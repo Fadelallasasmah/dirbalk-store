@@ -356,7 +356,34 @@
   .success-msg {
     display: none;
     text-align: center;
-    padding: 2rem 0;
+    padding: 1.5rem 0;
+  }
+
+  .success-icon {
+    margin: 0 auto 1.5rem;
+    width: 56px;
+    height: 56px;
+  }
+
+  .success-icon circle {
+    stroke: rgba(201,168,76,0.4);
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .success-icon path {
+    stroke: #C9A84C;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: drawCheck 0.6s ease forwards 0.2s;
+  }
+
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
   }
 
   .success-msg p {
@@ -365,6 +392,55 @@
     letter-spacing: 1px;
     line-height: 2;
     opacity: 0.85;
+  }
+
+  .success-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .share-btn {
+    padding: 13px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .share-btn:hover {
+    border-color: rgba(201,168,76,0.5);
+  }
+
+  .share-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .ig-reminder {
+    margin-top: 1.8rem;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.3px;
+    line-height: 1.8;
+  }
+
+  .ig-reminder a {
+    color: #C9A84C;
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
   }
 </style>
 </head>
@@ -430,14 +506,35 @@
   </div>
 
   <div class="success-msg" id="success-msg">
+    <svg class="success-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="26"></circle>
+      <path d="M17 29 L24 36 L39 20"></path>
+    </svg>
     <p>
       تم تسجيلك.<br>
       عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>
       دير بالك على حالك.
     </p>
+
+    <div class="success-actions">
+      <button type="button" class="share-btn" id="share-whatsapp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+        شارك مع صديق
+      </button>
+      <button type="button" class="share-btn" id="copy-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <span id="copy-link-text">نسخ الرابط</span>
+      </button>
+    </div>
+
+    <p class="ig-reminder">
+      وتابعنا على <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
+      رح تشوف كواليس الكوليكشن قبل ما يطلع.
+    </p>
   </div>
 
   <div class="page-footer">
+
     <div class="contact-row">
       <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="contact-btn" aria-label="واتساب">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
@@ -628,6 +725,33 @@
       btn.textContent = 'تسجيل';
     }
   });
+
+  // --- Share buttons on the success screen ---
+  const shareWhatsapp = document.getElementById('share-whatsapp');
+  const copyLinkBtn = document.getElementById('copy-link');
+  const copyLinkText = document.getElementById('copy-link-text');
+  const siteUrl = 'https://dirbalk.com';
+  const shareText = 'سجّلت لـ DIRBALَK — لما يطلع الكوليكشن رح تكون أول من يعرف. سجّل أنت كمان: ' + siteUrl;
+
+  if (shareWhatsapp) {
+    shareWhatsapp.addEventListener('click', () => {
+      if (window.gtag) gtag('event', 'share_click', { method: 'whatsapp' });
+      window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
+    });
+  }
+
+  if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', async () => {
+      if (window.gtag) gtag('event', 'share_click', { method: 'copy_link' });
+      try {
+        await navigator.clipboard.writeText(siteUrl);
+        copyLinkText.textContent = 'تم النسخ ✓';
+        setTimeout(() => { copyLinkText.textContent = 'نسخ الرابط'; }, 2000);
+      } catch (err) {
+        copyLinkText.textContent = siteUrl;
+      }
+    });
+  }
 })();
 </script>
 
