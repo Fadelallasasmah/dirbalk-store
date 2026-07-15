@@ -493,11 +493,103 @@
     border-color: rgba(201,168,76,0.4);
   }
 
+  .user-badge {
+    display: none;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 30;
+  }
+
+  .user-badge-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 6px 12px 6px 6px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s;
+  }
+
+  .user-badge-btn:hover,
+  .user-badge.open .user-badge-btn {
+    border-color: rgba(201,168,76,0.4);
+  }
+
+  .user-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    color: #C9A84C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .user-name {
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .user-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #141414;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    min-width: 160px;
+    flex-direction: column;
+  }
+
+  .user-badge.open .user-menu {
+    display: flex;
+  }
+
+  .user-menu-item {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 11.5px;
+    text-align: right;
+    padding: 11px 14px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0.3px;
+    transition: all 0.15s;
+  }
+
+  .user-menu-item:hover {
+    background: rgba(255,80,80,0.08);
+    color: rgba(255,120,120,0.9);
+  }
+
 </style>
 </head>
 <body>
 
 <a href="/en/" class="lang-switch">EN</a>
+
+<div class="user-badge" id="userBadge">
+  <button type="button" class="user-badge-btn" id="userBadgeBtn">
+    <span class="user-avatar" id="userAvatar">?</span>
+    <span class="user-name" id="userNameLabel"></span>
+  </button>
+  <div class="user-menu">
+    <button type="button" class="user-menu-item" id="logoutBtn">تسجيل الخروج</button>
+  </div>
+</div>
 
 <div class="container">
 
@@ -621,6 +713,7 @@
 
   // --- Gendered success-screen text ---
   const GENDER_KEY = 'dirbalk_gender';
+  const NAME_KEY = 'dirbalk_name';
   function applyGenderedText(isFemale) {
     if (isFemale) {
       document.getElementById('success-text').innerHTML =
@@ -630,6 +723,45 @@
     }
   }
 
+  // --- User badge (logged-in state) ---
+  const userBadge = document.getElementById('userBadge');
+  const userBadgeBtn = document.getElementById('userBadgeBtn');
+  const userAvatar = document.getElementById('userAvatar');
+  const userNameLabel = document.getElementById('userNameLabel');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  function showUserBadge(name) {
+    const first = (name || '').trim().split(' ')[0] || '';
+    userAvatar.textContent = first ? first.charAt(0).toUpperCase() : '?';
+    userNameLabel.textContent = first;
+    userBadge.style.display = 'block';
+  }
+
+  userBadgeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userBadge.classList.toggle('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!userBadge.contains(e.target)) userBadge.classList.remove('open');
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(GENDER_KEY);
+      localStorage.removeItem(NAME_KEY);
+    } catch (e) { /* ignore */ }
+    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_registration' });
+    userBadge.style.display = 'none';
+    userBadge.classList.remove('open');
+    document.getElementById('success-msg').style.display = 'none';
+    document.getElementById('form-section').style.display = 'block';
+    form.reset();
+    genderButtons.forEach((b) => b.classList.remove('selected'));
+    document.getElementById('genderInput').value = '';
+  });
+
   // --- Remember that this browser already registered ---
   const STORAGE_KEY = 'dirbalk_registered';
   try {
@@ -637,6 +769,7 @@
       document.getElementById('form-section').style.display = 'none';
       document.getElementById('success-msg').style.display = 'block';
       applyGenderedText(localStorage.getItem(GENDER_KEY) === 'female');
+      showUserBadge(localStorage.getItem(NAME_KEY) || '');
     }
   } catch (e) { /* localStorage unavailable, ignore */ }
 
@@ -819,8 +952,10 @@
         try {
           localStorage.setItem(STORAGE_KEY, '1');
           localStorage.setItem(GENDER_KEY, data.gender);
+          localStorage.setItem(NAME_KEY, data.name);
         } catch (e) { /* ignore */ }
         applyGenderedText(data.gender === 'female');
+        showUserBadge(data.name);
         document.getElementById('form-section').style.display = 'none';
         document.getElementById('success-msg').style.display = 'block';
       } else {
