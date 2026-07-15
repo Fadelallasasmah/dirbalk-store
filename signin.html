@@ -150,7 +150,20 @@
   .no-account a {
     color: #C9A84C;
     text-decoration: none;
+    padding-bottom: 2px;
     border-bottom: 0.5px solid rgba(201,168,76,0.4);
+  }
+
+  .forgot-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+  }
+
+  .forgot-link:hover {
+    color: #C9A84C;
   }
 
   .footer-text {
@@ -182,6 +195,7 @@
         <label for="password">كلمة المرور</label>
         <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
         <p class="field-msg" id="password-msg"></p>
+        <a href="forgot-password.html" class="forgot-link">نسيت كلمة المرور؟</a>
       </div>
     </div>
 
