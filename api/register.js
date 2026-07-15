@@ -22,6 +22,7 @@ export default async function handler(req, res) {
     const payload = {
       name: (req.body?.name || '').toString(),
       age: (req.body?.age || '').toString(),
+      gender: (req.body?.gender || '').toString(),
       phone: (req.body?.phone || '').toString(),
       email: (req.body?.email || '').toString(),
       ip,
