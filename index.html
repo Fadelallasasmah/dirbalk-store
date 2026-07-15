@@ -127,33 +127,110 @@
   .phone-row {
     display: flex;
     gap: 8px;
+    position: relative;
   }
 
-  .phone-row select {
+  .country-picker {
+    position: relative;
+    width: 128px;
+    flex-shrink: 0;
+  }
+
+  .country-btn {
+    width: 100%;
+    height: 100%;
     background: transparent;
     border: 0.5px solid rgba(255,255,255,0.15);
     color: #ffffff;
-    padding: 14px 8px;
+    padding: 14px 10px;
     font-size: 12px;
     outline: none;
     font-family: Arial, sans-serif;
     border-radius: 0;
-    width: 118px;
-    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
     transition: border-color 0.2s;
   }
 
-  .phone-row select:focus {
+  .country-btn:hover,
+  .country-btn.open {
     border-color: rgba(201,168,76,0.5);
   }
 
-  .phone-row select.field-error {
+  .country-btn.field-error {
     border-color: rgba(255,80,80,0.6);
   }
 
-  .phone-row select option {
-    background: #0a0a0a;
+  .country-btn .cb-caret {
+    font-size: 9px;
+    opacity: 0.5;
+  }
+
+  .country-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    width: 260px;
+    max-height: 280px;
+    background: #141414;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    z-index: 20;
+    flex-direction: column;
+  }
+
+  .country-dropdown.open {
+    display: flex;
+  }
+
+  .country-search {
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid rgba(255,255,255,0.15);
     color: #ffffff;
+    padding: 12px 14px;
+    font-size: 13px;
+    outline: none;
+    text-align: right;
+    font-family: Arial, sans-serif;
+    width: 100%;
+  }
+
+  .country-list {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .country-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #ffffff;
+    cursor: pointer;
+    text-align: right;
+  }
+
+  .country-option:hover,
+  .country-option.active {
+    background: rgba(201,168,76,0.15);
+  }
+
+  .country-option .co-dial {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    margin-right: auto;
+  }
+
+  .country-empty {
+    padding: 14px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
   }
 
   .phone-row input {
@@ -264,7 +341,16 @@
           <label for="phone">رقم الهاتف</label>
           <div class="phone-row">
             <input type="tel" id="phone" placeholder="XXXXXXXXX" autocomplete="tel" inputmode="numeric" />
-            <select id="countryCode" autocomplete="tel-country-code"></select>
+            <div class="country-picker" id="countryPicker">
+              <button type="button" class="country-btn" id="countryBtn">
+                <span class="cb-caret">▾</span>
+                <span id="countryBtnLabel">🇯🇴 962+</span>
+              </button>
+              <div class="country-dropdown" id="countryDropdown">
+                <input type="text" class="country-search" id="countrySearch" placeholder="ابحث عن دولة..." autocomplete="off" />
+                <div class="country-list" id="countryList"></div>
+              </div>
+            </div>
           </div>
           <p class="field-msg" id="phone-msg"></p>
         </div>
@@ -298,22 +384,73 @@
 
 <script>
 (function () {
-  const COUNTRIES = [{"iso2":"JO","dial":"+962","name":"الأردن","nameEn":"Jordan"},{"iso2":"EG","dial":"+20","name":"مصر","nameEn":"Egypt"},{"iso2":"SA","dial":"+966","name":"السعودية","nameEn":"Saudi Arabia"},{"iso2":"AE","dial":"+971","name":"الإمارات","nameEn":"United Arab Emirates"},{"iso2":"KW","dial":"+965","name":"الكويت","nameEn":"Kuwait"},{"iso2":"QA","dial":"+974","name":"قطر","nameEn":"Qatar"},{"iso2":"BH","dial":"+973","name":"البحرين","nameEn":"Bahrain"},{"iso2":"OM","dial":"+968","name":"عُمان","nameEn":"Oman"},{"iso2":"IQ","dial":"+964","name":"العراق","nameEn":"Iraq"},{"iso2":"SY","dial":"+963","name":"سوريا","nameEn":"Syrian Arab Republic"},{"iso2":"LB","dial":"+961","name":"لبنان","nameEn":"Lebanon"},{"iso2":"PS","dial":"+970","name":"فلسطين","nameEn":"Palestine, State of"},{"iso2":"YE","dial":"+967","name":"اليمن","nameEn":"Yemen"},{"iso2":"AF","dial":"+93","name":"Afghanistan","nameEn":"Afghanistan"},{"iso2":"AL","dial":"+355","name":"Albania","nameEn":"Albania"},{"iso2":"AS","dial":"+1","name":"American Samoa","nameEn":"American Samoa"},{"iso2":"AD","dial":"+376","name":"Andorra","nameEn":"Andorra"},{"iso2":"AO","dial":"+244","name":"Angola","nameEn":"Angola"},{"iso2":"AI","dial":"+1","name":"Anguilla","nameEn":"Anguilla"},{"iso2":"AG","dial":"+1","name":"Antigua and Barbuda","nameEn":"Antigua and Barbuda"},{"iso2":"AR","dial":"+54","name":"Argentina","nameEn":"Argentina"},{"iso2":"AM","dial":"+374","name":"Armenia","nameEn":"Armenia"},{"iso2":"AW","dial":"+297","name":"Aruba","nameEn":"Aruba"},{"iso2":"AT","dial":"+43","name":"Austria","nameEn":"Austria"},{"iso2":"AZ","dial":"+994","name":"Azerbaijan","nameEn":"Azerbaijan"},{"iso2":"BS","dial":"+1","name":"Bahamas","nameEn":"Bahamas"},{"iso2":"BD","dial":"+880","name":"Bangladesh","nameEn":"Bangladesh"},{"iso2":"BB","dial":"+1","name":"Barbados","nameEn":"Barbados"},{"iso2":"BY","dial":"+375","name":"Belarus","nameEn":"Belarus"},{"iso2":"BE","dial":"+32","name":"Belgium","nameEn":"Belgium"},{"iso2":"BZ","dial":"+501","name":"Belize","nameEn":"Belize"},{"iso2":"BJ","dial":"+229","name":"Benin","nameEn":"Benin"},{"iso2":"BM","dial":"+1","name":"Bermuda","nameEn":"Bermuda"},{"iso2":"BT","dial":"+975","name":"Bhutan","nameEn":"Bhutan"},{"iso2":"BO","dial":"+591","name":"Bolivia, Plurinational State of","nameEn":"Bolivia, Plurinational State of"},{"iso2":"BQ","dial":"+599","name":"Bonaire, Sint Eustatius and Saba","nameEn":"Bonaire, Sint Eustatius and Saba"},{"iso2":"BA","dial":"+387","name":"Bosnia and Herzegovina","nameEn":"Bosnia and Herzegovina"},{"iso2":"BW","dial":"+267","name":"Botswana","nameEn":"Botswana"},{"iso2":"IO","dial":"+246","name":"British Indian Ocean Territory","nameEn":"British Indian Ocean Territory"},{"iso2":"BN","dial":"+673","name":"Brunei Darussalam","nameEn":"Brunei Darussalam"},{"iso2":"BG","dial":"+359","name":"Bulgaria","nameEn":"Bulgaria"},{"iso2":"BF","dial":"+226","name":"Burkina Faso","nameEn":"Burkina Faso"},{"iso2":"BI","dial":"+257","name":"Burundi","nameEn":"Burundi"},{"iso2":"CV","dial":"+238","name":"Cabo Verde","nameEn":"Cabo Verde"},{"iso2":"KH","dial":"+855","name":"Cambodia","nameEn":"Cambodia"},{"iso2":"CM","dial":"+237","name":"Cameroon","nameEn":"Cameroon"},{"iso2":"KY","dial":"+1","name":"Cayman Islands","nameEn":"Cayman Islands"},{"iso2":"CF","dial":"+236","name":"Central African Republic","nameEn":"Central African Republic"},{"iso2":"TD","dial":"+235","name":"Chad","nameEn":"Chad"},{"iso2":"CL","dial":"+56","name":"Chile","nameEn":"Chile"},{"iso2":"CX","dial":"+61","name":"Christmas Island","nameEn":"Christmas Island"},{"iso2":"CC","dial":"+61","name":"Cocos (Keeling) Islands","nameEn":"Cocos (Keeling) Islands"},{"iso2":"CO","dial":"+57","name":"Colombia","nameEn":"Colombia"},{"iso2":"KM","dial":"+269","name":"Comoros","nameEn":"Comoros"},{"iso2":"CG","dial":"+242","name":"Congo","nameEn":"Congo"},{"iso2":"CD","dial":"+243","name":"Congo, The Democratic Republic of the","nameEn":"Congo, The Democratic Republic of the"},{"iso2":"CK","dial":"+682","name":"Cook Islands","nameEn":"Cook Islands"},{"iso2":"CR","dial":"+506","name":"Costa Rica","nameEn":"Costa Rica"},{"iso2":"HR","dial":"+385","name":"Croatia","nameEn":"Croatia"},{"iso2":"CU","dial":"+53","name":"Cuba","nameEn":"Cuba"},{"iso2":"CW","dial":"+599","name":"Curaçao","nameEn":"Curaçao"},{"iso2":"CY","dial":"+357","name":"Cyprus","nameEn":"Cyprus"},{"iso2":"CZ","dial":"+420","name":"Czechia","nameEn":"Czechia"},{"iso2":"CI","dial":"+225","name":"Côte d'Ivoire","nameEn":"Côte d'Ivoire"},{"iso2":"DK","dial":"+45","name":"Denmark","nameEn":"Denmark"},{"iso2":"DJ","dial":"+253","name":"Djibouti","nameEn":"Djibouti"},{"iso2":"DM","dial":"+1","name":"Dominica","nameEn":"Dominica"},{"iso2":"DO","dial":"+1","name":"Dominican Republic","nameEn":"Dominican Republic"},{"iso2":"EC","dial":"+593","name":"Ecuador","nameEn":"Ecuador"},{"iso2":"SV","dial":"+503","name":"El Salvador","nameEn":"El Salvador"},{"iso2":"GQ","dial":"+240","name":"Equatorial Guinea","nameEn":"Equatorial Guinea"},{"iso2":"ER","dial":"+291","name":"Eritrea","nameEn":"Eritrea"},{"iso2":"EE","dial":"+372","name":"Estonia","nameEn":"Estonia"},{"iso2":"SZ","dial":"+268","name":"Eswatini","nameEn":"Eswatini"},{"iso2":"ET","dial":"+251","name":"Ethiopia","nameEn":"Ethiopia"},{"iso2":"FK","dial":"+500","name":"Falkland Islands (Malvinas)","nameEn":"Falkland Islands (Malvinas)"},{"iso2":"FO","dial":"+298","name":"Faroe Islands","nameEn":"Faroe Islands"},{"iso2":"FJ","dial":"+679","name":"Fiji","nameEn":"Fiji"},{"iso2":"FI","dial":"+358","name":"Finland","nameEn":"Finland"},{"iso2":"GF","dial":"+594","name":"French Guiana","nameEn":"French Guiana"},{"iso2":"PF","dial":"+689","name":"French Polynesia","nameEn":"French Polynesia"},{"iso2":"GA","dial":"+241","name":"Gabon","nameEn":"Gabon"},{"iso2":"GM","dial":"+220","name":"Gambia","nameEn":"Gambia"},{"iso2":"GE","dial":"+995","name":"Georgia","nameEn":"Georgia"},{"iso2":"GH","dial":"+233","name":"Ghana","nameEn":"Ghana"},{"iso2":"GI","dial":"+350","name":"Gibraltar","nameEn":"Gibraltar"},{"iso2":"GR","dial":"+30","name":"Greece","nameEn":"Greece"},{"iso2":"GL","dial":"+299","name":"Greenland","nameEn":"Greenland"},{"iso2":"GD","dial":"+1","name":"Grenada","nameEn":"Grenada"},{"iso2":"GP","dial":"+590","name":"Guadeloupe","nameEn":"Guadeloupe"},{"iso2":"GU","dial":"+1","name":"Guam","nameEn":"Guam"},{"iso2":"GT","dial":"+502","name":"Guatemala","nameEn":"Guatemala"},{"iso2":"GG","dial":"+44","name":"Guernsey","nameEn":"Guernsey"},{"iso2":"GN","dial":"+224","name":"Guinea","nameEn":"Guinea"},{"iso2":"GW","dial":"+245","name":"Guinea-Bissau","nameEn":"Guinea-Bissau"},{"iso2":"GY","dial":"+592","name":"Guyana","nameEn":"Guyana"},{"iso2":"HT","dial":"+509","name":"Haiti","nameEn":"Haiti"},{"iso2":"VA","dial":"+39","name":"Holy See (Vatican City State)","nameEn":"Holy See (Vatican City State)"},{"iso2":"HN","dial":"+504","name":"Honduras","nameEn":"Honduras"},{"iso2":"HK","dial":"+852","name":"Hong Kong","nameEn":"Hong Kong"},{"iso2":"HU","dial":"+36","name":"Hungary","nameEn":"Hungary"},{"iso2":"IS","dial":"+354","name":"Iceland","nameEn":"Iceland"},{"iso2":"IR","dial":"+98","name":"Iran, Islamic Republic of","nameEn":"Iran, Islamic Republic of"},{"iso2":"IE","dial":"+353","name":"Ireland","nameEn":"Ireland"},{"iso2":"IM","dial":"+44","name":"Isle of Man","nameEn":"Isle of Man"},{"iso2":"IL","dial":"+972","name":"Israel","nameEn":"Israel"},{"iso2":"JM","dial":"+1","name":"Jamaica","nameEn":"Jamaica"},{"iso2":"JE","dial":"+44","name":"Jersey","nameEn":"Jersey"},{"iso2":"KZ","dial":"+7","name":"Kazakhstan","nameEn":"Kazakhstan"},{"iso2":"KE","dial":"+254","name":"Kenya","nameEn":"Kenya"},{"iso2":"KI","dial":"+686","name":"Kiribati","nameEn":"Kiribati"},{"iso2":"KP","dial":"+850","name":"Korea, Democratic People's Republic of","nameEn":"Korea, Democratic People's Republic of"},{"iso2":"KG","dial":"+996","name":"Kyrgyzstan","nameEn":"Kyrgyzstan"},{"iso2":"LA","dial":"+856","name":"Lao People's Democratic Republic","nameEn":"Lao People's Democratic Republic"},{"iso2":"LV","dial":"+371","name":"Latvia","nameEn":"Latvia"},{"iso2":"LS","dial":"+266","name":"Lesotho","nameEn":"Lesotho"},{"iso2":"LR","dial":"+231","name":"Liberia","nameEn":"Liberia"},{"iso2":"LI","dial":"+423","name":"Liechtenstein","nameEn":"Liechtenstein"},{"iso2":"LT","dial":"+370","name":"Lithuania","nameEn":"Lithuania"},{"iso2":"LU","dial":"+352","name":"Luxembourg","nameEn":"Luxembourg"},{"iso2":"MO","dial":"+853","name":"Macao","nameEn":"Macao"},{"iso2":"MG","dial":"+261","name":"Madagascar","nameEn":"Madagascar"},{"iso2":"MW","dial":"+265","name":"Malawi","nameEn":"Malawi"},{"iso2":"MV","dial":"+960","name":"Maldives","nameEn":"Maldives"},{"iso2":"ML","dial":"+223","name":"Mali","nameEn":"Mali"},{"iso2":"MT","dial":"+356","name":"Malta","nameEn":"Malta"},{"iso2":"MH","dial":"+692","name":"Marshall Islands","nameEn":"Marshall Islands"},{"iso2":"MQ","dial":"+596","name":"Martinique","nameEn":"Martinique"},{"iso2":"MR","dial":"+222","name":"Mauritania","nameEn":"Mauritania"},{"iso2":"MU","dial":"+230","name":"Mauritius","nameEn":"Mauritius"},{"iso2":"YT","dial":"+262","name":"Mayotte","nameEn":"Mayotte"},{"iso2":"MX","dial":"+52","name":"Mexico","nameEn":"Mexico"},{"iso2":"FM","dial":"+691","name":"Micronesia, Federated States of","nameEn":"Micronesia, Federated States of"},{"iso2":"MD","dial":"+373","name":"Moldova, Republic of","nameEn":"Moldova, Republic of"},{"iso2":"MC","dial":"+377","name":"Monaco","nameEn":"Monaco"},{"iso2":"MN","dial":"+976","name":"Mongolia","nameEn":"Mongolia"},{"iso2":"ME","dial":"+382","name":"Montenegro","nameEn":"Montenegro"},{"iso2":"MS","dial":"+1","name":"Montserrat","nameEn":"Montserrat"},{"iso2":"MZ","dial":"+258","name":"Mozambique","nameEn":"Mozambique"},{"iso2":"MM","dial":"+95","name":"Myanmar","nameEn":"Myanmar"},{"iso2":"NA","dial":"+264","name":"Namibia","nameEn":"Namibia"},{"iso2":"NR","dial":"+674","name":"Nauru","nameEn":"Nauru"},{"iso2":"NP","dial":"+977","name":"Nepal","nameEn":"Nepal"},{"iso2":"NC","dial":"+687","name":"New Caledonia","nameEn":"New Caledonia"},{"iso2":"NZ","dial":"+64","name":"New Zealand","nameEn":"New Zealand"},{"iso2":"NI","dial":"+505","name":"Nicaragua","nameEn":"Nicaragua"},{"iso2":"NE","dial":"+227","name":"Niger","nameEn":"Niger"},{"iso2":"NG","dial":"+234","name":"Nigeria","nameEn":"Nigeria"},{"iso2":"NU","dial":"+683","name":"Niue","nameEn":"Niue"},{"iso2":"NF","dial":"+672","name":"Norfolk Island","nameEn":"Norfolk Island"},{"iso2":"MK","dial":"+389","name":"North Macedonia","nameEn":"North Macedonia"},{"iso2":"MP","dial":"+1","name":"Northern Mariana Islands","nameEn":"Northern Mariana Islands"},{"iso2":"PW","dial":"+680","name":"Palau","nameEn":"Palau"},{"iso2":"PA","dial":"+507","name":"Panama","nameEn":"Panama"},{"iso2":"PG","dial":"+675","name":"Papua New Guinea","nameEn":"Papua New Guinea"},{"iso2":"PY","dial":"+595","name":"Paraguay","nameEn":"Paraguay"},{"iso2":"PE","dial":"+51","name":"Peru","nameEn":"Peru"},{"iso2":"PL","dial":"+48","name":"Poland","nameEn":"Poland"},{"iso2":"PT","dial":"+351","name":"Portugal","nameEn":"Portugal"},{"iso2":"PR","dial":"+1","name":"Puerto Rico","nameEn":"Puerto Rico"},{"iso2":"RO","dial":"+40","name":"Romania","nameEn":"Romania"},{"iso2":"RW","dial":"+250","name":"Rwanda","nameEn":"Rwanda"},{"iso2":"RE","dial":"+262","name":"Réunion","nameEn":"Réunion"},{"iso2":"BL","dial":"+590","name":"Saint Barthélemy","nameEn":"Saint Barthélemy"},{"iso2":"SH","dial":"+290","name":"Saint Helena, Ascension and Tristan da Cunha","nameEn":"Saint Helena, Ascension and Tristan da Cunha"},{"iso2":"KN","dial":"+1","name":"Saint Kitts and Nevis","nameEn":"Saint Kitts and Nevis"},{"iso2":"LC","dial":"+1","name":"Saint Lucia","nameEn":"Saint Lucia"},{"iso2":"MF","dial":"+590","name":"Saint Martin (French part)","nameEn":"Saint Martin (French part)"},{"iso2":"PM","dial":"+508","name":"Saint Pierre and Miquelon","nameEn":"Saint Pierre and Miquelon"},{"iso2":"VC","dial":"+1","name":"Saint Vincent and the Grenadines","nameEn":"Saint Vincent and the Grenadines"},{"iso2":"WS","dial":"+685","name":"Samoa","nameEn":"Samoa"},{"iso2":"SM","dial":"+378","name":"San Marino","nameEn":"San Marino"},{"iso2":"ST","dial":"+239","name":"Sao Tome and Principe","nameEn":"Sao Tome and Principe"},{"iso2":"SN","dial":"+221","name":"Senegal","nameEn":"Senegal"},{"iso2":"RS","dial":"+381","name":"Serbia","nameEn":"Serbia"},{"iso2":"SC","dial":"+248","name":"Seychelles","nameEn":"Seychelles"},{"iso2":"SL","dial":"+232","name":"Sierra Leone","nameEn":"Sierra Leone"},{"iso2":"SG","dial":"+65","name":"Singapore","nameEn":"Singapore"},{"iso2":"SX","dial":"+1","name":"Sint Maarten (Dutch part)","nameEn":"Sint Maarten (Dutch part)"},{"iso2":"SK","dial":"+421","name":"Slovakia","nameEn":"Slovakia"},{"iso2":"SI","dial":"+386","name":"Slovenia","nameEn":"Slovenia"},{"iso2":"SB","dial":"+677","name":"Solomon Islands","nameEn":"Solomon Islands"},{"iso2":"SO","dial":"+252","name":"Somalia","nameEn":"Somalia"},{"iso2":"SS","dial":"+211","name":"South Sudan","nameEn":"South Sudan"},{"iso2":"LK","dial":"+94","name":"Sri Lanka","nameEn":"Sri Lanka"},{"iso2":"SR","dial":"+597","name":"Suriname","nameEn":"Suriname"},{"iso2":"SJ","dial":"+47","name":"Svalbard and Jan Mayen","nameEn":"Svalbard and Jan Mayen"},{"iso2":"TW","dial":"+886","name":"Taiwan, Province of China","nameEn":"Taiwan, Province of China"},{"iso2":"TJ","dial":"+992","name":"Tajikistan","nameEn":"Tajikistan"},{"iso2":"TZ","dial":"+255","name":"Tanzania, United Republic of","nameEn":"Tanzania, United Republic of"},{"iso2":"TH","dial":"+66","name":"Thailand","nameEn":"Thailand"},{"iso2":"TL","dial":"+670","name":"Timor-Leste","nameEn":"Timor-Leste"},{"iso2":"TG","dial":"+228","name":"Togo","nameEn":"Togo"},{"iso2":"TK","dial":"+690","name":"Tokelau","nameEn":"Tokelau"},{"iso2":"TO","dial":"+676","name":"Tonga","nameEn":"Tonga"},{"iso2":"TT","dial":"+1","name":"Trinidad and Tobago","nameEn":"Trinidad and Tobago"},{"iso2":"TM","dial":"+993","name":"Turkmenistan","nameEn":"Turkmenistan"},{"iso2":"TC","dial":"+1","name":"Turks and Caicos Islands","nameEn":"Turks and Caicos Islands"},{"iso2":"TV","dial":"+688","name":"Tuvalu","nameEn":"Tuvalu"},{"iso2":"UG","dial":"+256","name":"Uganda","nameEn":"Uganda"},{"iso2":"UA","dial":"+380","name":"Ukraine","nameEn":"Ukraine"},{"iso2":"UY","dial":"+598","name":"Uruguay","nameEn":"Uruguay"},{"iso2":"UZ","dial":"+998","name":"Uzbekistan","nameEn":"Uzbekistan"},{"iso2":"VU","dial":"+678","name":"Vanuatu","nameEn":"Vanuatu"},{"iso2":"VE","dial":"+58","name":"Venezuela, Bolivarian Republic of","nameEn":"Venezuela, Bolivarian Republic of"},{"iso2":"VN","dial":"+84","name":"Viet Nam","nameEn":"Viet Nam"},{"iso2":"VG","dial":"+1","name":"Virgin Islands, British","nameEn":"Virgin Islands, British"},{"iso2":"VI","dial":"+1","name":"Virgin Islands, U.S.","nameEn":"Virgin Islands, U.S."},{"iso2":"WF","dial":"+681","name":"Wallis and Futuna","nameEn":"Wallis and Futuna"},{"iso2":"EH","dial":"+212","name":"Western Sahara","nameEn":"Western Sahara"},{"iso2":"ZM","dial":"+260","name":"Zambia","nameEn":"Zambia"},{"iso2":"ZW","dial":"+263","name":"Zimbabwe","nameEn":"Zimbabwe"},{"iso2":"AX","dial":"+358","name":"Åland Islands","nameEn":"Åland Islands"},{"iso2":"AU","dial":"+61","name":"أستراليا","nameEn":"Australia"},{"iso2":"DE","dial":"+49","name":"ألمانيا","nameEn":"Germany"},{"iso2":"ES","dial":"+34","name":"إسبانيا","nameEn":"Spain"},{"iso2":"ID","dial":"+62","name":"إندونيسيا","nameEn":"Indonesia"},{"iso2":"IT","dial":"+39","name":"إيطاليا","nameEn":"Italy"},{"iso2":"BR","dial":"+55","name":"البرازيل","nameEn":"Brazil"},{"iso2":"DZ","dial":"+213","name":"الجزائر","nameEn":"Algeria"},{"iso2":"SD","dial":"+249","name":"السودان","nameEn":"Sudan"},{"iso2":"SE","dial":"+46","name":"السويد","nameEn":"Sweden"},{"iso2":"CN","dial":"+86","name":"الصين","nameEn":"China"},{"iso2":"PH","dial":"+63","name":"الفلبين","nameEn":"Philippines"},{"iso2":"MA","dial":"+212","name":"المغرب","nameEn":"Morocco"},{"iso2":"GB","dial":"+44","name":"المملكة المتحدة","nameEn":"United Kingdom"},{"iso2":"NO","dial":"+47","name":"النرويج","nameEn":"Norway"},{"iso2":"IN","dial":"+91","name":"الهند","nameEn":"India"},{"iso2":"US","dial":"+1","name":"الولايات المتحدة","nameEn":"United States"},{"iso2":"JP","dial":"+81","name":"اليابان","nameEn":"Japan"},{"iso2":"PK","dial":"+92","name":"باكستان","nameEn":"Pakistan"},{"iso2":"TR","dial":"+90","name":"تركيا","nameEn":"Türkiye"},{"iso2":"TN","dial":"+216","name":"تونس","nameEn":"Tunisia"},{"iso2":"ZA","dial":"+27","name":"جنوب أفريقيا","nameEn":"South Africa"},{"iso2":"RU","dial":"+7","name":"روسيا","nameEn":"Russian Federation"},{"iso2":"CH","dial":"+41","name":"سويسرا","nameEn":"Switzerland"},{"iso2":"FR","dial":"+33","name":"فرنسا","nameEn":"France"},{"iso2":"CA","dial":"+1","name":"كندا","nameEn":"Canada"},{"iso2":"KR","dial":"+82","name":"كوريا الجنوبية","nameEn":"Korea, Republic of"},{"iso2":"LY","dial":"+218","name":"ليبيا","nameEn":"Libya"},{"iso2":"MY","dial":"+60","name":"ماليزيا","nameEn":"Malaysia"},{"iso2":"NL","dial":"+31","name":"هولندا","nameEn":"Netherlands"}];
+  const COUNTRIES = [{"iso2":"JO","dial":"+962","name":"الأردن","flag":"🇯🇴"},{"iso2":"SA","dial":"+966","name":"المملكة العربية السعودية","flag":"🇸🇦"},{"iso2":"AE","dial":"+971","name":"الإمارات العربية المتحدة","flag":"🇦🇪"},{"iso2":"KW","dial":"+965","name":"الكويت","flag":"🇰🇼"},{"iso2":"QA","dial":"+974","name":"قطر","flag":"🇶🇦"},{"iso2":"BH","dial":"+973","name":"البحرين","flag":"🇧🇭"},{"iso2":"OM","dial":"+968","name":"عُمان","flag":"🇴🇲"},{"iso2":"IQ","dial":"+964","name":"العراق","flag":"🇮🇶"},{"iso2":"SY","dial":"+963","name":"سوريا","flag":"🇸🇾"},{"iso2":"LB","dial":"+961","name":"لبنان","flag":"🇱🇧"},{"iso2":"PS","dial":"+970","name":"الأراضي الفلسطينية","flag":"🇵🇸"},{"iso2":"EG","dial":"+20","name":"مصر","flag":"🇪🇬"},{"iso2":"YE","dial":"+967","name":"اليمن","flag":"🇾🇪"},{"iso2":"IS","dial":"+354","name":"آيسلندا","flag":"🇮🇸"},{"iso2":"AZ","dial":"+994","name":"أذربيجان","flag":"🇦🇿"},{"iso2":"AM","dial":"+374","name":"أرمينيا","flag":"🇦🇲"},{"iso2":"AW","dial":"+297","name":"أروبا","flag":"🇦🇼"},{"iso2":"AU","dial":"+61","name":"أستراليا","flag":"🇦🇺"},{"iso2":"AF","dial":"+93","name":"أفغانستان","flag":"🇦🇫"},{"iso2":"AL","dial":"+355","name":"ألبانيا","flag":"🇦🇱"},{"iso2":"DE","dial":"+49","name":"ألمانيا","flag":"🇩🇪"},{"iso2":"AG","dial":"+1","name":"أنتيغوا وبربودا","flag":"🇦🇬"},{"iso2":"AD","dial":"+376","name":"أندورا","flag":"🇦🇩"},{"iso2":"AO","dial":"+244","name":"أنغولا","flag":"🇦🇴"},{"iso2":"AI","dial":"+1","name":"أنغويلا","flag":"🇦🇮"},{"iso2":"UY","dial":"+598","name":"أورغواي","flag":"🇺🇾"},{"iso2":"UZ","dial":"+998","name":"أوزبكستان","flag":"🇺🇿"},{"iso2":"UG","dial":"+256","name":"أوغندا","flag":"🇺🇬"},{"iso2":"UA","dial":"+380","name":"أوكرانيا","flag":"🇺🇦"},{"iso2":"IE","dial":"+353","name":"أيرلندا","flag":"🇮🇪"},{"iso2":"ET","dial":"+251","name":"إثيوبيا","flag":"🇪🇹"},{"iso2":"ER","dial":"+291","name":"إريتريا","flag":"🇪🇷"},{"iso2":"ES","dial":"+34","name":"إسبانيا","flag":"🇪🇸"},{"iso2":"EE","dial":"+372","name":"إستونيا","flag":"🇪🇪"},{"iso2":"IL","dial":"+972","name":"إسرائيل","flag":"🇮🇱"},{"iso2":"SZ","dial":"+268","name":"إسواتيني","flag":"🇸🇿"},{"iso2":"ID","dial":"+62","name":"إندونيسيا","flag":"🇮🇩"},{"iso2":"IR","dial":"+98","name":"إيران","flag":"🇮🇷"},{"iso2":"IT","dial":"+39","name":"إيطاليا","flag":"🇮🇹"},{"iso2":"AR","dial":"+54","name":"الأرجنتين","flag":"🇦🇷"},{"iso2":"IO","dial":"+246","name":"الإقليم البريطاني في المحيط الهندي","flag":"🇮🇴"},{"iso2":"EC","dial":"+593","name":"الإكوادور","flag":"🇪🇨"},{"iso2":"BR","dial":"+55","name":"البرازيل","flag":"🇧🇷"},{"iso2":"PT","dial":"+351","name":"البرتغال","flag":"🇵🇹"},{"iso2":"BA","dial":"+387","name":"البوسنة والهرسك","flag":"🇧🇦"},{"iso2":"CZ","dial":"+420","name":"التشيك","flag":"🇨🇿"},{"iso2":"ME","dial":"+382","name":"الجبل الأسود","flag":"🇲🇪"},{"iso2":"DZ","dial":"+213","name":"الجزائر","flag":"🇩🇿"},{"iso2":"DK","dial":"+45","name":"الدانمرك","flag":"🇩🇰"},{"iso2":"CV","dial":"+238","name":"الرأس الأخضر","flag":"🇨🇻"},{"iso2":"SV","dial":"+503","name":"السلفادور","flag":"🇸🇻"},{"iso2":"SN","dial":"+221","name":"السنغال","flag":"🇸🇳"},{"iso2":"SD","dial":"+249","name":"السودان","flag":"🇸🇩"},{"iso2":"SE","dial":"+46","name":"السويد","flag":"🇸🇪"},{"iso2":"EH","dial":"+212","name":"الصحراء الغربية","flag":"🇪🇭"},{"iso2":"SO","dial":"+252","name":"الصومال","flag":"🇸🇴"},{"iso2":"CN","dial":"+86","name":"الصين","flag":"🇨🇳"},{"iso2":"GA","dial":"+241","name":"الغابون","flag":"🇬🇦"},{"iso2":"VA","dial":"+39","name":"الفاتيكان","flag":"🇻🇦"},{"iso2":"PH","dial":"+63","name":"الفلبين","flag":"🇵🇭"},{"iso2":"CM","dial":"+237","name":"الكاميرون","flag":"🇨🇲"},{"iso2":"CG","dial":"+242","name":"الكونغو - برازافيل","flag":"🇨🇬"},{"iso2":"CD","dial":"+243","name":"الكونغو - كينشاسا","flag":"🇨🇩"},{"iso2":"MA","dial":"+212","name":"المغرب","flag":"🇲🇦"},{"iso2":"MX","dial":"+52","name":"المكسيك","flag":"🇲🇽"},{"iso2":"GB","dial":"+44","name":"المملكة المتحدة","flag":"🇬🇧"},{"iso2":"NO","dial":"+47","name":"النرويج","flag":"🇳🇴"},{"iso2":"AT","dial":"+43","name":"النمسا","flag":"🇦🇹"},{"iso2":"NE","dial":"+227","name":"النيجر","flag":"🇳🇪"},{"iso2":"IN","dial":"+91","name":"الهند","flag":"🇮🇳"},{"iso2":"US","dial":"+1","name":"الولايات المتحدة","flag":"🇺🇸"},{"iso2":"JP","dial":"+81","name":"اليابان","flag":"🇯🇵"},{"iso2":"GR","dial":"+30","name":"اليونان","flag":"🇬🇷"},{"iso2":"PG","dial":"+675","name":"بابوا غينيا الجديدة","flag":"🇵🇬"},{"iso2":"PY","dial":"+595","name":"باراغواي","flag":"🇵🇾"},{"iso2":"PK","dial":"+92","name":"باكستان","flag":"🇵🇰"},{"iso2":"PW","dial":"+680","name":"بالاو","flag":"🇵🇼"},{"iso2":"BB","dial":"+1","name":"بربادوس","flag":"🇧🇧"},{"iso2":"BM","dial":"+1","name":"برمودا","flag":"🇧🇲"},{"iso2":"BN","dial":"+673","name":"بروناي","flag":"🇧🇳"},{"iso2":"BE","dial":"+32","name":"بلجيكا","flag":"🇧🇪"},{"iso2":"BG","dial":"+359","name":"بلغاريا","flag":"🇧🇬"},{"iso2":"BZ","dial":"+501","name":"بليز","flag":"🇧🇿"},{"iso2":"BD","dial":"+880","name":"بنغلاديش","flag":"🇧🇩"},{"iso2":"PA","dial":"+507","name":"بنما","flag":"🇵🇦"},{"iso2":"BJ","dial":"+229","name":"بنين","flag":"🇧🇯"},{"iso2":"BT","dial":"+975","name":"بوتان","flag":"🇧🇹"},{"iso2":"BW","dial":"+267","name":"بوتسوانا","flag":"🇧🇼"},{"iso2":"PR","dial":"+1","name":"بورتوريكو","flag":"🇵🇷"},{"iso2":"BF","dial":"+226","name":"بوركينا فاسو","flag":"🇧🇫"},{"iso2":"BI","dial":"+257","name":"بوروندي","flag":"🇧🇮"},{"iso2":"PL","dial":"+48","name":"بولندا","flag":"🇵🇱"},{"iso2":"BO","dial":"+591","name":"بوليفيا","flag":"🇧🇴"},{"iso2":"PF","dial":"+689","name":"بولينيزيا الفرنسية","flag":"🇵🇫"},{"iso2":"PE","dial":"+51","name":"بيرو","flag":"🇵🇪"},{"iso2":"BY","dial":"+375","name":"بيلاروس","flag":"🇧🇾"},{"iso2":"TH","dial":"+66","name":"تايلاند","flag":"🇹🇭"},{"iso2":"TW","dial":"+886","name":"تايوان","flag":"🇹🇼"},{"iso2":"TM","dial":"+993","name":"تركمانستان","flag":"🇹🇲"},{"iso2":"TR","dial":"+90","name":"تركيا","flag":"🇹🇷"},{"iso2":"TA","dial":"+290","name":"تريستان دا كونا","flag":"🇹🇦"},{"iso2":"TT","dial":"+1","name":"ترينيداد وتوباغو","flag":"🇹🇹"},{"iso2":"TD","dial":"+235","name":"تشاد","flag":"🇹🇩"},{"iso2":"CL","dial":"+56","name":"تشيلي","flag":"🇨🇱"},{"iso2":"TZ","dial":"+255","name":"تنزانيا","flag":"🇹🇿"},{"iso2":"TG","dial":"+228","name":"توغو","flag":"🇹🇬"},{"iso2":"TV","dial":"+688","name":"توفالو","flag":"🇹🇻"},{"iso2":"TK","dial":"+690","name":"توكيلاو","flag":"🇹🇰"},{"iso2":"TN","dial":"+216","name":"تونس","flag":"🇹🇳"},{"iso2":"TO","dial":"+676","name":"تونغا","flag":"🇹🇴"},{"iso2":"TL","dial":"+670","name":"تيمور - ليشتي","flag":"🇹🇱"},{"iso2":"JM","dial":"+1","name":"جامايكا","flag":"🇯🇲"},{"iso2":"GI","dial":"+350","name":"جبل طارق","flag":"🇬🇮"},{"iso2":"AX","dial":"+358","name":"جزر آلاند","flag":"🇦🇽"},{"iso2":"BS","dial":"+1","name":"جزر البهاما","flag":"🇧🇸"},{"iso2":"KM","dial":"+269","name":"جزر القمر","flag":"🇰🇲"},{"iso2":"MQ","dial":"+596","name":"جزر المارتينيك","flag":"🇲🇶"},{"iso2":"MV","dial":"+960","name":"جزر المالديف","flag":"🇲🇻"},{"iso2":"TC","dial":"+1","name":"جزر توركس وكايكوس","flag":"🇹🇨"},{"iso2":"SB","dial":"+677","name":"جزر سليمان","flag":"🇸🇧"},{"iso2":"FO","dial":"+298","name":"جزر فارو","flag":"🇫🇴"},{"iso2":"FK","dial":"+500","name":"جزر فوكلاند","flag":"🇫🇰"},{"iso2":"VI","dial":"+1","name":"جزر فيرجن الأمريكية","flag":"🇻🇮"},{"iso2":"VG","dial":"+1","name":"جزر فيرجن البريطانية","flag":"🇻🇬"},{"iso2":"KY","dial":"+1","name":"جزر كايمان","flag":"🇰🇾"},{"iso2":"CK","dial":"+682","name":"جزر كوك","flag":"🇨🇰"},{"iso2":"CC","dial":"+61","name":"جزر كوكوس (كيلينغ)","flag":"🇨🇨"},{"iso2":"MH","dial":"+692","name":"جزر مارشال","flag":"🇲🇭"},{"iso2":"MP","dial":"+1","name":"جزر ماريانا الشمالية","flag":"🇲🇵"},{"iso2":"WF","dial":"+681","name":"جزر والس وفوتونا","flag":"🇼🇫"},{"iso2":"AC","dial":"+247","name":"جزيرة أسينشيون","flag":"🇦🇨"},{"iso2":"CX","dial":"+61","name":"جزيرة كريسماس","flag":"🇨🇽"},{"iso2":"IM","dial":"+44","name":"جزيرة مان","flag":"🇮🇲"},{"iso2":"NF","dial":"+672","name":"جزيرة نورفولك","flag":"🇳🇫"},{"iso2":"CF","dial":"+236","name":"جمهورية أفريقيا الوسطى","flag":"🇨🇫"},{"iso2":"DO","dial":"+1","name":"جمهورية الدومينيكان","flag":"🇩🇴"},{"iso2":"ZA","dial":"+27","name":"جنوب أفريقيا","flag":"🇿🇦"},{"iso2":"SS","dial":"+211","name":"جنوب السودان","flag":"🇸🇸"},{"iso2":"GE","dial":"+995","name":"جورجيا","flag":"🇬🇪"},{"iso2":"DJ","dial":"+253","name":"جيبوتي","flag":"🇩🇯"},{"iso2":"JE","dial":"+44","name":"جيرسي","flag":"🇯🇪"},{"iso2":"DM","dial":"+1","name":"دومينيكا","flag":"🇩🇲"},{"iso2":"RW","dial":"+250","name":"رواندا","flag":"🇷🇼"},{"iso2":"RU","dial":"+7","name":"روسيا","flag":"🇷🇺"},{"iso2":"RO","dial":"+40","name":"رومانيا","flag":"🇷🇴"},{"iso2":"RE","dial":"+262","name":"روينيون","flag":"🇷🇪"},{"iso2":"ZM","dial":"+260","name":"زامبيا","flag":"🇿🇲"},{"iso2":"ZW","dial":"+263","name":"زيمبابوي","flag":"🇿🇼"},{"iso2":"CI","dial":"+225","name":"ساحل العاج","flag":"🇨🇮"},{"iso2":"WS","dial":"+685","name":"ساموا","flag":"🇼🇸"},{"iso2":"AS","dial":"+1","name":"ساموا الأمريكية","flag":"🇦🇸"},{"iso2":"BL","dial":"+590","name":"سان بارتليمي","flag":"🇧🇱"},{"iso2":"PM","dial":"+508","name":"سان بيير ومكويلون","flag":"🇵🇲"},{"iso2":"MF","dial":"+590","name":"سان مارتن","flag":"🇲🇫"},{"iso2":"SM","dial":"+378","name":"سان مارينو","flag":"🇸🇲"},{"iso2":"VC","dial":"+1","name":"سانت فنسنت وجزر غرينادين","flag":"🇻🇨"},{"iso2":"KN","dial":"+1","name":"سانت كيتس ونيفيس","flag":"🇰🇳"},{"iso2":"LC","dial":"+1","name":"سانت لوسيا","flag":"🇱🇨"},{"iso2":"SX","dial":"+1","name":"سانت مارتن","flag":"🇸🇽"},{"iso2":"SH","dial":"+290","name":"سانت هيلينا","flag":"🇸🇭"},{"iso2":"ST","dial":"+239","name":"ساو تومي وبرينسيبي","flag":"🇸🇹"},{"iso2":"LK","dial":"+94","name":"سريلانكا","flag":"🇱🇰"},{"iso2":"SJ","dial":"+47","name":"سفالبارد وجان ماين","flag":"🇸🇯"},{"iso2":"SK","dial":"+421","name":"سلوفاكيا","flag":"🇸🇰"},{"iso2":"SI","dial":"+386","name":"سلوفينيا","flag":"🇸🇮"},{"iso2":"SG","dial":"+65","name":"سنغافورة","flag":"🇸🇬"},{"iso2":"SR","dial":"+597","name":"سورينام","flag":"🇸🇷"},{"iso2":"CH","dial":"+41","name":"سويسرا","flag":"🇨🇭"},{"iso2":"SL","dial":"+232","name":"سيراليون","flag":"🇸🇱"},{"iso2":"SC","dial":"+248","name":"سيشل","flag":"🇸🇨"},{"iso2":"RS","dial":"+381","name":"صربيا","flag":"🇷🇸"},{"iso2":"TJ","dial":"+992","name":"طاجيكستان","flag":"🇹🇯"},{"iso2":"GM","dial":"+220","name":"غامبيا","flag":"🇬🇲"},{"iso2":"GH","dial":"+233","name":"غانا","flag":"🇬🇭"},{"iso2":"GD","dial":"+1","name":"غرينادا","flag":"🇬🇩"},{"iso2":"GL","dial":"+299","name":"غرينلاند","flag":"🇬🇱"},{"iso2":"GT","dial":"+502","name":"غواتيمالا","flag":"🇬🇹"},{"iso2":"GP","dial":"+590","name":"غوادلوب","flag":"🇬🇵"},{"iso2":"GU","dial":"+1","name":"غوام","flag":"🇬🇺"},{"iso2":"GF","dial":"+594","name":"غويانا الفرنسية","flag":"🇬🇫"},{"iso2":"GY","dial":"+592","name":"غيانا","flag":"🇬🇾"},{"iso2":"GG","dial":"+44","name":"غيرنزي","flag":"🇬🇬"},{"iso2":"GN","dial":"+224","name":"غينيا","flag":"🇬🇳"},{"iso2":"GQ","dial":"+240","name":"غينيا الاستوائية","flag":"🇬🇶"},{"iso2":"GW","dial":"+245","name":"غينيا بيساو","flag":"🇬🇼"},{"iso2":"VU","dial":"+678","name":"فانواتو","flag":"🇻🇺"},{"iso2":"FR","dial":"+33","name":"فرنسا","flag":"🇫🇷"},{"iso2":"VE","dial":"+58","name":"فنزويلا","flag":"🇻🇪"},{"iso2":"FI","dial":"+358","name":"فنلندا","flag":"🇫🇮"},{"iso2":"VN","dial":"+84","name":"فيتنام","flag":"🇻🇳"},{"iso2":"FJ","dial":"+679","name":"فيجي","flag":"🇫🇯"},{"iso2":"CY","dial":"+357","name":"قبرص","flag":"🇨🇾"},{"iso2":"KG","dial":"+996","name":"قيرغيزستان","flag":"🇰🇬"},{"iso2":"KZ","dial":"+7","name":"كازاخستان","flag":"🇰🇿"},{"iso2":"NC","dial":"+687","name":"كاليدونيا الجديدة","flag":"🇳🇨"},{"iso2":"HR","dial":"+385","name":"كرواتيا","flag":"🇭🇷"},{"iso2":"KH","dial":"+855","name":"كمبوديا","flag":"🇰🇭"},{"iso2":"CA","dial":"+1","name":"كندا","flag":"🇨🇦"},{"iso2":"CU","dial":"+53","name":"كوبا","flag":"🇨🇺"},{"iso2":"CW","dial":"+599","name":"كوراساو","flag":"🇨🇼"},{"iso2":"KR","dial":"+82","name":"كوريا الجنوبية","flag":"🇰🇷"},{"iso2":"KP","dial":"+850","name":"كوريا الشمالية","flag":"🇰🇵"},{"iso2":"CR","dial":"+506","name":"كوستاريكا","flag":"🇨🇷"},{"iso2":"XK","dial":"+383","name":"كوسوفو","flag":"🇽🇰"},{"iso2":"CO","dial":"+57","name":"كولومبيا","flag":"🇨🇴"},{"iso2":"KI","dial":"+686","name":"كيريباتي","flag":"🇰🇮"},{"iso2":"KE","dial":"+254","name":"كينيا","flag":"🇰🇪"},{"iso2":"LV","dial":"+371","name":"لاتفيا","flag":"🇱🇻"},{"iso2":"LA","dial":"+856","name":"لاوس","flag":"🇱🇦"},{"iso2":"LU","dial":"+352","name":"لوكسمبورغ","flag":"🇱🇺"},{"iso2":"LY","dial":"+218","name":"ليبيا","flag":"🇱🇾"},{"iso2":"LR","dial":"+231","name":"ليبيريا","flag":"🇱🇷"},{"iso2":"LT","dial":"+370","name":"ليتوانيا","flag":"🇱🇹"},{"iso2":"LI","dial":"+423","name":"ليختنشتاين","flag":"🇱🇮"},{"iso2":"LS","dial":"+266","name":"ليسوتو","flag":"🇱🇸"},{"iso2":"MT","dial":"+356","name":"مالطا","flag":"🇲🇹"},{"iso2":"ML","dial":"+223","name":"مالي","flag":"🇲🇱"},{"iso2":"MY","dial":"+60","name":"ماليزيا","flag":"🇲🇾"},{"iso2":"YT","dial":"+262","name":"مايوت","flag":"🇾🇹"},{"iso2":"MG","dial":"+261","name":"مدغشقر","flag":"🇲🇬"},{"iso2":"MK","dial":"+389","name":"مقدونيا الشمالية","flag":"🇲🇰"},{"iso2":"MW","dial":"+265","name":"ملاوي","flag":"🇲🇼"},{"iso2":"MO","dial":"+853","name":"منطقة ماكاو الإدارية الخاصة","flag":"🇲🇴"},{"iso2":"MN","dial":"+976","name":"منغوليا","flag":"🇲🇳"},{"iso2":"MR","dial":"+222","name":"موريتانيا","flag":"🇲🇷"},{"iso2":"MU","dial":"+230","name":"موريشيوس","flag":"🇲🇺"},{"iso2":"MZ","dial":"+258","name":"موزمبيق","flag":"🇲🇿"},{"iso2":"MD","dial":"+373","name":"مولدوفا","flag":"🇲🇩"},{"iso2":"MC","dial":"+377","name":"موناكو","flag":"🇲🇨"},{"iso2":"MS","dial":"+1","name":"مونتسرات","flag":"🇲🇸"},{"iso2":"MM","dial":"+95","name":"ميانمار (بورما)","flag":"🇲🇲"},{"iso2":"FM","dial":"+691","name":"ميكرونيزيا","flag":"🇫🇲"},{"iso2":"NA","dial":"+264","name":"ناميبيا","flag":"🇳🇦"},{"iso2":"NR","dial":"+674","name":"ناورو","flag":"🇳🇷"},{"iso2":"NP","dial":"+977","name":"نيبال","flag":"🇳🇵"},{"iso2":"NG","dial":"+234","name":"نيجيريا","flag":"🇳🇬"},{"iso2":"NI","dial":"+505","name":"نيكاراغوا","flag":"🇳🇮"},{"iso2":"NZ","dial":"+64","name":"نيوزيلندا","flag":"🇳🇿"},{"iso2":"NU","dial":"+683","name":"نيوي","flag":"🇳🇺"},{"iso2":"HT","dial":"+509","name":"هايتي","flag":"🇭🇹"},{"iso2":"HN","dial":"+504","name":"هندوراس","flag":"🇭🇳"},{"iso2":"HU","dial":"+36","name":"هنغاريا","flag":"🇭🇺"},{"iso2":"NL","dial":"+31","name":"هولندا","flag":"🇳🇱"},{"iso2":"BQ","dial":"+599","name":"هولندا الكاريبية","flag":"🇧🇶"},{"iso2":"HK","dial":"+852","name":"هونغ كونغ الصينية (منطقة إدارية خاصة)","flag":"🇭🇰"}];
 
   const form = document.getElementById('reg-form');
   const btn = document.getElementById('submit-btn');
   const formError = document.getElementById('form-error');
-  const countrySelect = document.getElementById('countryCode');
   const fields = ['name', 'age', 'phone', 'email'];
   let formStarted = false;
 
-  // Populate the country code dropdown
-  COUNTRIES.forEach((c) => {
-    const opt = document.createElement('option');
-    opt.value = c.dial;
-    opt.textContent = c.name + ' ' + c.dial;
-    if (c.iso2 === 'JO') opt.selected = true;
-    countrySelect.appendChild(opt);
+  // --- Searchable country picker ---
+  const countryBtn = document.getElementById('countryBtn');
+  const countryBtnLabel = document.getElementById('countryBtnLabel');
+  const countryDropdown = document.getElementById('countryDropdown');
+  const countrySearch = document.getElementById('countrySearch');
+  const countryList = document.getElementById('countryList');
+  let selectedCountry = COUNTRIES.find((c) => c.iso2 === 'JO') || COUNTRIES[0];
+
+  function renderCountryList(filterText) {
+    const q = (filterText || '').trim().toLowerCase();
+    const filtered = q
+      ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q) || c.dial.includes(q))
+      : COUNTRIES;
+
+    countryList.innerHTML = '';
+    if (filtered.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'country-empty';
+      empty.textContent = 'ما في نتائج';
+      countryList.appendChild(empty);
+      return;
+    }
+    filtered.forEach((c) => {
+      const row = document.createElement('div');
+      row.className = 'country-option' + (c.iso2 === selectedCountry.iso2 ? ' active' : '');
+      row.innerHTML = '<span>' + c.flag + '</span><span>' + c.name + '</span><span class="co-dial">' + c.dial + '</span>';
+      row.addEventListener('click', () => {
+        selectedCountry = c;
+        countryBtnLabel.textContent = c.flag + ' ' + c.dial.replace('+', '') + '+';
+        closeCountryDropdown();
+      });
+      countryList.appendChild(row);
+    });
+  }
+
+  function openCountryDropdown() {
+    countryDropdown.classList.add('open');
+    countryBtn.classList.add('open');
+    countrySearch.value = '';
+    renderCountryList('');
+    setTimeout(() => countrySearch.focus(), 0);
+  }
+
+  function closeCountryDropdown() {
+    countryDropdown.classList.remove('open');
+    countryBtn.classList.remove('open');
+  }
+
+  countryBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (countryDropdown.classList.contains('open')) closeCountryDropdown();
+    else openCountryDropdown();
+  });
+
+  countrySearch.addEventListener('input', () => renderCountryList(countrySearch.value));
+  countrySearch.addEventListener('click', (e) => e.stopPropagation());
+
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('countryPicker').contains(e.target)) closeCountryDropdown();
   });
 
   fields.forEach((id) => {
@@ -382,7 +519,7 @@
     const data = {
       name: document.getElementById('name').value.trim().replace(/\s+/g, ' '),
       age: document.getElementById('age').value.trim(),
-      phone: localDigits ? countrySelect.value + localDigits : '',
+      phone: localDigits ? selectedCountry.dial + localDigits : '',
       email: document.getElementById('email').value.trim().toLowerCase(),
     };
 
