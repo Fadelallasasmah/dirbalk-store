@@ -4,7 +4,7 @@
 // gives us the visitor's real IP + country from Vercel's own headers, and lets the
 // browser read a real success/error response instead of guessing.
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgdOzSGER9lgesYbjH8Igu2NSPfc0VSbYZ0kd4rsJXEtxfv9aHnMxWMMLflqH_5C2dVQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKX8jjLd9DAwamUrO99Dul-uD76q6A6d8AOJT_HHP6rgBZ7s5W_NJid3o3T1sTEljEhQ/exec';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
