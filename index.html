@@ -442,9 +442,30 @@
     text-decoration: none;
     border-bottom: 0.5px solid rgba(201,168,76,0.4);
   }
+  .lang-switch {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    transition: all 0.2s;
+    font-family: Arial, sans-serif;
+  }
+
+  .lang-switch:hover {
+    color: #C9A84C;
+    border-color: rgba(201,168,76,0.4);
+  }
+
 </style>
 </head>
 <body>
+
+<a href="/en/" class="lang-switch">EN</a>
 
 <div class="container">
 
@@ -686,6 +707,7 @@
       age: document.getElementById('age').value.trim(),
       phone: localDigits ? selectedCountry.dial + localDigits : '',
       email: document.getElementById('email').value.trim().toLowerCase(),
+      lang: 'ar',
     };
 
     if (!validate(data)) {
