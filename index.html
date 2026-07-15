@@ -777,7 +777,7 @@
     const data = {
       name: document.getElementById('name').value.trim().replace(/\s+/g, ' '),
       age: document.getElementById('age').value.trim(),
-      gender: selectedGender,
+      gender: document.querySelector('.gender-btn.selected')?.getAttribute('data-gender') || '',
       phone: localDigits ? selectedCountry.dial + localDigits : '',
       email: document.getElementById('email').value.trim().toLowerCase(),
       lang: 'ar',
