@@ -4,7 +4,7 @@
 // gives us the visitor's real IP + country from Vercel's own headers, and lets the
 // browser read a real success/error response instead of guessing.
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywquYqjI6OVJ4Ey1rAOLLo8hqwRmwV05WqS0P4zBHZIi9svFqVEnGMDXh-JmEeJW7AYA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -20,11 +20,13 @@ export default async function handler(req, res) {
     const country = req.headers['x-vercel-ip-country'] || '';
 
     const payload = {
+      action: 'signup',
       name: (req.body?.name || '').toString(),
       age: (req.body?.age || '').toString(),
       gender: (req.body?.gender || '').toString(),
       phone: (req.body?.phone || '').toString(),
       email: (req.body?.email || '').toString(),
+      password: (req.body?.password || '').toString(),
       ip,
       country,
     };
