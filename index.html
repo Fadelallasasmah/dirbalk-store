@@ -495,6 +495,23 @@
     text-decoration: none;
     border-bottom: 0.5px solid rgba(201,168,76,0.4);
   }
+
+  .start-over-link {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    font-size: 10.5px;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+
+  .start-over-link:hover {
+    color: #C9A84C;
+  }
+
   .lang-switch {
     position: fixed;
     top: 18px;
@@ -719,6 +736,8 @@
     <p class="ig-reminder">
       <span id="ig-reminder-text">وتابعنا على</span> <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
     </p>
+
+    <button type="button" id="startOverLink" class="start-over-link" style="display:none;">مو حسابك؟ ابدأ من جديد</button>
   </div>
 
   <div class="page-footer">
@@ -763,6 +782,7 @@
       : 'تم إنشاء حسابك!<br>\n      تحقق من بريدك الإلكتروني وفعّل حسابك عشان تقدر تسجّل الدخول.<br>\n      دير بالك على حالك.';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
+    document.getElementById('startOverLink').style.display = 'block';
   }
 
   function showLoggedInState(name, isFemale) {
@@ -775,6 +795,7 @@
       : 'أهلاً فيك ' + first + '.<br>\n      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
+    document.getElementById('startOverLink').style.display = 'none';
     showUserBadge(name);
   }
 
@@ -784,6 +805,7 @@
   const userAvatar = document.getElementById('userAvatar');
   const userNameLabel = document.getElementById('userNameLabel');
   const logoutBtn = document.getElementById('logoutBtn');
+  const startOverLink = document.getElementById('startOverLink');
 
   function showUserBadge(name) {
     const first = (name || '').trim().split(' ')[0] || '';
@@ -801,21 +823,31 @@
     if (!userBadge.contains(e.target)) userBadge.classList.remove('open');
   });
 
-  logoutBtn.addEventListener('click', () => {
+  function resetToForm() {
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(GENDER_KEY);
       localStorage.removeItem(NAME_KEY);
       localStorage.removeItem(PENDING_KEY);
     } catch (e) { /* ignore */ }
-    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_registration' });
     userBadge.style.display = 'none';
     userBadge.classList.remove('open');
+    startOverLink.style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
     document.getElementById('form-section').style.display = 'block';
     form.reset();
     genderButtons.forEach((b) => b.classList.remove('selected'));
     document.getElementById('genderInput').value = '';
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_registration' });
+    resetToForm();
+  });
+
+  startOverLink.addEventListener('click', () => {
+    if (window.gtag) gtag('event', 'start_over_click', { form_name: 'dirbalk_registration' });
+    resetToForm();
   });
 
   // --- Restore state on load ---
