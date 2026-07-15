@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — DIRBALَK</title>
+<meta name="description" content="DIRBALK — دير بالك على حالك. سجّل الدخول لحسابك.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+  }
+
+  .brand-logo {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    margin: 0 auto 0.4rem;
+    display: block;
+  }
+
+  .brand-arabic {
+    color: #C9A84C;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 3rem;
+    opacity: 0.85;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: #C9A84C;
+    margin: 0 auto 3rem;
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    font-weight: normal;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .field {
+    text-align: right;
+  }
+
+  label {
+    display: block;
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  input {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #ffffff;
+    padding: 14px 18px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    outline: none;
+    text-align: right;
+    font-family: Arial, sans-serif;
+    border-radius: 0;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+
+  input::placeholder { color: rgba(255,255,255,0.25); }
+  input:focus { border-color: rgba(201,168,76,0.5); }
+  input.field-error { border-color: rgba(255,80,80,0.6); }
+
+  .field-msg {
+    color: rgba(255,80,80,0.75);
+    font-size: 10px;
+    margin-top: 5px;
+    letter-spacing: 0.3px;
+    min-height: 12px;
+    display: none;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 4px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    border-radius: 0;
+    transition: all 0.2s;
+    margin-top: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .submit-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .submit-btn:disabled { cursor: default; opacity: 0.6; }
+
+  .form-error {
+    color: rgba(255,80,80,0.85);
+    font-size: 12px;
+    margin-top: 10px;
+    display: none;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
+  }
+
+  .no-account {
+    text-align: center;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1rem;
+  }
+
+  .no-account a {
+    color: #C9A84C;
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+  }
+
+  .footer-text {
+    color: rgba(255,255,255,0.15);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
+  <p class="brand-arabic">دير بالك على حالك</p>
+  <div class="divider"></div>
+
+  <h1>تسجيل الدخول لحسابك</h1>
+
+  <form id="signin-form" novalidate>
+    <div class="form-group">
+      <div class="field">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
+        <p class="field-msg" id="email-msg"></p>
+      </div>
+      <div class="field">
+        <label for="password">كلمة المرور</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+        <p class="field-msg" id="password-msg"></p>
+      </div>
+    </div>
+
+    <p class="form-error" id="form-error"></p>
+
+    <button type="submit" class="submit-btn" id="submit-btn">
+      تسجيل الدخول
+    </button>
+  </form>
+
+  <p class="no-account">
+    ما عندك حساب؟ <a href="/">أنشئ حساب جديد</a>
+  </p>
+
+  <p class="footer-text">COLLECTION 01 · WINTER 2026</p>
+
+</div>
+
+<script>
+(function () {
+  const form = document.getElementById('signin-form');
+  const btn = document.getElementById('submit-btn');
+  const formError = document.getElementById('form-error');
+
+  function showFieldError(id, message) {
+    const input = document.getElementById(id);
+    const msg = document.getElementById(id + '-msg');
+    input.classList.add('field-error');
+    msg.textContent = message;
+    msg.style.display = 'block';
+  }
+
+  function clearAllErrors() {
+    ['email', 'password'].forEach((id) => {
+      document.getElementById(id).classList.remove('field-error');
+      document.getElementById(id + '-msg').style.display = 'none';
+    });
+    formError.style.display = 'none';
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    clearAllErrors();
+
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+
+    let valid = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showFieldError('email', 'الرجاء إدخال بريد إلكتروني صحيح.');
+      valid = false;
+    }
+    if (!password) {
+      showFieldError('password', 'الرجاء إدخال كلمة المرور.');
+      valid = false;
+    }
+    if (!valid) return;
+
+    btn.disabled = true;
+    btn.textContent = 'جاري الدخول...';
+    if (window.gtag) gtag('event', 'login_attempt');
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', email, password, lang: 'ar' }),
+      });
+      const result = await res.json();
+
+      if (result.status === 'success') {
+        if (window.gtag) gtag('event', 'login_success');
+        try {
+          localStorage.setItem('dirbalk_logged_in', '1');
+          localStorage.setItem('dirbalk_name', result.name || '');
+          localStorage.setItem('dirbalk_gender', result.gender || '');
+          localStorage.removeItem('dirbalk_pending_verification');
+        } catch (err) { /* ignore */ }
+        window.location.href = '/';
+      } else {
+        if (window.gtag) gtag('event', 'login_error', { reason: result.message || 'unknown' });
+        formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        formError.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'تسجيل الدخول';
+      }
+    } catch (err) {
+      formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      formError.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'تسجيل الدخول';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
