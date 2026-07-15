@@ -529,6 +529,7 @@
             <button type="button" class="gender-btn" data-gender="male">ذكر</button>
             <button type="button" class="gender-btn" data-gender="female">أنثى</button>
           </div>
+          <input type="hidden" id="genderInput" name="gender" value="" />
           <p class="field-msg" id="gender-msg"></p>
         </div>
         <div class="field">
@@ -633,6 +634,7 @@
   genderButtons.forEach((b) => {
     b.addEventListener('click', () => {
       selectedGender = b.getAttribute('data-gender');
+      document.getElementById('genderInput').value = selectedGender;
       genderButtons.forEach((btn2) => btn2.classList.remove('selected'));
       b.classList.add('selected');
       document.getElementById('genderRow').classList.remove('field-error');
@@ -777,7 +779,7 @@
     const data = {
       name: document.getElementById('name').value.trim().replace(/\s+/g, ' '),
       age: document.getElementById('age').value.trim(),
-      gender: document.querySelector('.gender-btn.selected')?.getAttribute('data-gender') || '',
+      gender: document.getElementById('genderInput').value || '',
       phone: localDigits ? selectedCountry.dial + localDigits : '',
       email: document.getElementById('email').value.trim().toLowerCase(),
       lang: 'ar',
