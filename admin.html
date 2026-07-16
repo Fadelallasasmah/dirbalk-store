@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — DIRBALَK</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  a { color: inherit; }
+
+  .gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .gate-card { width: 100%; max-width: 340px; text-align: center; }
+  .gate-card img { height: 26px; margin-bottom: 30px; }
+  .gate-card label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .gate-card input {
+    width: 100%;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 13px 16px;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    font-family: Arial, sans-serif;
+    margin-bottom: 16px;
+  }
+  .gate-card input:focus { border-color: rgba(201,168,76,0.5); }
+  .gate-btn {
+    width: 100%;
+    padding: 13px;
+    background: #C9A84C;
+    border: none;
+    color: #0a0a0a;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .gate-error { color: rgba(255,120,120,0.85); font-size: 11.5px; margin-top: 12px; display: none; }
+
+  .dash { display: none; max-width: 1000px; margin: 0 auto; padding: 30px 20px 80px; }
+
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .dash-header img { height: 22px; }
+  .dash-header .home-link { font-size: 11px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .dash-header .home-link:hover { color: #C9A84C; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    border: 0.5px solid rgba(255,255,255,0.12);
+    padding: 18px;
+  }
+  .stat-card .num { font-size: 24px; font-weight: bold; color: #C9A84C; margin-bottom: 6px; }
+  .stat-card .label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.3px; }
+
+  h2 { font-size: 15px; margin-bottom: 16px; letter-spacing: 0.3px; }
+
+  .country-list { margin-bottom: 40px; }
+  .country-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+  }
+  .country-row span:last-child { color: #C9A84C; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th {
+    text-align: right;
+    padding: 10px 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.15);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 8px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+  }
+  td.wrap { white-space: normal; max-width: 220px; }
+  .table-wrap { overflow-x: auto; }
+  .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
+
+  .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="/logo.png" alt="DIRBALK" />
+    <label for="adminKey">رمز الدخول</label>
+    <input type="password" id="adminKey" placeholder="••••••••" />
+    <button type="button" class="gate-btn" id="gateBtn">دخول</button>
+    <p class="gate-error" id="gateError">رمز الدخول غير صحيح.</p>
+  </div>
+</div>
+
+<div class="dash" id="dash">
+  <div class="dash-header">
+    <img src="/logo.png" alt="DIRBALK" />
+    <a href="/" class="home-link">← الرئيسية</a>
+  </div>
+
+  <div id="loadingNote" class="loading">جاري التحميل...</div>
+
+  <div id="dashContent" style="display:none;">
+    <div class="stat-grid" id="statGrid"></div>
+
+    <h2>التسجيلات حسب الدولة</h2>
+    <div class="country-list" id="countryList"></div>
+
+    <h2>آخر الطلبات</h2>
+    <div class="table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>الاسم</th>
+            <th>الإيميل</th>
+            <th>الهاتف</th>
+            <th>المدينة</th>
+            <th>العنوان</th>
+            <th>القطع</th>
+            <th>المجموع</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+      <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const ADMIN_KEY_STORAGE = 'dirbalk_admin_key';
+
+  function loadDashboard(key) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dash').style.display = 'block';
+
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        document.getElementById('loadingNote').style.display = 'none';
+        if (result.status !== 'success') {
+          document.getElementById('gate').style.display = 'flex';
+          document.getElementById('dash').style.display = 'none';
+          document.getElementById('gateError').style.display = 'block';
+          try { sessionStorage.removeItem(ADMIN_KEY_STORAGE); } catch (e) {}
+          return;
+        }
+
+        document.getElementById('dashContent').style.display = 'block';
+        renderStats(result.stats);
+        renderCountries(result.stats.countryCounts);
+        renderOrders(result.orders);
+      })
+      .catch(() => {
+        document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      });
+  }
+
+  function renderStats(stats) {
+    const cards = [
+      { num: stats.totalAccounts, label: 'إجمالي الحسابات' },
+      { num: stats.verifiedAccounts, label: 'حسابات مفعّلة' },
+      { num: stats.maleCount, label: 'ذكور' },
+      { num: stats.femaleCount, label: 'إناث' },
+      { num: stats.totalOrders, label: 'إجمالي الطلبات' },
+      { num: stats.totalRevenue + ' JD', label: 'إجمالي المبيعات (تجريبي)' },
+    ];
+    const grid = document.getElementById('statGrid');
+    grid.innerHTML = '';
+    cards.forEach((c) => {
+      const div = document.createElement('div');
+      div.className = 'stat-card';
+      div.innerHTML = '<div class="num">' + c.num + '</div><div class="label">' + c.label + '</div>';
+      grid.appendChild(div);
+    });
+  }
+
+  function renderCountries(countryCounts) {
+    const list = document.getElementById('countryList');
+    list.innerHTML = '';
+    const entries = Object.entries(countryCounts || {}).sort((a, b) => b[1] - a[1]);
+    if (entries.length === 0) {
+      list.innerHTML = '<p class="empty-note">ما في بيانات لسا.</p>';
+      return;
+    }
+    entries.forEach(([country, count]) => {
+      const row = document.createElement('div');
+      row.className = 'country-row';
+      row.innerHTML = '<span>' + country + '</span><span>' + count + '</span>';
+      list.appendChild(row);
+    });
+  }
+
+  function renderOrders(orders) {
+    const body = document.getElementById('ordersBody');
+    body.innerHTML = '';
+    if (!orders || orders.length === 0) {
+      document.getElementById('ordersEmpty').style.display = 'block';
+      return;
+    }
+    orders.forEach((o) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + o.orderId + '</td>' +
+        '<td>' + o.name + '</td>' +
+        '<td>' + o.email + '</td>' +
+        '<td>' + o.phone + '</td>' +
+        '<td>' + o.city + '</td>' +
+        '<td class="wrap">' + o.address + (o.locationLink ? ' <a href="' + o.locationLink + '" target="_blank" style="color:#C9A84C;">(خريطة)</a>' : '') + '</td>' +
+        '<td class="wrap">' + o.items + '</td>' +
+        '<td>' + o.total + ' JD</td>' +
+        '<td>' + o.status + '</td>';
+      body.appendChild(tr);
+    });
+  }
+
+  document.getElementById('gateBtn').addEventListener('click', () => {
+    const key = document.getElementById('adminKey').value.trim();
+    if (!key) return;
+    document.getElementById('gateError').style.display = 'none';
+    try { sessionStorage.setItem(ADMIN_KEY_STORAGE, key); } catch (e) {}
+    loadDashboard(key);
+  });
+
+  document.getElementById('adminKey').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('gateBtn').click();
+  });
+
+  try {
+    const savedKey = sessionStorage.getItem(ADMIN_KEY_STORAGE);
+    if (savedKey) loadDashboard(savedKey);
+  } catch (e) { /* ignore */ }
+})();
+</script>
+
+</body>
+</html>
