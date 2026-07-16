@@ -103,6 +103,23 @@
   input:focus { border-color: rgba(201,168,76,0.5); }
   input.field-error { border-color: rgba(255,80,80,0.6); }
 
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-left: 44px; }
+  .pw-toggle {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    opacity: 0.4;
+    filter: grayscale(1);
+    transition: opacity 0.2s;
+  }
+  .pw-toggle:hover, .pw-toggle.active { opacity: 0.9; }
+
   .field-msg {
     color: rgba(255,80,80,0.75);
     font-size: 10px;
@@ -193,7 +210,10 @@
       </div>
       <div class="field">
         <label for="password">كلمة المرور</label>
-        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+        <div class="password-wrap">
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+          <button type="button" class="pw-toggle" data-target="password" aria-label="إظهار كلمة المرور">👁</button>
+        </div>
         <p class="field-msg" id="password-msg"></p>
         <a href="forgot-password.html" class="forgot-link">نسيت كلمة المرور؟</a>
       </div>
@@ -217,6 +237,16 @@
 <script>
 (function () {
   const form = document.getElementById('signin-form');
+
+  document.querySelectorAll('.pw-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const showing = target.type === 'text';
+      target.type = showing ? 'password' : 'text';
+      btn.classList.toggle('active', !showing);
+    });
+  });
+
   const btn = document.getElementById('submit-btn');
   const formError = document.getElementById('form-error');
 
