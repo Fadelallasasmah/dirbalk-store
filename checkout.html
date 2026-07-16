@@ -239,6 +239,11 @@
           <input type="text" id="address" placeholder="الحي، الشارع، أقرب معلم" />
           <p class="field-msg" id="address-msg"></p>
         </div>
+        <div class="field">
+          <label for="locationLink">رابط الموقع (اختياري)</label>
+          <input type="text" id="locationLink" placeholder="رابط من Google Maps أو Apple Maps" />
+          <p class="field-msg" id="locationLink-msg"></p>
+        </div>
       </div>
 
       <p class="form-error" id="shippingError"></p>
@@ -377,10 +382,16 @@
   try {
     if (localStorage.getItem('dirbalk_logged_in') === '1') {
       const name = localStorage.getItem('dirbalk_name') || '';
+      const email = localStorage.getItem('dirbalk_email') || '';
+      const phone = localStorage.getItem('dirbalk_phone') || '';
+
+      if (name) document.getElementById('fullName').value = name;
+      if (email) document.getElementById('ckEmail').value = email;
+      if (phone) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
+
       if (name) {
-        document.getElementById('fullName').value = name;
         const note = document.getElementById('loggedInNote');
-        note.innerHTML = 'مسجل دخول كـ <strong>' + name + '</strong> — عبّي باقي البيانات لإتمام الطلب.';
+        note.innerHTML = 'مسجل دخول كـ <strong>' + name + '</strong> — عبّينالك بياناتك، بس تأكد منها وكمّل الباقي.';
         note.style.display = 'block';
       }
     }
@@ -416,6 +427,7 @@
       phone: document.getElementById('ckPhone').value.trim(),
       city: document.getElementById('city').value.trim(),
       address: document.getElementById('address').value.trim(),
+      locationLink: document.getElementById('locationLink').value.trim(),
     };
 
     let valid = true;
@@ -466,6 +478,7 @@
       phone: shippingData.phone,
       city: shippingData.city,
       address: shippingData.address,
+      locationLink: shippingData.locationLink,
       items: cart.map((l) => {
         const p = findProduct(l.id);
         return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
