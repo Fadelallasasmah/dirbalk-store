@@ -190,6 +190,33 @@
     transition: transform 0.4s ease;
   }
 
+  .gate-box {
+    max-width: 420px;
+    margin: 20px auto 80px;
+    padding: 0 20px;
+    text-align: center;
+  }
+  .gate-box p {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 22px;
+  }
+  .gate-actions { display: flex; gap: 10px; }
+  .gate-btn {
+    flex: 1;
+    padding: 13px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .gate-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .gate-btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
+  .gate-btn.primary:hover { opacity: 0.9; }
+
   .card:hover .card-media svg { transform: scale(1.08); }
 
   .card-code {
@@ -519,13 +546,21 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="shopHero">
   <p class="brand-mark">DIRBALَK®</p>
   <h1>Collection 01</h1>
   <p>إصدار محدود. لما يخلص، بيخلص. دير بالك على حالك.</p>
 </section>
 
-<div class="grid" id="productGrid"></div>
+<div class="gate-box" id="gateBox" style="display:none;">
+  <p>لازم يكون عندك حساب مفعّل عشان تتسوق.</p>
+  <div class="gate-actions">
+    <a href="/" class="gate-btn primary">أنشئ حساب</a>
+    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
+  </div>
+</div>
+
+<div class="grid" id="productGrid" style="display:none;"></div>
 
 <!-- Quick view modal -->
 <div class="overlay" id="modalOverlay">
@@ -701,8 +736,17 @@
     setTimeout(() => { t.style.display = 'none'; }, 2000);
   }
 
+  /* ---------------- login gate ---------------- */
+  let isLoggedIn = false;
+  try { isLoggedIn = localStorage.getItem('dirbalk_logged_in') === '1'; } catch (e) { /* ignore */ }
+
   /* ---------------- render product grid (no stock numbers shown) ---------------- */
   const grid = document.getElementById('productGrid');
+  if (isLoggedIn) {
+    grid.style.display = 'grid';
+  } else {
+    document.getElementById('gateBox').style.display = 'block';
+  }
   PRODUCTS.forEach((p) => {
     const soldOut = totalStock(p) === 0;
     const card = document.createElement('div');
