@@ -208,6 +208,15 @@
 
   @media (max-width: 640px) { .modal { grid-template-columns: 1fr; } }
 
+  @media (max-width: 520px) {
+    .grid { grid-template-columns: 1fr; gap: 18px; padding: 20px 16px 60px; }
+    .hero { padding: 34px 16px 20px; }
+    .modal-body { padding: 22px; }
+    .modal-media { padding: 24px; min-height: 260px; }
+    .card-media { height: 260px; }
+    .cart-drawer { max-width: 100%; }
+  }
+
   .modal-media {
     background: rgba(255,255,255,0.03);
     display: flex;
@@ -236,6 +245,31 @@
   }
   .zoom-hint svg { width: 12px; height: 12px; }
 
+  /* ---------- desktop hover magnifier ---------- */
+  .zoom-pane {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: calc(100% + 12px);
+    width: 340px;
+    height: 100%;
+    background: #0d0d0d;
+    border: 0.5px solid rgba(201,168,76,0.4);
+    overflow: hidden;
+    z-index: 40;
+  }
+
+  .zoom-pane svg {
+    width: 100%;
+    height: 100%;
+    transform: scale(2.4);
+    transform-origin: 50% 50%;
+  }
+
+  @media (min-width: 1300px) {
+    body.can-hover .modal-media.zooming .zoom-pane { display: block; }
+  }
+
   .modal-body { padding: 30px; position: relative; }
 
   .modal-close {
@@ -254,18 +288,38 @@
   .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
   .modal-colorway { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
   .modal-price { font-size: 16px; color: #C9A84C; font-weight: bold; margin-bottom: 18px; }
-  .modal-desc { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.55); margin-bottom: 20px; }
+  .modal-desc { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.55); margin-bottom: 22px; }
 
-  .spec-list { list-style: none; margin-bottom: 24px; }
-  .spec-list li {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11.5px;
-    padding: 8px 0;
-    border-top: 0.5px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.5);
+  .spec-heading {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #C9A84C;
+    margin-bottom: 8px;
+    margin-top: 18px;
   }
-  .spec-list li span:last-child { color: rgba(255,255,255,0.8); }
+
+  .spec-list { list-style: none; margin-bottom: 4px; }
+  .spec-list li {
+    font-size: 12px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.6);
+    padding-right: 14px;
+    position: relative;
+  }
+  .spec-list li::before {
+    content: '—';
+    position: absolute;
+    right: 0;
+    color: rgba(201,168,76,0.6);
+  }
+
+  .modal-meta {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
 
   .size-label { font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
   .size-row { display: flex; gap: 8px; margin-bottom: 22px; }
@@ -443,7 +497,14 @@
       <p class="modal-colorway" id="modalColorway"></p>
       <p class="modal-price" id="modalPrice"></p>
       <p class="modal-desc" id="modalDesc"></p>
-      <ul class="spec-list" id="specList"></ul>
+
+      <p class="spec-heading">القصة</p>
+      <ul class="spec-list" id="fitList"></ul>
+
+      <p class="spec-heading">التركيب والعناية</p>
+      <ul class="spec-list" id="careList"></ul>
+
+      <p class="modal-meta" id="modalMeta"></p>
       <p class="size-label">المقاس</p>
       <div class="size-row" id="sizeRow"></div>
       <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
@@ -486,7 +547,17 @@
       colorway: 'أبيض نقي',
       price: 22,
       desc: 'قماش قطن ثقيل 260 جرام، قصة أوفرسايز، بدون أي طباعة خارجية. تفاصيله كلها بالداخل.',
-      specs: [ ['القماش', 'قطن 260 جرام'], ['القصة', 'أوفرسايز'], ['اللون', 'أبيض نقي'] ],
+      fit: [
+        'قصة أوفرسايز واسعة',
+        'الطول لنص الفخذ تقريباً',
+        'الأكمام طويلة وعريضة'
+      ],
+      care: [
+        '100% قطن، 260 جرام/م²',
+        'غسيل بارد',
+        'لا تستخدم مبيض',
+        'تجفيف بحرارة منخفضة'
+      ],
       swatch: '#f2f0ea',
       silhouette: 'tee',
       sizes: { S: 20, M: 60, L: 20 }
@@ -497,7 +568,17 @@
       colorway: 'إندجو خام 13oz',
       price: 50,
       desc: 'دنيم خام 13oz، أزرار وأسنان معدن فضي مطفي، خيط تطريز أمبر مخفي.',
-      specs: [ ['القماش', 'دنيم خام 13oz'], ['القصة', 'واسع (Wide-leg)'], ['الأزرار', 'معدن فضي مطفي'] ],
+      fit: [
+        'قصة واسعة (Wide-leg)',
+        'خصر عادي',
+        'طول كامل للكاحل'
+      ],
+      care: [
+        'دنيم خام 13oz، 100% قطن',
+        'أزرار وأسنان معدن فضي مطفي',
+        'خيط تطريز أمبر مخفي',
+        'اغسله لحاله أول مرة، ماء بارد'
+      ],
       swatch: '#3a4a63',
       silhouette: 'pants',
       sizes: { S: 20, M: 60, L: 20 }
@@ -508,7 +589,16 @@
       colorway: 'إندجو خام 13oz',
       price: 65,
       desc: 'دنيم خام 13oz، ستة أزرار أمامية، أزرار وأسنان فضية مطفية، قصة أوفرسايز.',
-      specs: [ ['القماش', 'دنيم خام 13oz'], ['الأزرار', '6 أزرار أمامية'], ['القصة', 'أوفرسايز'] ],
+      fit: [
+        'قصة أوفرسايز',
+        'ستة أزرار أمامية',
+        'الطول لمنتصف الحوض تقريباً'
+      ],
+      care: [
+        'دنيم خام 13oz، 100% قطن',
+        'أزرار معدن فضي مطفي',
+        'اغسله لحاله أول مرة، ماء بارد'
+      ],
       swatch: '#2d3a52',
       silhouette: 'jacket',
       sizes: { S: 20, M: 60, L: 20 }
@@ -516,6 +606,8 @@
   ];
 
   const CART_KEY = 'dirbalk_cart';
+  window.canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (window.canHover) document.body.classList.add('can-hover');
 
   function silhouetteSVG(type, tint) {
     const stroke = 'rgba(255,255,255,0.15)';
@@ -592,7 +684,9 @@
     modalSize = null;
     const svg = silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
     document.getElementById('modalMedia').innerHTML = svg +
-      '<span class="zoom-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg> اضغط للتكبير</span>';
+      '<span class="zoom-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg> ' +
+      (window.canHover ? 'حرّك الماوس للتكبير' : 'اضغط للتكبير') + '</span>' +
+      '<div class="zoom-pane" id="zoomPane">' + svg + '</div>';
     document.getElementById('modalCode').textContent = modalProduct.id;
     document.getElementById('modalTitle').textContent = modalProduct.name;
     document.getElementById('modalColorway').textContent = modalProduct.colorway;
@@ -600,13 +694,9 @@
     document.getElementById('modalDesc').textContent = modalProduct.desc;
     document.getElementById('modalMsg').style.display = 'none';
 
-    const specList = document.getElementById('specList');
-    specList.innerHTML = '';
-    modalProduct.specs.forEach(([label, value]) => {
-      const li = document.createElement('li');
-      li.innerHTML = '<span>' + label + '</span><span>' + value + '</span>';
-      specList.appendChild(li);
-    });
+    renderSpecSection('fitList', modalProduct.fit);
+    renderSpecSection('careList', modalProduct.care);
+    document.getElementById('modalMeta').textContent = 'كود: ' + modalProduct.id + ' · اللون: ' + modalProduct.colorway;
 
     const sizeRow = document.getElementById('sizeRow');
     sizeRow.innerHTML = '';
@@ -630,6 +720,16 @@
     if (window.gtag) gtag('event', 'view_item', { item_id: id });
   }
 
+  function renderSpecSection(listId, items) {
+    const list = document.getElementById(listId);
+    list.innerHTML = '';
+    items.forEach((text) => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      list.appendChild(li);
+    });
+  }
+
   document.getElementById('modalClose').addEventListener('click', () => {
     document.getElementById('modalOverlay').classList.remove('open');
   });
@@ -637,12 +737,33 @@
     if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('open');
   });
 
-  /* ---------------- zoom lightbox ---------------- */
-  document.getElementById('modalMedia').addEventListener('click', () => {
+  /* ---------------- zoom: lightbox (tap) + magnifier (hover) ---------------- */
+  const modalMediaEl = document.getElementById('modalMedia');
+
+  modalMediaEl.addEventListener('click', (e) => {
     if (!modalProduct) return;
+    // On hover-capable desktops the magnifier already shows on hover,
+    // so a click there opens the full lightbox for an even closer look.
     document.getElementById('lightboxMedia').innerHTML = silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
     document.getElementById('lightbox').classList.add('open');
   });
+
+  modalMediaEl.addEventListener('mousemove', (e) => {
+    if (!window.canHover || !modalProduct) return;
+    modalMediaEl.classList.add('zooming');
+    const rect = modalMediaEl.getBoundingClientRect();
+    const xPct = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
+    const yPct = Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100));
+    const zoomSvg = document.querySelector('#zoomPane svg');
+    if (zoomSvg) {
+      zoomSvg.style.transformOrigin = xPct + '% ' + yPct + '%';
+    }
+  });
+
+  modalMediaEl.addEventListener('mouseleave', () => {
+    modalMediaEl.classList.remove('zooming');
+  });
+
   function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
   document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
   document.getElementById('lightbox').addEventListener('click', (e) => {
