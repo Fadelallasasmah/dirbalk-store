@@ -272,6 +272,8 @@
           localStorage.setItem('dirbalk_logged_in', '1');
           localStorage.setItem('dirbalk_name', result.name || '');
           localStorage.setItem('dirbalk_gender', result.gender || '');
+          localStorage.setItem('dirbalk_email', result.email || email);
+          localStorage.setItem('dirbalk_phone', result.phone || '');
           localStorage.removeItem('dirbalk_pending_verification');
         } catch (err) { /* ignore */ }
         window.location.href = '/';
