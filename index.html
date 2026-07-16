@@ -6,7 +6,6 @@
 <title>DIRBALَK</title>
 <meta name="description" content="DIRBALK — دير بالك على حالك. Collection 01, Winter 2026.">
 
-<!-- Open Graph / link preview tags -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dirbalk.com/">
 <meta property="og:title" content="DIRBALَK — دير بالك على حالك">
@@ -16,12 +15,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ar_JO">
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="DIRBALَK — دير بالك على حالك">
 <meta name="twitter:description" content="Collection 01 · Winter 2026. سجّل الآن، رح نبعتلك أول لما يطلع.">
 <meta name="twitter:image" content="https://dirbalk.com/og-image.png">
- <!-- Google Analytics -->
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -40,46 +38,53 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    justify-content: flex-start;
+    padding: 0 0 3rem;
   }
 
-  .container {
+  .container { width: 100%; max-width: 460px; text-align: center; padding: 0 2rem; }
+
+  .hero-media {
     width: 100%;
-    max-width: 420px;
-    text-align: center;
+    max-height: 62vh;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2.2rem;
   }
 
-  .brand-sub {
-    color: #C9A84C;
-    font-size: 11px;
-    letter-spacing: 4px;
-    margin-bottom: 2rem;
-    opacity: 0.7;
+  .hero-media video,
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0) 60%, rgba(10,10,10,1) 100%);
+    pointer-events: none;
   }
 
   .brand-logo {
     width: 100%;
-    max-width: 320px;
+    max-width: 260px;
     height: auto;
-    margin-bottom: 0.4rem;
+    margin: 0 auto 0.4rem;
+    display: block;
   }
 
   .brand-arabic {
     color: #C9A84C;
     font-size: 14px;
     letter-spacing: 2px;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     opacity: 0.85;
   }
 
-  .divider {
-    width: 40px;
-    height: 1px;
-    background: #C9A84C;
-    margin: 0 auto 3rem;
-    opacity: 0.4;
-  }
+  .divider { width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 2.5rem; opacity: 0.4; }
 
   .shop-cta {
     display: inline-block;
@@ -89,33 +94,21 @@
     text-decoration: none;
     border: 0.5px solid rgba(201,168,76,0.4);
     padding: 11px 26px;
-    margin-bottom: 2.8rem;
+    margin-bottom: 2.5rem;
     transition: all 0.2s;
   }
-
-  .shop-cta:hover {
-    border-color: #C9A84C;
-    background: rgba(201,168,76,0.08);
-  }
+  .shop-cta:hover { border-color: #C9A84C; background: rgba(201,168,76,0.08); }
 
   .description {
     color: rgba(255,255,255,0.5);
     font-size: 13px;
     line-height: 1.9;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.2rem;
     letter-spacing: 0.3px;
   }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 8px;
-  }
-
-  .field {
-    text-align: right;
-  }
+  .form-group { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+  .field { text-align: right; }
 
   label {
     display: block;
@@ -135,158 +128,12 @@
     outline: none;
     text-align: right;
     font-family: Arial, sans-serif;
-    border-radius: 0;
     width: 100%;
     transition: border-color 0.2s;
   }
-
-  input::placeholder {
-    color: rgba(255,255,255,0.25);
-  }
-
-  input:focus {
-    border-color: rgba(201,168,76,0.5);
-  }
-
-  input.field-error {
-    border-color: rgba(255,80,80,0.6);
-  }
-
-  .password-wrap { position: relative; }
-  .password-wrap input { padding-left: 44px; }
-  .pw-toggle {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 15px;
-    opacity: 0.4;
-    filter: grayscale(1);
-    transition: opacity 0.2s;
-  }
-  .pw-toggle:hover, .pw-toggle.active { opacity: 0.9; }
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
-
-  .phone-row {
-    display: flex;
-    gap: 8px;
-    position: relative;
-  }
-
-  .country-picker {
-    position: relative;
-    width: 128px;
-    flex-shrink: 0;
-  }
-
-  .country-btn {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    color: #ffffff;
-    padding: 14px 10px;
-    font-size: 12px;
-    outline: none;
-    font-family: Arial, sans-serif;
-    border-radius: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    transition: border-color 0.2s;
-  }
-
-  .country-btn:hover,
-  .country-btn.open {
-    border-color: rgba(201,168,76,0.5);
-  }
-
-  .country-btn.field-error {
-    border-color: rgba(255,80,80,0.6);
-  }
-
-  .country-btn .cb-caret {
-    font-size: 9px;
-    opacity: 0.5;
-  }
-
-  .country-dropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + 4px);
-    right: 0;
-    width: 260px;
-    max-height: 280px;
-    background: #141414;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    z-index: 20;
-    flex-direction: column;
-  }
-
-  .country-dropdown.open {
-    display: flex;
-  }
-
-  .country-search {
-    background: transparent;
-    border: none;
-    border-bottom: 0.5px solid rgba(255,255,255,0.15);
-    color: #ffffff;
-    padding: 12px 14px;
-    font-size: 13px;
-    outline: none;
-    text-align: right;
-    font-family: Arial, sans-serif;
-    width: 100%;
-  }
-
-  .country-list {
-    overflow-y: auto;
-    flex: 1;
-  }
-
-  .country-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: #ffffff;
-    cursor: pointer;
-    text-align: right;
-  }
-
-  .country-option:hover,
-  .country-option.active {
-    background: rgba(201,168,76,0.15);
-  }
-
-  .country-option .co-dial {
-    color: rgba(255,255,255,0.4);
-    font-size: 11px;
-    margin-right: auto;
-  }
-
-  .country-empty {
-    padding: 14px;
-    text-align: center;
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-  }
-
-  .phone-row input {
-    flex: 1;
-    min-width: 0;
-  }
+  input::placeholder { color: rgba(255,255,255,0.25); }
+  input:focus { border-color: rgba(201,168,76,0.5); }
+  input.field-error { border-color: rgba(255,80,80,0.6); }
 
   .field-msg {
     color: rgba(255,80,80,0.75);
@@ -297,11 +144,7 @@
     display: none;
   }
 
-  .gender-row {
-    display: flex;
-    gap: 8px;
-  }
-
+  .gender-row { display: flex; gap: 8px; }
   .gender-btn {
     flex: 1;
     padding: 13px 8px;
@@ -314,20 +157,9 @@
     font-family: Arial, sans-serif;
     transition: all 0.2s;
   }
-
-  .gender-btn:hover {
-    border-color: rgba(201,168,76,0.4);
-  }
-
-  .gender-btn.selected {
-    border-color: #C9A84C;
-    color: #C9A84C;
-    background: rgba(201,168,76,0.08);
-  }
-
-  .gender-btn.field-error {
-    border-color: rgba(255,80,80,0.6);
-  }
+  .gender-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .gender-btn.selected { border-color: #C9A84C; color: #C9A84C; background: rgba(201,168,76,0.08); }
+  .gender-btn.field-error { border-color: rgba(255,80,80,0.6); }
 
   .submit-btn {
     width: 100%;
@@ -339,97 +171,35 @@
     letter-spacing: 4px;
     cursor: pointer;
     font-family: Arial, sans-serif;
-    border-radius: 0;
     transition: all 0.2s;
     margin-top: 1.5rem;
     margin-bottom: 1.2rem;
   }
+  .submit-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .submit-btn:disabled { cursor: default; opacity: 0.6; }
 
-  .submit-btn:hover {
-    border-color: rgba(201,168,76,0.4);
-  }
+  .footer-text { color: rgba(255,255,255,0.15); font-size: 10px; letter-spacing: 2px; margin-bottom: 1.2rem; }
 
-  .submit-btn:disabled {
-    cursor: default;
-    opacity: 0.6;
-  }
-
-  .footer-text {
-    color: rgba(255,255,255,0.15);
-    font-size: 10px;
-    letter-spacing: 2px;
-    margin-bottom: 1.2rem;
-  }
-
-  .contact-row {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    margin-top: 2.5rem;
-    margin-bottom: 1.2rem;
-  }
-
+  .contact-row { display: flex; justify-content: center; gap: 14px; margin-top: 2.5rem; margin-bottom: 1.2rem; }
   .contact-btn {
-    width: 38px;
-    height: 38px;
+    width: 38px; height: 38px;
     border: 0.5px solid rgba(255,255,255,0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     color: rgba(255,255,255,0.6);
     text-decoration: none;
     transition: all 0.2s;
   }
+  .contact-btn:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
+  .contact-btn svg { width: 17px; height: 17px; }
 
-  .contact-btn:hover {
-    border-color: rgba(201,168,76,0.5);
-    color: #C9A84C;
-  }
-
-  .contact-btn svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .page-footer {
-    margin-top: 1rem;
-    text-align: center;
-  }
-
-  .page-footer .brand-mark {
-    color: #C9A84C;
-    font-size: 11px;
-    letter-spacing: 4px;
-    opacity: 0.6;
-  }
+  .page-footer { margin-top: 1rem; text-align: center; }
+  .page-footer .brand-mark { color: #C9A84C; font-size: 11px; letter-spacing: 4px; opacity: 0.6; }
 
   .privacy-link {
     color: rgba(255,255,255,0.25);
     font-size: 10px;
     letter-spacing: 0.5px;
     text-decoration: underline;
-  }
-
-  .have-account {
-    text-align: center;
-    font-size: 11.5px;
-    color: rgba(255,255,255,0.4);
-    margin-top: 0.4rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .have-account a {
-    color: #C9A84C;
-    text-decoration: none;
-    border-bottom: 0.5px solid rgba(201,168,76,0.4);
-  }
-
-  .verify-icon {
-    margin: 0 auto 1.5rem;
-    width: 52px;
-    height: 52px;
-    color: #C9A84C;
-    opacity: 0.9;
   }
 
   .form-error {
@@ -441,46 +211,19 @@
     line-height: 1.6;
   }
 
-  .success-msg {
-    display: none;
-    text-align: center;
-    padding: 1.5rem 0;
-  }
+  .success-msg { display: none; text-align: center; padding: 1.5rem 0; }
 
-  .success-icon {
-    margin: 0 auto 1.5rem;
-    width: 56px;
-    height: 56px;
-  }
-
-  .success-icon circle {
-    stroke: rgba(201,168,76,0.4);
-    stroke-width: 1;
-    fill: none;
-  }
-
+  .success-icon { margin: 0 auto 1.5rem; width: 56px; height: 56px; }
+  .success-icon circle { stroke: rgba(201,168,76,0.4); stroke-width: 1; fill: none; }
   .success-icon path {
-    stroke: #C9A84C;
-    stroke-width: 2;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 30;
-    stroke-dashoffset: 30;
+    stroke: #C9A84C; stroke-width: 2; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 30; stroke-dashoffset: 30;
     animation: drawCheck 0.6s ease forwards 0.2s;
   }
+  @keyframes drawCheck { to { stroke-dashoffset: 0; } }
 
-  @keyframes drawCheck {
-    to { stroke-dashoffset: 0; }
-  }
-
-  .success-msg p {
-    color: #C9A84C;
-    font-size: 13px;
-    letter-spacing: 1px;
-    line-height: 2;
-    opacity: 0.85;
-  }
+  .success-msg p { color: #C9A84C; font-size: 13px; letter-spacing: 1px; line-height: 2; opacity: 0.85; }
 
   .success-actions {
     margin-top: 2rem;
@@ -507,15 +250,8 @@
     gap: 8px;
     transition: border-color 0.2s;
   }
-
-  .share-btn:hover {
-    border-color: rgba(201,168,76,0.5);
-  }
-
-  .share-btn svg {
-    width: 15px;
-    height: 15px;
-  }
+  .share-btn:hover { border-color: rgba(201,168,76,0.5); }
+  .share-btn svg { width: 15px; height: 15px; }
 
   .ig-reminder {
     margin-top: 1.8rem;
@@ -524,28 +260,48 @@
     letter-spacing: 0.3px;
     line-height: 1.8;
   }
-
   .ig-reminder a {
     color: #C9A84C;
     text-decoration: none;
     border-bottom: 0.5px solid rgba(201,168,76,0.4);
   }
 
-  .start-over-link {
-    display: block;
-    margin: 1.5rem auto 0;
+  .user-badge {
+    display: none;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 30;
+  }
+  .user-badge-btn {
+    display: flex; align-items: center; gap: 8px;
     background: transparent;
-    border: none;
-    color: rgba(255,255,255,0.3);
-    font-size: 10.5px;
-    text-decoration: underline;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 6px 12px 6px 6px;
     cursor: pointer;
     font-family: Arial, sans-serif;
+    transition: all 0.2s;
   }
-
-  .start-over-link:hover {
-    color: #C9A84C;
+  .user-badge-btn:hover, .user-badge.open .user-badge-btn { border-color: rgba(201,168,76,0.4); }
+  .user-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(201,168,76,0.15); color: #C9A84C;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: bold; flex-shrink: 0;
   }
+  .user-name { color: rgba(255,255,255,0.7); font-size: 11px; letter-spacing: 0.3px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-menu {
+    display: none; position: absolute; top: calc(100% + 6px); left: 0;
+    background: #141414; border: 0.5px solid rgba(255,255,255,0.15);
+    min-width: 160px; flex-direction: column;
+  }
+  .user-badge.open .user-menu { display: flex; }
+  .user-menu-item {
+    background: transparent; border: none; color: rgba(255,255,255,0.6);
+    font-size: 11.5px; text-align: right; padding: 11px 14px; cursor: pointer;
+    font-family: Arial, sans-serif; letter-spacing: 0.3px; transition: all 0.15s;
+  }
+  .user-menu-item:hover { background: rgba(255,80,80,0.08); color: rgba(255,120,120,0.9); }
 
   .lang-switch {
     position: fixed;
@@ -559,95 +315,9 @@
     padding: 6px 12px;
     transition: all 0.2s;
     font-family: Arial, sans-serif;
-  }
-
-  .lang-switch:hover {
-    color: #C9A84C;
-    border-color: rgba(201,168,76,0.4);
-  }
-
-  .user-badge {
-    display: none;
-    position: fixed;
-    top: 18px;
-    left: 18px;
     z-index: 30;
   }
-
-  .user-badge-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    padding: 6px 12px 6px 6px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    transition: all 0.2s;
-  }
-
-  .user-badge-btn:hover,
-  .user-badge.open .user-badge-btn {
-    border-color: rgba(201,168,76,0.4);
-  }
-
-  .user-avatar {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(201,168,76,0.15);
-    color: #C9A84C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: bold;
-    flex-shrink: 0;
-  }
-
-  .user-name {
-    color: rgba(255,255,255,0.7);
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .user-menu {
-    display: none;
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    background: #141414;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    min-width: 160px;
-    flex-direction: column;
-  }
-
-  .user-badge.open .user-menu {
-    display: flex;
-  }
-
-  .user-menu-item {
-    background: transparent;
-    border: none;
-    color: rgba(255,255,255,0.6);
-    font-size: 11.5px;
-    text-align: right;
-    padding: 11px 14px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    letter-spacing: 0.3px;
-    transition: all 0.15s;
-  }
-
-  .user-menu-item:hover {
-    background: rgba(255,80,80,0.08);
-    color: rgba(255,120,120,0.9);
-  }
-
+  .lang-switch:hover { color: #C9A84C; border-color: rgba(201,168,76,0.4); }
 </style>
 </head>
 <body>
@@ -664,9 +334,15 @@
   </div>
 </div>
 
+<div class="hero-media">
+  <video autoplay muted loop playsinline poster="/hero-drawing.png">
+    <source src="/hero-animation.mp4" type="video/mp4">
+  </video>
+</div>
+
 <div class="container">
 
-  <img src="logo.png" alt="DIRBALK" class="brand-logo" />
+  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
   <p class="brand-arabic">دير بالك على حالك</p>
   <div class="divider"></div>
 
@@ -686,68 +362,26 @@
           <p class="field-msg" id="name-msg"></p>
         </div>
         <div class="field">
-          <label for="age">العمر</label>
-          <input type="number" id="age" placeholder="مثال: 23" min="1" max="99" autocomplete="off" inputmode="numeric" />
-          <p class="field-msg" id="age-msg"></p>
-        </div>
-        <div class="field">
           <label>الجنس</label>
           <div class="gender-row" id="genderRow">
             <button type="button" class="gender-btn" data-gender="male">ذكر</button>
             <button type="button" class="gender-btn" data-gender="female">أنثى</button>
           </div>
-          <input type="hidden" id="genderInput" name="gender" value="" />
+          <input type="hidden" id="genderInput" value="" />
           <p class="field-msg" id="gender-msg"></p>
-        </div>
-        <div class="field">
-          <label for="phone">رقم الهاتف</label>
-          <div class="phone-row">
-            <input type="tel" id="phone" placeholder="XXXXXXXXX" autocomplete="tel" inputmode="numeric" />
-            <div class="country-picker" id="countryPicker">
-              <button type="button" class="country-btn" id="countryBtn">
-                <span class="cb-caret">▾</span>
-                <span id="countryBtnLabel"><img class="co-flag" src="https://flagcdn.com/24x18/jo.png" alt="" /> 962+</span>
-              </button>
-              <div class="country-dropdown" id="countryDropdown">
-                <input type="text" class="country-search" id="countrySearch" placeholder="ابحث عن دولة..." autocomplete="off" />
-                <div class="country-list" id="countryList"></div>
-              </div>
-            </div>
-          </div>
-          <p class="field-msg" id="phone-msg"></p>
         </div>
         <div class="field">
           <label for="email">البريد الإلكتروني</label>
           <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
           <p class="field-msg" id="email-msg"></p>
         </div>
-        <div class="field">
-          <label for="password">كلمة المرور</label>
-          <div class="password-wrap">
-            <input type="password" id="password" placeholder="6 أحرف على الأقل" autocomplete="new-password" />
-            <button type="button" class="pw-toggle" data-target="password" aria-label="إظهار كلمة المرور">👁</button>
-          </div>
-          <p class="field-msg" id="password-msg"></p>
-        </div>
-        <div class="field">
-          <label for="confirmPassword">تأكيد كلمة المرور</label>
-          <div class="password-wrap">
-            <input type="password" id="confirmPassword" placeholder="أعد كتابة كلمة المرور" autocomplete="new-password" />
-            <button type="button" class="pw-toggle" data-target="confirmPassword" aria-label="إظهار كلمة المرور">👁</button>
-          </div>
-          <p class="field-msg" id="confirmPassword-msg"></p>
-        </div>
       </div>
 
       <p class="form-error" id="form-error"></p>
 
       <button type="submit" class="submit-btn" id="submit-btn">
-        إنشاء حساب
+        تسجيل
       </button>
-
-      <p class="have-account">
-        عندك حساب أصلاً؟ <a href="signin.html">تسجيل الدخول</a>
-      </p>
     </form>
 
     <p class="footer-text">COLLECTION 01 · WINTER 2026</p>
@@ -755,13 +389,13 @@
   </div>
 
   <div class="success-msg" id="success-msg">
-    <svg class="verify-icon" id="successIcon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="14" width="44" height="32" rx="3" stroke="currentColor" stroke-width="2"/>
-      <path d="M8 16 L28 34 L48 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="success-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="26"></circle>
+      <path d="M17 29 L24 36 L39 20"></path>
     </svg>
     <p id="success-text">
-      تم إنشاء حسابك!<br>
-      تحقق من بريدك الإلكتروني وفعّل حسابك عشان تقدر تسجّل الدخول.<br>
+      تم تسجيلك.<br>
+      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>
       دير بالك على حالك.
     </p>
 
@@ -779,12 +413,9 @@
     <p class="ig-reminder">
       <span id="ig-reminder-text">وتابعنا على</span> <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
     </p>
-
-    <button type="button" id="startOverLink" class="start-over-link" style="display:none;">مو حسابك؟ ابدأ من جديد</button>
   </div>
 
   <div class="page-footer">
-
     <div class="contact-row">
       <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="contact-btn" aria-label="واتساب">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
@@ -800,66 +431,58 @@
 
 <script>
 (function () {
-  const COUNTRIES = [{"iso2":"JO","dial":"+962","name":"الأردن","flag":"🇯🇴"},{"iso2":"SA","dial":"+966","name":"المملكة العربية السعودية","flag":"🇸🇦"},{"iso2":"AE","dial":"+971","name":"الإمارات العربية المتحدة","flag":"🇦🇪"},{"iso2":"KW","dial":"+965","name":"الكويت","flag":"🇰🇼"},{"iso2":"QA","dial":"+974","name":"قطر","flag":"🇶🇦"},{"iso2":"BH","dial":"+973","name":"البحرين","flag":"🇧🇭"},{"iso2":"OM","dial":"+968","name":"عُمان","flag":"🇴🇲"},{"iso2":"IQ","dial":"+964","name":"العراق","flag":"🇮🇶"},{"iso2":"SY","dial":"+963","name":"سوريا","flag":"🇸🇾"},{"iso2":"LB","dial":"+961","name":"لبنان","flag":"🇱🇧"},{"iso2":"PS","dial":"+970","name":"الأراضي الفلسطينية","flag":"🇵🇸"},{"iso2":"EG","dial":"+20","name":"مصر","flag":"🇪🇬"},{"iso2":"YE","dial":"+967","name":"اليمن","flag":"🇾🇪"},{"iso2":"IS","dial":"+354","name":"آيسلندا","flag":"🇮🇸"},{"iso2":"AZ","dial":"+994","name":"أذربيجان","flag":"🇦🇿"},{"iso2":"AM","dial":"+374","name":"أرمينيا","flag":"🇦🇲"},{"iso2":"AW","dial":"+297","name":"أروبا","flag":"🇦🇼"},{"iso2":"AU","dial":"+61","name":"أستراليا","flag":"🇦🇺"},{"iso2":"AF","dial":"+93","name":"أفغانستان","flag":"🇦🇫"},{"iso2":"AL","dial":"+355","name":"ألبانيا","flag":"🇦🇱"},{"iso2":"DE","dial":"+49","name":"ألمانيا","flag":"🇩🇪"},{"iso2":"AG","dial":"+1","name":"أنتيغوا وبربودا","flag":"🇦🇬"},{"iso2":"AD","dial":"+376","name":"أندورا","flag":"🇦🇩"},{"iso2":"AO","dial":"+244","name":"أنغولا","flag":"🇦🇴"},{"iso2":"AI","dial":"+1","name":"أنغويلا","flag":"🇦🇮"},{"iso2":"UY","dial":"+598","name":"أورغواي","flag":"🇺🇾"},{"iso2":"UZ","dial":"+998","name":"أوزبكستان","flag":"🇺🇿"},{"iso2":"UG","dial":"+256","name":"أوغندا","flag":"🇺🇬"},{"iso2":"UA","dial":"+380","name":"أوكرانيا","flag":"🇺🇦"},{"iso2":"IE","dial":"+353","name":"أيرلندا","flag":"🇮🇪"},{"iso2":"ET","dial":"+251","name":"إثيوبيا","flag":"🇪🇹"},{"iso2":"ER","dial":"+291","name":"إريتريا","flag":"🇪🇷"},{"iso2":"ES","dial":"+34","name":"إسبانيا","flag":"🇪🇸"},{"iso2":"EE","dial":"+372","name":"إستونيا","flag":"🇪🇪"},{"iso2":"IL","dial":"+972","name":"إسرائيل","flag":"🇮🇱"},{"iso2":"SZ","dial":"+268","name":"إسواتيني","flag":"🇸🇿"},{"iso2":"ID","dial":"+62","name":"إندونيسيا","flag":"🇮🇩"},{"iso2":"IR","dial":"+98","name":"إيران","flag":"🇮🇷"},{"iso2":"IT","dial":"+39","name":"إيطاليا","flag":"🇮🇹"},{"iso2":"AR","dial":"+54","name":"الأرجنتين","flag":"🇦🇷"},{"iso2":"IO","dial":"+246","name":"الإقليم البريطاني في المحيط الهندي","flag":"🇮🇴"},{"iso2":"EC","dial":"+593","name":"الإكوادور","flag":"🇪🇨"},{"iso2":"BR","dial":"+55","name":"البرازيل","flag":"🇧🇷"},{"iso2":"PT","dial":"+351","name":"البرتغال","flag":"🇵🇹"},{"iso2":"BA","dial":"+387","name":"البوسنة والهرسك","flag":"🇧🇦"},{"iso2":"CZ","dial":"+420","name":"التشيك","flag":"🇨🇿"},{"iso2":"ME","dial":"+382","name":"الجبل الأسود","flag":"🇲🇪"},{"iso2":"DZ","dial":"+213","name":"الجزائر","flag":"🇩🇿"},{"iso2":"DK","dial":"+45","name":"الدانمرك","flag":"🇩🇰"},{"iso2":"CV","dial":"+238","name":"الرأس الأخضر","flag":"🇨🇻"},{"iso2":"SV","dial":"+503","name":"السلفادور","flag":"🇸🇻"},{"iso2":"SN","dial":"+221","name":"السنغال","flag":"🇸🇳"},{"iso2":"SD","dial":"+249","name":"السودان","flag":"🇸🇩"},{"iso2":"SE","dial":"+46","name":"السويد","flag":"🇸🇪"},{"iso2":"EH","dial":"+212","name":"الصحراء الغربية","flag":"🇪🇭"},{"iso2":"SO","dial":"+252","name":"الصومال","flag":"🇸🇴"},{"iso2":"CN","dial":"+86","name":"الصين","flag":"🇨🇳"},{"iso2":"GA","dial":"+241","name":"الغابون","flag":"🇬🇦"},{"iso2":"VA","dial":"+39","name":"الفاتيكان","flag":"🇻🇦"},{"iso2":"PH","dial":"+63","name":"الفلبين","flag":"🇵🇭"},{"iso2":"CM","dial":"+237","name":"الكاميرون","flag":"🇨🇲"},{"iso2":"CG","dial":"+242","name":"الكونغو - برازافيل","flag":"🇨🇬"},{"iso2":"CD","dial":"+243","name":"الكونغو - كينشاسا","flag":"🇨🇩"},{"iso2":"MA","dial":"+212","name":"المغرب","flag":"🇲🇦"},{"iso2":"MX","dial":"+52","name":"المكسيك","flag":"🇲🇽"},{"iso2":"GB","dial":"+44","name":"المملكة المتحدة","flag":"🇬🇧"},{"iso2":"NO","dial":"+47","name":"النرويج","flag":"🇳🇴"},{"iso2":"AT","dial":"+43","name":"النمسا","flag":"🇦🇹"},{"iso2":"NE","dial":"+227","name":"النيجر","flag":"🇳🇪"},{"iso2":"IN","dial":"+91","name":"الهند","flag":"🇮🇳"},{"iso2":"US","dial":"+1","name":"الولايات المتحدة","flag":"🇺🇸"},{"iso2":"JP","dial":"+81","name":"اليابان","flag":"🇯🇵"},{"iso2":"GR","dial":"+30","name":"اليونان","flag":"🇬🇷"},{"iso2":"PG","dial":"+675","name":"بابوا غينيا الجديدة","flag":"🇵🇬"},{"iso2":"PY","dial":"+595","name":"باراغواي","flag":"🇵🇾"},{"iso2":"PK","dial":"+92","name":"باكستان","flag":"🇵🇰"},{"iso2":"PW","dial":"+680","name":"بالاو","flag":"🇵🇼"},{"iso2":"BB","dial":"+1","name":"بربادوس","flag":"🇧🇧"},{"iso2":"BM","dial":"+1","name":"برمودا","flag":"🇧🇲"},{"iso2":"BN","dial":"+673","name":"بروناي","flag":"🇧🇳"},{"iso2":"BE","dial":"+32","name":"بلجيكا","flag":"🇧🇪"},{"iso2":"BG","dial":"+359","name":"بلغاريا","flag":"🇧🇬"},{"iso2":"BZ","dial":"+501","name":"بليز","flag":"🇧🇿"},{"iso2":"BD","dial":"+880","name":"بنغلاديش","flag":"🇧🇩"},{"iso2":"PA","dial":"+507","name":"بنما","flag":"🇵🇦"},{"iso2":"BJ","dial":"+229","name":"بنين","flag":"🇧🇯"},{"iso2":"BT","dial":"+975","name":"بوتان","flag":"🇧🇹"},{"iso2":"BW","dial":"+267","name":"بوتسوانا","flag":"🇧🇼"},{"iso2":"PR","dial":"+1","name":"بورتوريكو","flag":"🇵🇷"},{"iso2":"BF","dial":"+226","name":"بوركينا فاسو","flag":"🇧🇫"},{"iso2":"BI","dial":"+257","name":"بوروندي","flag":"🇧🇮"},{"iso2":"PL","dial":"+48","name":"بولندا","flag":"🇵🇱"},{"iso2":"BO","dial":"+591","name":"بوليفيا","flag":"🇧🇴"},{"iso2":"PF","dial":"+689","name":"بولينيزيا الفرنسية","flag":"🇵🇫"},{"iso2":"PE","dial":"+51","name":"بيرو","flag":"🇵🇪"},{"iso2":"BY","dial":"+375","name":"بيلاروس","flag":"🇧🇾"},{"iso2":"TH","dial":"+66","name":"تايلاند","flag":"🇹🇭"},{"iso2":"TW","dial":"+886","name":"تايوان","flag":"🇹🇼"},{"iso2":"TM","dial":"+993","name":"تركمانستان","flag":"🇹🇲"},{"iso2":"TR","dial":"+90","name":"تركيا","flag":"🇹🇷"},{"iso2":"TA","dial":"+290","name":"تريستان دا كونا","flag":"🇹🇦"},{"iso2":"TT","dial":"+1","name":"ترينيداد وتوباغو","flag":"🇹🇹"},{"iso2":"TD","dial":"+235","name":"تشاد","flag":"🇹🇩"},{"iso2":"CL","dial":"+56","name":"تشيلي","flag":"🇨🇱"},{"iso2":"TZ","dial":"+255","name":"تنزانيا","flag":"🇹🇿"},{"iso2":"TG","dial":"+228","name":"توغو","flag":"🇹🇬"},{"iso2":"TV","dial":"+688","name":"توفالو","flag":"🇹🇻"},{"iso2":"TK","dial":"+690","name":"توكيلاو","flag":"🇹🇰"},{"iso2":"TN","dial":"+216","name":"تونس","flag":"🇹🇳"},{"iso2":"TO","dial":"+676","name":"تونغا","flag":"🇹🇴"},{"iso2":"TL","dial":"+670","name":"تيمور - ليشتي","flag":"🇹🇱"},{"iso2":"JM","dial":"+1","name":"جامايكا","flag":"🇯🇲"},{"iso2":"GI","dial":"+350","name":"جبل طارق","flag":"🇬🇮"},{"iso2":"AX","dial":"+358","name":"جزر آلاند","flag":"🇦🇽"},{"iso2":"BS","dial":"+1","name":"جزر البهاما","flag":"🇧🇸"},{"iso2":"KM","dial":"+269","name":"جزر القمر","flag":"🇰🇲"},{"iso2":"MQ","dial":"+596","name":"جزر المارتينيك","flag":"🇲🇶"},{"iso2":"MV","dial":"+960","name":"جزر المالديف","flag":"🇲🇻"},{"iso2":"TC","dial":"+1","name":"جزر توركس وكايكوس","flag":"🇹🇨"},{"iso2":"SB","dial":"+677","name":"جزر سليمان","flag":"🇸🇧"},{"iso2":"FO","dial":"+298","name":"جزر فارو","flag":"🇫🇴"},{"iso2":"FK","dial":"+500","name":"جزر فوكلاند","flag":"🇫🇰"},{"iso2":"VI","dial":"+1","name":"جزر فيرجن الأمريكية","flag":"🇻🇮"},{"iso2":"VG","dial":"+1","name":"جزر فيرجن البريطانية","flag":"🇻🇬"},{"iso2":"KY","dial":"+1","name":"جزر كايمان","flag":"🇰🇾"},{"iso2":"CK","dial":"+682","name":"جزر كوك","flag":"🇨🇰"},{"iso2":"CC","dial":"+61","name":"جزر كوكوس (كيلينغ)","flag":"🇨🇨"},{"iso2":"MH","dial":"+692","name":"جزر مارشال","flag":"🇲🇭"},{"iso2":"MP","dial":"+1","name":"جزر ماريانا الشمالية","flag":"🇲🇵"},{"iso2":"WF","dial":"+681","name":"جزر والس وفوتونا","flag":"🇼🇫"},{"iso2":"AC","dial":"+247","name":"جزيرة أسينشيون","flag":"🇦🇨"},{"iso2":"CX","dial":"+61","name":"جزيرة كريسماس","flag":"🇨🇽"},{"iso2":"IM","dial":"+44","name":"جزيرة مان","flag":"🇮🇲"},{"iso2":"NF","dial":"+672","name":"جزيرة نورفولك","flag":"🇳🇫"},{"iso2":"CF","dial":"+236","name":"جمهورية أفريقيا الوسطى","flag":"🇨🇫"},{"iso2":"DO","dial":"+1","name":"جمهورية الدومينيكان","flag":"🇩🇴"},{"iso2":"ZA","dial":"+27","name":"جنوب أفريقيا","flag":"🇿🇦"},{"iso2":"SS","dial":"+211","name":"جنوب السودان","flag":"🇸🇸"},{"iso2":"GE","dial":"+995","name":"جورجيا","flag":"🇬🇪"},{"iso2":"DJ","dial":"+253","name":"جيبوتي","flag":"🇩🇯"},{"iso2":"JE","dial":"+44","name":"جيرسي","flag":"🇯🇪"},{"iso2":"DM","dial":"+1","name":"دومينيكا","flag":"🇩🇲"},{"iso2":"RW","dial":"+250","name":"رواندا","flag":"🇷🇼"},{"iso2":"RU","dial":"+7","name":"روسيا","flag":"🇷🇺"},{"iso2":"RO","dial":"+40","name":"رومانيا","flag":"🇷🇴"},{"iso2":"RE","dial":"+262","name":"روينيون","flag":"🇷🇪"},{"iso2":"ZM","dial":"+260","name":"زامبيا","flag":"🇿🇲"},{"iso2":"ZW","dial":"+263","name":"زيمبابوي","flag":"🇿🇼"},{"iso2":"CI","dial":"+225","name":"ساحل العاج","flag":"🇨🇮"},{"iso2":"WS","dial":"+685","name":"ساموا","flag":"🇼🇸"},{"iso2":"AS","dial":"+1","name":"ساموا الأمريكية","flag":"🇦🇸"},{"iso2":"BL","dial":"+590","name":"سان بارتليمي","flag":"🇧🇱"},{"iso2":"PM","dial":"+508","name":"سان بيير ومكويلون","flag":"🇵🇲"},{"iso2":"MF","dial":"+590","name":"سان مارتن","flag":"🇲🇫"},{"iso2":"SM","dial":"+378","name":"سان مارينو","flag":"🇸🇲"},{"iso2":"VC","dial":"+1","name":"سانت فنسنت وجزر غرينادين","flag":"🇻🇨"},{"iso2":"KN","dial":"+1","name":"سانت كيتس ونيفيس","flag":"🇰🇳"},{"iso2":"LC","dial":"+1","name":"سانت لوسيا","flag":"🇱🇨"},{"iso2":"SX","dial":"+1","name":"سانت مارتن","flag":"🇸🇽"},{"iso2":"SH","dial":"+290","name":"سانت هيلينا","flag":"🇸🇭"},{"iso2":"ST","dial":"+239","name":"ساو تومي وبرينسيبي","flag":"🇸🇹"},{"iso2":"LK","dial":"+94","name":"سريلانكا","flag":"🇱🇰"},{"iso2":"SJ","dial":"+47","name":"سفالبارد وجان ماين","flag":"🇸🇯"},{"iso2":"SK","dial":"+421","name":"سلوفاكيا","flag":"🇸🇰"},{"iso2":"SI","dial":"+386","name":"سلوفينيا","flag":"🇸🇮"},{"iso2":"SG","dial":"+65","name":"سنغافورة","flag":"🇸🇬"},{"iso2":"SR","dial":"+597","name":"سورينام","flag":"🇸🇷"},{"iso2":"CH","dial":"+41","name":"سويسرا","flag":"🇨🇭"},{"iso2":"SL","dial":"+232","name":"سيراليون","flag":"🇸🇱"},{"iso2":"SC","dial":"+248","name":"سيشل","flag":"🇸🇨"},{"iso2":"RS","dial":"+381","name":"صربيا","flag":"🇷🇸"},{"iso2":"TJ","dial":"+992","name":"طاجيكستان","flag":"🇹🇯"},{"iso2":"GM","dial":"+220","name":"غامبيا","flag":"🇬🇲"},{"iso2":"GH","dial":"+233","name":"غانا","flag":"🇬🇭"},{"iso2":"GD","dial":"+1","name":"غرينادا","flag":"🇬🇩"},{"iso2":"GL","dial":"+299","name":"غرينلاند","flag":"🇬🇱"},{"iso2":"GT","dial":"+502","name":"غواتيمالا","flag":"🇬🇹"},{"iso2":"GP","dial":"+590","name":"غوادلوب","flag":"🇬🇵"},{"iso2":"GU","dial":"+1","name":"غوام","flag":"🇬🇺"},{"iso2":"GF","dial":"+594","name":"غويانا الفرنسية","flag":"🇬🇫"},{"iso2":"GY","dial":"+592","name":"غيانا","flag":"🇬🇾"},{"iso2":"GG","dial":"+44","name":"غيرنزي","flag":"🇬🇬"},{"iso2":"GN","dial":"+224","name":"غينيا","flag":"🇬🇳"},{"iso2":"GQ","dial":"+240","name":"غينيا الاستوائية","flag":"🇬🇶"},{"iso2":"GW","dial":"+245","name":"غينيا بيساو","flag":"🇬🇼"},{"iso2":"VU","dial":"+678","name":"فانواتو","flag":"🇻🇺"},{"iso2":"FR","dial":"+33","name":"فرنسا","flag":"🇫🇷"},{"iso2":"VE","dial":"+58","name":"فنزويلا","flag":"🇻🇪"},{"iso2":"FI","dial":"+358","name":"فنلندا","flag":"🇫🇮"},{"iso2":"VN","dial":"+84","name":"فيتنام","flag":"🇻🇳"},{"iso2":"FJ","dial":"+679","name":"فيجي","flag":"🇫🇯"},{"iso2":"CY","dial":"+357","name":"قبرص","flag":"🇨🇾"},{"iso2":"KG","dial":"+996","name":"قيرغيزستان","flag":"🇰🇬"},{"iso2":"KZ","dial":"+7","name":"كازاخستان","flag":"🇰🇿"},{"iso2":"NC","dial":"+687","name":"كاليدونيا الجديدة","flag":"🇳🇨"},{"iso2":"HR","dial":"+385","name":"كرواتيا","flag":"🇭🇷"},{"iso2":"KH","dial":"+855","name":"كمبوديا","flag":"🇰🇭"},{"iso2":"CA","dial":"+1","name":"كندا","flag":"🇨🇦"},{"iso2":"CU","dial":"+53","name":"كوبا","flag":"🇨🇺"},{"iso2":"CW","dial":"+599","name":"كوراساو","flag":"🇨🇼"},{"iso2":"KR","dial":"+82","name":"كوريا الجنوبية","flag":"🇰🇷"},{"iso2":"KP","dial":"+850","name":"كوريا الشمالية","flag":"🇰🇵"},{"iso2":"CR","dial":"+506","name":"كوستاريكا","flag":"🇨🇷"},{"iso2":"XK","dial":"+383","name":"كوسوفو","flag":"🇽🇰"},{"iso2":"CO","dial":"+57","name":"كولومبيا","flag":"🇨🇴"},{"iso2":"KI","dial":"+686","name":"كيريباتي","flag":"🇰🇮"},{"iso2":"KE","dial":"+254","name":"كينيا","flag":"🇰🇪"},{"iso2":"LV","dial":"+371","name":"لاتفيا","flag":"🇱🇻"},{"iso2":"LA","dial":"+856","name":"لاوس","flag":"🇱🇦"},{"iso2":"LU","dial":"+352","name":"لوكسمبورغ","flag":"🇱🇺"},{"iso2":"LY","dial":"+218","name":"ليبيا","flag":"🇱🇾"},{"iso2":"LR","dial":"+231","name":"ليبيريا","flag":"🇱🇷"},{"iso2":"LT","dial":"+370","name":"ليتوانيا","flag":"🇱🇹"},{"iso2":"LI","dial":"+423","name":"ليختنشتاين","flag":"🇱🇮"},{"iso2":"LS","dial":"+266","name":"ليسوتو","flag":"🇱🇸"},{"iso2":"MT","dial":"+356","name":"مالطا","flag":"🇲🇹"},{"iso2":"ML","dial":"+223","name":"مالي","flag":"🇲🇱"},{"iso2":"MY","dial":"+60","name":"ماليزيا","flag":"🇲🇾"},{"iso2":"YT","dial":"+262","name":"مايوت","flag":"🇾🇹"},{"iso2":"MG","dial":"+261","name":"مدغشقر","flag":"🇲🇬"},{"iso2":"MK","dial":"+389","name":"مقدونيا الشمالية","flag":"🇲🇰"},{"iso2":"MW","dial":"+265","name":"ملاوي","flag":"🇲🇼"},{"iso2":"MO","dial":"+853","name":"منطقة ماكاو الإدارية الخاصة","flag":"🇲🇴"},{"iso2":"MN","dial":"+976","name":"منغوليا","flag":"🇲🇳"},{"iso2":"MR","dial":"+222","name":"موريتانيا","flag":"🇲🇷"},{"iso2":"MU","dial":"+230","name":"موريشيوس","flag":"🇲🇺"},{"iso2":"MZ","dial":"+258","name":"موزمبيق","flag":"🇲🇿"},{"iso2":"MD","dial":"+373","name":"مولدوفا","flag":"🇲🇩"},{"iso2":"MC","dial":"+377","name":"موناكو","flag":"🇲🇨"},{"iso2":"MS","dial":"+1","name":"مونتسرات","flag":"🇲🇸"},{"iso2":"MM","dial":"+95","name":"ميانمار (بورما)","flag":"🇲🇲"},{"iso2":"FM","dial":"+691","name":"ميكرونيزيا","flag":"🇫🇲"},{"iso2":"NA","dial":"+264","name":"ناميبيا","flag":"🇳🇦"},{"iso2":"NR","dial":"+674","name":"ناورو","flag":"🇳🇷"},{"iso2":"NP","dial":"+977","name":"نيبال","flag":"🇳🇵"},{"iso2":"NG","dial":"+234","name":"نيجيريا","flag":"🇳🇬"},{"iso2":"NI","dial":"+505","name":"نيكاراغوا","flag":"🇳🇮"},{"iso2":"NZ","dial":"+64","name":"نيوزيلندا","flag":"🇳🇿"},{"iso2":"NU","dial":"+683","name":"نيوي","flag":"🇳🇺"},{"iso2":"HT","dial":"+509","name":"هايتي","flag":"🇭🇹"},{"iso2":"HN","dial":"+504","name":"هندوراس","flag":"🇭🇳"},{"iso2":"HU","dial":"+36","name":"هنغاريا","flag":"🇭🇺"},{"iso2":"NL","dial":"+31","name":"هولندا","flag":"🇳🇱"},{"iso2":"BQ","dial":"+599","name":"هولندا الكاريبية","flag":"🇧🇶"},{"iso2":"HK","dial":"+852","name":"هونغ كونغ الصينية (منطقة إدارية خاصة)","flag":"🇭🇰"}];
-
   const form = document.getElementById('reg-form');
-
-  // --- Show/hide password toggles ---
-  document.querySelectorAll('.pw-toggle').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      const showing = target.type === 'text';
-      target.type = showing ? 'password' : 'text';
-      btn.classList.toggle('active', !showing);
-    });
-  });
-
   const btn = document.getElementById('submit-btn');
   const formError = document.getElementById('form-error');
-  const fields = ['name', 'age', 'phone', 'email', 'password', 'confirmPassword'];
+  const fields = ['name', 'email'];
   let formStarted = false;
 
   const GENDER_KEY = 'dirbalk_gender';
   const NAME_KEY = 'dirbalk_name';
   const STORAGE_KEY = 'dirbalk_logged_in';
-  const PENDING_KEY = 'dirbalk_pending_verification';
 
-  const ICON_MAIL = '<rect x="6" y="14" width="44" height="32" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 16 L28 34 L48 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
-  const ICON_CHECK = '<circle cx="28" cy="28" r="26"></circle><path d="M17 29 L24 36 L39 20"></path>';
+  fields.forEach((id) => {
+    document.getElementById(id).addEventListener('focus', () => {
+      if (!formStarted) {
+        formStarted = true;
+        if (window.gtag) gtag('event', 'form_start', { form_name: 'dirbalk_waitlist' });
+      }
+    });
+  });
 
-  function showPendingState(isFemale) {
-    const icon = document.getElementById('successIcon');
-    icon.setAttribute('class', 'verify-icon');
-    icon.innerHTML = ICON_MAIL;
-    document.getElementById('success-text').innerHTML = isFemale
-      ? 'تم إنشاء حسابك!<br>\n      تحققي من بريدك الإلكتروني وفعّلي حسابك عشان تقدري تسجّلي الدخول.<br>\n      ديري بالك على حالك.'
-      : 'تم إنشاء حسابك!<br>\n      تحقق من بريدك الإلكتروني وفعّل حسابك عشان تقدر تسجّل الدخول.<br>\n      دير بالك على حالك.';
-    document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
-    document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
-    document.getElementById('startOverLink').style.display = 'block';
+  function showFieldError(id, message) {
+    const input = document.getElementById(id);
+    const msg = document.getElementById(id + '-msg');
+    input.classList.add('field-error');
+    msg.textContent = message;
+    msg.style.display = 'block';
+  }
+  function clearFieldError(id) {
+    const input = document.getElementById(id);
+    const msg = document.getElementById(id + '-msg');
+    input.classList.remove('field-error');
+    msg.style.display = 'none';
+  }
+  function clearAllErrors() {
+    fields.forEach(clearFieldError);
+    document.getElementById('genderRow').classList.remove('field-error');
+    document.getElementById('gender-msg').style.display = 'none';
+    formError.style.display = 'none';
   }
 
-  function showLoggedInState(name, isFemale) {
-    const icon = document.getElementById('successIcon');
-    icon.setAttribute('class', 'success-icon');
-    icon.innerHTML = ICON_CHECK;
-    const first = (name || '').trim().split(' ')[0] || '';
+  function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
-      ? 'أهلاً فيكِ ' + first + '.<br>\n      عندما يصدر Collection 01 ربما ستكونين أول من يعرف.<br>\n      ديري بالك على حالك.'
-      : 'أهلاً فيك ' + first + '.<br>\n      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
+      ? 'تم تسجيلك.<br>\n      عندما يصدر Collection 01 ربما ستكونين أول من يعرف.<br>\n      ديري بالك على حالك.'
+      : 'تم تسجيلك.<br>\n      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
-    document.getElementById('startOverLink').style.display = 'none';
-    showUserBadge(name);
   }
 
-  // --- User badge (logged-in state) ---
   const userBadge = document.getElementById('userBadge');
   const userBadgeBtn = document.getElementById('userBadgeBtn');
   const userAvatar = document.getElementById('userAvatar');
   const userNameLabel = document.getElementById('userNameLabel');
   const logoutBtn = document.getElementById('logoutBtn');
-  const startOverLink = document.getElementById('startOverLink');
 
   function showUserBadge(name) {
     const first = (name || '').trim().split(' ')[0] || '';
@@ -872,7 +495,6 @@
     e.stopPropagation();
     userBadge.classList.toggle('open');
   });
-
   document.addEventListener('click', (e) => {
     if (!userBadge.contains(e.target)) userBadge.classList.remove('open');
   });
@@ -882,13 +504,10 @@
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(GENDER_KEY);
       localStorage.removeItem(NAME_KEY);
-      localStorage.removeItem(PENDING_KEY);
-      localStorage.removeItem('dirbalk_email');
-      localStorage.removeItem('dirbalk_phone');
     } catch (e) { /* ignore */ }
     userBadge.style.display = 'none';
     userBadge.classList.remove('open');
-    startOverLink.style.display = 'none';
+    document.getElementById('shopCta').style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
     document.getElementById('form-section').style.display = 'block';
     form.reset();
@@ -897,36 +516,14 @@
   }
 
   logoutBtn.addEventListener('click', () => {
-    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_registration' });
+    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_waitlist' });
     resetToForm();
   });
 
-  startOverLink.addEventListener('click', () => {
-    if (window.gtag) gtag('event', 'start_over_click', { form_name: 'dirbalk_registration' });
-    resetToForm();
-  });
-
-  // --- Restore state on load ---
-  try {
-    if (localStorage.getItem(STORAGE_KEY) === '1') {
-      document.getElementById('form-section').style.display = 'none';
-      document.getElementById('success-msg').style.display = 'block';
-      showLoggedInState(localStorage.getItem(NAME_KEY) || '', localStorage.getItem(GENDER_KEY) === 'female');
-      document.getElementById('shopCta').style.display = 'inline-block';
-    } else if (localStorage.getItem(PENDING_KEY) === '1') {
-      document.getElementById('form-section').style.display = 'none';
-      document.getElementById('success-msg').style.display = 'block';
-      showPendingState(localStorage.getItem(GENDER_KEY) === 'female');
-    }
-  } catch (e) { /* localStorage unavailable, ignore */ }
-
-  // --- Gender selection ---
-  let selectedGender = null;
   const genderButtons = document.querySelectorAll('.gender-btn');
   genderButtons.forEach((b) => {
     b.addEventListener('click', () => {
-      selectedGender = b.getAttribute('data-gender');
-      document.getElementById('genderInput').value = selectedGender;
+      document.getElementById('genderInput').value = b.getAttribute('data-gender');
       genderButtons.forEach((btn2) => btn2.classList.remove('selected'));
       b.classList.add('selected');
       document.getElementById('genderRow').classList.remove('field-error');
@@ -934,112 +531,23 @@
     });
   });
 
-  // --- Searchable country picker ---
-  const countryBtn = document.getElementById('countryBtn');
-  const countryBtnLabel = document.getElementById('countryBtnLabel');
-  const countryDropdown = document.getElementById('countryDropdown');
-  const countrySearch = document.getElementById('countrySearch');
-  const countryList = document.getElementById('countryList');
-  let selectedCountry = COUNTRIES.find((c) => c.iso2 === 'JO') || COUNTRIES[0];
+  function showLoggedIn(name, isFemale) {
+    applyGenderedText(isFemale);
+    showUserBadge(name);
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('shopCta').style.display = 'inline-block';
+  }
 
-  function renderCountryList(filterText) {
-    const q = (filterText || '').trim().toLowerCase();
-    const filtered = q
-      ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q) || c.dial.includes(q))
-      : COUNTRIES;
-
-    countryList.innerHTML = '';
-    if (filtered.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'country-empty';
-      empty.textContent = 'ما في نتائج';
-      countryList.appendChild(empty);
-      return;
+  try {
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      showLoggedIn(localStorage.getItem(NAME_KEY) || '', localStorage.getItem(GENDER_KEY) === 'female');
     }
-    filtered.forEach((c) => {
-      const row = document.createElement('div');
-      row.className = 'country-option' + (c.iso2 === selectedCountry.iso2 ? ' active' : '');
-      row.innerHTML = '<span>' + c.flag + '</span><span>' + c.name + '</span><span class="co-dial">' + c.dial + '</span>';
-      row.addEventListener('click', () => {
-        selectedCountry = c;
-        countryBtnLabel.textContent = c.flag + ' ' + c.dial.replace('+', '') + '+';
-        closeCountryDropdown();
-      });
-      countryList.appendChild(row);
-    });
-  }
-
-  function openCountryDropdown() {
-    countryDropdown.classList.add('open');
-    countryBtn.classList.add('open');
-    countrySearch.value = '';
-    renderCountryList('');
-    setTimeout(() => countrySearch.focus(), 0);
-  }
-
-  function closeCountryDropdown() {
-    countryDropdown.classList.remove('open');
-    countryBtn.classList.remove('open');
-  }
-
-  countryBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (countryDropdown.classList.contains('open')) closeCountryDropdown();
-    else openCountryDropdown();
-  });
-
-  countrySearch.addEventListener('input', () => renderCountryList(countrySearch.value));
-  countrySearch.addEventListener('click', (e) => e.stopPropagation());
-
-  document.addEventListener('click', (e) => {
-    if (!document.getElementById('countryPicker').contains(e.target)) closeCountryDropdown();
-  });
-
-  fields.forEach((id) => {
-    document.getElementById(id).addEventListener('focus', () => {
-      if (!formStarted) {
-        formStarted = true;
-        if (window.gtag) gtag('event', 'form_start', { form_name: 'dirbalk_registration' });
-      }
-    });
-  });
-
-  function showFieldError(id, message) {
-    const input = document.getElementById(id);
-    const msg = document.getElementById(id + '-msg');
-    input.classList.add('field-error');
-    msg.textContent = message;
-    msg.style.display = 'block';
-  }
-
-  function clearFieldError(id) {
-    const input = document.getElementById(id);
-    const msg = document.getElementById(id + '-msg');
-    input.classList.remove('field-error');
-    msg.style.display = 'none';
-  }
-
-  function clearAllErrors() {
-    fields.forEach(clearFieldError);
-    document.getElementById('genderRow').classList.remove('field-error');
-    document.getElementById('gender-msg').style.display = 'none';
-    formError.style.display = 'none';
-  }
+  } catch (e) { /* localStorage unavailable, ignore */ }
 
   function validate(data) {
     let valid = true;
-
-    if (!data.name) {
-      showFieldError('name', 'الرجاء إدخال الاسم الكامل.');
-      valid = false;
-    }
-
-    const age = parseInt(data.age, 10);
-    if (!data.age || isNaN(age) || age < 17 || age > 40) {
-      showFieldError('age', 'هذا التسجيل مخصص للفئة العمرية 17-40.');
-      valid = false;
-    }
-
+    if (!data.name) { showFieldError('name', 'الرجاء إدخال الاسم الكامل.'); valid = false; }
     if (!data.gender) {
       document.getElementById('genderRow').classList.add('field-error');
       const gm = document.getElementById('gender-msg');
@@ -1047,28 +555,7 @@
       gm.style.display = 'block';
       valid = false;
     }
-
-    const localDigits2 = (data.phone || '').replace(/\D/g, '');
-    if (!localDigits2 || localDigits2.length < 7 || localDigits2.length > 15) {
-      showFieldError('phone', 'رقم الهاتف غير صحيح.');
-      valid = false;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      showFieldError('email', 'الرجاء إدخال بريد إلكتروني صحيح.');
-      valid = false;
-    }
-
-    if (!data.password || data.password.length < 6) {
-      showFieldError('password', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل.');
-      valid = false;
-    }
-
-    if (data.password !== data.confirmPassword) {
-      showFieldError('confirmPassword', 'كلمتا المرور غير متطابقتين.');
-      valid = false;
-    }
-
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('email', 'الرجاء إدخال بريد إلكتروني صحيح.'); valid = false; }
     return valid;
   }
 
@@ -1076,31 +563,23 @@
     e.preventDefault();
     clearAllErrors();
 
-    const rawPhone = document.getElementById('phone').value.trim();
-    const localDigits = rawPhone.replace(/\D/g, '').replace(/^0+/, '');
     const data = {
-      action: 'signup',
       name: document.getElementById('name').value.trim().replace(/\s+/g, ' '),
-      age: document.getElementById('age').value.trim(),
       gender: document.getElementById('genderInput').value || '',
-      phone: localDigits ? selectedCountry.dial + localDigits : '',
       email: document.getElementById('email').value.trim().toLowerCase(),
-      password: document.getElementById('password').value,
-      confirmPassword: document.getElementById('confirmPassword').value,
-      lang: 'ar',
     };
 
     if (!validate(data)) {
-      if (window.gtag) gtag('event', 'form_validation_error', { form_name: 'dirbalk_registration' });
+      if (window.gtag) gtag('event', 'form_validation_error', { form_name: 'dirbalk_waitlist' });
       return;
     }
 
     btn.disabled = true;
-    btn.textContent = 'جاري الإنشاء...';
-    if (window.gtag) gtag('event', 'form_submit_attempt', { form_name: 'dirbalk_registration' });
+    btn.textContent = 'جاري التسجيل...';
+    if (window.gtag) gtag('event', 'form_submit_attempt', { form_name: 'dirbalk_waitlist' });
 
     try {
-      const res = await fetch('/api/register', {
+      const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -1108,31 +587,29 @@
       const result = await res.json();
 
       if (result.status === 'success') {
-        if (window.gtag) gtag('event', 'form_submit_success', { form_name: 'dirbalk_registration' });
+        if (window.gtag) gtag('event', 'form_submit_success', { form_name: 'dirbalk_waitlist' });
         try {
-          localStorage.setItem(PENDING_KEY, '1');
+          localStorage.setItem(STORAGE_KEY, '1');
           localStorage.setItem(GENDER_KEY, data.gender);
+          localStorage.setItem(NAME_KEY, data.name);
         } catch (e) { /* ignore */ }
-        showPendingState(data.gender === 'female');
-        document.getElementById('form-section').style.display = 'none';
-        document.getElementById('success-msg').style.display = 'block';
+        showLoggedIn(data.name, data.gender === 'female');
       } else {
-        if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_registration', reason: result.message || 'unknown' });
+        if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: result.message || 'unknown' });
         formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         formError.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'إنشاء حساب';
+        btn.textContent = 'تسجيل';
       }
     } catch (err) {
-      if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_registration', reason: 'network' });
+      if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: 'network' });
       formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       formError.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'إنشاء حساب';
+      btn.textContent = 'تسجيل';
     }
   });
 
-  // --- Share buttons on the success screen ---
   const shareWhatsapp = document.getElementById('share-whatsapp');
   const copyLinkBtn = document.getElementById('copy-link');
   const copyLinkText = document.getElementById('copy-link-text');
