@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Collection 01 — DIRBALَK</title>
-<meta name="description" content="DIRBALK — Collection 01, Winter 2026. تيشيرت، بنطلون، جاكيت. 100 قطعة من كل تصميم.">
+<meta name="description" content="DIRBALK — Collection 01, Winter 2026. تيشيرت، بنطلون، جاكيت.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -29,7 +29,6 @@
     position: sticky;
     top: 0;
     z-index: 25;
-    background: #0a0aeeee;
     background: rgba(10,10,10,0.92);
     backdrop-filter: blur(6px);
     border-bottom: 0.5px solid rgba(255,255,255,0.1);
@@ -44,17 +43,9 @@
     justify-content: space-between;
   }
 
-  .header-logo {
-    height: 22px;
-    width: auto;
-    display: block;
-  }
+  .header-logo { height: 22px; width: auto; display: block; }
 
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+  .header-actions { display: flex; align-items: center; gap: 16px; }
 
   .icon-btn {
     background: transparent;
@@ -95,12 +86,7 @@
   .home-link:hover { color: #C9A84C; }
 
   /* ---------- hero ---------- */
-  .hero {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 50px 20px 30px;
-    text-align: center;
-  }
+  .hero { max-width: 1100px; margin: 0 auto; padding: 50px 20px 30px; text-align: center; }
 
   .hero .brand-mark {
     color: #C9A84C;
@@ -139,10 +125,14 @@
     border: 0.5px solid rgba(255,255,255,0.12);
     background: #111111;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
   }
 
-  .card:hover { border-color: rgba(201,168,76,0.4); }
+  .card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+  }
 
   .card-media {
     position: relative;
@@ -151,9 +141,16 @@
     align-items: center;
     justify-content: center;
     background: rgba(255,255,255,0.03);
+    overflow: hidden;
   }
 
-  .card-media svg { width: 55%; height: 85%; }
+  .card-media svg {
+    width: 55%;
+    height: 85%;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover .card-media svg { transform: scale(1.08); }
 
   .card-code {
     position: absolute;
@@ -164,43 +161,32 @@
     color: rgba(255,255,255,0.35);
   }
 
-  .card-stock {
+  .card-tag {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    font-size: 10px;
+    font-size: 9.5px;
+    letter-spacing: 1px;
     color: #C9A84C;
     opacity: 0.85;
+    border: 0.5px solid rgba(201,168,76,0.4);
+    padding: 3px 8px;
   }
 
-  .card-stock.sold-out { color: rgba(255,120,120,0.85); }
+  .card-tag.sold-out { color: rgba(255,120,120,0.85); border-color: rgba(255,120,120,0.4); }
 
   .card-body { padding: 18px 16px; }
 
-  .card-name {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 4px;
-  }
-
-  .card-colorway {
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 10px;
-  }
-
-  .card-price {
-    font-size: 14px;
-    color: #C9A84C;
-    font-weight: bold;
-  }
+  .card-name { font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+  .card-colorway { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+  .card-price { font-size: 14px; color: #C9A84C; font-weight: bold; }
 
   /* ---------- modal (quick view) ---------- */
   .overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     z-index: 50;
     align-items: center;
     justify-content: center;
@@ -212,7 +198,7 @@
   .modal {
     background: #111111;
     border: 0.5px solid rgba(255,255,255,0.15);
-    max-width: 780px;
+    max-width: 820px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -220,9 +206,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 640px) {
-    .modal { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 640px) { .modal { grid-template-columns: 1fr; } }
 
   .modal-media {
     background: rgba(255,255,255,0.03);
@@ -230,10 +214,27 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    min-height: 280px;
+    min-height: 320px;
+    position: relative;
+    cursor: zoom-in;
   }
 
-  .modal-media svg { width: 70%; height: 90%; }
+  .modal-media svg { width: 70%; height: 90%; transition: transform 0.3s ease; }
+  .modal-media:hover svg { transform: scale(1.05); }
+
+  .zoom-hint {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .zoom-hint svg { width: 12px; height: 12px; }
 
   .modal-body { padding: 30px; position: relative; }
 
@@ -249,46 +250,24 @@
   }
   .modal-close:hover { color: #C9A84C; }
 
-  .modal-code {
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 6px;
-  }
+  .modal-code { font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+  .modal-colorway { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+  .modal-price { font-size: 16px; color: #C9A84C; font-weight: bold; margin-bottom: 18px; }
+  .modal-desc { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.55); margin-bottom: 20px; }
 
-  .modal-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 4px;
+  .spec-list { list-style: none; margin-bottom: 24px; }
+  .spec-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    padding: 8px 0;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
   }
+  .spec-list li span:last-child { color: rgba(255,255,255,0.8); }
 
-  .modal-colorway {
-    font-size: 12px;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 16px;
-  }
-
-  .modal-price {
-    font-size: 16px;
-    color: #C9A84C;
-    font-weight: bold;
-    margin-bottom: 18px;
-  }
-
-  .modal-desc {
-    font-size: 12.5px;
-    line-height: 1.9;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 24px;
-  }
-
-  .size-label {
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 10px;
-  }
-
+  .size-label { font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
   .size-row { display: flex; gap: 8px; margin-bottom: 22px; }
 
   .size-btn {
@@ -303,17 +282,8 @@
     transition: all 0.2s;
   }
 
-  .size-btn.selected {
-    border-color: #C9A84C;
-    color: #C9A84C;
-    background: rgba(201,168,76,0.08);
-  }
-
-  .size-btn:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
-    text-decoration: line-through;
-  }
+  .size-btn.selected { border-color: #C9A84C; color: #C9A84C; background: rgba(201,168,76,0.08); }
+  .size-btn:disabled { opacity: 0.25; cursor: not-allowed; text-decoration: line-through; }
 
   .add-btn {
     width: 100%;
@@ -326,29 +296,42 @@
     font-weight: bold;
     cursor: pointer;
     font-family: Arial, sans-serif;
+    transition: opacity 0.2s;
   }
+  .add-btn:hover { opacity: 0.9; }
+  .add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .add-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+  .modal-msg { font-size: 11px; color: rgba(255,120,120,0.85); margin-top: 10px; display: none; }
 
-  .modal-msg {
-    font-size: 11px;
-    color: rgba(255,120,120,0.85);
-    margin-top: 10px;
-    display: none;
-  }
-
-  /* ---------- cart drawer ---------- */
-  .cart-overlay {
+  /* ---------- zoom lightbox ---------- */
+  .lightbox {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 60;
+    background: rgba(0,0,0,0.92);
+    z-index: 90;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox svg { width: min(80vw, 480px); height: 80vh; }
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.3);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 18px;
   }
 
+  /* ---------- cart drawer ---------- */
+  .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 60; }
   .cart-overlay.open { display: block; }
 
   .cart-drawer {
@@ -366,99 +349,28 @@
     transform: translateX(-100%);
     transition: transform 0.25s ease;
   }
-
   .cart-drawer.open { transform: translateX(0); }
 
-  .cart-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.12);
-  }
-
+  .cart-header { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 0.5px solid rgba(255,255,255,0.12); }
   .cart-header h2 { font-size: 14px; letter-spacing: 1px; }
-
   .cart-items { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .cart-empty { color: rgba(255,255,255,0.35); font-size: 12.5px; text-align: center; padding: 40px 0; }
 
-  .cart-empty {
-    color: rgba(255,255,255,0.35);
-    font-size: 12.5px;
-    text-align: center;
-    padding: 40px 0;
-  }
-
-  .cart-item {
-    display: flex;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-  }
-
-  .cart-item-media {
-    width: 60px;
-    height: 70px;
-    background: rgba(255,255,255,0.03);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
+  .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+  .cart-item-media { width: 60px; height: 70px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .cart-item-media svg { width: 70%; height: 80%; }
-
   .cart-item-info { flex: 1; }
-
   .cart-item-name { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; }
   .cart-item-size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
-
-  .cart-item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .qty-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .qty-btn {
-    width: 20px;
-    height: 20px;
-    border: 0.5px solid rgba(255,255,255,0.25);
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-    font-size: 12px;
-    line-height: 1;
-  }
-
+  .cart-item-row { display: flex; align-items: center; justify-content: space-between; }
+  .qty-controls { display: flex; align-items: center; gap: 8px; }
+  .qty-btn { width: 20px; height: 20px; border: 0.5px solid rgba(255,255,255,0.25); background: transparent; color: #fff; cursor: pointer; font-size: 12px; line-height: 1; }
   .cart-item-price { font-size: 12px; color: #C9A84C; }
-
-  .remove-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255,255,255,0.3);
-    cursor: pointer;
-    font-size: 11px;
-    text-decoration: underline;
-  }
+  .remove-btn { background: transparent; border: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 11px; text-decoration: underline; }
   .remove-btn:hover { color: rgba(255,120,120,0.85); }
 
-  .cart-footer {
-    padding: 18px 20px 22px;
-    border-top: 0.5px solid rgba(255,255,255,0.12);
-  }
-
-  .cart-subtotal {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    margin-bottom: 14px;
-  }
-
+  .cart-footer { padding: 18px 20px 22px; border-top: 0.5px solid rgba(255,255,255,0.12); }
+  .cart-subtotal { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px; }
   .cart-subtotal strong { color: #C9A84C; }
 
   .checkout-btn {
@@ -476,11 +388,7 @@
     display: block;
     text-align: center;
   }
-
-  .checkout-btn.disabled {
-    opacity: 0.4;
-    pointer-events: none;
-  }
+  .checkout-btn.disabled { opacity: 0.4; pointer-events: none; }
 
   .toast {
     position: fixed;
@@ -514,7 +422,7 @@
 <section class="hero">
   <p class="brand-mark">DIRBALَK®</p>
   <h1>Collection 01</h1>
-  <p>مية قطعة من كل تصميم. لما تخلص، رح تخلص. دير بالك على حالك.</p>
+  <p>إصدار محدود. لما يخلص، بيخلص. دير بالك على حالك.</p>
 </section>
 
 <div class="grid" id="productGrid"></div>
@@ -522,7 +430,12 @@
 <!-- Quick view modal -->
 <div class="overlay" id="modalOverlay">
   <div class="modal">
-    <div class="modal-media" id="modalMedia"></div>
+    <div class="modal-media" id="modalMedia">
+      <span class="zoom-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
+        اضغط للتكبير
+      </span>
+    </div>
     <div class="modal-body">
       <button type="button" class="modal-close" id="modalClose">✕</button>
       <p class="modal-code" id="modalCode"></p>
@@ -530,12 +443,19 @@
       <p class="modal-colorway" id="modalColorway"></p>
       <p class="modal-price" id="modalPrice"></p>
       <p class="modal-desc" id="modalDesc"></p>
+      <ul class="spec-list" id="specList"></ul>
       <p class="size-label">المقاس</p>
       <div class="size-row" id="sizeRow"></div>
       <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
       <p class="modal-msg" id="modalMsg"></p>
     </div>
   </div>
+</div>
+
+<!-- Zoom lightbox -->
+<div class="lightbox" id="lightbox">
+  <button type="button" class="lightbox-close" id="lightboxClose">✕</button>
+  <div id="lightboxMedia"></div>
 </div>
 
 <!-- Cart drawer -->
@@ -566,6 +486,7 @@
       colorway: 'أبيض نقي',
       price: 22,
       desc: 'قماش قطن ثقيل 260 جرام، قصة أوفرسايز، بدون أي طباعة خارجية. تفاصيله كلها بالداخل.',
+      specs: [ ['القماش', 'قطن 260 جرام'], ['القصة', 'أوفرسايز'], ['اللون', 'أبيض نقي'] ],
       swatch: '#f2f0ea',
       silhouette: 'tee',
       sizes: { S: 20, M: 60, L: 20 }
@@ -575,7 +496,8 @@
       name: 'بنطلون دنيم واسع',
       colorway: 'إندجو خام 13oz',
       price: 50,
-      desc: 'دنيم خام 13oz، أزرار وأسنان معدن فضي مطفي، خيط تطريز أمبر مخفي، وحرف  مطرز بالجيب .',
+      desc: 'دنيم خام 13oz، أزرار وأسنان معدن فضي مطفي، خيط تطريز أمبر مخفي.',
+      specs: [ ['القماش', 'دنيم خام 13oz'], ['القصة', 'واسع (Wide-leg)'], ['الأزرار', 'معدن فضي مطفي'] ],
       swatch: '#3a4a63',
       silhouette: 'pants',
       sizes: { S: 20, M: 60, L: 20 }
@@ -586,6 +508,7 @@
       colorway: 'إندجو خام 13oz',
       price: 65,
       desc: 'دنيم خام 13oz، ستة أزرار أمامية، أزرار وأسنان فضية مطفية، قصة أوفرسايز.',
+      specs: [ ['القماش', 'دنيم خام 13oz'], ['الأزرار', '6 أزرار أمامية'], ['القصة', 'أوفرسايز'] ],
       swatch: '#2d3a52',
       silhouette: 'jacket',
       sizes: { S: 20, M: 60, L: 20 }
@@ -616,6 +539,7 @@
   let cart = loadCart();
 
   function findProduct(id) { return PRODUCTS.find((p) => p.id === id); }
+  function totalStock(p) { return Object.values(p.sizes).reduce((a, b) => a + b, 0); }
 
   function cartCount() { return cart.reduce((s, l) => s + l.qty, 0); }
   function cartSubtotal() {
@@ -639,16 +563,16 @@
     setTimeout(() => { t.style.display = 'none'; }, 2000);
   }
 
-  /* ---------------- render product grid ---------------- */
+  /* ---------------- render product grid (no stock numbers shown) ---------------- */
   const grid = document.getElementById('productGrid');
   PRODUCTS.forEach((p) => {
-    const totalStock = Object.values(p.sizes).reduce((a, b) => a + b, 0);
+    const soldOut = totalStock(p) === 0;
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML =
       '<div class="card-media">' + silhouetteSVG(p.silhouette, p.swatch) +
       '<span class="card-code">' + p.id + '</span>' +
-      '<span class="card-stock' + (totalStock === 0 ? ' sold-out' : '') + '">' + (totalStock === 0 ? 'نفذت الكمية' : totalStock + ' من 10 متبقية') + '</span>' +
+      '<span class="card-tag' + (soldOut ? ' sold-out' : '') + '">' + (soldOut ? 'نفذت الكمية' : 'إصدار محدود') + '</span>' +
       '</div>' +
       '<div class="card-body">' +
       '<p class="card-name">' + p.name + '</p>' +
@@ -666,13 +590,23 @@
   function openModal(id) {
     modalProduct = findProduct(id);
     modalSize = null;
-    document.getElementById('modalMedia').innerHTML = silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+    const svg = silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+    document.getElementById('modalMedia').innerHTML = svg +
+      '<span class="zoom-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg> اضغط للتكبير</span>';
     document.getElementById('modalCode').textContent = modalProduct.id;
     document.getElementById('modalTitle').textContent = modalProduct.name;
     document.getElementById('modalColorway').textContent = modalProduct.colorway;
     document.getElementById('modalPrice').textContent = modalProduct.price + ' دينار';
     document.getElementById('modalDesc').textContent = modalProduct.desc;
     document.getElementById('modalMsg').style.display = 'none';
+
+    const specList = document.getElementById('specList');
+    specList.innerHTML = '';
+    modalProduct.specs.forEach(([label, value]) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<span>' + label + '</span><span>' + value + '</span>';
+      specList.appendChild(li);
+    });
 
     const sizeRow = document.getElementById('sizeRow');
     sizeRow.innerHTML = '';
@@ -701,6 +635,18 @@
   });
   document.getElementById('modalOverlay').addEventListener('click', (e) => {
     if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('open');
+  });
+
+  /* ---------------- zoom lightbox ---------------- */
+  document.getElementById('modalMedia').addEventListener('click', () => {
+    if (!modalProduct) return;
+    document.getElementById('lightboxMedia').innerHTML = silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+    document.getElementById('lightbox').classList.add('open');
+  });
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
   });
 
   document.getElementById('addToCartBtn').addEventListener('click', () => {
