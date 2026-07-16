@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتمام الشراء — DIRBALَK</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  a { color: inherit; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-logo { height: 20px; width: auto; }
+  .back-link { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .back-link:hover { color: #C9A84C; }
+
+  .steps {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px 20px 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .step-dot {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-dot.active { color: #C9A84C; }
+  .step-dot span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .step-sep { color: rgba(255,255,255,0.15); font-size: 10px; }
+
+  .wrap { max-width: 700px; margin: 0 auto; padding: 30px 20px 100px; }
+
+  h1 { font-size: 18px; margin-bottom: 22px; letter-spacing: 0.3px; }
+
+  .summary-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+  .summary-media { width: 64px; height: 76px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .summary-media svg { width: 70%; height: 80%; }
+  .summary-info { flex: 1; }
+  .summary-name { font-size: 13px; font-weight: bold; margin-bottom: 2px; }
+  .summary-meta { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .summary-price { font-size: 12.5px; color: #C9A84C; }
+
+  .summary-total { display: flex; justify-content: space-between; padding-top: 18px; font-size: 15px; }
+  .summary-total strong { color: #C9A84C; }
+
+  .empty-cart { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
+  .empty-cart a { color: #C9A84C; text-decoration: underline; }
+
+  .form-group { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+  .field { text-align: right; }
+  .field.half { display: inline-block; width: 48%; }
+  .field-row { display: flex; gap: 4%; }
+
+  label { display: block; color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; }
+
+  input, select {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #ffffff;
+    padding: 13px 16px;
+    font-size: 13px;
+    outline: none;
+    text-align: right;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  input::placeholder { color: rgba(255,255,255,0.25); }
+  input:focus, select:focus { border-color: rgba(201,168,76,0.5); }
+  input.field-error { border-color: rgba(255,80,80,0.6); }
+
+  .field-msg { color: rgba(255,80,80,0.75); font-size: 10px; margin-top: 5px; min-height: 12px; display: none; }
+
+  .logged-in-note {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 0.5px solid rgba(201,168,76,0.25);
+    display: none;
+  }
+  .logged-in-note strong { color: #C9A84C; }
+
+  .primary-btn {
+    width: 100%;
+    padding: 15px;
+    background: #C9A84C;
+    border: none;
+    color: #0a0a0a;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+    transition: opacity 0.2s;
+  }
+  .primary-btn:hover { opacity: 0.9; }
+  .primary-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .secondary-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
+  .secondary-link:hover { color: #C9A84C; }
+
+  .form-error { color: rgba(255,80,80,0.85); font-size: 12px; margin-top: 14px; display: none; line-height: 1.6; }
+
+  .test-mode-note { font-size: 10.5px; color: rgba(255,255,255,0.3); margin-bottom: 18px; line-height: 1.7; }
+
+  .confirm-box { text-align: center; padding: 40px 0; }
+  .confirm-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #C9A84C;
+  }
+  .confirm-box h2 { font-size: 18px; margin-bottom: 10px; }
+  .confirm-box p { font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 6px; }
+  .confirm-order-id { color: #C9A84C; font-size: 13px; margin: 16px 0 26px; }
+  .confirm-box .primary-btn { text-decoration: none; display: inline-block; width: auto; padding: 13px 32px; }
+
+  .step-section { display: none; }
+  .step-section.active { display: block; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 20px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/shop.html" class="back-link">← الرجوع للمتجر</a>
+    <img src="/logo.png" alt="DIRBALK" class="header-logo" />
+  </div>
+</header>
+
+<div class="steps" id="stepsIndicator">
+  <span class="step-dot active" data-step="1"><span></span>السلة</span>
+  <span class="step-sep">—</span>
+  <span class="step-dot" data-step="2"><span></span>الشحن</span>
+  <span class="step-sep">—</span>
+  <span class="step-dot" data-step="3"><span></span>الدفع</span>
+</div>
+
+<div class="wrap">
+
+  <div class="step-section active" id="step1">
+    <h1>ملخص الطلب</h1>
+    <div id="summaryItems"></div>
+    <div class="summary-total" id="summaryTotalRow" style="display:none;">
+      <span>المجموع</span>
+      <strong id="summaryTotal">0 JD</strong>
+    </div>
+    <div id="emptyCartMsg" class="empty-cart" style="display:none;">
+      السلة فاضية. <a href="/shop.html">روح تسوق الكوليكشن</a>
+    </div>
+    <button type="button" class="primary-btn" id="toShippingBtn" style="display:none;">متابعة لبيانات الشحن</button>
+  </div>
+
+  <div class="step-section" id="step2">
+    <h1>بيانات الشحن</h1>
+    <p class="logged-in-note" id="loggedInNote"></p>
+    <form id="shippingForm" novalidate>
+      <div class="form-group">
+        <div class="field">
+          <label for="fullName">الاسم الكامل</label>
+          <input type="text" id="fullName" placeholder="مثال: خالد أحمد" />
+          <p class="field-msg" id="fullName-msg"></p>
+        </div>
+        <div class="field">
+          <label for="ckEmail">البريد الإلكتروني</label>
+          <input type="email" id="ckEmail" placeholder="example@email.com" />
+          <p class="field-msg" id="ckEmail-msg"></p>
+        </div>
+        <div class="field">
+          <label for="ckPhone">رقم الهاتف</label>
+          <input type="tel" id="ckPhone" placeholder="07XXXXXXXX" inputmode="numeric" />
+          <p class="field-msg" id="ckPhone-msg"></p>
+        </div>
+        <div class="field">
+          <label for="city">المدينة</label>
+          <input type="text" id="city" placeholder="مثال: عمّان" />
+          <p class="field-msg" id="city-msg"></p>
+        </div>
+        <div class="field">
+          <label for="address">العنوان بالتفصيل</label>
+          <input type="text" id="address" placeholder="الحي، الشارع، أقرب معلم" />
+          <p class="field-msg" id="address-msg"></p>
+        </div>
+      </div>
+
+      <p class="form-error" id="shippingError"></p>
+      <button type="submit" class="primary-btn">متابعة للدفع</button>
+    </form>
+    <button type="button" class="secondary-link" id="backToStep1">← الرجوع للسلة</button>
+  </div>
+
+  <div class="step-section" id="step3">
+    <h1>الدفع</h1>
+    <p class="test-mode-note">وضع تجريبي — ما رح يتم خصم أي مبلغ حقيقي. هاد بس لاختبار تجربة الشراء.</p>
+    <form id="paymentForm" novalidate>
+      <div class="form-group">
+        <div class="field">
+          <label for="cardNumber">رقم البطاقة</label>
+          <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" inputmode="numeric" />
+          <p class="field-msg" id="cardNumber-msg"></p>
+        </div>
+        <div class="field-row">
+          <div class="field half">
+            <label for="cardExpiry">تاريخ الانتهاء</label>
+            <input type="text" id="cardExpiry" placeholder="MM/YY" />
+            <p class="field-msg" id="cardExpiry-msg"></p>
+          </div>
+          <div class="field half">
+            <label for="cardCvc">CVC</label>
+            <input type="text" id="cardCvc" placeholder="123" inputmode="numeric" />
+            <p class="field-msg" id="cardCvc-msg"></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="form-error" id="paymentError"></p>
+      <button type="submit" class="primary-btn" id="payBtn">إتمام الدفع</button>
+    </form>
+    <button type="button" class="secondary-link" id="backToStep2">← الرجوع لبيانات الشحن</button>
+  </div>
+
+  <div class="step-section" id="step4">
+    <div class="confirm-box">
+      <div class="confirm-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2>تم استلام طلبك</h2>
+      <p>رح نتواصل معك قريباً لتأكيد التفاصيل والتوصيل.</p>
+      <p class="confirm-order-id" id="orderIdDisplay"></p>
+      <a href="/shop.html" class="primary-btn">الرجوع للمتجر</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const PRODUCTS = [
+    { id: 'DB-TEE-01', name: 'تيشيرت أوفرسايز', colorway: 'أبيض نقي', price: 22, swatch: '#f2f0ea', silhouette: 'tee' },
+    { id: 'DB-DEN-01', name: 'بنطلون دنيم واسع', colorway: 'إندجو خام 13oz', price: 50, swatch: '#3a4a63', silhouette: 'pants' },
+    { id: 'DB-JAC-01', name: 'جاكيت دنيم أوفرسايز', colorway: 'إندجو خام 13oz', price: 65, swatch: '#2d3a52', silhouette: 'jacket' }
+  ];
+
+  const CART_KEY = 'dirbalk_cart';
+
+  function silhouetteSVG(type, tint) {
+    const stroke = 'rgba(255,255,255,0.15)';
+    if (type === 'jacket') {
+      return '<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg"><path d="M60 30 L80 20 L100 32 L120 20 L140 30 L155 60 L138 78 L128 62 L128 190 L72 190 L72 62 L62 78 L45 60 Z" fill="' + tint + '" stroke="' + stroke + '" stroke-width="1.5"/><line x1="100" y1="32" x2="100" y2="190" stroke="' + stroke + '" stroke-width="1" stroke-dasharray="2 3"/></svg>';
+    }
+    if (type === 'pants') {
+      return '<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg"><path d="M75 20 L125 20 L130 60 L150 195 L120 195 L102 90 L98 90 L80 195 L50 195 L70 60 Z" fill="' + tint + '" stroke="' + stroke + '" stroke-width="1.5"/></svg>';
+    }
+    return '<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg"><path d="M70 30 L100 22 L130 30 L155 55 L138 72 L128 60 L128 190 L72 190 L72 60 L62 72 L45 55 Z" fill="' + tint + '" stroke="' + stroke + '" stroke-width="1.5"/></svg>';
+  }
+
+  function findProduct(id) { return PRODUCTS.find((p) => p.id === id); }
+
+  function loadCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+    catch (e) { return []; }
+  }
+  function saveCart(cart) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) { /* ignore */ }
+  }
+
+  let cart = loadCart();
+
+  function goToStep(n) {
+    document.querySelectorAll('.step-section').forEach((s) => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    document.querySelectorAll('.step-dot').forEach((d) => {
+      d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 3);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function renderSummary() {
+    const container = document.getElementById('summaryItems');
+    container.innerHTML = '';
+    if (cart.length === 0) {
+      document.getElementById('emptyCartMsg').style.display = 'block';
+      document.getElementById('summaryTotalRow').style.display = 'none';
+      document.getElementById('toShippingBtn').style.display = 'none';
+      return;
+    }
+    document.getElementById('emptyCartMsg').style.display = 'none';
+    document.getElementById('summaryTotalRow').style.display = 'flex';
+    document.getElementById('toShippingBtn').style.display = 'block';
+
+    let total = 0;
+    cart.forEach((line) => {
+      const p = findProduct(line.id);
+      if (!p) return;
+      total += p.price * line.qty;
+      const row = document.createElement('div');
+      row.className = 'summary-item';
+      row.innerHTML =
+        '<div class="summary-media">' + silhouetteSVG(p.silhouette, p.swatch) + '</div>' +
+        '<div class="summary-info">' +
+        '<p class="summary-name">' + p.name + '</p>' +
+        '<p class="summary-meta">مقاس ' + line.size + ' × ' + line.qty + '</p>' +
+        '<p class="summary-price">' + (p.price * line.qty) + ' JD</p>' +
+        '</div>';
+      container.appendChild(row);
+    });
+    document.getElementById('summaryTotal').textContent = total + ' JD';
+  }
+
+  renderSummary();
+
+  document.getElementById('toShippingBtn').addEventListener('click', () => {
+    if (window.gtag) gtag('event', 'begin_checkout');
+    goToStep(2);
+  });
+  document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
+  document.getElementById('backToStep2').addEventListener('click', () => goToStep(2));
+
+  try {
+    if (localStorage.getItem('dirbalk_logged_in') === '1') {
+      const name = localStorage.getItem('dirbalk_name') || '';
+      if (name) {
+        document.getElementById('fullName').value = name;
+        const note = document.getElementById('loggedInNote');
+        note.innerHTML = 'مسجل دخول كـ <strong>' + name + '</strong> — عبّي باقي البيانات لإتمام الطلب.';
+        note.style.display = 'block';
+      }
+    }
+  } catch (e) { /* ignore */ }
+
+  const shippingForm = document.getElementById('shippingForm');
+  const shippingFields = ['fullName', 'ckEmail', 'ckPhone', 'city', 'address'];
+
+  function clearShippingErrors() {
+    shippingFields.forEach((id) => {
+      document.getElementById(id).classList.remove('field-error');
+      document.getElementById(id + '-msg').style.display = 'none';
+    });
+    document.getElementById('shippingError').style.display = 'none';
+  }
+
+  function showFieldError(id, msg) {
+    document.getElementById(id).classList.add('field-error');
+    const m = document.getElementById(id + '-msg');
+    m.textContent = msg;
+    m.style.display = 'block';
+  }
+
+  let shippingData = null;
+
+  shippingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearShippingErrors();
+
+    const data = {
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('ckEmail').value.trim().toLowerCase(),
+      phone: document.getElementById('ckPhone').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      address: document.getElementById('address').value.trim(),
+    };
+
+    let valid = true;
+    if (!data.fullName) { showFieldError('fullName', 'الرجاء إدخال الاسم الكامل.'); valid = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('ckEmail', 'الرجاء إدخال بريد إلكتروني صحيح.'); valid = false; }
+    if (!/^0?7[0-9]{8}$/.test(data.phone.replace(/\s/g, ''))) { showFieldError('ckPhone', 'رقم الهاتف غير صحيح.'); valid = false; }
+    if (!data.city) { showFieldError('city', 'الرجاء إدخال المدينة.'); valid = false; }
+    if (!data.address) { showFieldError('address', 'الرجاء إدخال العنوان.'); valid = false; }
+    if (!valid) return;
+
+    shippingData = data;
+    if (window.gtag) gtag('event', 'add_shipping_info');
+    goToStep(3);
+  });
+
+  const paymentForm = document.getElementById('paymentForm');
+  const payBtn = document.getElementById('payBtn');
+
+  paymentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('paymentError').style.display = 'none';
+
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    const cardExpiry = document.getElementById('cardExpiry').value.trim();
+    const cardCvc = document.getElementById('cardCvc').value.trim();
+
+    let valid = true;
+    ['cardNumber', 'cardExpiry', 'cardCvc'].forEach((id) => {
+      document.getElementById(id).classList.remove('field-error');
+      document.getElementById(id + '-msg').style.display = 'none';
+    });
+    if (cardNumber.length < 12) { showFieldError('cardNumber', 'رقم بطاقة غير صحيح.'); valid = false; }
+    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) { showFieldError('cardExpiry', 'صيغة غير صحيحة (MM/YY).'); valid = false; }
+    if (cardCvc.length < 3) { showFieldError('cardCvc', 'CVC غير صحيح.'); valid = false; }
+    if (!valid) return;
+
+    payBtn.disabled = true;
+    payBtn.textContent = 'جاري المعالجة...';
+
+    const total = cart.reduce((s, l) => {
+      const p = findProduct(l.id);
+      return s + (p ? p.price * l.qty : 0);
+    }, 0);
+
+    const orderPayload = {
+      name: shippingData.fullName,
+      email: shippingData.email,
+      phone: shippingData.phone,
+      city: shippingData.city,
+      address: shippingData.address,
+      items: cart.map((l) => {
+        const p = findProduct(l.id);
+        return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
+      }).join(', '),
+      total: total,
+    };
+
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload),
+      });
+      const result = await res.json();
+
+      if (result.status === 'success') {
+        if (window.gtag) gtag('event', 'purchase', { value: total, currency: 'JOD' });
+        document.getElementById('orderIdDisplay').textContent = 'رقم الطلب: ' + (result.orderId || '—');
+        cart = [];
+        saveCart(cart);
+        goToStep(4);
+      } else {
+        document.getElementById('paymentError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        document.getElementById('paymentError').style.display = 'block';
+        payBtn.disabled = false;
+        payBtn.textContent = 'إتمام الدفع';
+      }
+    } catch (err) {
+      document.getElementById('paymentError').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      document.getElementById('paymentError').style.display = 'block';
+      payBtn.disabled = false;
+      payBtn.textContent = 'إتمام الدفع';
+    }
+  });
+
+  if (cart.length === 0) goToStep(1);
+})();
+</script>
+
+</body>
+</html>
