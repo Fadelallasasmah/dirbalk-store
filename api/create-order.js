@@ -18,6 +18,7 @@ export default async function handler(req, res) {
       phone: (req.body?.phone || '').toString(),
       city: (req.body?.city || '').toString(),
       address: (req.body?.address || '').toString(),
+      locationLink: (req.body?.locationLink || '').toString(),
       items: (req.body?.items || '').toString(),
       total: (req.body?.total || 0).toString(),
     };
