@@ -682,8 +682,12 @@
 
     var soldOut = totalStock(p) === 0;
     var tag = document.getElementById('pdpTag');
-    tag.textContent = soldOut ? 'نفذت الكمية' : '';
-    if (soldOut) tag.classList.add('sold-out');
+    if (soldOut) {
+      tag.textContent = 'نفذت الكمية';
+      tag.classList.add('sold-out');
+    } else {
+      tag.style.display = 'none';
+    }
 
     /* spec lists */
     ['fit', 'care'].forEach(function (key) {
