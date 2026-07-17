@@ -761,7 +761,7 @@
       '<p class="card-colorway">' + p.colorway + '</p>' +
       '<p class="card-price">' + p.price + ' دينار</p>' +
       '</div>';
-    card.addEventListener('click', () => openModal(p.id));
+    card.addEventListener('click', () => { window.location.href = '/product.html?id=' + p.id; });
     grid.appendChild(card);
   });
 
