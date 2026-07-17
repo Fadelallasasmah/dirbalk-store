@@ -13,8 +13,13 @@
   gtag('js', new Date());
   gtag('config', 'G-FMPZV540CP');
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
 
   body {
     background: #0a0a0a;
@@ -47,10 +52,10 @@
   .header-logo { height: 22px; width: auto; display: block; }
   .header-actions { display: flex; align-items: center; gap: 16px; }
 
-  .account-link { font-size: 11px; letter-spacing: 0.5px; color: rgba(255,255,255,0.5); text-decoration: none; }
+  .account-link { font-size: 11px; letter-spacing: 0.5px; color: rgba(255,255,255,0.72); text-decoration: none; }
   .account-link:hover { color: #C9A84C; }
 
-  .user-chip { display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(255,255,255,0.6); }
+  .user-chip { display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(255,255,255,0.75); }
   .user-chip-avatar {
     width: 20px; height: 20px; border-radius: 50%;
     background: rgba(201,168,76,0.15); color: #C9A84C;
@@ -77,7 +82,7 @@
 
   /* ---------- gate ---------- */
   .gate-box { max-width: 420px; margin: 80px auto; padding: 0 20px; text-align: center; }
-  .gate-box p { color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.9; margin-bottom: 22px; }
+  .gate-box p { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 1.9; margin-bottom: 22px; }
   .gate-actions { display: flex; gap: 10px; }
   .gate-btn {
     flex: 1; padding: 13px;
@@ -92,7 +97,7 @@
   /* ---------- not found ---------- */
   .notfound { max-width: 420px; margin: 100px auto; padding: 0 20px; text-align: center; }
   .notfound .brand-mark { color: #C9A84C; font-size: 11px; letter-spacing: 4px; margin-bottom: 1.4rem; opacity: 0.85; }
-  .notfound p { color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.9; margin-bottom: 24px; }
+  .notfound p { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 1.9; margin-bottom: 24px; }
 
   /* ---------- product layout ---------- */
   .pdp {
@@ -171,7 +176,7 @@
   .pdp-story {
     font-size: 13px;
     line-height: 2.05;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.75);
     margin-bottom: 30px;
   }
 
@@ -224,20 +229,39 @@
     overflow: hidden;
     transition: max-height 0.3s ease;
   }
-  .acc.open .acc-body { max-height: 400px; }
+  .acc.open .acc-body { max-height: 620px; }
 
   .acc-content { padding: 2px 2px 18px; }
 
   .spec-list { list-style: none; }
   .spec-list li {
     font-size: 12px; line-height: 2;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.72);
     padding-right: 14px; position: relative;
   }
   .spec-list li::before { content: '—'; position: absolute; right: 0; color: rgba(201,168,76,0.6); }
 
-  .acc-text { font-size: 12px; line-height: 2; color: rgba(255,255,255,0.55); }
+  .acc-text { font-size: 12px; line-height: 2; color: rgba(255,255,255,0.72); }
   .acc-text .hint { color: rgba(201,168,76,0.75); }
+
+  /* size guide table */
+  .sg-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 4px; }
+  .sg-table th {
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #C9A84C;
+    padding: 8px 6px;
+    border-bottom: 0.5px solid rgba(201,168,76,0.3);
+    font-weight: normal;
+  }
+  .sg-table th.c, .sg-table td.c { text-align: center; }
+  .sg-table td {
+    padding: 9px 6px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.72);
+  }
+  .sg-note { font-size: 10.5px; color: rgba(255,255,255,0.35); line-height: 1.9; margin-top: 12px; }
 
   .pdp-meta {
     font-size: 10.5px;
@@ -473,6 +497,16 @@
         <button type="button" class="acc-head">القصة والمقاس <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content"><ul class="spec-list" id="fitList"></ul></div></div>
       </div>
+      <div class="acc" id="accSize">
+        <button type="button" class="acc-head">دليل المقاسات <span class="acc-icon">+</span></button>
+        <div class="acc-body"><div class="acc-content">
+          <table class="sg-table">
+            <thead id="sgHead"></thead>
+            <tbody id="sgBody"></tbody>
+          </table>
+          <p class="sg-note" id="sgNote"></p>
+        </div></div>
+      </div>
       <div class="acc" id="accCare">
         <button type="button" class="acc-head">التركيب والعناية <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content"><ul class="spec-list" id="careList"></ul></div></div>
@@ -611,6 +645,40 @@
 
   var CART_KEY = 'dirbalk_cart';
 
+  /* دليل المقاسات — قياسات مختارة للزبون من الـ tech pack (بالسنتيمتر، والقطعة مفرودة) */
+  var SIZE_GUIDE = {
+    'DB-TEE-01': {
+      rows: [
+        ['عرض الصدر', '58', '63', '68'],
+        ['طول القطعة', '65', '68', '71'],
+        ['عرض الكتف', '50', '54', '58'],
+        ['طول الكم', '21', '23', '25']
+      ],
+      note: 'كل القياسات بالسنتيمتر والقطعة مفرودة. هامش ±1 سم.<br>أسهل طريقة: قيس تيشيرت بلبسك مريح وهو مفرود وقارن الأرقام.'
+    },
+    'DB-DEN-01': {
+      rows: [
+        ['الخصر (مفرود)', '38–40', '41–43', '44–47'],
+        ['الورك (مفرود)', '54', '58', '62'],
+        ['الفخذ (مفرود)', '35', '37', '39'],
+        ['فتحة الرجل (مفرودة)', '28–29', '29–30', '30–31'],
+        ['الطول الداخلي', '76', '78', '80'],
+        ['الطول الكلي', '105', '107', '109']
+      ],
+      note: 'كل القياسات بالسنتيمتر والبنطلون مفرود — قياسات الخصر والورك هي عرض القطعة وهي مفرودة (نص المحيط). هامش ±1 سم.<br>أسهل طريقة: افرد بنطلون بلبسك مريح وقيسه وقارن.'
+    },
+    'DB-JAC-01': {
+      rows: [
+        ['عرض الصدر', '62', '67', '72'],
+        ['طول القطعة', '63', '66', '69'],
+        ['عرض الكتف', '52', '56', '60'],
+        ['طول الكم', '59', '61', '63'],
+        ['فتحة الكم', '18', '20', '22']
+      ],
+      note: 'كل القياسات بالسنتيمتر والجاكيت مفرود. هامش ±1 سم.<br>القصة أوفرسايز — إذا محتار بين مقاسين وبدك قصة أهدى، خذ الأصغر.'
+    }
+  };
+
   function silhouetteSVG(type, tint) {
     var stroke = 'rgba(255,255,255,0.15)';
     if (type === 'jacket') {
@@ -734,6 +802,23 @@
         list.appendChild(li);
       });
     });
+
+    /* size guide */
+    var sg = SIZE_GUIDE[p.id];
+    if (sg) {
+      document.getElementById('sgHead').innerHTML =
+        '<tr><th>القياس</th><th class="c">S</th><th class="c">M</th><th class="c">L</th></tr>';
+      var sgBody = document.getElementById('sgBody');
+      sgBody.innerHTML = '';
+      sg.rows.forEach(function (r) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + r[0] + '</td><td class="c">' + r[1] + '</td><td class="c">' + r[2] + '</td><td class="c">' + r[3] + '</td>';
+        sgBody.appendChild(tr);
+      });
+      document.getElementById('sgNote').innerHTML = sg.note;
+    } else {
+      document.getElementById('accSize').style.display = 'none';
+    }
 
     /* sizes */
     var sizeRow = document.getElementById('sizeRow');
