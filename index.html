@@ -348,8 +348,6 @@
   <p class="brand-arabic">دير بالك على حالك</p>
   <div class="divider"></div>
 
-  <a href="/shop.html" class="shop-cta" id="shopCta" style="display:none;">تسوق الكوليكشن الآن ←</a>
-
   <div id="form-section">
     <p class="description">
       لما يطلع الكوليكشن — ممكن نبعتلك.<br>
@@ -509,7 +507,6 @@
     } catch (e) { /* ignore */ }
     userBadge.style.display = 'none';
     userBadge.classList.remove('open');
-    document.getElementById('shopCta').style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
     document.getElementById('form-section').style.display = 'block';
     form.reset();
@@ -538,7 +535,6 @@
     showUserBadge(name);
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
-    document.getElementById('shopCta').style.display = 'inline-block';
   }
 
   try {
