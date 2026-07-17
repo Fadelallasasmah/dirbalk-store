@@ -335,8 +335,33 @@
     z-index: 80; display: none;
   }
 
+  /* ---------- unified footer ---------- */
+  .site-footer {
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    margin-top: 60px;
+    padding: 34px 20px 40px;
+    text-align: center;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-bottom: 22px;
+  }
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: #C9A84C; }
+  .footer-brand { color: #C9A84C; font-size: 11px; letter-spacing: 4px; opacity: 0.6; }
+
   /* ---------- mobile ---------- */
   @media (max-width: 860px) {
+    .site-footer { padding-bottom: 110px; }
     .pdp { grid-template-columns: 1fr; }
 
     .pdp-media {
@@ -479,6 +504,16 @@
   </div>
 
 </div>
+
+<footer class="site-footer">
+  <nav class="footer-links">
+    <a href="/">الرئيسية</a>
+    <a href="/shop.html">الكوليكشن</a>
+    <a href="/about.html">عن DIRBALK</a>
+    <a href="/privacy.html">سياسة الخصوصية</a>
+  </nav>
+  <p class="footer-brand">DIRBALَK®</p>
+</footer>
 
 <!-- mobile sticky bar -->
 <div class="mobile-bar" id="mobileBar" style="display:none;">
