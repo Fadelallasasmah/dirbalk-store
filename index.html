@@ -27,8 +27,13 @@
   gtag('js', new Date());
   gtag('config', 'G-FMPZV540CP');
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
 
   body {
     background: #0a0a0a;
@@ -100,7 +105,7 @@
   .shop-cta:hover { border-color: #C9A84C; background: rgba(201,168,76,0.08); }
 
   .description {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.72);
     font-size: 13px;
     line-height: 1.9;
     margin-bottom: 2.2rem;
@@ -150,7 +155,7 @@
     padding: 13px 8px;
     background: transparent;
     border: 0.5px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.75);
     font-size: 12px;
     letter-spacing: 0.5px;
     cursor: pointer;
@@ -185,7 +190,7 @@
     width: 38px; height: 38px;
     border: 0.5px solid rgba(255,255,255,0.18);
     display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.75);
     text-decoration: none;
     transition: all 0.2s;
   }
@@ -297,7 +302,7 @@
   }
   .user-badge.open .user-menu { display: flex; }
   .user-menu-item {
-    background: transparent; border: none; color: rgba(255,255,255,0.6);
+    background: transparent; border: none; color: rgba(255,255,255,0.75);
     font-size: 11.5px; text-align: right; padding: 11px 14px; cursor: pointer;
     font-family: Arial, sans-serif; letter-spacing: 0.3px; transition: all 0.15s;
   }
@@ -344,7 +349,7 @@
 <div class="container">
 
   <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
-  <p class="brand-arabic">دير بالك على حالك</p>
+  <p class="brand-arabic brand-phrase">دير بالك على حالك</p>
   <div class="divider"></div>
 
 
@@ -396,7 +401,7 @@
     <p id="success-text">
       تم تسجيلك.<br>
       عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>
-      دير بالك على حالك.
+      <span class="brand-phrase">دير بالك على حالك.</span>
     </p>
 
     <div class="success-actions">
@@ -424,7 +429,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
     </div>
-    <p class="brand-mark">DIRBALَK®</p>
+    <img src="/logo.png" alt="DIRBALK" style="height:18px;width:auto;opacity:0.65;" />
   </div>
 
 </div>
@@ -472,8 +477,8 @@
 
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
-      ? 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكونين أول من يعرف.<br>\n      ديري بالك على حالك.'
-      : 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
+      ? 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكونين أول من يعرف.<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
+      : 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
   }
