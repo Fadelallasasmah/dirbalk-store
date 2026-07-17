@@ -12,8 +12,13 @@
   gtag('js', new Date());
   gtag('config', 'G-FMPZV540CP');
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
 
   body {
     background: #0a0a0a;
@@ -50,7 +55,7 @@
   .account-link {
     font-size: 11px;
     letter-spacing: 0.5px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.72);
     text-decoration: none;
   }
   .account-link:hover { color: #C9A84C; }
@@ -60,7 +65,7 @@
     align-items: center;
     gap: 8px;
     font-size: 11px;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.75);
   }
 
   .user-chip-avatar {
@@ -144,7 +149,7 @@
   }
 
   .hero p {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.72);
     font-size: 13px;
     max-width: 420px;
     margin: 0 auto;
@@ -197,7 +202,7 @@
     text-align: center;
   }
   .gate-box p {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.72);
     font-size: 13px;
     line-height: 1.9;
     margin-bottom: 22px;
@@ -345,7 +350,7 @@
     left: 16px;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.72);
     cursor: pointer;
     font-size: 20px;
   }
@@ -355,7 +360,7 @@
   .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
   .modal-colorway { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
   .modal-price { font-size: 16px; color: #C9A84C; font-weight: bold; margin-bottom: 18px; }
-  .modal-desc { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.55); margin-bottom: 22px; }
+  .modal-desc { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.72); margin-bottom: 22px; }
 
   .spec-heading {
     font-size: 10px;
@@ -369,7 +374,7 @@
   .spec-list li {
     font-size: 12px;
     line-height: 1.9;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.75);
     padding-right: 14px;
     position: relative;
   }
@@ -547,9 +552,9 @@
 </header>
 
 <section class="hero" id="shopHero">
-  <p class="brand-mark">DIRBALَK®</p>
+  <img src="/logo.png" alt="DIRBALK" style="height:20px;width:auto;opacity:0.9;margin-bottom:1rem;" />
   <h1>Collection 01</h1>
-  <p>. دير بالك على حالك.</p>
+  <p class="brand-phrase">دير بالك على حالك.</p>
 </section>
 
 <div class="gate-box" id="gateBox" style="display:none;">
@@ -754,7 +759,7 @@
     card.innerHTML =
       '<div class="card-media">' + silhouetteSVG(p.silhouette, p.swatch) +
       '<span class="card-code">' + p.id + '</span>' +
-      '<span class="card-tag' + (soldOut ? ' sold-out' : '') + '">' + (soldOut ? 'نفذت الكمية' : '') + '</span>' +
+      (soldOut ? '<span class="card-tag sold-out">نفذت الكمية</span>' : '') +
       '</div>' +
       '<div class="card-body">' +
       '<p class="card-name">' + p.name + '</p>' +
@@ -1011,7 +1016,7 @@
     <a href="/about.html">عن DIRBALK</a>
     <a href="/privacy.html">سياسة الخصوصية</a>
   </nav>
-  <p class="footer-brand">DIRBALَK®</p>
+  <img src="/logo.png" alt="DIRBALK" style="height:18px;width:auto;opacity:0.65;" />
 </footer>
 </body>
 </html>
