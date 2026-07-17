@@ -682,7 +682,7 @@
 
     var soldOut = totalStock(p) === 0;
     var tag = document.getElementById('pdpTag');
-    tag.textContent = soldOut ? 'نفذت الكمية' : 'إصدار محدود';
+    tag.textContent = soldOut ? 'نفذت الكمية' : '';
     if (soldOut) tag.classList.add('sold-out');
 
     /* spec lists */
