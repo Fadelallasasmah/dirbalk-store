@@ -46,9 +46,10 @@
 
   .hero-media {
     width: 100%;
-    max-width: 460px;
-    margin: 0 auto 2.2rem;
-    max-height: 62vh;
+    height: 46vh;
+    min-height: 260px;
+    max-height: 460px;
+    margin-bottom: 2.2rem;
     overflow: hidden;
     position: relative;
   }
@@ -348,6 +349,8 @@
   <p class="brand-arabic">دير بالك على حالك</p>
   <div class="divider"></div>
 
+  <a href="/shop.html" class="shop-cta" id="shopCta" style="display:none;">تسوق الكوليكشن الآن ←</a>
+
   <div id="form-section">
     <p class="description">
       لما يطلع الكوليكشن — ممكن نبعتلك.<br>
@@ -507,6 +510,7 @@
     } catch (e) { /* ignore */ }
     userBadge.style.display = 'none';
     userBadge.classList.remove('open');
+    document.getElementById('shopCta').style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
     document.getElementById('form-section').style.display = 'block';
     form.reset();
@@ -535,6 +539,7 @@
     showUserBadge(name);
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('shopCta').style.display = 'inline-block';
   }
 
   try {
