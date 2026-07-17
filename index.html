@@ -46,10 +46,11 @@
 
   .hero-media {
     width: 100%;
+    max-width: 460px;
+    margin: 0 auto 2.2rem;
     max-height: 62vh;
     overflow: hidden;
     position: relative;
-    margin-bottom: 2.2rem;
   }
 
   .hero-media video,
@@ -322,7 +323,8 @@
 </head>
 <body>
 
-<a href="/en/" class="lang-switch">EN</a>
+<!-- EN link hidden until the English version is rebuilt to match this simplified page -->
+<!-- <a href="/en/" class="lang-switch">EN</a> -->
 
 <div class="user-badge" id="userBadge">
   <button type="button" class="user-badge-btn" id="userBadgeBtn">
@@ -358,7 +360,7 @@
       <div class="form-group">
         <div class="field">
           <label for="name">الاسم الكامل</label>
-          <input type="text" id="name" placeholder="مثال: خالد" autocomplete="name" />
+          <input type="text" id="name" placeholder="مثال: زكريا" autocomplete="name" />
           <p class="field-msg" id="name-msg"></p>
         </div>
         <div class="field">
@@ -395,7 +397,7 @@
     </svg>
     <p id="success-text">
       تم تسجيلك.<br>
-      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>
+      عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>
       دير بالك على حالك.
     </p>
 
@@ -472,8 +474,8 @@
 
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
-      ? 'تم تسجيلك.<br>\n      عندما يصدر Collection 01 ربما ستكونين أول من يعرف.<br>\n      ديري بالك على حالك.'
-      : 'تم تسجيلك.<br>\n      عندما يصدر Collection 01 ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
+      ? 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكونين أول من يعرف.<br>\n      ديري بالك على حالك.'
+      : 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>\n      دير بالك على حالك.';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
   }
