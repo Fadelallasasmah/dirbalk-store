@@ -666,44 +666,46 @@
 })();
 </script>
 
-<style>
-  /* ---------- unified footer ---------- */
+<!--
+  الخطوة 2: انسخ الـ HTML تحت وحطه قبل <style>
+  /* ---------- unified site footer ---------- */
   .site-footer {
+    width: 100%;
     border-top: 0.5px solid rgba(255,255,255,0.08);
     margin-top: 60px;
-    padding: 34px 20px 40px;
+    padding: 36px 20px 44px;
     text-align: center;
   }
-  .footer-links {
+  .site-footer .footer-links {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 22px;
-    margin-bottom: 22px;
+    gap: 12px 26px;
+    margin-bottom: 24px;
   }
-  .footer-links a {
+  .site-footer .footer-links a {
     font-size: 11px;
-    letter-spacing: 0.5px;
-    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.45);
     text-decoration: none;
     transition: color 0.2s;
   }
-  .footer-links a:hover { color: #C9A84C; }
-  .footer-brand { color: #C9A84C; font-size: 11px; letter-spacing: 4px; opacity: 0.6; }
+  .site-footer .footer-links a:hover { color: #C9A84C; }
+  .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
 </style>
- 
-<!--
-  الخطوة 2: انسخ الـ HTML تحت وحطه قبل </body>:
--->
- 
 <footer class="site-footer">
   <nav class="footer-links">
     <a href="/">الرئيسية</a>
     <a href="/shop.html">الكوليكشن</a>
     <a href="/about.html">عن DIRBALK</a>
+    <a href="/shipping.html">الشحن والإرجاع</a>
     <a href="/privacy.html">سياسة الخصوصية</a>
+    <a href="/signin.html">تسجيل الدخول</a>
   </nav>
-  <img src="/logo.png" alt="DIRBALK" style="height:18px;width:auto;opacity:0.65;" />
+  <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>
+</body>:
+-->
+ 
 </body>
 </html>
