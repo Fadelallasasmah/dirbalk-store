@@ -145,6 +145,63 @@
     color: rgba(255,255,255,0.28);
   }
 
+
+  /* ---------- real image frames + zoom ---------- */
+  .media-frame.has-img { cursor: zoom-in; }
+  .media-frame.has-img img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.25s ease;
+    will-change: transform;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .media-frame.has-img:hover img { transform: scale(1.9); }
+  }
+
+  /* ---------- mobile lightbox (pinch zoom) ---------- */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 90;
+    overflow: hidden;
+    touch-action: none;
+  }
+  .lightbox.open { display: block; }
+  .lightbox img {
+    position: absolute;
+    top: 50%; left: 50%;
+    max-width: 100%; max-height: 100%;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: calc(14px + env(safe-area-inset-top));
+    left: 16px;
+    z-index: 91;
+    width: 38px; height: 38px;
+    background: rgba(10,10,10,0.6);
+    border: 0.5px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .lightbox-hint {
+    position: absolute;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    left: 0; right: 0;
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    pointer-events: none;
+  }
+
   /* mobile gallery progress bar */
   .media-progress { display: none; }
 
@@ -558,9 +615,8 @@
       silhouette: 'tee',
       sizes: { S: 20, M: 60, L: 20 },
       media: [
-        { ratio: '45', caption: 'HERO' },
-        { ratio: '45', caption: 'FRONT' },
-        { ratio: '45', caption: 'BACK' },
+        { src: '/img/tee-front.jpg', ratio: '11', caption: 'FRONT' },
+        { src: '/img/tee-back.jpg', ratio: '11', caption: 'BACK' },
         { ratio: '11', caption: 'FABRIC 260 GSM' },
         { ratio: '11', caption: 'COLLAR SEAM' },
         { ratio: '45', caption: 'FOLDED' }
@@ -579,9 +635,8 @@
       silhouette: 'pants',
       sizes: { S: 20, M: 60, L: 20 },
       media: [
-        { ratio: '45', caption: 'HERO' },
+        { src: '/img/den-back.jpg', ratio: '45', caption: 'BACK' },
         { ratio: '45', caption: 'FRONT' },
-        { ratio: '45', caption: 'BACK POCKET' },
         { ratio: '11', caption: 'DENIM MACRO' },
         { ratio: '11', caption: 'AMBER STITCH' },
         { ratio: '45', caption: 'HEM STACK' }
@@ -600,9 +655,9 @@
       silhouette: 'jacket',
       sizes: { S: 20, M: 60, L: 20 },
       media: [
-        { ratio: '45', caption: 'HERO' },
-        { ratio: '45', caption: 'FRONT' },
-        { ratio: '45', caption: 'BACK' },
+        { src: '/img/jac-front.jpg', ratio: '45', caption: 'FRONT' },
+        { src: '/img/jac-back.jpg', ratio: '45', caption: 'BACK' },
+        { src: '/img/jac-side.jpg', ratio: '45', caption: 'SIDE' },
         { ratio: '11', caption: 'BUTTON MACRO' },
         { ratio: '11', caption: 'CUFF DETAIL' },
         { ratio: '45', caption: 'OPEN / INTERIOR' }
@@ -724,11 +779,33 @@
     /* media */
     var mediaWrap = document.getElementById('pdpMedia');
     mediaWrap.innerHTML = '';
+    var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     p.media.forEach(function (m) {
       var frame = document.createElement('div');
-      frame.className = 'media-frame ratio-' + m.ratio;
-      frame.innerHTML = silhouetteSVG(p.silhouette, p.swatch) +
-        '<span class="media-caption">' + m.caption + '</span>';
+      frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '');
+      if (m.src) {
+        frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="lazy" />' +
+          '<span class="media-caption">' + m.caption + '</span>';
+        var img = frame.querySelector('img');
+        if (finePointer) {
+          /* لابتوب: زوم بيتبع مؤشر الماوس */
+          frame.addEventListener('mousemove', function (e) {
+            var r = frame.getBoundingClientRect();
+            var x = ((e.clientX - r.left) / r.width) * 100;
+            var y = ((e.clientY - r.top) / r.height) * 100;
+            img.style.transformOrigin = x + '% ' + y + '%';
+          });
+          frame.addEventListener('mouseleave', function () {
+            img.style.transformOrigin = 'center center';
+          });
+        } else {
+          /* موبايل: كبسة بتفتح فل-سكرين مع pinch zoom */
+          frame.addEventListener('click', function () { openLightbox(m.src); });
+        }
+      } else {
+        frame.innerHTML = silhouetteSVG(p.silhouette, p.swatch) +
+          '<span class="media-caption">' + m.caption + '</span>';
+      }
       mediaWrap.appendChild(frame);
     });
 
@@ -824,6 +901,86 @@
 
     if (window.gtag) gtag('event', 'view_item', { item_id: p.id, page: 'pdp' });
   }
+
+
+  /* ---------------- lightbox (pinch zoom) ---------------- */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightboxImg');
+  var lbState = { scale: 1, tx: 0, ty: 0 };
+  var pointers = {};
+  var pinchStart = null;
+  var lastTap = 0;
+
+  function lbApply() {
+    lbImg.style.transform = 'translate(-50%, -50%) translate(' + lbState.tx + 'px,' + lbState.ty + 'px) scale(' + lbState.scale + ')';
+  }
+  function openLightbox(src) {
+    lbImg.src = src;
+    lbState = { scale: 1, tx: 0, ty: 0 };
+    lbApply();
+    lb.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    document.documentElement.style.overflow = '';
+  }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+
+  lb.addEventListener('pointerdown', function (e) {
+    if (e.target === document.getElementById('lightboxClose')) return;
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    var ids = Object.keys(pointers);
+    if (ids.length === 1) {
+      /* double-tap: تكبير سريع / رجوع */
+      var now = Date.now();
+      if (now - lastTap < 300) {
+        if (lbState.scale > 1) { lbState = { scale: 1, tx: 0, ty: 0 }; }
+        else { lbState.scale = 2.5; }
+        lbApply();
+      }
+      lastTap = now;
+    }
+    if (ids.length === 2) {
+      var a = pointers[ids[0]], b = pointers[ids[1]];
+      pinchStart = {
+        dist: Math.hypot(a.x - b.x, a.y - b.y),
+        scale: lbState.scale,
+        midX: (a.x + b.x) / 2, midY: (a.y + b.y) / 2,
+        tx: lbState.tx, ty: lbState.ty
+      };
+    }
+  });
+
+  lb.addEventListener('pointermove', function (e) {
+    if (!pointers[e.pointerId]) return;
+    var prev = pointers[e.pointerId];
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    var ids = Object.keys(pointers);
+
+    if (ids.length === 2 && pinchStart) {
+      var a = pointers[ids[0]], b = pointers[ids[1]];
+      var dist = Math.hypot(a.x - b.x, a.y - b.y);
+      lbState.scale = Math.min(5, Math.max(1, pinchStart.scale * (dist / pinchStart.dist)));
+      var midX = (a.x + b.x) / 2, midY = (a.y + b.y) / 2;
+      lbState.tx = pinchStart.tx + (midX - pinchStart.midX);
+      lbState.ty = pinchStart.ty + (midY - pinchStart.midY);
+      if (lbState.scale === 1) { lbState.tx = 0; lbState.ty = 0; }
+      lbApply();
+    } else if (ids.length === 1 && lbState.scale > 1) {
+      /* سحب الصورة وهي مكبرة */
+      lbState.tx += e.clientX - prev.x;
+      lbState.ty += e.clientY - prev.y;
+      lbApply();
+    }
+  });
+
+  function lbPointerEnd(e) {
+    delete pointers[e.pointerId];
+    if (Object.keys(pointers).length < 2) pinchStart = null;
+  }
+  lb.addEventListener('pointerup', lbPointerEnd);
+  lb.addEventListener('pointercancel', lbPointerEnd);
 
   /* ---------------- accordions ---------------- */
   Array.prototype.forEach.call(document.querySelectorAll('.acc-head'), function (head) {
@@ -980,6 +1137,12 @@
   .site-footer .footer-links a:hover { color: #C9A84C; }
   .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
 </style>
+<div class="lightbox" id="lightbox">
+  <button type="button" class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="" />
+  <p class="lightbox-hint">كبّر بأصابعك · دبل-كبسة للتكبير السريع</p>
+</div>
+
 <footer class="site-footer">
   <nav class="footer-links">
     <a href="/">الرئيسية</a>
