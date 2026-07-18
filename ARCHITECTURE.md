@@ -710,3 +710,10 @@ sequenceDiagram
 | ADR-005 | 2026-07-18 | No blockchain for passports | No trust problem Postgres + signed export can't solve |
 | ADR-006 | 2026-07-18 | COD is a first-class payment path permanently | Jordan market reality |
 | ADR-007 | 2026-07-18 | Cairo Bold reserved exclusively for the brand phrase; wordmark-with-fatha is image-only | Brand system rules, learned in production |
+
+| ADR-008 | 2026-07-18 | Phase 0.5 piece system live on Sheets: "Pieces" tab, piece code format {TEE|DEN|JKT}-{S|M|L}-{NNNN}, serial blocks S:1–20 / M:21–80 / L:81–100, batch B02 registry is the sole print source | Ship serials + passports for C01 without waiting for Phase 1; ink permanence requires locked registry |
+| ADR-009 | 2026-07-18 | Order IDs sequential DB-0001 (max existing + 1 under script lock), replacing random DB-XXXXXXXX | Human-readable, support-friendly, deletion-safe |
+| ADR-010 | 2026-07-18 | B01 piece registry burned (leaked to public repo pre-print) and fully regenerated as B02; secrets (registries, .gs, sheet imports) never enter the Git repo | Repo == public; possession-based codes must stay offline |
+| ADR-011 | 2026-07-18 | All site imagery lives under /img/ only; root-level legacy assets (logo, og-image, hero) stay put; new images always /img/{prefix}-{shot}.jpg, prefixes tee/den/jac | One home for media; stable references from all pages |
+| ADR-012 | 2026-07-18 | Dual zoom system on PDP: desktop = cursor-tracking magnify in-frame (1.9x, hover+fine pointer only); mobile = fullscreen lightbox with custom pinch/pan/double-tap (max 5x) | Premium fashion-standard inspection UX per input device |
+| ADR-013 | 2026-07-18 | Unified 6-link footer on all pages except index.html, which stays link-free to keep the collection unadvertised pre-launch | Full site interconnection without exposing the shop from the public face |
