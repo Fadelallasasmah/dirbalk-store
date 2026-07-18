@@ -298,6 +298,21 @@
 
   .success-msg p { color: #C9A84C; font-size: 13px; letter-spacing: 1px; line-height: 2; opacity: 0.85; }
 
+  .position-line {
+    margin: 6px 0 18px;
+    color: rgba(255,255,255,0.72) !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .position-line .pos-num {
+    display: block;
+    color: #C9A84C;
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
   .success-actions {
     margin-top: 2rem;
     display: flex;
@@ -512,6 +527,7 @@
       <circle cx="28" cy="28" r="26"></circle>
       <path d="M17 29 L24 36 L39 20"></path>
     </svg>
+    <p class="position-line" id="positionLine" style="display:none;"><span id="positionLabel"></span><span class="pos-num" id="positionNum"></span></p>
     <p id="success-text">
       تم تسجيلك.<br>
       عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>
@@ -589,6 +605,18 @@
     formError.style.display = 'none';
   }
 
+  const POSITION_KEY = 'dirbalk_position';
+
+  function showPosition(isFemale) {
+    let pos = '';
+    try { pos = localStorage.getItem(POSITION_KEY) || ''; } catch (e) { /* ignore */ }
+    const line = document.getElementById('positionLine');
+    if (!pos) { line.style.display = 'none'; return; }
+    document.getElementById('positionLabel').textContent = isFemale ? 'أنتِ بالقائمة، رقمك' : 'أنت بالقائمة، رقمك';
+    document.getElementById('positionNum').textContent = pos;
+    line.style.display = 'block';
+  }
+
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
       ? 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكونين أول من يعرف.<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
@@ -623,6 +651,7 @@
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(GENDER_KEY);
       localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(POSITION_KEY);
     } catch (e) { /* ignore */ }
     userBadge.style.display = 'none';
     userBadge.classList.remove('open');
@@ -651,6 +680,7 @@
 
   function showLoggedIn(name, isFemale) {
     applyGenderedText(isFemale);
+    showPosition(isFemale);
     showUserBadge(name);
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
@@ -709,6 +739,7 @@
           localStorage.setItem(STORAGE_KEY, '1');
           localStorage.setItem(GENDER_KEY, data.gender);
           localStorage.setItem(NAME_KEY, data.name);
+          if (result.position) localStorage.setItem(POSITION_KEY, String(result.position));
         } catch (e) { /* ignore */ }
         showLoggedIn(data.name, data.gender === 'female');
       } else {
