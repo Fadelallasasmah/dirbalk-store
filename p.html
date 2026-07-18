@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIRBALَK</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  .wrap { max-width: 480px; margin: 0 auto; padding: 60px 24px 80px; text-align: center; }
+
+  .brand-logo { width: min(44vw, 170px); height: auto; margin-bottom: 3rem; opacity: 0.95; }
+
+  .state { display: none; }
+  .state.active { display: block; }
+
+  .pulse-line {
+    width: 40px; height: 1px; background: #C9A84C;
+    margin: 0 auto 1.8rem;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.25; } 50% { opacity: 0.9; } }
+
+  .msg { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 2; }
+
+  /* ---------- passport ---------- */
+  .pp-kicker { font-size: 10px; letter-spacing: 3px; color: #C9A84C; opacity: 0.7; margin-bottom: 14px; }
+
+  .pp-serial {
+    font-size: clamp(40px, 12vw, 64px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pp-serial span { color: #C9A84C; }
+  .pp-of { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 26px; }
+
+  .pp-code {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 7px 16px;
+    margin-bottom: 34px;
+  }
+
+  .pp-name { font-size: 19px; font-weight: bold; margin-bottom: 4px; }
+  .pp-colorway { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+  .pp-collection { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-bottom: 40px; }
+
+  .pp-section {
+    border-top: 0.5px solid rgba(255,255,255,0.1);
+    padding: 22px 2px;
+    text-align: right;
+  }
+  .pp-section h3 {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #C9A84C;
+    margin-bottom: 12px;
+    font-weight: normal;
+  }
+  .pp-section p, .pp-section li {
+    font-size: 12.5px;
+    line-height: 2;
+    color: rgba(255,255,255,0.6);
+  }
+  .pp-section ul { list-style: none; }
+  .pp-section li { padding-right: 14px; position: relative; }
+  .pp-section li::before { content: '—'; position: absolute; right: 0; color: rgba(201,168,76,0.6); }
+
+  .hidden-hint { color: rgba(201,168,76,0.8) !important; }
+
+  .pp-phrase {
+    margin-top: 44px;
+    color: #C9A84C;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  .err-actions { margin-top: 2rem; }
+  .btn {
+    display: inline-block;
+    padding: 13px 28px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
+
+    <div class="state active" id="stateLoading">
+      <div class="pulse-line"></div>
+      <p class="msg">عم نقرأ القطعة...</p>
+    </div>
+
+    <div class="state" id="stateError">
+      <p class="msg">هالسجل مش موجود.<br>إذا وصلت هون من قطعة حقيقية، تواصل معنا.</p>
+      <div class="err-actions"><a href="/" class="btn primary">الرئيسية</a></div>
+    </div>
+
+    <div class="state" id="statePassport">
+      <p class="pp-kicker">سجل القطعة</p>
+      <p class="pp-serial" id="ppSerial"></p>
+      <p class="pp-of" id="ppOf"></p>
+      <p class="pp-code" id="ppCode"></p>
+
+      <p class="pp-name" id="ppName"></p>
+      <p class="pp-colorway" id="ppColorway"></p>
+      <p class="pp-collection">COLLECTION 01 · WINTER 2026</p>
+
+      <div class="pp-section">
+        <h3>الخامة</h3>
+        <ul id="ppMaterials"></ul>
+      </div>
+
+      <div class="pp-section">
+        <h3>العناية</h3>
+        <ul id="ppCare"></ul>
+      </div>
+
+      <div class="pp-section">
+        <h3>التفاصيل المخفية</h3>
+        <p class="hidden-hint" id="ppHidden"></p>
+      </div>
+
+      <p class="pp-phrase brand-phrase">دير بالك على حالك.</p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var PRODUCT_INFO = {
+    'DB-TEE-01': {
+      name: 'تيشيرت أوفرسايز',
+      colorway: 'أبيض نقي',
+      run: 100,
+      materials: ['100% قطن ممشط', '260 جرام/م²', 'بدون أي طباعة خارجية'],
+      care: ['غسيل بارد', 'لا تستخدم مبيض', 'تجفيف بحرارة منخفضة'],
+      hidden: 'في إشي بهالقطعة مش مكتوب بأي مكان. لقيته؟'
+    },
+    'DB-DEN-01': {
+      name: 'بنطلون دنيم واسع',
+      colorway: 'إندجو خام 13oz',
+      run: 100,
+      materials: ['دنيم خام 13oz، 100% قطن', 'أزرار وأسنان معدن فضي مطفي', 'خيط تطريز أمبر'],
+      care: ['اغسله لحاله أول مرة', 'ماء بارد، مقلوب', 'الدنيم الخام بيتغير معك — هاد المقصود'],
+      hidden: 'في 3 أشياء بهالقطعة مش مكتوبة بأي مكان. لقيتها؟'
+    },
+    'DB-JAC-01': {
+      name: 'جاكيت دنيم أوفرسايز',
+      colorway: 'إندجو خام 13oz',
+      run: 100,
+      materials: ['دنيم خام 13oz، 100% قطن', 'ستة أزرار معدن فضي مطفي'],
+      care: ['اغسله لحاله أول مرة', 'ماء بارد', 'كل لبسة بتترك أثرها فيه'],
+      hidden: 'افتح الجاكيت ودوّر.'
+    }
+  };
+
+  function show(id) {
+    document.querySelectorAll('.state').forEach(function (s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+
+  // slug from /p/{slug} (vercel rewrite) or ?s= fallback
+  var slug = '';
+  var m = window.location.pathname.match(/^\/p\/([2-9a-z]+)$/);
+  if (m) slug = m[1];
+  if (!slug) slug = new URLSearchParams(window.location.search).get('s') || '';
+
+  if (!slug) { show('stateError'); return; }
+
+  fetch('/api/passport', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ slug: slug })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (result) {
+      if (result.status !== 'success' || !result.piece) { show('stateError'); return; }
+
+      var pc = result.piece;
+      var info = PRODUCT_INFO[pc.product];
+      if (!info) { show('stateError'); return; }
+
+      var serial = parseInt(pc.serial, 10);
+      document.getElementById('ppSerial').innerHTML =
+        '<span>#</span>' + String(serial).padStart(3, '0');
+      document.getElementById('ppOf').textContent = 'القطعة ' + serial + ' من ' + info.run;
+      document.getElementById('ppCode').textContent = pc.code + ' · ' + pc.size;
+      document.getElementById('ppName').textContent = info.name;
+      document.getElementById('ppColorway').textContent = info.colorway;
+      document.getElementById('ppHidden').textContent = info.hidden;
+
+      ['materials', 'care'].forEach(function (key) {
+        var list = document.getElementById(key === 'materials' ? 'ppMaterials' : 'ppCare');
+        info[key].forEach(function (t) {
+          var li = document.createElement('li');
+          li.textContent = t;
+          list.appendChild(li);
+        });
+      });
+
+      show('statePassport');
+      if (window.gtag) gtag('event', 'passport_view', { piece: pc.code });
+    })
+    .catch(function () { show('stateError'); });
+})();
+</script>
+</body>
+</html>
