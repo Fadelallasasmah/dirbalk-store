@@ -1,6 +1,6 @@
 // DIRBALK — magic link validation proxy
 // مهم: بدّل SCRIPT_URL بنفس القيمة الموجودة بـ api/waitlist.js عندك بالضبط
-const SCRIPT_URL = 'PASTE_SAME_SCRIPT_URL_AS_IN_waitlist.js';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
