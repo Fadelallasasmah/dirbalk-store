@@ -604,6 +604,7 @@
   var PRODUCTS = [
     {
       id: 'DB-TEE-01',
+      img: '/img/tee-front.jpg',
       name: 'تيشيرت أوفرسايز',
       colorway: 'أبيض نقي',
       price: 22,
@@ -624,6 +625,7 @@
     },
     {
       id: 'DB-DEN-01',
+      img: '/img/den-back.jpg',
       name: 'بنطلون دنيم واسع',
       colorway: 'إندجو خام 13oz',
       price: 50,
@@ -644,6 +646,7 @@
     },
     {
       id: 'DB-JAC-01',
+      img: '/img/jac-front.jpg',
       name: 'جاكيت دنيم أوفرسايز',
       colorway: 'إندجو خام 13oz',
       price: 65,
@@ -1035,7 +1038,7 @@
         var row = document.createElement('div');
         row.className = 'cart-item';
         row.innerHTML =
-          '<div class="cart-item-media">' + silhouetteSVG(p.silhouette, p.swatch) + '</div>' +
+          '<div class="cart-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
           '<div class="cart-item-info">' +
           '<p class="cart-item-name">' + p.name + '</p>' +
           '<p class="cart-item-size">مقاس ' + line.size + '</p>' +
