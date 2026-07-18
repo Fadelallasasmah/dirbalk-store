@@ -204,6 +204,30 @@
   .j-step.done .j-title { color: #C9A84C; }
   .j-sub { font-size: 10.5px; color: rgba(255,255,255,0.35); line-height: 1.8; }
 
+  .piece-reveal {
+    margin: 26px auto 4px;
+    max-width: 320px;
+  }
+  .piece-reveal .pr-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 12px;
+  }
+  .pr-item {
+    border: 0.5px solid rgba(201,168,76,0.35);
+    padding: 14px;
+    margin-bottom: 8px;
+  }
+  .pr-code {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    margin-bottom: 3px;
+  }
+  .pr-of { font-size: 10.5px; color: rgba(255,255,255,0.45); letter-spacing: 0.5px; }
+
   .confirm-phrase {
     margin-top: 30px;
     color: #C9A84C;
@@ -354,6 +378,11 @@
       </div>
       <h2>طلبك صار عنا</h2>
       <p class="confirm-order-id" id="orderIdDisplay"></p>
+
+      <div class="piece-reveal" id="pieceReveal" style="display:none;">
+        <p class="pr-label">قطعك — بالأرقام</p>
+        <div id="pieceRevealList"></div>
+      </div>
 
       <div class="journey">
         <div class="j-step done">
@@ -587,6 +616,7 @@
         const p = findProduct(l.id);
         return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
       }).join(', '),
+      lines: cart.map((l) => ({ id: l.id, size: l.size, qty: l.qty })),
       total: total,
     };
 
@@ -601,6 +631,20 @@
       if (result.status === 'success') {
         if (window.gtag) gtag('event', 'purchase', { value: total, currency: 'JOD' });
         document.getElementById('orderIdDisplay').textContent = 'رقم الطلب: ' + (result.orderId || '—');
+        if (result.pieces && result.pieces.length) {
+          const revealNames = { 'DB-TEE-01': 'تيشيرت', 'DB-DEN-01': 'بنطلون دنيم', 'DB-JAC-01': 'جاكيت دنيم' };
+          const list = document.getElementById('pieceRevealList');
+          list.innerHTML = '';
+          result.pieces.forEach((pc) => {
+            const serial = parseInt(pc.serial, 10);
+            const div = document.createElement('div');
+            div.className = 'pr-item';
+            div.innerHTML = '<p class="pr-code">' + pc.code + '</p>' +
+              '<p class="pr-of">' + (revealNames[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100</p>';
+            list.appendChild(div);
+          });
+          document.getElementById('pieceReveal').style.display = 'block';
+        }
         cart = [];
         saveCart(cart);
         goToStep(4);
