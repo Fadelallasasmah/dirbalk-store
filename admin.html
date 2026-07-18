@@ -122,6 +122,51 @@
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
   .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
+
+  /* ---------- drop invites ---------- */
+  .invite-section { margin-top: 50px; padding-top: 30px; border-top: 0.5px solid rgba(255,255,255,0.1); }
+  .invite-box textarea {
+    width: 100%;
+    min-height: 90px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 13px 16px;
+    font-size: 12.5px;
+    outline: none;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    margin-bottom: 12px;
+  }
+  .invite-box textarea:focus { border-color: rgba(201,168,76,0.5); }
+  .invite-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+  .invite-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); cursor: pointer; }
+  .invite-check input { accent-color: #C9A84C; }
+  .invite-btn {
+    padding: 12px 26px;
+    background: #C9A84C;
+    border: none;
+    color: #0a0a0a;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .invite-btn:disabled { opacity: 0.5; cursor: default; }
+  .invite-hint { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.9; margin-bottom: 14px; }
+  .invite-status { font-size: 12px; color: #C9A84C; margin-bottom: 14px; display: none; }
+  .invite-status.err { color: rgba(255,120,120,0.85); }
+  .copy-btn {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    font-size: 10.5px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .copy-btn:hover { border-color: rgba(201,168,76,0.4); color: #C9A84C; }
 </style>
 </head>
 <body>
@@ -169,6 +214,33 @@
         <tbody id="ordersBody"></tbody>
       </table>
       <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
+    </div>
+
+    <div class="invite-section">
+      <h2>دعوات الدروب</h2>
+      <p class="invite-hint">
+        كل مدعو بياخد رابط دخول شخصي صالح 24 ساعة — بيفتحه وبيدخل الشوب مباشرة بدون كلمة سر، من أي جهاز.<br>
+        اترك الخانة فاضية لدعوة <strong>كل</strong> المسجلين، أو حط إيميلات محددة (كل إيميل بسطر).
+      </p>
+      <div class="invite-box">
+        <textarea id="inviteEmails" placeholder="example1@email.com&#10;example2@email.com"></textarea>
+        <div class="invite-controls">
+          <label class="invite-check">
+            <input type="checkbox" id="inviteSendEmails" checked />
+            ابعت إيميل الدعوة لكل واحد
+          </label>
+          <button type="button" class="invite-btn" id="inviteBtn">ولّد الدعوات</button>
+        </div>
+        <p class="invite-status" id="inviteStatus"></p>
+        <div class="table-wrap">
+          <table id="inviteTable" style="display:none;">
+            <thead>
+              <tr><th>الاسم</th><th>الإيميل</th><th>الرابط</th></tr>
+            </thead>
+            <tbody id="inviteBody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -263,6 +335,88 @@
         '<td>' + o.status + '</td>';
       body.appendChild(tr);
     });
+  }
+
+  /* ---------- drop invites ---------- */
+  document.getElementById('inviteBtn').addEventListener('click', () => {
+    const raw = document.getElementById('inviteEmails').value;
+    const emails = raw.split('\n').map((e) => e.trim().toLowerCase()).filter(Boolean);
+    const sendEmails = document.getElementById('inviteSendEmails').checked;
+
+    const confirmMsg = emails.length === 0
+      ? 'رح تنولّد دعوات لكل المسجلين' + (sendEmails ? ' وينبعتلهم إيميل' : '') + '. أكيد؟'
+      : 'رح تنولّد دعوات لـ ' + emails.length + ' شخص' + (sendEmails ? ' وينبعتلهم إيميل' : '') + '. أكيد؟';
+    if (!window.confirm(confirmMsg)) return;
+
+    let key = '';
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+
+    const btn = document.getElementById('inviteBtn');
+    const status = document.getElementById('inviteStatus');
+    btn.disabled = true;
+    btn.textContent = 'جاري التوليد...';
+    status.style.display = 'none';
+    status.classList.remove('err');
+
+    fetch('/api/invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, emails, sendEmails }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        btn.disabled = false;
+        btn.textContent = 'ولّد الدعوات';
+        status.style.display = 'block';
+        if (result.status !== 'success') {
+          status.classList.add('err');
+          status.textContent = result.message || 'حدث خطأ مؤقت.';
+          return;
+        }
+        status.textContent = 'انولّدت ' + result.count + ' دعوة' + (sendEmails ? ' وانبعتت الإيميلات.' : '.') + ' الروابط صالحة 24 ساعة.';
+        renderInvites(result.invites || []);
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'ولّد الدعوات';
+        status.style.display = 'block';
+        status.classList.add('err');
+        status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      });
+  });
+
+  function renderInvites(invites) {
+    const table = document.getElementById('inviteTable');
+    const body = document.getElementById('inviteBody');
+    body.innerHTML = '';
+    if (invites.length === 0) { table.style.display = 'none'; return; }
+    invites.forEach((inv) => {
+      const tr = document.createElement('tr');
+      const nameTd = document.createElement('td');
+      nameTd.textContent = inv.name;
+      const emailTd = document.createElement('td');
+      emailTd.textContent = inv.email;
+      const linkTd = document.createElement('td');
+      const copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'نسخ الرابط';
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(inv.link);
+          copyBtn.textContent = 'تم ✓';
+          setTimeout(() => { copyBtn.textContent = 'نسخ الرابط'; }, 1600);
+        } catch (e) {
+          window.prompt('انسخ الرابط:', inv.link);
+        }
+      });
+      linkTd.appendChild(copyBtn);
+      tr.appendChild(nameTd);
+      tr.appendChild(emailTd);
+      tr.appendChild(linkTd);
+      body.appendChild(tr);
+    });
+    table.style.display = 'table';
   }
 
   document.getElementById('gateBtn').addEventListener('click', () => {
