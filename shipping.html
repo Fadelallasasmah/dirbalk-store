@@ -64,6 +64,18 @@
     margin-bottom: 44px;
   }
 
+
+  /* ---------- scroll reveal motion ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
   .sec {
     border-top: 0.5px solid rgba(255,255,255,0.1);
     padding: 26px 2px;
@@ -140,32 +152,32 @@
   <h1>الشحن والدفع والإرجاع</h1>
   <p class="subtitle">كل شي بدك تعرفه قبل ما تطلب — بدون كلام كبير.</p>
 
-  <div class="sec">
+  <div class="sec reveal">
     <h2>الدفع</h2>
     <p><strong>كاش عند الاستلام.</strong> بتدفع لما توصلك القطعة وتشوفها بعينك — هيك أبسط وأريح للكل.</p>
     <p>الدفع بالبطاقة أونلاين جاي قريباً.</p>
   </div>
 
-  <div class="sec">
+  <div class="sec reveal">
     <h2>التوصيل</h2>
     <p>التوصيل <strong>داخل الأردن</strong> خلال <strong>2–4 أيام عمل</strong> من تأكيد الطلب.</p>
     <p>بعد ما تطلب، رح نتواصل معك على واتساب لتأكيد العنوان قبل الشحن — فخلي رقمك صح.</p>
     <p>رسوم التوصيل بتنحكى معك عند تأكيد الطلب حسب منطقتك.</p>
   </div>
 
-  <div class="sec">
+  <div class="sec reveal">
     <h2>الاستبدال</h2>
     <p>مقاسك طلع مش مناسب؟ <strong>الاستبدال ممكن خلال 7 أيام</strong> من الاستلام، بشرط تكون القطعة بحالتها الأصلية: ما انلبست برا البيت، ما انغسلت، وكل تفاصيلها زي ما وصلتك.</p>
     <p>كل قطعة إلها رقم خاص فيها — فالاستبدال بيكون بقطعة ثانية برقم مختلف، حسب المتوفر من مقاسك.</p>
     <p>عشان تتجنب هالموضوع من الأساس: شيك على <strong>دليل المقاسات</strong> بصفحة كل قطعة قبل ما تطلب — فيه القياسات بالسنتيمتر وطريقة سهلة تقارن فيها مع قطعة بلبسها.</p>
   </div>
 
-  <div class="sec">
+  <div class="sec reveal">
     <h2>الإرجاع</h2>
     <p>إذا وصلتك القطعة وفيها عيب مصنعي — نادر بس بيصير — صوّرها وابعتلنا خلال <strong>48 ساعة</strong> من الاستلام، وبنحلها معك مباشرة: استبدال أو استرجاع كامل.</p>
   </div>
 
-  <div class="sec">
+  <div class="sec reveal">
     <h2>أي سؤال؟</h2>
     <p>واتساب أسرع طريقة توصلنا — جهّز رقم طلبك (DB-XXXX) وبنرد عليك.</p>
     <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="wa-btn">
@@ -190,5 +202,28 @@
 
 </div>
 
+<script>
+(function(){
+  /* ---------------- scroll reveal ---------------- */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal:not(.visible)');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { obs.observe(el); });
+  }
+
+initReveal();
+})();
+</script>
 </body>
 </html>
