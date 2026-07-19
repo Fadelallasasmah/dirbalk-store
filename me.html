@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حسابي — DIRBALَK</title>
+<meta name="robots" content="noindex">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  a { color: inherit; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-logo { height: 22px; width: auto; display: block; }
+  .home-link { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .home-link:hover { color: #C9A84C; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 46px 24px 70px; }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  /* gate */
+  .gate-box { max-width: 420px; margin: 60px auto; text-align: center; }
+  .gate-box p { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 1.9; margin-bottom: 22px; }
+  .gate-actions { display: flex; gap: 10px; }
+  .gate-btn {
+    flex: 1; padding: 13px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff; font-size: 12px; letter-spacing: 1px;
+    text-decoration: none; transition: all 0.2s; text-align: center;
+  }
+  .gate-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .gate-btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
+
+  /* greeting */
+  .greet { margin-bottom: 40px; }
+  .greet h1 { font-size: 22px; margin-bottom: 4px; }
+  .greet p { font-size: 12px; color: rgba(255,255,255,0.45); }
+  .logout-btn {
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px; text-decoration: underline;
+    cursor: pointer; font-family: Arial, sans-serif;
+    margin-top: 10px;
+  }
+  .logout-btn:hover { color: rgba(255,120,120,0.85); }
+
+  h2.sec-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    font-weight: normal;
+    margin-bottom: 16px;
+  }
+  section { margin-bottom: 46px; }
+
+  .loading, .empty {
+    color: rgba(255,255,255,0.4);
+    font-size: 12.5px;
+    line-height: 1.9;
+    padding: 14px 0;
+  }
+  .empty a { color: #C9A84C; text-decoration: none; }
+
+  /* pieces */
+  .piece-card {
+    border: 0.5px solid rgba(201,168,76,0.3);
+    padding: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .piece-code { font-size: 17px; font-weight: bold; letter-spacing: 2px; color: #C9A84C; margin-bottom: 4px; }
+  .piece-sub { font-size: 11.5px; color: rgba(255,255,255,0.5); }
+  .passport-link {
+    padding: 11px 20px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    font-size: 11px; letter-spacing: 1px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+    white-space: nowrap;
+  }
+  .passport-link:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
+
+  /* orders */
+  .order-row {
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    padding: 16px 2px;
+  }
+  .order-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+  .order-id { font-size: 13.5px; font-weight: bold; letter-spacing: 1px; }
+  .order-date { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .order-items { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 6px; }
+  .order-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .order-total { font-size: 12.5px; color: #C9A84C; font-weight: bold; }
+  .order-status {
+    font-size: 10px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.55);
+    border: 0.5px solid rgba(255,255,255,0.18);
+    padding: 4px 10px;
+  }
+
+  .closing { text-align: center; margin-top: 20px; }
+  .closing .phrase { color: #C9A84C; font-size: 13px; opacity: 0.9; }
+
+  /* unified footer */
+  .site-footer {
+    width: 100%;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    margin-top: 60px;
+    padding: 36px 20px 44px;
+    text-align: center;
+  }
+  .site-footer .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 26px; margin-bottom: 24px; }
+  .site-footer .footer-links a { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+  .site-footer .footer-links a:hover { color: #C9A84C; }
+  .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/shop.html" class="home-link">→ الكوليكشن</a>
+    <a href="/"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
+    <span style="width:60px;"></span>
+  </div>
+</header>
+
+<div class="gate-box" id="gateBox" style="display:none;">
+  <p>سجّل دخولك عشان تشوف حسابك.</p>
+  <div class="gate-actions">
+    <a href="/" class="gate-btn primary">أنشئ حساب</a>
+    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
+  </div>
+</div>
+
+<div class="wrap" id="accountWrap" style="display:none;">
+
+  <div class="greet reveal">
+    <h1 id="greetName"></h1>
+    <p id="greetEmail"></p>
+    <button type="button" class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
+  </div>
+
+  <section class="reveal" style="transition-delay:0.1s;">
+    <h2 class="sec-title">قطعي</h2>
+    <div id="piecesArea"><p class="loading">عم نحمّل...</p></div>
+  </section>
+
+  <section class="reveal" style="transition-delay:0.2s;">
+    <h2 class="sec-title">طلباتي</h2>
+    <div id="ordersArea"><p class="loading">عم نحمّل...</p></div>
+  </section>
+
+  <div class="closing">
+    <p class="phrase brand-phrase" id="closingPhrase">دير بالك على حالك.</p>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <nav class="footer-links">
+    <a href="/">الرئيسية</a>
+    <a href="/shop.html">الكوليكشن</a>
+    <a href="/about.html">عن DIRBALK</a>
+    <a href="/shipping.html">الشحن والإرجاع</a>
+    <a href="/privacy.html">سياسة الخصوصية</a>
+    <a href="/signin.html">تسجيل الدخول</a>
+  </nav>
+  <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
+</footer>
+
+<script>
+(function () {
+  var PRODUCT_NAMES = {
+    'DB-TEE-01': 'تيشيرت أوفرسايز',
+    'DB-DEN-01': 'بنطلون دنيم واسع',
+    'DB-JAC-01': 'جاكيت دنيم أوفرسايز'
+  };
+
+  var loggedIn = false, email = '', name = '', gender = '';
+  try {
+    loggedIn = localStorage.getItem('dirbalk_logged_in') === '1';
+    email = (localStorage.getItem('dirbalk_email') || '').toLowerCase();
+    name = localStorage.getItem('dirbalk_name') || '';
+    gender = localStorage.getItem('dirbalk_gender') || '';
+  } catch (e) { /* ignore */ }
+
+  if (!loggedIn || !email) {
+    document.getElementById('gateBox').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('accountWrap').style.display = 'block';
+  var first = name.trim().split(' ')[0] || '';
+  var isFemale = gender === 'female';
+  document.getElementById('greetName').textContent = 'أهلاً ' + first;
+  document.getElementById('greetEmail').textContent = email;
+  document.getElementById('closingPhrase').textContent = isFemale ? 'ديري بالك على حالك.' : 'دير بالك على حالك.';
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    try {
+      ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position']
+        .forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) { /* ignore */ }
+    window.location.href = '/';
+  });
+
+  /* reveal */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal:not(.visible)');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('visible'); }); return; }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { obs.observe(el); });
+  }
+  initReveal();
+
+  /* data */
+  fetch('/api/me', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (result) {
+      renderPieces(result.pieces || []);
+      renderOrders(result.orders || []);
+    })
+    .catch(function () {
+      document.getElementById('piecesArea').innerHTML = '<p class="empty">صار خطأ مؤقت — جرب كمان شوي.</p>';
+      document.getElementById('ordersArea').innerHTML = '';
+    });
+
+  function renderPieces(pieces) {
+    var area = document.getElementById('piecesArea');
+    if (!pieces.length) {
+      area.innerHTML = '<p class="empty">ما عندك قطع لسا.<br><a href="/shop.html">Collection 01 ←</a></p>';
+      return;
+    }
+    area.innerHTML = '';
+    pieces.forEach(function (pc) {
+      var serial = parseInt(pc.serial, 10);
+      var card = document.createElement('div');
+      card.className = 'piece-card';
+      card.innerHTML =
+        '<div>' +
+        '<p class="piece-code">' + pc.code + '</p>' +
+        '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100' +
+        (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
+        '</div>' +
+        '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>';
+      area.appendChild(card);
+    });
+  }
+
+  function renderOrders(orders) {
+    var area = document.getElementById('ordersArea');
+    if (!orders.length) {
+      area.innerHTML = '<p class="empty">ما في طلبات لسا.</p>';
+      return;
+    }
+    area.innerHTML = '';
+    orders.forEach(function (o) {
+      var d = o.time ? new Date(o.time) : null;
+      var dateStr = d ? d.toLocaleDateString('ar-JO', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+      var row = document.createElement('div');
+      row.className = 'order-row';
+      row.innerHTML =
+        '<div class="order-top"><span class="order-id">' + o.orderId + '</span><span class="order-date">' + dateStr + '</span></div>' +
+        '<p class="order-items">' + (o.items || '') + '</p>' +
+        '<div class="order-bottom"><span class="order-total">' + (o.total || 0) + ' JD</span><span class="order-status">' + (o.status || '') + '</span></div>';
+      area.appendChild(row);
+    });
+  }
+
+  if (window.gtag) gtag('event', 'page_view_me');
+})();
+</script>
+
+</body>
+</html>
