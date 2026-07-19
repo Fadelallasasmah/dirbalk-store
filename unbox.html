@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="/assets/theme.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIRBALَK</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+  body {
+    background: #0a0a0a; color: #ffffff; font-family: Arial, sans-serif;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 2rem; text-align: center;
+  }
+  .wrap { max-width: 380px; }
+  .brand-logo { width: min(48vw, 190px); height: auto; margin-bottom: 2.6rem; opacity: 0.95; }
+
+  .stage { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .stage.show { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .stage { transition: none; } }
+
+  .line1 { font-size: 19px; line-height: 1.8; margin-bottom: 10px; }
+  .line2 { color: rgba(255,255,255,0.55); font-size: 13px; line-height: 2; margin-bottom: 2.4rem; }
+
+  .cta {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #C9A84C;
+    color: #0a0a0a;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    transition: opacity 0.2s;
+  }
+  .cta:hover { opacity: 0.9; }
+
+  .phrase { margin-top: 2.4rem; color: #C9A84C; font-size: 13px; opacity: 0.85; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
+
+    <div class="stage" id="stage">
+      <p class="line1 brand-phrase">وصلتك.</p>
+      <p class="line2">هلأ دوّر. في تفاصيل بهالقطعة حدا فكّر فيها لأجلك.</p>
+      <a href="#" class="cta" id="ctaLink">شوف قطعتك</a>
+      <p class="phrase brand-phrase">دير بالك على حالك.</p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get('p') || '';
+  var link = document.getElementById('ctaLink');
+  link.href = slug ? '/p/' + slug : '/shop.html';
+
+  requestAnimationFrame(function () {
+    setTimeout(function () { document.getElementById('stage').classList.add('show'); }, 150);
+  });
+})();
+</script>
+</body>
+</html>
