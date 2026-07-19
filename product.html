@@ -160,15 +160,32 @@
   }
 
   /* ---------- real image frames + zoom ---------- */
-  .media-frame.has-img { cursor: zoom-in; }
-  .media-frame.has-img img {
+  .media-frame img,
+  .media-frame video {
     width: 100%; height: 100%;
     object-fit: cover; display: block;
-    transition: transform 0.25s ease;
-    will-change: transform;
   }
-  @media (hover: hover) and (pointer: fine) {
-    .media-frame.has-img:hover img { transform: scale(1.9); }
+  .media-frame.has-img { cursor: zoom-in; position: relative; }
+
+  /* ---------- magnifier lens (Amazon-style side pane) ---------- */
+  .mag-pane {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: calc(100% + 14px);
+    width: 420px;
+    height: 100%;
+    background: #0d0d0d repeat;
+    background-size: 260%;
+    border: 0.5px solid rgba(201,168,76,0.4);
+    z-index: 45;
+    pointer-events: none;
+  }
+  @media (min-width: 1280px) {
+    .media-frame.has-img.zooming .mag-pane { display: block; }
+  }
+  @media (max-width: 1279px) {
+    .media-frame.has-img { cursor: pointer; }
   }
 
   /* ---------- mobile lightbox (pinch zoom) ---------- */
@@ -819,18 +836,20 @@
       frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '') + ' reveal';
       if (m.src) {
         frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="lazy" />' +
-          '<span class="media-caption">' + m.caption + '</span>';
-        var img = frame.querySelector('img');
+          '<span class="media-caption">' + m.caption + '</span>' +
+          '<div class="mag-pane" style="background-image:url(' + m.src + ');"></div>';
         if (finePointer) {
-          /* لابتوب: زوم بيتبع مؤشر الماوس */
+          /* لابتوب: عدسة مكبّرة جنب الصورة، بتتبع الماوس (نمط Amazon) */
+          var pane = frame.querySelector('.mag-pane');
           frame.addEventListener('mousemove', function (e) {
             var r = frame.getBoundingClientRect();
             var x = ((e.clientX - r.left) / r.width) * 100;
             var y = ((e.clientY - r.top) / r.height) * 100;
-            img.style.transformOrigin = x + '% ' + y + '%';
+            pane.style.backgroundPosition = x + '% ' + y + '%';
+            frame.classList.add('zooming');
           });
           frame.addEventListener('mouseleave', function () {
-            img.style.transformOrigin = 'center center';
+            frame.classList.remove('zooming');
           });
         } else {
           /* موبايل: كبسة بتفتح فل-سكرين مع pinch zoom */
