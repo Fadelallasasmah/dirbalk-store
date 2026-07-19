@@ -92,7 +92,9 @@
           '</g>' +
         '</svg>' +
         '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-          '<circle cx="12" cy="12" r="8" stroke="#C9A84C" stroke-width="1.6"/>' +
+          '<mask id="dbMoonMask"><rect x="0" y="0" width="24" height="24" fill="#fff"/>' +
+          '<circle cx="15.2" cy="9.2" r="7.4" fill="#000"/></mask>' +
+          '<circle cx="12" cy="12" r="8.5" fill="#C9A84C" mask="url(#dbMoonMask)"/>' +
         '</svg>' +
       '</span></button>' +
       '<button type="button" class="theme-reset" aria-label="رجوع للوضع التلقائي" title="تلقائي">↺</button>';
