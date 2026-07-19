@@ -93,7 +93,7 @@
         '</svg>' +
         '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
           '<circle cx="12" cy="12" r="8.5" fill="#C9A84C"/>' +
-          '<path d="M15.6 5.3a8.5 8.5 0 0 1 0 13.4 6.9 6.9 0 0 0 0-13.4z" fill="#0a0a0a" opacity="0.22"/>' +
+          '<path d="M16.3 4.9a8.5 8.5 0 0 1 0 14.2 6.3 6.3 0 0 0 0-14.2z" fill="#0a0a0a" opacity="0.32"/>' +
         '</svg>' +
       '</span></button>' +
       '<button type="button" class="theme-reset" aria-label="رجوع للوضع التلقائي" title="تلقائي">↺</button>';
