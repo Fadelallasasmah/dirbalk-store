@@ -146,6 +146,18 @@
   }
 
 
+
+  /* ---------- scroll reveal motion ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
   /* ---------- real image frames + zoom ---------- */
   .media-frame.has-img { cursor: zoom-in; }
   .media-frame.has-img img {
@@ -512,13 +524,13 @@
   </div>
 
   <div class="pdp-info">
-    <p class="pdp-code" id="pdpCode"></p>
-    <h1 class="pdp-title" id="pdpTitle"></h1>
+    <p class="pdp-code reveal" id="pdpCode" style="transition-delay:0.05s;"></p>
+    <h1 class="pdp-title reveal" id="pdpTitle" style="transition-delay:0.12s;"></h1>
     <p class="pdp-colorway" id="pdpColorway"></p>
     <p class="pdp-price" id="pdpPrice"></p>
     <span class="pdp-tag" id="pdpTag"></span>
 
-    <p class="pdp-story" id="pdpStory"></p>
+    <p class="pdp-story reveal" id="pdpStory" style="transition-delay:0.2s;"></p>
 
     <p class="size-label">المقاس</p>
     <div class="size-row" id="sizeRow"></div>
@@ -785,7 +797,7 @@
     var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     p.media.forEach(function (m) {
       var frame = document.createElement('div');
-      frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '');
+      frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '') + ' reveal';
       if (m.src) {
         frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="lazy" />' +
           '<span class="media-caption">' + m.caption + '</span>';
@@ -902,6 +914,7 @@
       otherRow.appendChild(a);
     });
 
+    initReveal();
     if (window.gtag) gtag('event', 'view_item', { item_id: p.id, page: 'pdp' });
   }
 
@@ -984,6 +997,25 @@
   }
   lb.addEventListener('pointerup', lbPointerEnd);
   lb.addEventListener('pointercancel', lbPointerEnd);
+
+
+  /* ---------------- scroll reveal ---------------- */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal:not(.visible)');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { obs.observe(el); });
+  }
 
   /* ---------------- accordions ---------------- */
   Array.prototype.forEach.call(document.querySelectorAll('.acc-head'), function (head) {
