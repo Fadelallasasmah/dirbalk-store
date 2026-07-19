@@ -50,13 +50,15 @@
     + '.theme-toggle{position:fixed;top:70px;left:18px;z-index:35;display:flex;align-items:center;gap:8px;'
     + 'background:none;border:none;padding:6px;cursor:pointer;opacity:0.55;transition:opacity 0.3s ease;}'
     + '.theme-toggle:hover{opacity:1;}'
-    + '.theme-icon{width:14px;height:14px;display:block;position:relative;}'
-    /* الشمس: دائرة أمبر مصمتة */
-    + '.theme-icon::before{content:"";position:absolute;inset:0;border-radius:50%;'
-    + 'background:#C9A84C;border:1px solid #C9A84C;'
-    + 'transition:background-color var(--t) ease;}'
-    /* القمر: نفس الدائرة، مفرغة */
-    + 'html[data-theme="night"] .theme-icon::before{background:transparent;}'
+    + '.theme-icon{width:15px;height:15px;display:block;position:relative;}'
+    + '.theme-icon svg{position:absolute;inset:0;width:100%;height:100%;'
+    + 'transition:opacity var(--t) ease, transform var(--t) ease;}'
+    /* الشمس: ظاهرة بالنهار */
+    + '.icon-sun{opacity:0;transform:rotate(-90deg) scale(0.5);}'
+    + 'html[data-theme="day"] .icon-sun{opacity:1;transform:rotate(0deg) scale(1);}'
+    /* القمر: ظاهر بالليل */
+    + '.icon-moon{opacity:1;transform:rotate(0deg) scale(1);}'
+    + 'html[data-theme="day"] .icon-moon{opacity:0;transform:rotate(90deg) scale(0.5);}'
     + '.theme-reset{background:none;border:none;padding:4px;cursor:pointer;'
     + 'color:rgba(201,168,76,0.45);font-size:12px;line-height:1;font-family:Arial,sans-serif;'
     + 'opacity:0;pointer-events:none;transition:opacity 0.3s ease,color 0.2s ease;}'
@@ -79,7 +81,20 @@
     wrap.className = 'theme-toggle';
     wrap.innerHTML =
       '<button type="button" class="theme-btn" aria-label="تبديل النهار والليل" style="background:none;border:none;padding:0;cursor:pointer;">' +
-      '<span class="theme-icon"></span></button>' +
+      '<span class="theme-icon">' +
+        '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+          '<circle cx="12" cy="12" r="4.5" fill="#C9A84C"/>' +
+          '<g stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round">' +
+            '<path d="M12 2.5v2.4"/><path d="M12 19.1v2.4"/>' +
+            '<path d="M21.5 12h-2.4"/><path d="M4.9 12H2.5"/>' +
+            '<path d="M18.36 5.64l-1.7 1.7"/><path d="M7.34 16.66l-1.7 1.7"/>' +
+            '<path d="M18.36 18.36l-1.7-1.7"/><path d="M7.34 7.34l-1.7-1.7"/>' +
+          '</g>' +
+        '</svg>' +
+        '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+          '<circle cx="12" cy="12" r="8" stroke="#C9A84C" stroke-width="1.6"/>' +
+        '</svg>' +
+      '</span></button>' +
       '<button type="button" class="theme-reset" aria-label="رجوع للوضع التلقائي" title="تلقائي">↺</button>';
     document.body.appendChild(wrap);
 
@@ -108,4 +123,4 @@
 
     sync();
   });
-})();assets/theme.js
+})();
