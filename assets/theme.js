@@ -48,9 +48,9 @@
 
     /* ---------- the toggle ---------- */
     + '.theme-toggle{position:fixed;top:70px;left:18px;z-index:35;display:flex;align-items:center;gap:8px;'
-    + 'background:none;border:none;padding:6px;cursor:pointer;opacity:0.55;transition:opacity 0.3s ease;}'
+    + 'background:none;border:none;padding:8px;cursor:pointer;opacity:0.55;transition:opacity 0.3s ease;}'
     + '.theme-toggle:hover{opacity:1;}'
-    + '.theme-icon{width:15px;height:15px;display:block;position:relative;}'
+    + '.theme-icon{width:22px;height:22px;display:block;position:relative;}'
     + '.theme-icon svg{position:absolute;inset:0;width:100%;height:100%;'
     + 'transition:opacity var(--t) ease, transform var(--t) ease;}'
     /* الشمس: ظاهرة بالنهار */
