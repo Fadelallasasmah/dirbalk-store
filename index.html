@@ -411,9 +411,56 @@
 </head>
 <body>
 
+<script>
+(function () {
+  var ASSETS = {
+    day:   { video: '/hero-day.mp4',       poster: '/hero-drawing-day.jpg' },
+    night: { video: '/hero-animation.mp4', poster: '/hero-drawing.jpg' }
+  };
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'day' ? 'day' : 'night';
+  }
+
+  function applyHero(theme) {
+    var a = ASSETS[theme] || ASSETS.night;
+
+    var splashVid = document.getElementById('splashVideo');
+    var splashSrc = document.getElementById('splashSource');
+    if (splashVid && splashSrc && splashVid.parentNode) {
+      splashSrc.src = a.video;
+      splashVid.poster = a.poster;
+      splashVid.load();
+      splashVid.play && splashVid.play().catch(function () {});
+    }
+
+    var heroVid = document.getElementById('heroVideo');
+    var heroSrc = document.getElementById('heroSource');
+    if (heroVid && heroSrc) {
+      if (heroSrc.src.indexOf(a.video) === -1) {
+        var t = heroVid.currentTime;
+        heroSrc.src = a.video;
+        heroVid.poster = a.poster;
+        heroVid.load();
+        heroVid.addEventListener('loadedmetadata', function onMeta() {
+          heroVid.removeEventListener('loadedmetadata', onMeta);
+          try { heroVid.currentTime = t; } catch (e) { /* ignore */ }
+        });
+        heroVid.play && heroVid.play().catch(function () {});
+      }
+    }
+  }
+
+  applyHero(currentTheme());
+  document.addEventListener('dirbalk:theme', function (e) {
+    applyHero(e.detail && e.detail.theme ? e.detail.theme : currentTheme());
+  });
+})();
+</script>
+
 <div id="splash" aria-hidden="true">
   <video id="splashVideo" autoplay muted playsinline poster="/hero-drawing.jpg">
-    <source src="/hero-animation.mp4" type="video/mp4">
+    <source id="splashSource" src="/hero-animation.mp4" type="video/mp4">
   </video>
   <div class="splash-veil"></div>
   <div class="splash-center">
@@ -471,8 +518,8 @@
 </div>
 
 <div class="hero-media">
-  <video autoplay muted loop playsinline poster="/hero-drawing.jpg">
-    <source src="/hero-animation.mp4" type="video/mp4">
+  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
   </video>
 </div>
 
