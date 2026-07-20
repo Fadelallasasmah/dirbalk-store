@@ -138,9 +138,15 @@
 
     function sync() {
       var t = currentTheme();
+      var prev = DOC.getAttribute('data-theme');
       DOC.setAttribute('data-theme', t);
       resetBtn.classList.toggle('show', isManual());
       syncFavicon(t);
+      if (t !== prev) {
+        try {
+          document.dispatchEvent(new CustomEvent('dirbalk:theme', { detail: { theme: t } }));
+        } catch (e) { /* ignore (very old browsers) */ }
+      }
     }
 
     wrap.querySelector('.theme-btn').addEventListener('click', function () {
