@@ -167,23 +167,18 @@
   }
   .media-frame.has-img { cursor: zoom-in; position: relative; }
 
-  /* ---------- magnifier lens (Amazon-style side pane) ---------- */
-  .mag-pane {
+  /* ---------- magnifier lens (Amazon-style, global fixed pane — avoids clipping) ---------- */
+  #magPane {
     display: none;
-    position: absolute;
-    top: 0;
-    right: calc(100% + 14px);
-    width: 420px;
-    height: 100%;
-    background: #0d0d0d repeat;
+    position: fixed;
+    background-color: #0d0d0d;
+    background-repeat: no-repeat;
     background-size: 260%;
     border: 0.5px solid rgba(201,168,76,0.4);
-    z-index: 45;
+    z-index: 95;
     pointer-events: none;
   }
-  @media (min-width: 1280px) {
-    .media-frame.has-img.zooming .mag-pane { display: block; }
-  }
+  #magPane.show { display: block; }
   @media (max-width: 1279px) {
     .media-frame.has-img { cursor: pointer; }
   }
@@ -316,7 +311,7 @@
     overflow: hidden;
     transition: max-height 0.3s ease;
   }
-  .acc.open .acc-body { max-height: 620px; }
+  /* max-height set dynamically per accordion via JS on open */
 
   .acc-content { padding: 2px 2px 18px; }
 
@@ -536,6 +531,8 @@
   <a href="/shop.html" class="gate-btn primary" style="display:inline-block; padding: 13px 30px;">Collection 01</a>
 </div>
 
+<div id="magPane"></div>
+
 <!-- product -->
 <div class="pdp" id="pdp" style="display:none;">
 
@@ -647,6 +644,28 @@
       o.start(); o.stop(ctx.currentTime + 0.24);
     } catch (e) { /* ignore */ }
   }
+
+  /* ---------------- global magnifier engine ---------------- */
+  var magPane = document.getElementById('magPane');
+  var magSrc = '';
+  function magMove(e, frame, src) {
+    if (magSrc !== src) { magPane.style.backgroundImage = 'url(' + src + ')'; magSrc = src; }
+    var r = frame.getBoundingClientRect();
+    var x = ((e.clientX - r.left) / r.width) * 100;
+    var y = ((e.clientY - r.top) / r.height) * 100;
+    magPane.style.backgroundPosition = x + '% ' + y + '%';
+
+    var gap = 14, paneW = 420, paneH = r.height;
+    var left = r.right + gap;
+    if (left + paneW > window.innerWidth) left = r.left - gap - paneW;
+    if (left < 0) left = Math.max(8, window.innerWidth - paneW - 8);
+    magPane.style.left = left + 'px';
+    magPane.style.top = r.top + 'px';
+    magPane.style.width = paneW + 'px';
+    magPane.style.height = paneH + 'px';
+    magPane.classList.add('show');
+  }
+  function magHide() { magPane.classList.remove('show'); }
 
   /* ---------------- products (must stay in sync with shop.html) ---------------- */
   var PRODUCTS = [
@@ -836,21 +855,11 @@
       frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '') + ' reveal';
       if (m.src) {
         frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="lazy" />' +
-          '<span class="media-caption">' + m.caption + '</span>' +
-          '<div class="mag-pane" style="background-image:url(' + m.src + ');"></div>';
+          '<span class="media-caption">' + m.caption + '</span>';
         if (finePointer) {
-          /* لابتوب: عدسة مكبّرة جنب الصورة، بتتبع الماوس (نمط Amazon) */
-          var pane = frame.querySelector('.mag-pane');
-          frame.addEventListener('mousemove', function (e) {
-            var r = frame.getBoundingClientRect();
-            var x = ((e.clientX - r.left) / r.width) * 100;
-            var y = ((e.clientY - r.top) / r.height) * 100;
-            pane.style.backgroundPosition = x + '% ' + y + '%';
-            frame.classList.add('zooming');
-          });
-          frame.addEventListener('mouseleave', function () {
-            frame.classList.remove('zooming');
-          });
+          /* لابتوب: عدسة مكبّرة عائمة بجانب الصورة، بتتبع الماوس (نمط Amazon) */
+          frame.addEventListener('mousemove', function (e) { magMove(e, frame, m.src); });
+          frame.addEventListener('mouseleave', magHide);
         } else {
           /* موبايل: كبسة بتفتح فل-سكرين مع pinch zoom */
           frame.addEventListener('click', function () { openLightbox(m.src); });
@@ -1058,7 +1067,16 @@
   /* ---------------- accordions ---------------- */
   Array.prototype.forEach.call(document.querySelectorAll('.acc-head'), function (head) {
     head.addEventListener('click', function () {
-      head.parentElement.classList.toggle('open');
+      var acc = head.parentElement;
+      var body = acc.querySelector('.acc-body');
+      var wasOpen = acc.classList.contains('open');
+      acc.classList.toggle('open');
+      body.style.maxHeight = wasOpen ? '' : (body.scrollHeight + 'px');
+    });
+  });
+  window.addEventListener('resize', function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.acc.open .acc-body'), function (body) {
+      body.style.maxHeight = body.scrollHeight + 'px';
     });
   });
 
