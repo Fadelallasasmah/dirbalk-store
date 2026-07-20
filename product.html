@@ -175,8 +175,8 @@
     background-repeat: no-repeat;
     background-size: 260%;
     border: 0.5px solid rgba(201,168,76,0.4);
-    z-index: 95;
-    pointer-events: none;
+    z-index: 30;
+    pointer-events: none !important;
   }
   #magPane.show { display: block; }
   @media (max-width: 1279px) {
@@ -301,7 +301,12 @@
     cursor: pointer;
     display: flex; align-items: center; justify-content: space-between;
     transition: color 0.2s;
+    position: relative;
+    z-index: 40;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: rgba(201,168,76,0.15);
   }
+  .pdp-info { position: sticky; top: 55px; z-index: 20; }
   .acc-head:hover { color: #C9A84C; }
   .acc-head .acc-icon { font-size: 14px; color: rgba(201,168,76,0.7); transition: transform 0.25s; }
   .acc.open .acc-head .acc-icon { transform: rotate(45deg); }
