@@ -224,20 +224,18 @@
   .gate-btn.primary:hover { opacity: 0.9; }
 
   .card:hover .card-media svg { transform: scale(1.08); }
-  /* both stacked images share one continuous zoom on hover — the swap (opacity) is fully separate,
-     so switching images while hovering keeps the same zoom level instead of resetting/conflicting */
-  .card-media img {
+  /* stacked photo set: one visible (.cm-current) at a time, slow fade+zoom on every change.
+     Hover alone auto-advances to the next photo; arrows cycle through ALL photos manually. */
+  .card-media img.cm-img {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover; display: block;
-    transform: scale(1);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .card:hover .card-media img { transform: scale(1.1); }
-
-  .card-media .cm-img-alt { opacity: 0; }
-  .card-media.swapped .cm-img-alt { opacity: 1; }
-  .card-media.swapped > img:not(.cm-img-alt) { opacity: 0; }
+  .card-media img.cm-img.cm-current { opacity: 1; transform: scale(1); }
+  .card:hover .card-media img.cm-img.cm-current { transform: scale(1.09); }
 
   /* ---------- prev/next arrows on cards with 2+ images ---------- */
   .card-nav {
@@ -255,7 +253,18 @@
   .card-nav:hover { border-color: rgba(201,168,76,0.6); color: #C9A84C; }
   .card-nav.prev { right: 10px; }
   .card-nav.next { left: 10px; }
-  .card-media.has-alt .card-nav { display: flex; }
+  .card-media.has-multi .card-nav { display: flex; }
+  .card-dots {
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    display: none; gap: 5px; z-index: 10;
+  }
+  .card-media.has-multi .card-dots { display: flex; }
+  .card-dots span {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    transition: background-color 0.3s ease;
+  }
+  .card-dots span.active { background: #C9A84C; }
   @media (max-width: 860px) {
     .card-nav { opacity: 1; background: rgba(10,10,10,0.7); }
   }
@@ -684,7 +693,7 @@
     {
       id: 'DB-TEE-01',
       img: '/img/tee-front.jpg',
-      imgAlt: '/img/tee-back.jpg',
+      images: ['/img/tee-front.jpg', '/img/tee-back.jpg'],
       name: 'تيشيرت أوفرسايز',
       colorway: 'أبيض نقي',
       price: 22,
@@ -707,6 +716,7 @@
     {
       id: 'DB-DEN-01',
       img: '/img/den-back.jpg',
+      images: ['/img/den-back.jpg'],
       name: 'بنطلون دنيم واسع',
       colorway: 'إندجو خام 13oz',
       price: 50,
@@ -729,7 +739,7 @@
     {
       id: 'DB-JAC-01',
       img: '/img/jac-front.jpg',
-      imgAlt: '/img/jac-back.jpg',
+      images: ['/img/jac-front.jpg', '/img/jac-back.jpg', '/img/jac-side.jpg'],
       name: 'جاكيت دنيم أوفرسايز',
       colorway: 'إندجو خام 13oz',
       price: 65,
@@ -813,14 +823,25 @@
   }
   PRODUCTS.forEach((p, idx) => {
     const soldOut = totalStock(p) === 0;
+    const images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+    const hasMulti = images.length > 1;
+
     const card = document.createElement('div');
     card.className = 'card reveal';
     card.style.transitionDelay = (idx * 0.12) + 's';
+
+    const imgsHtml = images.length
+      ? images.map((src, i) => '<img class="cm-img' + (i === 0 ? ' cm-current' : '') + '" data-idx="' + i + '" src="' + src + '" alt="' + p.name + '" loading="lazy" />').join('')
+      : silhouetteSVG(p.silhouette, p.swatch);
+
+    const navHtml = hasMulti
+      ? '<button type="button" class="card-nav prev" aria-label="الصورة السابقة">›</button>' +
+        '<button type="button" class="card-nav next" aria-label="الصورة التالية">‹</button>' +
+        '<div class="card-dots">' + images.map((_, i) => '<span' + (i === 0 ? ' class="active"' : '') + '></span>').join('') + '</div>'
+      : '';
+
     card.innerHTML =
-      '<div class="card-media' + (p.img && p.imgAlt ? ' has-alt' : '') + '">' + (p.img ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" />' : silhouetteSVG(p.silhouette, p.swatch)) +
-      (p.img && p.imgAlt ? '<img class="cm-img-alt" src="' + p.imgAlt + '" alt="" loading="lazy" />' +
-        '<button type="button" class="card-nav prev" aria-label="الصورة السابقة">›</button>' +
-        '<button type="button" class="card-nav next" aria-label="الصورة التالية">‹</button>' : '') +
+      '<div class="card-media' + (hasMulti ? ' has-multi' : '') + '">' + imgsHtml + navHtml +
       '<span class="card-code">' + p.id + '</span>' +
       (soldOut ? '<span class="card-tag sold-out">نفذت الكمية</span>' : '') +
       '</div>' +
@@ -829,17 +850,26 @@
       '<p class="card-colorway">' + p.colorway + '</p>' +
       '<p class="card-price">' + p.price + ' دينار</p>' +
       '</div>';
-    if (p.img && p.imgAlt) {
-      const prevBtn = card.querySelector('.card-nav.prev');
-      const nextBtn = card.querySelector('.card-nav.next');
+
+    if (hasMulti) {
       const mediaEl = card.querySelector('.card-media');
-      [prevBtn, nextBtn].forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          mediaEl.classList.toggle('swapped');
-        });
-      });
+      const imgEls = Array.from(mediaEl.querySelectorAll('.cm-img'));
+      const dotEls = Array.from(mediaEl.querySelectorAll('.card-dots span'));
+      let current = 0;
+
+      function show(i) {
+        current = ((i % images.length) + images.length) % images.length;
+        imgEls.forEach((im) => im.classList.toggle('cm-current', parseInt(im.dataset.idx, 10) === current));
+        dotEls.forEach((d, di) => d.classList.toggle('active', di === current));
+      }
+
+      card.addEventListener('mouseenter', () => show(1));
+      card.addEventListener('mouseleave', () => show(0));
+
+      mediaEl.querySelector('.card-nav.prev').addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
+      mediaEl.querySelector('.card-nav.next').addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
     }
+
     card.addEventListener('click', () => { window.location.href = '/product.html?id=' + p.id; });
     grid.appendChild(card);
   });
