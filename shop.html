@@ -868,6 +868,31 @@
 
       mediaEl.querySelector('.card-nav.prev').addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
       mediaEl.querySelector('.card-nav.next').addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
+
+      /* ---- mobile: swipe right/left on the image to cycle, no arrow tap needed ---- */
+      let touchStartX = 0, touchStartY = 0, touchMoved = false;
+      mediaEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchMoved = false;
+      }, { passive: true });
+
+      mediaEl.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
+
+      mediaEl.addEventListener('touchend', (e) => {
+        if (!touchMoved) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) < 32 || Math.abs(dx) < Math.abs(dy)) return; /* mostly vertical scroll — ignore */
+        e.stopPropagation();
+        if (dx < 0) show(current + 1); else show(current - 1); /* RTL page, but swipe direction stays finger-natural */
+        suppressClick = true;
+      }, { passive: true });
+
+      let suppressClick = false;
+      card.addEventListener('click', (e) => {
+        if (suppressClick) { e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+      }, true);
     }
 
     card.addEventListener('click', () => { window.location.href = '/product.html?id=' + p.id; });
