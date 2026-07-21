@@ -259,6 +259,56 @@
   .confirm-order-id { color: #C9A84C; font-size: 13px; margin: 16px 0 26px; }
   .confirm-box .primary-btn { text-decoration: none; display: inline-block; width: auto; padding: 13px 32px; }
 
+
+  /* ---------- review / invoice step ---------- */
+  .review-block { border: 0.5px solid rgba(255,255,255,0.12); margin-bottom: 22px; }
+  .review-block h3 {
+    font-size: 10px; letter-spacing: 1.5px; color: #C9A84C;
+    padding: 14px 16px; border-bottom: 0.5px solid rgba(255,255,255,0.1); font-weight: normal;
+  }
+  .review-block .rb-body { padding: 14px 16px; }
+  .review-block .rb-body p { font-size: 12.5px; line-height: 2; color: rgba(255,255,255,0.75); }
+  .review-block .rb-body a { color: #C9A84C; text-decoration: none; }
+
+  .review-item {
+    display: flex; gap: 14px; align-items: center;
+    padding: 12px 16px; border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .review-item:last-child { border-bottom: none; }
+  .review-item-media {
+    width: 56px; height: 66px; flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden;
+  }
+  .review-item-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .review-item-media svg { width: 70%; height: 80%; }
+  .review-item-info { flex: 1; }
+  .review-item-name { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; }
+  .review-item-meta { font-size: 11px; color: rgba(255,255,255,0.45); }
+  .review-item-price { font-size: 12.5px; color: #C9A84C; white-space: nowrap; }
+
+  .review-totals { padding: 14px 16px; }
+  .review-totals .rt-row { display: flex; justify-content: space-between; font-size: 12.5px; color: rgba(255,255,255,0.6); padding: 4px 0; }
+  .review-totals .rt-row.rt-grand { color: #ffffff; font-weight: bold; font-size: 14px; padding-top: 10px; margin-top: 6px; border-top: 0.5px solid rgba(255,255,255,0.1); }
+  .review-totals .rt-row.rt-grand strong { color: #C9A84C; }
+
+  .save-info-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    margin: 14px 0 4px;
+  }
+  .save-info-row input { accent-color: #C9A84C; width: 15px; height: 15px; cursor: pointer; }
+  .save-info-row label { cursor: pointer; }
+
+  /* mini lightbox for review item images */
+  .mini-lb {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    z-index: 100; align-items: center; justify-content: center; padding: 30px; cursor: zoom-out;
+  }
+  .mini-lb.open { display: flex; }
+  .mini-lb img { max-width: 90vw; max-height: 90vh; }
+
   .step-section { display: none; }
   .step-section.active { display: block; }
 
@@ -281,7 +331,9 @@
   <span class="step-sep">—</span>
   <span class="step-dot" data-step="2"><span></span>الشحن</span>
   <span class="step-sep">—</span>
-  <span class="step-dot" data-step="3"><span></span>الدفع</span>
+  <span class="step-dot" data-step="3"><span></span>المراجعة</span>
+  <span class="step-sep">—</span>
+  <span class="step-dot" data-step="4"><span></span>الدفع</span>
 </div>
 
 <div class="wrap">
@@ -336,13 +388,39 @@
         </div>
       </div>
 
+      <div class="save-info-row">
+        <input type="checkbox" id="saveInfoCheck" />
+        <label for="saveInfoCheck">احفظ بياناتي للمرة الجاية</label>
+      </div>
+
       <p class="form-error" id="shippingError"></p>
-      <button type="submit" class="primary-btn">متابعة للدفع</button>
+      <button type="submit" class="primary-btn">متابعة للمراجعة</button>
     </form>
     <button type="button" class="secondary-link" id="backToStep1">← الرجوع للسلة</button>
   </div>
 
   <div class="step-section" id="step3">
+    <h1>راجع طلبك</h1>
+
+    <div class="review-block">
+      <h3>القطع</h3>
+      <div id="reviewItems"></div>
+    </div>
+
+    <div class="review-block">
+      <h3>الشحن إلى</h3>
+      <div class="rb-body" id="reviewShipping"></div>
+    </div>
+
+    <div class="review-block">
+      <div class="review-totals" id="reviewTotals"></div>
+    </div>
+
+    <button type="button" class="primary-btn" id="toPaymentBtn">متابعة للدفع</button>
+    <button type="button" class="secondary-link" id="backToStep2FromReview">← الرجوع لبيانات الشحن</button>
+  </div>
+
+  <div class="step-section" id="step4">
     <h1>الدفع</h1>
     <p class="test-mode-note">وضع تجريبي — ما رح يتم خصم أي مبلغ حقيقي. هاد بس لاختبار تجربة الشراء.</p>
     <form id="paymentForm" novalidate>
@@ -369,10 +447,10 @@
       <p class="form-error" id="paymentError"></p>
       <button type="submit" class="primary-btn" id="payBtn">إتمام الدفع</button>
     </form>
-    <button type="button" class="secondary-link" id="backToStep2">← الرجوع لبيانات الشحن</button>
+    <button type="button" class="secondary-link" id="backToStep3">← الرجوع للمراجعة</button>
   </div>
 
-  <div class="step-section" id="step4">
+  <div class="step-section" id="step5">
     <div class="confirm-box">
       <div class="confirm-icon">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
@@ -430,6 +508,8 @@
 
 </div>
 
+<div class="mini-lb" id="miniLb"><img id="miniLbImg" src="" alt="" /></div>
+
 <script>
 (function () {
   const PRODUCTS = [
@@ -467,7 +547,7 @@
     document.querySelectorAll('.step-section').forEach((s) => s.classList.remove('active'));
     document.getElementById('step' + n).classList.add('active');
     document.querySelectorAll('.step-dot').forEach((d) => {
-      d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 3);
+      d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 4);
     });
     window.scrollTo(0, 0);
   }
@@ -504,6 +584,53 @@
     document.getElementById('summaryTotal').textContent = total + ' JD';
   }
 
+
+  const revealNamesMap = { 'DB-TEE-01': 'تيشيرت أوفرسايز', 'DB-DEN-01': 'بنطلون دنيم واسع', 'DB-JAC-01': 'جاكيت دنيم أوفرسايز' };
+
+  function renderReview() {
+    const itemsWrap = document.getElementById('reviewItems');
+    itemsWrap.innerHTML = '';
+    let subtotal = 0;
+    cart.forEach((line) => {
+      const p = findProduct(line.id);
+      if (!p) return;
+      subtotal += p.price * line.qty;
+      const row = document.createElement('div');
+      row.className = 'review-item';
+      row.innerHTML =
+        '<div class="review-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+        '<div class="review-item-info">' +
+        '<p class="review-item-name">' + p.name + '</p>' +
+        '<p class="review-item-meta">مقاس ' + line.size + ' · الكمية ' + line.qty + '</p>' +
+        '</div>' +
+        '<span class="review-item-price">' + (p.price * line.qty) + ' JD</span>';
+      if (p.img) {
+        row.querySelector('.review-item-media').addEventListener('click', () => {
+          document.getElementById('miniLbImg').src = p.img;
+          document.getElementById('miniLb').classList.add('open');
+        });
+      }
+      itemsWrap.appendChild(row);
+    });
+
+    if (shippingData) {
+      document.getElementById('reviewShipping').innerHTML =
+        '<p><strong>' + shippingData.fullName + '</strong></p>' +
+        '<p>' + shippingData.phone + ' · ' + shippingData.email + '</p>' +
+        '<p>' + shippingData.city + ' — ' + shippingData.address + '</p>' +
+        (shippingData.locationLink ? '<p><a href="' + shippingData.locationLink + '" target="_blank" rel="noreferrer">رابط الموقع ↗</a></p>' : '');
+    }
+
+    document.getElementById('reviewTotals').innerHTML =
+      '<div class="rt-row"><span>المجموع الفرعي</span><span>' + subtotal + ' JD</span></div>' +
+      '<div class="rt-row"><span>الشحن</span><span>يتحدد عند التأكيد</span></div>' +
+      '<div class="rt-row rt-grand"><span>الإجمالي</span><strong>' + subtotal + ' JD</strong></div>';
+  }
+
+  document.getElementById('miniLb').addEventListener('click', () => {
+    document.getElementById('miniLb').classList.remove('open');
+  });
+
   renderSummary();
 
   document.getElementById('toShippingBtn').addEventListener('click', () => {
@@ -511,7 +638,9 @@
     goToStep(2);
   });
   document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
-  document.getElementById('backToStep2').addEventListener('click', () => goToStep(2));
+  document.getElementById('backToStep2FromReview').addEventListener('click', () => goToStep(2));
+  document.getElementById('toPaymentBtn').addEventListener('click', () => goToStep(4));
+  document.getElementById('backToStep3').addEventListener('click', () => goToStep(3));
 
   try {
     if (localStorage.getItem('dirbalk_logged_in') === '1') {
@@ -528,6 +657,17 @@
         note.innerHTML = 'مسجل دخول كـ <strong>' + name + '</strong> — عبّينالك بياناتك، بس تأكد منها وكمّل الباقي.';
         note.style.display = 'block';
       }
+    }
+
+    const saved = JSON.parse(localStorage.getItem('dirbalk_saved_shipping') || 'null');
+    if (saved) {
+      if (saved.fullName) document.getElementById('fullName').value = saved.fullName;
+      if (saved.email) document.getElementById('ckEmail').value = saved.email;
+      if (saved.phone) document.getElementById('ckPhone').value = saved.phone;
+      if (saved.city) document.getElementById('city').value = saved.city;
+      if (saved.address) document.getElementById('address').value = saved.address;
+      if (saved.locationLink) document.getElementById('locationLink').value = saved.locationLink;
+      document.getElementById('saveInfoCheck').checked = true;
     }
   } catch (e) { /* ignore */ }
 
@@ -573,7 +713,15 @@
     if (!valid) return;
 
     shippingData = data;
+    try {
+      if (document.getElementById('saveInfoCheck').checked) {
+        localStorage.setItem('dirbalk_saved_shipping', JSON.stringify(data));
+      } else {
+        localStorage.removeItem('dirbalk_saved_shipping');
+      }
+    } catch (e) { /* ignore */ }
     if (window.gtag) gtag('event', 'add_shipping_info');
+    renderReview();
     goToStep(3);
   });
 
@@ -648,7 +796,7 @@
         }
         cart = [];
         saveCart(cart);
-        goToStep(4);
+        goToStep(5);
       } else {
         document.getElementById('paymentError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         document.getElementById('paymentError').style.display = 'block';
