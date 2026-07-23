@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /about.html
+Allow: /drop.html
+Allow: /shipping.html
+Allow: /privacy.html
+
+Disallow: /shop.html
+Disallow: /product.html
+Disallow: /checkout.html
+Disallow: /me.html
+Disallow: /admin.html
+Disallow: /signin.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /enter.html
+Disallow: /unbox.html
+Disallow: /p/
+Disallow: /api/
+
+Sitemap: https://dirbalk.com/sitemap.xml
