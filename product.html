@@ -468,6 +468,18 @@
   }
   .checkout-btn.disabled { opacity: 0.4; pointer-events: none; }
 
+
+  .fly-cart-clone {
+    position: fixed;
+    z-index: 95;
+    object-fit: cover;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.34, 0.2, 0.4, 1), opacity 0.6s ease, top 0.6s cubic-bezier(0.34, 0.2, 0.4, 1), left 0.6s cubic-bezier(0.34, 0.2, 0.4, 1), width 0.6s ease, height 0.6s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fly-cart-clone { display: none; }
+  }
+
   .toast {
     position: fixed;
     bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -1130,6 +1142,41 @@
   });
 
   /* ---------------- add to cart ---------------- */
+
+  /* ---------------- "fly to cart" delight animation ---------------- */
+  function flyToCart() {
+    try {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var imgEl = document.querySelector('#pdpMedia .media-frame img');
+      var cartBtn = document.getElementById('cartBtn');
+      if (!imgEl || !cartBtn) return;
+      var srcRect = imgEl.getBoundingClientRect();
+      var cartRect = cartBtn.getBoundingClientRect();
+      if (!srcRect.width || !cartRect.width) return;
+
+      var clone = document.createElement('img');
+      clone.src = imgEl.src;
+      clone.className = 'fly-cart-clone';
+      clone.style.top = srcRect.top + 'px';
+      clone.style.left = srcRect.left + 'px';
+      clone.style.width = srcRect.width + 'px';
+      clone.style.height = srcRect.height + 'px';
+      document.body.appendChild(clone);
+
+      requestAnimationFrame(function () {
+        clone.style.top = (cartRect.top + cartRect.height / 2 - 8) + 'px';
+        clone.style.left = (cartRect.left + cartRect.width / 2 - 8) + 'px';
+        clone.style.width = '16px';
+        clone.style.height = '16px';
+        clone.style.opacity = '0.15';
+      });
+
+      setTimeout(function () {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+      }, 650);
+    } catch (e) { /* purely cosmetic — never let this break the actual add-to-cart flow */ }
+  }
+
   function addToCart() {
     if (!product) return;
     if (!selectedSize) {
@@ -1155,6 +1202,7 @@
     else cart.push({ id: product.id, size: selectedSize, qty: 1 });
     saveCart(cart);
     updateCartBadge();
+    flyToCart();
     showToast('انضافت للسلة — ' + product.name + ' (' + selectedSize + ')');
     playAddSound();
     if (window.gtag) gtag('event', 'add_to_cart', { item_id: product.id, size: selectedSize, page: 'pdp' });
