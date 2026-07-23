@@ -80,18 +80,18 @@
   function faviconSVG(theme) {
     if (theme === 'day') {
       return 'data:image/svg+xml,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="%23171310"/>' +
-        '<circle cx="12" cy="12" r="5.2" fill="%23C9A84C"/>' +
-        '<g stroke="%23C9A84C" stroke-width="1.8" stroke-linecap="round">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="#171310"/>' +
+        '<circle cx="12" cy="12" r="5.2" fill="#C9A84C"/>' +
+        '<g stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">' +
         '<path d="M12 2.5v2.6"/><path d="M12 18.9v2.6"/><path d="M21.5 12h-2.6"/><path d="M5.1 12H2.5"/>' +
         '<path d="M18.6 5.4l-1.85 1.85"/><path d="M7.25 16.75l-1.85 1.85"/>' +
         '<path d="M18.6 18.6l-1.85-1.85"/><path d="M7.25 7.25l-1.85-1.85"/></g></svg>'
       );
     }
     return 'data:image/svg+xml,' + encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="%23050505"/>' +
-      '<circle cx="12" cy="12" r="8.5" fill="%23C9A84C"/>' +
-      '<path d="M16.3 4.9a8.5 8.5 0 0 1 0 14.2 6.3 6.3 0 0 0 0-14.2z" fill="%23050505" opacity="0.32"/></svg>'
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="#050505"/>' +
+      '<circle cx="12" cy="12" r="8.5" fill="#C9A84C"/>' +
+      '<path d="M16.3 4.9a8.5 8.5 0 0 1 0 14.2 6.3 6.3 0 0 0 0-14.2z" fill="#050505" opacity="0.32"/></svg>'
     );
   }
   function syncFavicon(theme) {
