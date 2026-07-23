@@ -121,53 +121,6 @@
   }
   td.wrap { white-space: normal; max-width: 220px; }
   .table-wrap { overflow-x: auto; }
-  /* ---------- quick actions ---------- */
-  .quick-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
-  .qa-btn {
-    padding: 11px 18px;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.75);
-    font-size: 11.5px; letter-spacing: 0.5px;
-    text-decoration: none; background: none; cursor: pointer;
-    font-family: Arial, sans-serif;
-    transition: all 0.2s;
-  }
-  .qa-btn:hover { border-color: rgba(201,168,76,0.4); color: #C9A84C; }
-
-  /* ---------- inventory ---------- */
-  .inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 40px; }
-  .inv-card { border: 0.5px solid rgba(255,255,255,0.12); padding: 16px; }
-  .inv-card .inv-name { font-size: 12.5px; font-weight: bold; margin-bottom: 10px; }
-  .inv-card .inv-sizes { display: flex; gap: 8px; flex-wrap: wrap; }
-  .inv-size-chip {
-    font-size: 11px; padding: 5px 10px;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6);
-  }
-  .inv-size-chip.low { border-color: rgba(224,179,77,0.5); color: #e0b34d; }
-  .inv-size-chip.out { border-color: rgba(255,120,120,0.4); color: rgba(255,140,140,0.85); text-decoration: line-through; }
-
-  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 40px; }
-  .stock-badge {
-    font-size: 11px; padding: 6px 12px;
-    border: 0.5px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6);
-  }
-  .stock-badge.low { border-color: rgba(224,179,77,0.4); color: #e0b34d; }
-  .stock-badge.out { border-color: rgba(255,120,120,0.35); color: rgba(255,140,140,0.85); }
-
-  .bestseller-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 9px 0; border-bottom: 0.5px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); }
-  .bestseller-row span:last-child { color: #C9A84C; }
-
-  .orders-search {
-    width: 100%; max-width: 320px;
-    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
-    color: #fff; padding: 10px 14px; font-size: 12px;
-    outline: none; font-family: Arial, sans-serif;
-    margin-bottom: 14px; text-align: right;
-  }
-  .orders-search:focus { border-color: rgba(201,168,76,0.5); }
-
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
   .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
@@ -265,31 +218,15 @@
     <a href="/" class="home-link">← الرئيسية</a>
   </div>
 
-  <div class="quick-actions">
-    <button type="button" class="qa-btn" id="refreshDataBtn">تحديث البيانات</button>
-    <a href="https://docs.google.com/spreadsheets/" target="_blank" rel="noreferrer" class="qa-btn">فتح الشيت</a>
-    <a href="#invite-section-anchor" class="qa-btn" id="jumpToInviteBtn">دعوات الدروب ↓</a>
-    <a href="/shop.html" class="qa-btn">معاينة المتجر</a>
-  </div>
-
   <div id="loadingNote"><div class="sk-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div></div>
 
   <div id="dashContent" style="display:none;">
     <div class="stat-grid" id="statGrid"></div>
 
-    <div class="badge-row" id="stockBadgeRow"></div>
-
-    <h2>المخزون</h2>
-    <div class="inv-grid" id="invGrid"></div>
-
-    <h2>الأكثر مبيعاً</h2>
-    <div id="bestSellersList"></div>
-
     <h2>التسجيلات حسب الدولة</h2>
     <div class="country-list" id="countryList"></div>
 
     <h2>آخر الطلبات</h2>
-    <input type="text" class="orders-search" id="ordersSearch" placeholder="دور برقم الطلب أو الاسم أو الإيميل..." />
     <div class="table-wrap">
       <table id="ordersTable">
         <thead>
@@ -310,7 +247,7 @@
       <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
     </div>
 
-    <div class="invite-section" id="invite-section-anchor">
+    <div class="invite-section">
       <h2>دعوات الدروب</h2>
       <p class="invite-hint">
         كل مدعو بياخد رابط دخول شخصي صالح 24 ساعة — بيفتحه وبيدخل الشوب مباشرة بدون كلمة سر، من أي جهاز.<br>
@@ -342,8 +279,6 @@
 <script>
 (function () {
   const ADMIN_KEY_STORAGE = 'dirbalk_admin_key';
-  var PRODUCT_NAMES = { 'DB-TEE-01': 'تيشيرت أوفرسايز', 'DB-DEN-01': 'بنطلون دنيم واسع', 'DB-JAC-01': 'جاكيت دنيم أوفرسايز' };
-  let allOrders = [];
 
   function loadDashboard(key) {
     document.getElementById('gate').style.display = 'none';
@@ -368,12 +303,7 @@
         document.getElementById('dashContent').style.display = 'block';
         renderStats(result.stats);
         renderCountries(result.stats.countryCounts);
-        allOrders = result.orders || [];
-        renderOrders(allOrders);
-        if (result.inventory) {
-          renderInventory(result.inventory);
-          renderBestSellers(result.inventory.bestSellers);
-        }
+        renderOrders(result.orders);
       })
       .catch(() => {
         document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
@@ -416,72 +346,13 @@
   }
 
 
-  function renderInventory(inv) {
-    var byProduct = inv.byProduct || {};
-    var lowMap = {}, outMap = {};
-    (inv.lowStock || []).forEach(function (l) { lowMap[l.product + '|' + l.size] = true; });
-    (inv.outOfStock || []).forEach(function (o) { outMap[o.product + '|' + o.size] = true; });
-
-    var badgeRow = document.getElementById('stockBadgeRow');
-    badgeRow.innerHTML = '';
-    var lowCount = (inv.lowStock || []).length;
-    var outCount = (inv.outOfStock || []).length;
-    if (lowCount) {
-      var b1 = document.createElement('span');
-      b1.className = 'stock-badge low';
-      b1.textContent = lowCount + ' مقاس منخفض المخزون';
-      badgeRow.appendChild(b1);
-    }
-    if (outCount) {
-      var b2 = document.createElement('span');
-      b2.className = 'stock-badge out';
-      b2.textContent = outCount + ' مقاس نفدت كميته';
-      badgeRow.appendChild(b2);
-    }
-    if (!lowCount && !outCount) {
-      var b3 = document.createElement('span');
-      b3.className = 'stock-badge';
-      b3.textContent = 'المخزون بحالة جيدة';
-      badgeRow.appendChild(b3);
-    }
-
-    var grid = document.getElementById('invGrid');
-    grid.innerHTML = '';
-    var products = Object.keys(byProduct);
-    if (!products.length) {
-      grid.innerHTML = '<p class="empty-note">شيت Pieces مش موجود أو فاضي.</p>';
-      return;
-    }
-    products.forEach(function (prod) {
-      var p = byProduct[prod];
-      var card = document.createElement('div');
-      card.className = 'inv-card';
-      var chips = Object.keys(p.sizes).sort().map(function (sz) {
-        var avail = p.sizes[sz].available;
-        var cls = outMap[prod + '|' + sz] ? 'out' : (lowMap[prod + '|' + sz] ? 'low' : '');
-        return '<span class="inv-size-chip ' + cls + '">' + sz + ' · ' + avail + '</span>';
-      }).join('');
-      card.innerHTML =
-        '<p class="inv-name">' + (PRODUCT_NAMES[prod] || prod) + '</p>' +
-        '<div class="inv-sizes">' + chips + '</div>';
-      grid.appendChild(card);
-    });
-  }
-
-  function renderBestSellers(list) {
-    var wrap = document.getElementById('bestSellersList');
-    wrap.innerHTML = '';
-    if (!list || !list.length || list.every(function (b) { return b.sold === 0; })) {
-      wrap.innerHTML = '<p class="empty-note">ولا قطعة انباعت لسا.</p>';
-      return;
-    }
-    list.forEach(function (b) {
-      if (!b.sold) return;
-      var row = document.createElement('div');
-      row.className = 'bestseller-row';
-      row.innerHTML = '<span>' + (PRODUCT_NAMES[b.product] || b.product) + '</span><span>' + b.sold + ' مباعة</span>';
-      wrap.appendChild(row);
-    });
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function renderOrders(orders) {
@@ -493,16 +364,20 @@
     }
     orders.forEach((o) => {
       const tr = document.createElement('tr');
+      var safeLocationLink = '';
+      if (o.locationLink && /^https?:\/\//i.test(o.locationLink)) {
+        safeLocationLink = ' <a href="' + escapeHtml(o.locationLink) + '" target="_blank" style="color:#C9A84C;">(خريطة)</a>';
+      }
       tr.innerHTML =
-        '<td>' + o.orderId + '</td>' +
-        '<td>' + o.name + '</td>' +
-        '<td>' + o.email + '</td>' +
-        '<td>' + o.phone + '</td>' +
-        '<td>' + o.city + '</td>' +
-        '<td class="wrap">' + o.address + (o.locationLink ? ' <a href="' + o.locationLink + '" target="_blank" style="color:#C9A84C;">(خريطة)</a>' : '') + '</td>' +
-        '<td class="wrap">' + o.items + '</td>' +
-        '<td>' + o.total + ' JD</td>' +
-        '<td>' + o.status + '</td>';
+        '<td>' + escapeHtml(o.orderId) + '</td>' +
+        '<td>' + escapeHtml(o.name) + '</td>' +
+        '<td>' + escapeHtml(o.email) + '</td>' +
+        '<td>' + escapeHtml(o.phone) + '</td>' +
+        '<td>' + escapeHtml(o.city) + '</td>' +
+        '<td class="wrap">' + escapeHtml(o.address) + safeLocationLink + '</td>' +
+        '<td class="wrap">' + escapeHtml(o.items) + '</td>' +
+        '<td>' + escapeHtml(o.total) + ' JD</td>' +
+        '<td>' + escapeHtml(o.status) + '</td>';
       body.appendChild(tr);
     });
   }
@@ -591,24 +466,6 @@
     });
     table.style.display = 'table';
   }
-
-
-  document.getElementById('ordersSearch').addEventListener('input', function () {
-    var q = this.value.trim().toLowerCase();
-    if (!q) { renderOrders(allOrders); return; }
-    var filtered = allOrders.filter(function (o) {
-      return (o.orderId || '').toLowerCase().includes(q) ||
-             (o.name || '').toLowerCase().includes(q) ||
-             (o.email || '').toLowerCase().includes(q);
-    });
-    renderOrders(filtered);
-  });
-
-  document.getElementById('refreshDataBtn').addEventListener('click', function () {
-    var key = '';
-    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
-    if (key) { document.getElementById('loadingNote').style.display = ''; document.getElementById('dashContent').style.display = 'none'; loadDashboard(key); }
-  });
 
   document.getElementById('gateBtn').addEventListener('click', () => {
     const key = document.getElementById('adminKey').value.trim();
