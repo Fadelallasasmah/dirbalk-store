@@ -614,6 +614,16 @@
 
   const revealNamesMap = { 'DB-TEE-01': 'تيشيرت أوفرسايز', 'DB-DEN-01': 'بنطلون دنيم واسع', 'DB-JAC-01': 'جاكيت دنيم أوفرسايز' };
 
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function renderReview() {
     const itemsWrap = document.getElementById('reviewItems');
     itemsWrap.innerHTML = '';
@@ -641,11 +651,14 @@
     });
 
     if (shippingData) {
+      var safeLocLink = (shippingData.locationLink && /^https?:\/\//i.test(shippingData.locationLink))
+        ? '<p><a href="' + escapeHtml(shippingData.locationLink) + '" target="_blank" rel="noreferrer">رابط الموقع ↗</a></p>'
+        : '';
       document.getElementById('reviewShipping').innerHTML =
-        '<p><strong>' + shippingData.fullName + '</strong></p>' +
-        '<p>' + shippingData.phone + ' · ' + shippingData.email + '</p>' +
-        '<p>' + shippingData.city + ' — ' + shippingData.address + '</p>' +
-        (shippingData.locationLink ? '<p><a href="' + shippingData.locationLink + '" target="_blank" rel="noreferrer">رابط الموقع ↗</a></p>' : '');
+        '<p><strong>' + escapeHtml(shippingData.fullName) + '</strong></p>' +
+        '<p>' + escapeHtml(shippingData.phone) + ' · ' + escapeHtml(shippingData.email) + '</p>' +
+        '<p>' + escapeHtml(shippingData.city) + ' — ' + escapeHtml(shippingData.address) + '</p>' +
+        safeLocLink;
     }
 
     document.getElementById('reviewTotals').innerHTML =
