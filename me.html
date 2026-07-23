@@ -93,6 +93,37 @@
   }
   section { margin-bottom: 46px; }
 
+
+  /* ---------- skeleton loading (real network wait: /api/me) ---------- */
+  .sk-piece, .sk-order {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+  }
+  .sk-piece {
+    height: 76px;
+    margin-bottom: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08);
+  }
+  .sk-order {
+    height: 64px;
+    margin-bottom: 2px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .sk-piece::after, .sk-order::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: skShimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes skShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk-piece::after, .sk-order::after { animation: none; opacity: 0.5; }
+  }
+
   .loading, .empty {
     color: rgba(255,255,255,0.4);
     font-size: 12.5px;
@@ -187,12 +218,12 @@
 
   <section class="reveal" style="transition-delay:0.1s;">
     <h2 class="sec-title">قطعي</h2>
-    <div id="piecesArea"><p class="loading">عم نجمّع قطعك...</p></div>
+    <div id="piecesArea"><div class="sk-piece"></div><div class="sk-piece"></div></div>
   </section>
 
   <section class="reveal" style="transition-delay:0.2s;">
     <h2 class="sec-title">طلباتي</h2>
-    <div id="ordersArea"><p class="loading">عم نرجع بالسجل...</p></div>
+    <div id="ordersArea"><div class="sk-order"></div><div class="sk-order"></div><div class="sk-order"></div></div>
   </section>
 
   <div class="closing">
