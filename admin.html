@@ -124,6 +124,35 @@
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
   .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
+  /* ---------- skeleton loading (real network wait: /api/admin-data) ---------- */
+  .sk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .sk-card, .sk-row {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .sk-card { height: 64px; }
+  .sk-row { height: 38px; margin-bottom: 6px; border-radius: 0; }
+  .sk-card::after, .sk-row::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    animation: skShimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes skShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk-card::after, .sk-row::after { animation: none; opacity: 0.5; }
+  }
+
 
   /* ---------- drop invites ---------- */
   .invite-section { margin-top: 50px; padding-top: 30px; border-top: 0.5px solid rgba(255,255,255,0.1); }
@@ -189,7 +218,7 @@
     <a href="/" class="home-link">← الرئيسية</a>
   </div>
 
-  <div id="loadingNote" class="loading">جاري التحميل...</div>
+  <div id="loadingNote"><div class="sk-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div></div>
 
   <div id="dashContent" style="display:none;">
     <div class="stat-grid" id="statGrid"></div>
