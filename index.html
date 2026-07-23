@@ -741,9 +741,26 @@
     }
   } catch (e) { /* localStorage unavailable, ignore */ }
 
+  const FAKE_NAMES = ['test', 'testtest', 'admin', 'asdf', 'asdfasdf', 'qwerty', 'name', 'user', 'xxxx', 'aaaa', 'none', 'null', 'na'];
+
+  function isFakeName(name) {
+    var n = name.toLowerCase().replace(/\s+/g, '');
+    if (n.length < 2) return true;
+    if (/^\d+$/.test(n)) return true;                 // digits only, e.g. "12345"
+    if (/^(.)\1+$/.test(n)) return true;               // same character repeated, e.g. "aaaaa"
+    if (FAKE_NAMES.indexOf(n) !== -1) return true;      // known placeholder words
+    return false;
+  }
+
   function validate(data) {
     let valid = true;
-    if (!data.name) { showFieldError('name', 'الرجاء إدخال الاسم الكامل.'); valid = false; }
+    if (!data.name) {
+      showFieldError('name', 'الرجاء إدخال الاسم الكامل.');
+      valid = false;
+    } else if (isFakeName(data.name)) {
+      showFieldError('name', 'الرجاء إدخال اسمك الحقيقي.');
+      valid = false;
+    }
     if (!data.gender) {
       document.getElementById('genderRow').classList.add('field-error');
       const gm = document.getElementById('gender-msg');
@@ -755,8 +772,10 @@
     return valid;
   }
 
+  let isSubmitting = false;
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    if (isSubmitting) return;
     clearAllErrors();
 
     const data = {
@@ -770,6 +789,7 @@
       return;
     }
 
+    isSubmitting = true;
     btn.disabled = true;
     btn.textContent = 'جاري التسجيل...';
     if (window.gtag) gtag('event', 'form_submit_attempt', { form_name: 'dirbalk_waitlist' });
@@ -796,6 +816,7 @@
         formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         formError.style.display = 'block';
         if (window.DirbalkToast) DirbalkToast.error(result.message || 'التسجيل ما نجح.');
+        isSubmitting = false;
         btn.disabled = false;
         btn.textContent = 'تسجيل';
       }
@@ -804,6 +825,7 @@
       formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       formError.style.display = 'block';
       if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      isSubmitting = false;
       btn.disabled = false;
       btn.textContent = 'تسجيل';
     }
