@@ -599,7 +599,7 @@
       const row = document.createElement('div');
       row.className = 'summary-item';
       row.innerHTML =
-        '<div class="summary-media">' + (p.img ? '<img src="' + p.img + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+        '<div class="summary-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
         '<div class="summary-info">' +
         '<p class="summary-name">' + p.name + '</p>' +
         '<p class="summary-meta">مقاس ' + line.size + ' × ' + line.qty + '</p>' +
@@ -624,7 +624,7 @@
       const row = document.createElement('div');
       row.className = 'review-item';
       row.innerHTML =
-        '<div class="review-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+        '<div class="review-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
         '<div class="review-item-info">' +
         '<p class="review-item-name">' + p.name + '</p>' +
         '<p class="review-item-meta">مقاس ' + line.size + ' · الكمية ' + line.qty + '</p>' +
