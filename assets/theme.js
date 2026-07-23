@@ -76,7 +76,7 @@
     console.log('%cدورت هون كمان؟ خير.', 'color:rgba(255,255,255,0.4);font-size:11px;');
   } catch (e) { /* ignore */ }
 
-  /* ---------- favicon: clean branded monogram (solid bg, always legible) ---------- */
+  /* ---------- favicon: real DIRBALK wordmark, sized for browser tabs ---------- */
   function syncFavicon() {
     var link = document.querySelector('link[rel="icon"]');
     if (!link) {
@@ -84,12 +84,16 @@
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-      '<rect width="32" height="32" fill="#0a0a0a"/>' +
-      '<text x="16" y="22" font-family="Arial, sans-serif" font-weight="bold" font-size="18" ' +
-      'fill="#C9A84C" text-anchor="middle">D</text></svg>';
-    link.type = 'image/svg+xml';
-    link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+    link.type = 'image/png';
+    link.href = '/favicon-32.png';
+
+    var apple = document.querySelector('link[rel="apple-touch-icon"]');
+    if (!apple) {
+      apple = document.createElement('link');
+      apple.rel = 'apple-touch-icon';
+      document.head.appendChild(apple);
+    }
+    apple.href = '/favicon-180.png';
   }
 
   /* ---------- icon + behavior ---------- */
