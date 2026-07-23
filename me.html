@@ -445,10 +445,10 @@
     pwBtn.disabled = true;
     pwBtn.textContent = 'جاري الحفظ...';
 
-    fetch('/api/change-password', {
+    fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, currentPassword: currentPassword, newPassword: newPw })
+      body: JSON.stringify({ kind: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
@@ -501,10 +501,10 @@
     delBtn.disabled = true;
     delBtn.textContent = 'جاري الحذف...';
 
-    fetch('/api/delete-account', {
+    fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: pw })
+      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
