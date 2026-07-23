@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إتمام الشراء — DIRBALَK</title>
@@ -806,12 +807,14 @@
       } else {
         document.getElementById('paymentError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         document.getElementById('paymentError').style.display = 'block';
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'الطلب ما نجح، جرب كمان مرة.');
         payBtn.disabled = false;
         payBtn.textContent = 'إتمام الدفع';
       }
     } catch (err) {
       document.getElementById('paymentError').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       document.getElementById('paymentError').style.display = 'block';
+      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       payBtn.disabled = false;
       payBtn.textContent = 'إتمام الدفع';
     }
