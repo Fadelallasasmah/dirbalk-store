@@ -67,6 +67,18 @@
     gap: 8px;
     font-size: 11px;
     color: rgba(255,255,255,0.75);
+    min-width: 0;
+  }
+  #userChipName {
+    max-width: 76px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  @media (max-width: 380px) {
+    #userChipName { max-width: 48px; }
+    .header-actions { gap: 10px; }
   }
 
   .user-chip-avatar {
@@ -533,7 +545,7 @@
   .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
   .cart-item-media { width: 60px; height: 70px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .cart-item-media svg { width: 70%; height: 80%; }
-  .cart-item-info { flex: 1; }
+  .cart-item-info { flex: 1; min-width: 0; }
   .cart-item-name { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; }
   .cart-item-size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
   .cart-item-row { display: flex; align-items: center; justify-content: space-between; }
