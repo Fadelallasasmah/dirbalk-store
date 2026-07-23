@@ -75,7 +75,7 @@
     font-size: 10px; font-weight: bold;
     display: flex; align-items: center; justify-content: center;
   }
-  .user-chip-logout { background: transparent; border: none; color: rgba(255,255,255,0.3); font-size: 10px; text-decoration: underline; cursor: pointer; font-family: Arial, sans-serif; }
+  .user-chip-logout { background: transparent; border: none; color: rgba(255,255,255,0.5); font-size: 10px; text-decoration: underline; cursor: pointer; font-family: Arial, sans-serif; }
   .user-chip-logout:hover { color: rgba(255,120,120,0.85); }
 
   .icon-btn { background: transparent; border: none; color: rgba(255,255,255,0.7); cursor: pointer; position: relative; display: flex; align-items: center; padding: 4px; }
@@ -379,7 +379,7 @@
 
   .pdp-meta {
     font-size: 10.5px;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.5);
     margin-top: 30px;
     padding-top: 16px;
     border-top: 0.5px solid rgba(255,255,255,0.08);
@@ -399,7 +399,7 @@
     transition: border-color 0.2s;
   }
   .other-link:hover { border-color: rgba(201,168,76,0.4); }
-  .other-link .oc { display: block; font-size: 9px; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
+  .other-link .oc { display: block; font-size: 9px; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
   .other-link .on { display: block; font-size: 11px; color: rgba(255,255,255,0.65); }
 
   /* mobile sticky add bar */
@@ -452,7 +452,7 @@
   .qty-controls { display: flex; align-items: center; gap: 8px; }
   .qty-btn { width: 20px; height: 20px; border: 0.5px solid rgba(255,255,255,0.25); background: transparent; color: #fff; cursor: pointer; font-size: 12px; line-height: 1; }
   .cart-item-price { font-size: 12px; color: #C9A84C; }
-  .remove-btn { background: transparent; border: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 11px; text-decoration: underline; }
+  .remove-btn { background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 11px; text-decoration: underline; }
   .remove-btn:hover { color: rgba(255,120,120,0.85); }
 
   .cart-footer { padding: 18px 20px 22px; border-top: 0.5px solid rgba(255,255,255,0.12); }
@@ -651,7 +651,7 @@
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
     <h2>السلة</h2>
-    <button type="button" class="icon-btn" id="cartClose">✕</button>
+    <button type="button" class="icon-btn" id="cartClose" aria-label="إغلاق السلة">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
@@ -666,7 +666,7 @@
 <div class="toast" id="toast"></div>
 
 <div class="lightbox" id="lightbox">
-  <button type="button" class="lightbox-close" id="lightboxClose">✕</button>
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="إغلاق">✕</button>
   <img id="lightboxImg" src="" alt="" />
   <p class="lightbox-hint">كبّر بأصابعك · دبل-كبسة للتكبير السريع</p>
 </div>
@@ -1182,9 +1182,9 @@
           '<p class="cart-item-size">مقاس ' + line.size + '</p>' +
           '<div class="cart-item-row">' +
           '<div class="qty-controls">' +
-          '<button type="button" class="qty-btn" data-action="dec">−</button>' +
+          '<button type="button" class="qty-btn" data-action="dec" aria-label="إنقاص الكمية">−</button>' +
           '<span>' + line.qty + '</span>' +
-          '<button type="button" class="qty-btn" data-action="inc">+</button>' +
+          '<button type="button" class="qty-btn" data-action="inc" aria-label="زيادة الكمية">+</button>' +
           '</div>' +
           '<span class="cart-item-price">' + (p.price * line.qty) + ' JD</span>' +
           '</div>' +
