@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم — DIRBALَK</title>
@@ -371,9 +373,11 @@
         if (result.status !== 'success') {
           status.classList.add('err');
           status.textContent = result.message || 'حدث خطأ مؤقت.';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'حدث خطأ مؤقت.');
           return;
         }
         status.textContent = 'انولّدت ' + result.count + ' دعوة' + (sendEmails ? ' وانبعتت الإيميلات.' : '.') + ' الروابط صالحة 24 ساعة.';
+        if (window.DirbalkToast) DirbalkToast.success('انولّدت ' + result.count + ' دعوة.');
         renderInvites(result.invites || []);
       })
       .catch(() => {
@@ -382,6 +386,7 @@
         status.style.display = 'block';
         status.classList.add('err');
         status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       });
   });
 
