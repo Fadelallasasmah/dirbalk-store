@@ -71,10 +71,74 @@
     + '.theme-reset.show{opacity:1;pointer-events:auto;}'
     + '.theme-reset:hover{color:#C9A84C;}'
     + '@media (max-width:860px){.theme-toggle{top:64px;left:12px;}}';
+    /* ---------- back to top (global, premium UX) ---------- */
+    + '.db-top-btn{position:fixed;bottom:24px;right:18px;width:38px;height:38px;'
+    + 'background:rgba(20,20,20,0.85);backdrop-filter:blur(4px);'
+    + 'border:0.5px solid rgba(255,255,255,0.15);color:#C9A84C;'
+    + 'cursor:pointer;z-index:70;opacity:0;pointer-events:none;'
+    + 'transform:translateY(8px);transition:opacity 0.3s ease,transform 0.3s ease,border-color 0.2s;'
+    + 'display:flex;align-items:center;justify-content:center;}'
+    + '.db-top-btn.show{opacity:1;pointer-events:auto;transform:translateY(0);}'
+    + '.db-top-btn:hover{border-color:rgba(201,168,76,0.5);}'
+    + '.db-top-btn svg{width:16px;height:16px;}'
+    + '@media (max-width:520px){.db-top-btn{bottom:84px;right:14px;}}'
+
+    /* ---------- subtle page-fade on internal navigation ---------- */
+    + '.db-page-fade{position:fixed;inset:0;background:#0a0a0a;z-index:150;'
+    + 'opacity:0;pointer-events:none;transition:opacity 0.22s ease;}'
+    + '.db-page-fade.show{opacity:1;pointer-events:auto;}'
+    + '@media (prefers-reduced-motion: reduce){.db-page-fade{display:none;}}'
+
 
   var style = document.createElement('style');
   style.textContent = css;
   document.head.appendChild(style);
+
+
+  /* ---------- back to top ---------- */
+  ready(function () {
+    var topBtn = document.createElement('button');
+    topBtn.type = 'button';
+    topBtn.className = 'db-top-btn';
+    topBtn.setAttribute('aria-label', 'الرجوع لأعلى الصفحة');
+    topBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>';
+    document.body.appendChild(topBtn);
+
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.addEventListener('scroll', function () {
+      topBtn.classList.toggle('show', window.scrollY > 500);
+    }, { passive: true });
+
+    topBtn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* ---------- subtle fade on internal same-page navigation ---------- */
+  ready(function () {
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
+
+    var fadeEl = document.createElement('div');
+    fadeEl.className = 'db-page-fade';
+    document.body.appendChild(fadeEl);
+
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      // only intercept plain internal navigations — skip external links, new-tab links,
+      // hashes, mailto/tel, and anything with a modifier key or a non-default click
+      if (a.target === '_blank' || href.indexOf('#') === 0 || href.indexOf('mailto:') === 0 ||
+          href.indexOf('tel:') === 0 || href.indexOf('http') === 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) {
+        return;
+      }
+      e.preventDefault();
+      fadeEl.classList.add('show');
+      setTimeout(function () { window.location.href = href; }, 180);
+    });
+  });
 
   /* ---------- console easter egg ---------- */
   try {
