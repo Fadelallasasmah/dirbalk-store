@@ -56,8 +56,14 @@
     margin: 0 auto;
     padding: 30px 20px 10px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px 10px;
+  }
+  @media (max-width: 420px) {
+    .steps { gap: 6px 8px; padding: 22px 12px 8px; }
+    .step-dot { font-size: 9px; letter-spacing: 0.5px; }
+    .step-sep { font-size: 9px; }
   }
 
   .step-dot {
@@ -79,7 +85,7 @@
   .summary-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
   .summary-media { width: 64px; height: 76px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .summary-media svg { width: 70%; height: 80%; }
-  .summary-info { flex: 1; }
+  .summary-info { flex: 1; min-width: 0; }
   .summary-name { font-size: 13px; font-weight: bold; margin-bottom: 2px; }
   .summary-meta { font-size: 11px; color: rgba(255,255,255,0.4); }
   .summary-price { font-size: 12.5px; color: #C9A84C; }
@@ -283,7 +289,7 @@
   }
   .review-item-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .review-item-media svg { width: 70%; height: 80%; }
-  .review-item-info { flex: 1; }
+  .review-item-info { flex: 1; min-width: 0; }
   .review-item-name { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; }
   .review-item-meta { font-size: 11px; color: rgba(255,255,255,0.45); }
   .review-item-price { font-size: 12.5px; color: #C9A84C; white-space: nowrap; }
