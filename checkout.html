@@ -513,6 +513,25 @@
     </div>
   </div>
 
+  <div class="step-section" id="step6">
+    <div class="confirm-box">
+      <div class="confirm-icon" style="border-color:rgba(255,138,138,0.4);color:#ff8a8a;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7l10 10M17 7L7 17"/></svg>
+      </div>
+      <h2>ما قدرنا نكمّل الطلب</h2>
+      <p style="color:rgba(255,255,255,0.65);font-size:13px;line-height:1.9;max-width:320px;margin:0 auto 26px;">
+        صار خطأ مؤقت وإحنا عم نعالج طلبك. القطع لسا بسلتك — جرب كمان مرة، وإذا تكررت المشكلة تواصل معنا مباشرة.
+      </p>
+      <div class="confirm-actions">
+        <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="confirm-wa">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+          واتساب
+        </a>
+        <button type="button" class="primary-btn" id="retryPaymentBtn">حاول كمان مرة</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="mini-lb" id="miniLb"><img id="miniLbImg" src="" alt="" /></div>
@@ -717,6 +736,10 @@
     if (!/^0?7[0-9]{8}$/.test(data.phone.replace(/\s/g, ''))) { showFieldError('ckPhone', 'رقم الهاتف غير صحيح.'); valid = false; }
     if (!data.city) { showFieldError('city', 'الرجاء إدخال المدينة.'); valid = false; }
     if (!data.address) { showFieldError('address', 'الرجاء إدخال العنوان.'); valid = false; }
+    if (data.locationLink && !/^https?:\/\/.+/i.test(data.locationLink)) {
+      showFieldError('locationLink', 'الرابط لازم يبدأ بـ http:// أو https://');
+      valid = false;
+    }
     if (!valid) return;
 
     shippingData = data;
@@ -734,6 +757,7 @@
 
   const paymentForm = document.getElementById('paymentForm');
   const payBtn = document.getElementById('payBtn');
+  let isSubmittingPayment = false;
 
   paymentForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -743,16 +767,31 @@
     const cardExpiry = document.getElementById('cardExpiry').value.trim();
     const cardCvc = document.getElementById('cardCvc').value.trim();
 
+    if (isSubmittingPayment) return;
+
     let valid = true;
     ['cardNumber', 'cardExpiry', 'cardCvc'].forEach((id) => {
       document.getElementById(id).classList.remove('field-error');
       document.getElementById(id + '-msg').style.display = 'none';
     });
     if (cardNumber.length < 12) { showFieldError('cardNumber', 'رقم بطاقة غير صحيح.'); valid = false; }
-    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) { showFieldError('cardExpiry', 'صيغة غير صحيحة (MM/YY).'); valid = false; }
+    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+      showFieldError('cardExpiry', 'صيغة غير صحيحة (MM/YY).');
+      valid = false;
+    } else {
+      var expParts = cardExpiry.split('/');
+      var expMonth = parseInt(expParts[0], 10);
+      var expYear = 2000 + parseInt(expParts[1], 10);
+      var expDate = new Date(expYear, expMonth, 0, 23, 59, 59);
+      if (expMonth < 1 || expMonth > 12 || expDate < new Date()) {
+        showFieldError('cardExpiry', 'البطاقة منتهية الصلاحية.');
+        valid = false;
+      }
+    }
     if (cardCvc.length < 3) { showFieldError('cardCvc', 'CVC غير صحيح.'); valid = false; }
     if (!valid) return;
 
+    isSubmittingPayment = true;
     payBtn.disabled = true;
     payBtn.textContent = 'جاري المعالجة...';
 
@@ -805,20 +844,25 @@
         saveCart(cart);
         goToStep(5);
       } else {
+        // business-logic decline (e.g. size just sold out) — fixable inline, stays on the payment form
         document.getElementById('paymentError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         document.getElementById('paymentError').style.display = 'block';
         if (window.DirbalkToast) DirbalkToast.error(result.message || 'الطلب ما نجح، جرب كمان مرة.');
+        isSubmittingPayment = false;
         payBtn.disabled = false;
         payBtn.textContent = 'إتمام الدفع';
       }
     } catch (err) {
-      document.getElementById('paymentError').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
-      document.getElementById('paymentError').style.display = 'block';
-      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      // genuine network/unexpected failure — dedicated failure step instead of an easy-to-miss inline message
+      isSubmittingPayment = false;
       payBtn.disabled = false;
       payBtn.textContent = 'إتمام الدفع';
+      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      goToStep(6);
     }
   });
+
+  document.getElementById('retryPaymentBtn').addEventListener('click', function () { goToStep(4); });
 
   if (cart.length === 0) goToStep(1);
 })();
