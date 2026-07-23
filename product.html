@@ -255,6 +255,21 @@
   .pdp-title { font-size: 24px; font-weight: bold; margin-bottom: 5px; letter-spacing: 0.3px; }
   .pdp-colorway { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
   .pdp-price { font-size: 17px; color: #C9A84C; font-weight: bold; margin-bottom: 26px; }
+  .pdp-delivery {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11.5px; color: rgba(255,255,255,0.5);
+    margin: -14px 0 26px;
+  }
+  .pdp-delivery svg { width: 14px; height: 14px; flex-shrink: 0; opacity: 0.7; }
+
+  .low-stock-note {
+    font-size: 11px;
+    color: #e0b34d;
+    margin: -12px 0 18px;
+    display: none;
+  }
+  .low-stock-note.show { display: block; }
+
 
   .pdp-tag {
     display: inline-block;
@@ -563,12 +578,17 @@
     <h1 class="pdp-title reveal" id="pdpTitle" style="transition-delay:0.12s;"></h1>
     <p class="pdp-colorway" id="pdpColorway"></p>
     <p class="pdp-price" id="pdpPrice"></p>
+    <p class="pdp-delivery">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.6"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+      <span id="pdpDelivery">التوصيل خلال 2–4 أيام عمل داخل الأردن</span>
+    </p>
     <span class="pdp-tag" id="pdpTag"></span>
 
     <p class="pdp-story reveal" id="pdpStory" style="transition-delay:0.2s;"></p>
 
     <p class="size-label">المقاس</p>
     <div class="size-row" id="sizeRow"></div>
+    <p class="low-stock-note" id="lowStockNote">بقي القليل من هالمقاس.</p>
 
     <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
     <p class="pdp-msg" id="pdpMsg"></p>
@@ -910,7 +930,7 @@
     document.getElementById('mbPrice').textContent = p.price + ' دينار';
     document.getElementById('pdpStory').textContent = p.story;
     document.getElementById('detailsText').innerHTML = p.details;
-    document.getElementById('pdpMeta').innerHTML = 'كود: ' + p.id + '<br>اللون: ' + p.colorway + '<br>Collection 01 · Winter 2026';
+    document.getElementById('pdpMeta').innerHTML = 'كود: ' + p.id + '<br>اللون: ' + p.colorway + '<br>صُنع في مصر<br>Collection 01 · Winter 2026';
 
     var soldOut = totalStock(p) === 0;
     var tag = document.getElementById('pdpTag');
@@ -949,9 +969,12 @@
       document.getElementById('accSize').style.display = 'none';
     }
 
-    /* sizes */
+    /* sizes — low-stock note shown WITHOUT ever printing the exact count (brand policy) */
+    var LOW_STOCK_THRESHOLD = 5;
     var sizeRow = document.getElementById('sizeRow');
+    var lowStockNote = document.getElementById('lowStockNote');
     sizeRow.innerHTML = '';
+    lowStockNote.classList.remove('show');
     Object.keys(p.sizes).forEach(function (sz) {
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -963,6 +986,8 @@
         Array.prototype.forEach.call(sizeRow.children, function (b) { b.classList.remove('selected'); });
         btn.classList.add('selected');
         document.getElementById('pdpMsg').style.display = 'none';
+        var remaining = p.sizes[sz] || 0;
+        lowStockNote.classList.toggle('show', remaining > 0 && remaining <= LOW_STOCK_THRESHOLD);
       });
       sizeRow.appendChild(btn);
     });
