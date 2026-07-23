@@ -893,11 +893,12 @@
     var mediaWrap = document.getElementById('pdpMedia');
     mediaWrap.innerHTML = '';
     var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    p.media.forEach(function (m) {
+    p.media.forEach(function (m, mIdx) {
       var frame = document.createElement('div');
       frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '') + ' reveal';
       if (m.src) {
-        frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="lazy" />' +
+        var loadAttr = mIdx === 0 ? 'eager' : 'lazy'; // first image is above-the-fold — load it immediately
+        frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="' + loadAttr + '" />' +
           '<span class="media-caption">' + m.caption + '</span>';
         if (finePointer) {
           /* لابتوب: عدسة مكبّرة عائمة بجانب الصورة، بتتبع الماوس (نمط Amazon) */
@@ -1175,7 +1176,7 @@
         var row = document.createElement('div');
         row.className = 'cart-item';
         row.innerHTML =
-          '<div class="cart-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+          '<div class="cart-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
           '<div class="cart-item-info">' +
           '<p class="cart-item-name">' + p.name + '</p>' +
           '<p class="cart-item-size">مقاس ' + line.size + '</p>' +
