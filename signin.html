@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تسجيل الدخول — DIRBALَK</title>
@@ -307,17 +308,20 @@
           localStorage.setItem('dirbalk_phone', result.phone || '');
           localStorage.removeItem('dirbalk_pending_verification');
         } catch (err) { /* ignore */ }
+        if (window.DirbalkToast) DirbalkToast.success('أهلاً فيك من جديد.');
         window.location.href = '/';
       } else {
         if (window.gtag) gtag('event', 'login_error', { reason: result.message || 'unknown' });
         formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         formError.style.display = 'block';
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'تسجيل الدخول ما نجح.');
         btn.disabled = false;
         btn.textContent = 'تسجيل الدخول';
       }
     } catch (err) {
       formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       formError.style.display = 'block';
+      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       btn.disabled = false;
       btn.textContent = 'تسجيل الدخول';
     }
