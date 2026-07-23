@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIRBALَK</title>
@@ -794,6 +795,7 @@
         if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: result.message || 'unknown' });
         formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         formError.style.display = 'block';
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'التسجيل ما نجح.');
         btn.disabled = false;
         btn.textContent = 'تسجيل';
       }
@@ -801,6 +803,7 @@
       if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: 'network' });
       formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       formError.style.display = 'block';
+      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       btn.disabled = false;
       btn.textContent = 'تسجيل';
     }
