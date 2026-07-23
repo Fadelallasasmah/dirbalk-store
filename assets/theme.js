@@ -76,33 +76,16 @@
     console.log('%cدورت هون كمان؟ خير.', 'color:rgba(255,255,255,0.4);font-size:11px;');
   } catch (e) { /* ignore */ }
 
-  /* ---------- theme-aware favicon (sun / moon) ---------- */
-  function faviconSVG(theme) {
-    if (theme === 'day') {
-      return 'data:image/svg+xml,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="#171310"/>' +
-        '<circle cx="12" cy="12" r="5.2" fill="#C9A84C"/>' +
-        '<g stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">' +
-        '<path d="M12 2.5v2.6"/><path d="M12 18.9v2.6"/><path d="M21.5 12h-2.6"/><path d="M5.1 12H2.5"/>' +
-        '<path d="M18.6 5.4l-1.85 1.85"/><path d="M7.25 16.75l-1.85 1.85"/>' +
-        '<path d="M18.6 18.6l-1.85-1.85"/><path d="M7.25 7.25l-1.85-1.85"/></g></svg>'
-      );
-    }
-    return 'data:image/svg+xml,' + encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="#050505"/>' +
-      '<circle cx="12" cy="12" r="8.5" fill="#C9A84C"/>' +
-      '<path d="M16.3 4.9a8.5 8.5 0 0 1 0 14.2 6.3 6.3 0 0 0 0-14.2z" fill="#050505" opacity="0.32"/></svg>'
-    );
-  }
-  function syncFavicon(theme) {
+  /* ---------- favicon: static DIRBALK logo ---------- */
+  function syncFavicon() {
     var link = document.querySelector('link[rel="icon"]');
     if (!link) {
       link = document.createElement('link');
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    link.type = 'image/svg+xml';
-    link.href = faviconSVG(theme);
+    link.type = 'image/png';
+    link.href = '/logo.png';
   }
 
   /* ---------- icon + behavior ---------- */
@@ -141,7 +124,7 @@
       var prev = DOC.getAttribute('data-theme');
       DOC.setAttribute('data-theme', t);
       resetBtn.classList.toggle('show', isManual());
-      syncFavicon(t);
+      syncFavicon();
       if (t !== prev) {
         try {
           document.dispatchEvent(new CustomEvent('dirbalk:theme', { detail: { theme: t } }));
