@@ -268,8 +268,10 @@
     formError.style.display = 'none';
   }
 
+  let isSubmitting = false;
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    if (isSubmitting) return;
     clearAllErrors();
 
     const email = document.getElementById('email').value.trim().toLowerCase();
@@ -286,6 +288,7 @@
     }
     if (!valid) return;
 
+    isSubmitting = true;
     btn.disabled = true;
     btn.textContent = 'جاري الدخول...';
     if (window.gtag) gtag('event', 'login_attempt');
@@ -315,6 +318,7 @@
         formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         formError.style.display = 'block';
         if (window.DirbalkToast) DirbalkToast.error(result.message || 'تسجيل الدخول ما نجح.');
+        isSubmitting = false;
         btn.disabled = false;
         btn.textContent = 'تسجيل الدخول';
       }
@@ -322,6 +326,7 @@
       formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       formError.style.display = 'block';
       if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      isSubmitting = false;
       btn.disabled = false;
       btn.textContent = 'تسجيل الدخول';
     }
