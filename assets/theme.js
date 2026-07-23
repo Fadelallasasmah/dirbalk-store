@@ -26,6 +26,12 @@
 
   /* ---------- atmospheres ---------- */
   var css = ''
+    /* ---------- global keyboard focus visibility (site-wide, a11y) ---------- */
+    + 'a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, '
+    + '[tabindex]:focus-visible, .card:focus-visible, .size-btn:focus-visible {'
+    + 'outline: 2px solid #C9A84C; outline-offset: 2px; border-radius: 0;'
+    + '}'
+    + 'a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }'
     + ':root{--t:0.6s}'
     + '@media (prefers-reduced-motion: reduce){:root{--t:0s}}'
     + 'body,header,.cart-drawer{transition:background-color var(--t) ease, background var(--t) ease;}'
