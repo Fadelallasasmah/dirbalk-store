@@ -54,7 +54,8 @@
 
   .header-logo { height: 22px; width: auto; display: block; }
 
-  .header-actions { display: flex; align-items: center; gap: 16px; }
+  .header-actions { display: flex; align-items: center; gap: 16px; order: 2; }
+  #cartBtn { order: 3; }
 
   /* ---------- mobile hamburger + side menu (≤720px) ---------- */
   .hamburger-btn {
@@ -666,6 +667,10 @@
     </button>
     <a href="/" class="home-link">← الرئيسية</a>
     <a href="/shop.html"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
+    <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
+      <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+    </button>
     <div class="header-actions">
       <a href="/signin.html" class="account-link" id="accountLink">تسجيل الدخول</a>
       <div class="user-chip" id="userChip" style="display:none;">
@@ -673,10 +678,6 @@
         <a href="/me.html" id="userChipName" style="text-decoration:none;color:inherit;"></a>
         <button type="button" class="user-chip-logout" id="userChipLogout">خروج</button>
       </div>
-      <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
-        <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-      </button>
     </div>
   </div>
 </header>
