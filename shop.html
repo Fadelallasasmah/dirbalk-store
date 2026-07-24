@@ -55,6 +55,69 @@
 
   .header-actions { display: flex; align-items: center; gap: 16px; }
 
+  /* ---------- mobile hamburger + side menu (≤720px) ---------- */
+  .hamburger-btn {
+    display: none;
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer; padding: 4px;
+    width: 24px; height: 24px;
+    flex-direction: column; justify-content: center; gap: 5px;
+  }
+  .hamburger-btn span { display: block; width: 100%; height: 1.4px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
+  .hamburger-btn.open span:nth-child(1) { transform: translateY(6.4px) rotate(45deg); }
+  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+  .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.4px) rotate(-45deg); }
+
+  .side-menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96; }
+  .side-menu-overlay.open { display: block; }
+
+  .side-menu-links { display: none; }
+  #sideMenuPanel { display: none; }
+
+  @media (max-width: 720px) {
+    .hamburger-btn { display: flex; }
+    .header-inner > .header-actions { display: none; }
+
+    #sideMenuPanel {
+      display: flex;
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh; width: 100%; max-width: 300px;
+      background: #0d0d0d;
+      border-right: 0.5px solid rgba(255,255,255,0.1);
+      z-index: 97;
+      transform: translateX(-100%);
+      transition: transform 0.28s ease;
+      flex-direction: column;
+      padding: 20px 22px;
+      overflow-y: auto;
+    }
+    #sideMenuPanel.open { transform: translateX(0); }
+
+    .side-menu-close {
+      align-self: flex-start;
+      background: none; border: none; color: rgba(255,255,255,0.5);
+      font-size: 18px; cursor: pointer; margin-bottom: 30px; padding: 4px;
+    }
+
+    .side-menu-links { display: flex; flex-direction: column; gap: 4px; margin-bottom: 28px; }
+    .side-menu-links a {
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 14px; padding: 12px 4px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    }
+    .side-menu-links a:hover { color: #C9A84C; }
+
+    #sideMenuPanel .header-actions {
+      display: flex !important;
+      flex-direction: column; align-items: flex-start; gap: 14px;
+      padding-top: 16px; border-top: 0.5px solid rgba(255,255,255,0.1);
+    }
+    #sideMenuPanel .user-chip { flex-direction: row; }
+    #sideMenuPanel #userChipName { max-width: 160px; }
+  }
+
   .account-link {
     font-size: 11px;
     letter-spacing: 0.5px;
@@ -591,24 +654,15 @@
     .fly-cart-clone { display: none; }
   }
 
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ffffff;
-    color: #0a0a0a;
-    padding: 10px 20px;
-    font-size: 12px;
-    z-index: 80;
-    display: none;
-  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <a href="/" class="home-link">← الرئيسية</a>
     <a href="/shop.html"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
     <div class="header-actions">
@@ -625,6 +679,24 @@
     </div>
   </div>
 </header>
+
+<div class="side-menu-overlay" id="sideMenuOverlay"></div>
+<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+  <div class="side-menu-links">
+    <a href="/">الرئيسية</a>
+    <a href="/shop.html">الكوليكشن</a>
+    <a href="/about.html">عن DIRBALK</a>
+  </div>
+  <div class="header-actions">
+    <a href="/signin.html" class="account-link" id="accountLinkM">تسجيل الدخول</a>
+    <div class="user-chip" id="userChipM" style="display:none;">
+      <span class="user-chip-avatar" id="userChipAvatarM">?</span>
+      <a href="/me.html" id="userChipNameM" style="text-decoration:none;color:inherit;"></a>
+      <button type="button" class="user-chip-logout" id="userChipLogoutM">خروج</button>
+    </div>
+  </div>
+</nav>
 
 <section class="hero" id="shopHero">
   <img src="/logo.png" alt="DIRBALK" class="reveal" style="height:20px;width:auto;margin-bottom:1rem;transition-delay:0.05s;" />
@@ -697,7 +769,6 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
 
 <script>
 (function () {
@@ -828,13 +899,6 @@
     const count = cartCount();
     if (count > 0) { badge.style.display = 'flex'; badge.textContent = count; }
     else badge.style.display = 'none';
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 2000);
   }
 
   /* ---------------- login gate ---------------- */
@@ -1097,7 +1161,7 @@
     updateCartBadge();
     flyToCart(document.getElementById('modalMedia'));
     document.getElementById('modalOverlay').classList.remove('open');
-    showToast('انضافت للسلة — ' + modalProduct.name + ' (' + modalSize + ')');
+    if (window.DirbalkToast) DirbalkToast.success('انضافت للسلة — ' + modalProduct.name + ' (' + modalSize + ')');
     playAddSound();
     if (window.gtag) gtag('event', 'add_to_cart', { item_id: modalProduct.id, size: modalSize });
   });
@@ -1137,7 +1201,7 @@
         });
         row.querySelector('[data-action="inc"]').addEventListener('click', () => {
           const stock = p.sizes[line.size] || 0;
-          if (line.qty + 1 > stock) { showToast('ما في كمية كافية.'); return; }
+          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('ما في كمية كافية.'); return; }
           line.qty += 1;
           saveCart(cart); renderCart(); updateCartBadge();
         });
@@ -1177,15 +1241,46 @@
       document.getElementById('userChipAvatar').textContent = first ? first.charAt(0).toUpperCase() : '?';
       document.getElementById('userChipName').textContent = first;
 
-      document.getElementById('userChipLogout').addEventListener('click', () => {
+      document.getElementById('accountLinkM').style.display = 'none';
+      document.getElementById('userChipM').style.display = 'flex';
+      document.getElementById('userChipAvatarM').textContent = first ? first.charAt(0).toUpperCase() : '?';
+      document.getElementById('userChipNameM').textContent = first;
+
+      function doLogout() {
         try {
           ['dirbalk_logged_in', 'dirbalk_gender', 'dirbalk_name', 'dirbalk_pending_verification', 'dirbalk_email', 'dirbalk_phone']
             .forEach((k) => localStorage.removeItem(k));
         } catch (e) { /* ignore */ }
         window.location.href = '/';
-      });
+      }
+      document.getElementById('userChipLogout').addEventListener('click', doLogout);
+      document.getElementById('userChipLogoutM').addEventListener('click', doLogout);
     }
   } catch (e) { /* ignore */ }
+
+  /* ---------------- mobile hamburger + side menu ---------------- */
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const sideMenuPanel = document.getElementById('sideMenuPanel');
+  const sideMenuOverlay = document.getElementById('sideMenuOverlay');
+
+  function openSideMenu() {
+    sideMenuPanel.classList.add('open');
+    sideMenuOverlay.classList.add('open');
+    hamburgerBtn.classList.add('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeSideMenu() {
+    sideMenuPanel.classList.remove('open');
+    sideMenuOverlay.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+  }
+  hamburgerBtn.addEventListener('click', () => {
+    if (sideMenuPanel.classList.contains('open')) closeSideMenu(); else openSideMenu();
+  });
+  document.getElementById('sideMenuClose').addEventListener('click', closeSideMenu);
+  sideMenuOverlay.addEventListener('click', closeSideMenu);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSideMenu(); });
 
   updateCartBadge();
 })();
