@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/password-ux.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>حسابي — DIRBALَK</title>
@@ -363,6 +364,12 @@
 
 <script>
 (function () {
+  if (window.DirbalkPassword) {
+    DirbalkPassword.attachCapsLock('currentPw');
+    DirbalkPassword.attachStrength('newPw');
+    DirbalkPassword.attachCapsLock('newPw');
+    DirbalkPassword.attachCapsLock('deletePw');
+  }
   var PRODUCT_NAMES = {
     'DB-TEE-01': 'تيشيرت أوفرسايز',
     'DB-DEN-01': 'بنطلون دنيم واسع',
