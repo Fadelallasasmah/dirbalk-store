@@ -53,7 +53,8 @@
   }
 
   .header-logo { height: 22px; width: auto; display: block; }
-  .header-actions { display: flex; align-items: center; gap: 16px; }
+  .header-actions { display: flex; align-items: center; gap: 16px; order: 2; }
+  #cartBtn { order: 3; }
 
   /* ---------- mobile hamburger + side menu (≤720px) ---------- */
   .hamburger-btn {
@@ -187,7 +188,29 @@
   }
 
   /* media column */
-  .pdp-media { display: flex; flex-direction: column; }
+  .pdp-media { display: flex; flex-direction: column; position: relative; }
+
+  /* ---------- gallery prev/next arrows — mobile only (visible, tappable) ---------- */
+  /* Desktop relies on normal scroll + real keyboard arrow keys instead, since
+     fixed-position side arrows don't sit well against the 2-column layout. */
+  .gallery-nav { display: none; }
+  @media (max-width: 860px) {
+    .gallery-nav {
+      display: flex;
+      position: absolute;
+      top: 45%; transform: translateY(-50%);
+      width: 34px; height: 34px;
+      background: rgba(10,10,10,0.65);
+      border: 0.5px solid rgba(255,255,255,0.25);
+      color: #fff;
+      align-items: center; justify-content: center;
+      cursor: pointer; z-index: 40;
+      font-size: 16px;
+    }
+    .gallery-nav:active { border-color: rgba(201,168,76,0.6); color: #C9A84C; }
+    .gallery-nav.prev { right: 12px; }
+    .gallery-nav.next { left: 12px; }
+  }
 
   .media-frame {
     position: relative;
@@ -602,6 +625,10 @@
     </button>
     <a href="/shop.html" class="back-link">→ الكوليكشن</a>
     <a href="/shop.html"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
+    <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
+      <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+    </button>
     <div class="header-actions">
       <a href="/signin.html" class="account-link" id="accountLink">تسجيل الدخول</a>
       <div class="user-chip" id="userChip" style="display:none;">
@@ -609,10 +636,6 @@
         <a href="/me.html" id="userChipName" style="text-decoration:none;color:inherit;"></a>
         <button type="button" class="user-chip-logout" id="userChipLogout">خروج</button>
       </div>
-      <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
-        <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-      </button>
     </div>
   </div>
 </header>
@@ -906,6 +929,8 @@
     /* media */
     var mediaWrap = document.getElementById('pdpMedia');
     mediaWrap.innerHTML = '';
+    var frames = [];
+    var currentMediaIdx = 0;
     var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     p.media.forEach(function (m, mIdx) {
       var frame = document.createElement('div');
@@ -927,6 +952,36 @@
           '<span class="media-caption">' + m.caption + '</span>';
       }
       mediaWrap.appendChild(frame);
+      frames.push(frame);
+    });
+
+    /* prev/next navigation — loops at both ends, works via visible mobile arrows and keyboard on any screen */
+    function goToMedia(delta) {
+      if (!frames.length) return;
+      currentMediaIdx = ((currentMediaIdx + delta) % frames.length + frames.length) % frames.length;
+      frames[currentMediaIdx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+    }
+
+    var navPrev = document.createElement('button');
+    navPrev.type = 'button';
+    navPrev.className = 'gallery-nav prev';
+    navPrev.setAttribute('aria-label', 'الصورة السابقة');
+    navPrev.textContent = '›';
+    var navNext = document.createElement('button');
+    navNext.type = 'button';
+    navNext.className = 'gallery-nav next';
+    navNext.setAttribute('aria-label', 'الصورة التالية');
+    navNext.textContent = '‹';
+    navPrev.addEventListener('click', function () { goToMedia(-1); });
+    navNext.addEventListener('click', function () { goToMedia(1); });
+    mediaWrap.appendChild(navPrev);
+    mediaWrap.appendChild(navNext);
+
+    document.addEventListener('keydown', function (e) {
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') goToMedia(-1);
+      else if (e.key === 'ArrowLeft') goToMedia(1);
     });
 
     /* mobile gallery progress */
