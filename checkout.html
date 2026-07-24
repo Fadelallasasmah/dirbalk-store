@@ -557,6 +557,20 @@
 
   function findProduct(id) { return PRODUCTS.find((p) => p.id === id); }
 
+  function cartTotal() {
+    return cart.reduce((s, l) => {
+      const p = findProduct(l.id);
+      return s + (p ? p.price * l.qty : 0);
+    }, 0);
+  }
+
+  function cartToGA4Items() {
+    return cart.map((line) => {
+      const p = findProduct(line.id);
+      return p ? { item_id: p.id, item_name: p.name, price: p.price, item_variant: line.size, quantity: line.qty } : null;
+    }).filter(Boolean);
+  }
+
   function loadCart() {
     try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
     catch (e) { return []; }
@@ -671,7 +685,9 @@
   renderSummary();
 
   document.getElementById('toShippingBtn').addEventListener('click', () => {
-    if (window.gtag) gtag('event', 'begin_checkout');
+    if (window.gtag) {
+      gtag('event', 'begin_checkout', { currency: 'JOD', value: cartTotal(), items: cartToGA4Items() });
+    }
     goToStep(2);
   });
   document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
@@ -761,7 +777,9 @@
         localStorage.removeItem('dirbalk_saved_shipping');
       }
     } catch (e) { /* ignore */ }
-    if (window.gtag) gtag('event', 'add_shipping_info');
+    if (window.gtag) {
+      gtag('event', 'add_shipping_info', { currency: 'JOD', value: cartTotal(), items: cartToGA4Items() });
+    }
     renderReview();
     goToStep(3);
   });
@@ -806,10 +824,7 @@
     payBtn.disabled = true;
     payBtn.textContent = 'جاري المعالجة...';
 
-    const total = cart.reduce((s, l) => {
-      const p = findProduct(l.id);
-      return s + (p ? p.price * l.qty : 0);
-    }, 0);
+    const total = cartTotal();
 
     const orderPayload = {
       name: shippingData.fullName,
@@ -835,7 +850,14 @@
       const result = await res.json();
 
       if (result.status === 'success') {
-        if (window.gtag) gtag('event', 'purchase', { value: total, currency: 'JOD' });
+        if (window.gtag) {
+          gtag('event', 'purchase', {
+            transaction_id: result.orderId || ('unknown-' + Date.now()),
+            currency: 'JOD',
+            value: total,
+            items: cartToGA4Items()
+          });
+        }
         document.getElementById('orderIdDisplay').textContent = 'رقم الطلب: ' + (result.orderId || '—');
         if (result.pieces && result.pieces.length) {
           const revealNames = { 'DB-TEE-01': 'تيشيرت', 'DB-DEN-01': 'بنطلون دنيم', 'DB-JAC-01': 'جاكيت دنيم' };
