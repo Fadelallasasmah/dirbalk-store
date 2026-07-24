@@ -1,6 +1,6 @@
-// DIRBALK — /api/forgot-password
-// Same-origin backend proxy for the "forgot password" request, forwarding
-// to the same Google Apps Script (with action: "forgot").
+// DIRBALK — /api/reset-password
+// Same-origin backend proxy for the "reset password" request, forwarding
+// to the same Google Apps Script (with action: "reset").
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -12,8 +12,10 @@ export default async function handler(req, res) {
 
   try {
     const payload = {
-      action: 'forgot',
+      action: 'reset',
       email: (req.body?.email || '').toString(),
+      token: (req.body?.token || '').toString(),
+      password: (req.body?.password || '').toString(),
     };
 
     const scriptRes = await fetch(SCRIPT_URL, {
