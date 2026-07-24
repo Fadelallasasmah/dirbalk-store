@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -787,76 +788,7 @@
     } catch (e) { /* ignore */ }
   }
 
-  const PRODUCTS = [
-    {
-      id: 'DB-TEE-01',
-      img: '/img/tee-front.jpg',
-      images: ['/img/tee-front.jpg', '/img/tee-back.jpg'],
-      name: 'تيشيرت أوفرسايز',
-      colorway: 'أبيض نقي',
-      price: 22,
-      desc: 'قماش قطن ثقيل 260 جرام، قصة أوفرسايز، بدون أي طباعة خارجية. تفاصيله كلها بالداخل.',
-      fit: [
-        'قصة أوفرسايز واسعة',
-        'الطول لنص الفخذ تقريباً',
-        'الأكمام طويلة وعريضة'
-      ],
-      care: [
-        '100% قطن، 260 جرام/م²',
-        'غسيل بارد',
-        'لا تستخدم مبيض',
-        'تجفيف بحرارة منخفضة'
-      ],
-      swatch: '#f2f0ea',
-      silhouette: 'tee',
-      sizes: { S: 20, M: 60, L: 20 }
-    },
-    {
-      id: 'DB-DEN-01',
-      img: '/img/den-back.jpg',
-      images: ['/img/den-back.jpg'],
-      name: 'بنطلون دنيم واسع',
-      colorway: 'إندجو خام 13oz',
-      price: 50,
-      desc: 'دنيم خام 13oz، أزرار وأسنان معدن فضي مطفي، خيط تطريز أمبر مخفي.',
-      fit: [
-        'قصة واسعة (Wide-leg)',
-        'خصر عادي',
-        'طول كامل للكاحل'
-      ],
-      care: [
-        'دنيم خام 13oz، 100% قطن',
-        'أزرار وأسنان معدن فضي مطفي',
-        'خيط تطريز أمبر مخفي',
-        'اغسله لحاله أول مرة، ماء بارد'
-      ],
-      swatch: '#3a4a63',
-      silhouette: 'pants',
-      sizes: { S: 20, M: 60, L: 20 }
-    },
-    {
-      id: 'DB-JAC-01',
-      img: '/img/jac-front.jpg',
-      images: ['/img/jac-front.jpg', '/img/jac-back.jpg', '/img/jac-side.jpg'],
-      name: 'جاكيت دنيم أوفرسايز',
-      colorway: 'إندجو خام 13oz',
-      price: 65,
-      desc: 'دنيم خام 13oz، ستة أزرار أمامية، أزرار وأسنان فضية مطفية، قصة أوفرسايز.',
-      fit: [
-        'قصة أوفرسايز',
-        'ستة أزرار أمامية',
-        'الطول لمنتصف الحوض تقريباً'
-      ],
-      care: [
-        'دنيم خام 13oz، 100% قطن',
-        'أزرار معدن فضي مطفي',
-        'اغسله لحاله أول مرة، ماء بارد'
-      ],
-      swatch: '#2d3a52',
-      silhouette: 'jacket',
-      sizes: { S: 20, M: 60, L: 20 }
-    }
-  ];
+  const PRODUCTS = window.DIRBALK_PRODUCTS;
 
   const CART_KEY = 'dirbalk_cart';
   window.canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
