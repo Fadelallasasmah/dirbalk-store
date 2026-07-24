@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -539,11 +540,7 @@
 
 <script>
 (function () {
-  const PRODUCTS = [
-    { id: 'DB-TEE-01', name: 'تيشيرت أوفرسايز', colorway: 'أبيض نقي', price: 22, swatch: '#f2f0ea', silhouette: 'tee', img: '/img/tee-front.jpg' },
-    { id: 'DB-DEN-01', name: 'بنطلون دنيم واسع', colorway: 'إندجو خام 13oz', price: 50, swatch: '#3a4a63', silhouette: 'pants', img: '/img/den-back.jpg' },
-    { id: 'DB-JAC-01', name: 'جاكيت دنيم أوفرسايز', colorway: 'إندجو خام 13oz', price: 65, swatch: '#2d3a52', silhouette: 'jacket', img: '/img/jac-front.jpg' }
-  ];
+  const PRODUCTS = window.DIRBALK_PRODUCTS;
 
   const CART_KEY = 'dirbalk_cart';
 
