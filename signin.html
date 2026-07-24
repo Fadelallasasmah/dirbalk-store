@@ -305,7 +305,10 @@
       const result = await res.json();
 
       if (result.status === 'success') {
-        if (window.gtag) gtag('event', 'login_success');
+        if (window.gtag) {
+          gtag('event', 'login_success');
+          gtag('event', 'login', { method: 'password' });
+        }
         try {
           localStorage.setItem('dirbalk_logged_in', '1');
           localStorage.setItem('dirbalk_name', result.name || '');
