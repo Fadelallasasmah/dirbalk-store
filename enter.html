@@ -7,6 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIRBALَK</title>
 <meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
@@ -139,6 +146,7 @@
         localStorage.setItem('dirbalk_gender', result.gender || '');
         localStorage.setItem('dirbalk_email', result.email || '');
         if (result.phone) localStorage.setItem('dirbalk_phone', result.phone);
+        if (window.gtag) gtag('event', 'login', { method: 'magic_link' });
       } catch (e) { /* ignore */ }
 
       var first = (result.name || '').trim().split(' ')[0] || '';
