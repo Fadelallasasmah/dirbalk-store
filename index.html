@@ -824,7 +824,10 @@
       const result = await res.json();
 
       if (result.status === 'success') {
-        if (window.gtag) gtag('event', 'form_submit_success', { form_name: 'dirbalk_waitlist' });
+        if (window.gtag) {
+          gtag('event', 'form_submit_success', { form_name: 'dirbalk_waitlist' });
+          gtag('event', 'sign_up', { method: 'waitlist' });
+        }
         try {
           localStorage.setItem(STORAGE_KEY, '1');
           localStorage.setItem(GENDER_KEY, data.gender);
