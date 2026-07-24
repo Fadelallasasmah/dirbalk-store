@@ -1025,7 +1025,13 @@
     });
 
     initReveal();
-    if (window.gtag) gtag('event', 'view_item', { item_id: p.id, page: 'pdp' });
+    if (window.gtag) {
+      gtag('event', 'view_item', {
+        currency: 'JOD',
+        value: p.price,
+        items: [{ item_id: p.id, item_name: p.name, price: p.price, item_category: p.silhouette }]
+      });
+    }
   }
 
 
@@ -1207,7 +1213,13 @@
     flyToCart();
     if (window.DirbalkToast) DirbalkToast.success('انضافت للسلة — ' + product.name + ' (' + selectedSize + ')');
     playAddSound();
-    if (window.gtag) gtag('event', 'add_to_cart', { item_id: product.id, size: selectedSize, page: 'pdp' });
+    if (window.gtag) {
+      gtag('event', 'add_to_cart', {
+        currency: 'JOD',
+        value: product.price,
+        items: [{ item_id: product.id, item_name: product.name, price: product.price, item_variant: selectedSize, quantity: 1 }]
+      });
+    }
   }
 
   document.getElementById('addToCartBtn').addEventListener('click', addToCart);
