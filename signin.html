@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/password-ux.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -240,6 +241,7 @@
 <script>
 (function () {
   const form = document.getElementById('signin-form');
+  if (window.DirbalkPassword) DirbalkPassword.attachCapsLock('password');
 
   document.querySelectorAll('.pw-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
