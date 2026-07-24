@@ -841,6 +841,12 @@
   const grid = document.getElementById('productGrid');
   if (isLoggedIn) {
     grid.style.display = 'grid';
+    if (window.gtag) {
+      gtag('event', 'view_item_list', {
+        item_list_name: 'Collection 01',
+        items: PRODUCTS.map((p) => ({ item_id: p.id, item_name: p.name, price: p.price, item_category: p.silhouette }))
+      });
+    }
   } else {
     document.getElementById('gateBox').style.display = 'block';
   }
@@ -918,7 +924,15 @@
       }, true);
     }
 
-    card.addEventListener('click', () => { window.location.href = '/product.html?id=' + p.id; });
+    card.addEventListener('click', () => {
+      if (window.gtag) {
+        gtag('event', 'select_item', {
+          item_list_name: 'Collection 01',
+          items: [{ item_id: p.id, item_name: p.name, price: p.price }]
+        });
+      }
+      window.location.href = '/product.html?id=' + p.id;
+    });
     grid.appendChild(card);
   });
 
@@ -983,7 +997,13 @@
     });
 
     document.getElementById('modalOverlay').classList.add('open');
-    if (window.gtag) gtag('event', 'view_item', { item_id: id });
+    if (window.gtag) {
+      gtag('event', 'view_item', {
+        currency: 'JOD',
+        value: modalProduct.price,
+        items: [{ item_id: modalProduct.id, item_name: modalProduct.name, price: modalProduct.price, item_category: modalProduct.silhouette }]
+      });
+    }
   }
 
   function renderSpecSection(listId, items) {
@@ -1095,7 +1115,13 @@
     document.getElementById('modalOverlay').classList.remove('open');
     if (window.DirbalkToast) DirbalkToast.success('انضافت للسلة — ' + modalProduct.name + ' (' + modalSize + ')');
     playAddSound();
-    if (window.gtag) gtag('event', 'add_to_cart', { item_id: modalProduct.id, size: modalSize });
+    if (window.gtag) {
+      gtag('event', 'add_to_cart', {
+        currency: 'JOD',
+        value: modalProduct.price,
+        items: [{ item_id: modalProduct.id, item_name: modalProduct.name, price: modalProduct.price, item_variant: modalSize, quantity: 1 }]
+      });
+    }
   });
 
   /* ---------------- cart drawer ---------------- */
