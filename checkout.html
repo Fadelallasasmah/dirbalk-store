@@ -571,6 +571,13 @@
     }).filter(Boolean);
   }
 
+  function cartItemsSummary() {
+    return cart.map((l) => {
+      const p = findProduct(l.id);
+      return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
+    }).join(', ');
+  }
+
   function loadCart() {
     try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
     catch (e) { return []; }
@@ -780,6 +787,22 @@
     if (window.gtag) {
       gtag('event', 'add_shipping_info', { currency: 'JOD', value: cartTotal(), items: cartToGA4Items() });
     }
+
+    // fire-and-forget — logs a reminder candidate in case checkout never finishes.
+    // Never blocks or fails the actual checkout flow if this call fails.
+    fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'logAbandonedCart',
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        items: cartItemsSummary(),
+        total: cartTotal(),
+      }),
+    }).catch(() => { /* silent — this is a nice-to-have, not critical */ });
+
     renderReview();
     goToStep(3);
   });
@@ -833,10 +856,7 @@
       city: shippingData.city,
       address: shippingData.address,
       locationLink: shippingData.locationLink,
-      items: cart.map((l) => {
-        const p = findProduct(l.id);
-        return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
-      }).join(', '),
+      items: cartItemsSummary(),
       lines: cart.map((l) => ({ id: l.id, size: l.size, qty: l.qty })),
       total: total,
     };
