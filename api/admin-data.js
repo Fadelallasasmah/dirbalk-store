@@ -1,7 +1,11 @@
 // DIRBALK — /api/admin-data
 // Same-origin backend proxy for the admin dashboard, forwarding to the
-// same Google Apps Script (with action: "admin"). The Apps Script itself
-// checks the secret key before returning anything.
+// same Google Apps Script. Handles two request kinds so a second Vercel
+// function isn't needed (Hobby plan is capped at 12):
+//   - default / no "kind": fetch dashboard data (action: "admin")
+//   - kind: "updateOrderStatus": update an order's status, which may
+//     trigger a shipping/delivered email on the backend (action: "updateOrderStatus")
+// The Apps Script itself checks the secret key before doing anything either way.
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -11,12 +15,24 @@ export default async function handler(req, res) {
     return;
   }
 
-  try {
-    const payload = {
+  const kind = (req.body?.kind || '').toString();
+  let payload;
+
+  if (kind === 'updateOrderStatus') {
+    payload = {
+      action: 'updateOrderStatus',
+      key: (req.body?.key || '').toString(),
+      orderId: (req.body?.orderId || '').toString(),
+      newStatus: (req.body?.newStatus || '').toString(),
+    };
+  } else {
+    payload = {
       action: 'admin',
       key: (req.body?.key || '').toString(),
     };
+  }
 
+  try {
     const scriptRes = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
