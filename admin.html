@@ -123,6 +123,21 @@
   .table-wrap { overflow-x: auto; }
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
+  .status-select {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.8);
+    font-size: 11.5px;
+    padding: 6px 8px;
+    font-family: Arial, sans-serif;
+    outline: none;
+    cursor: pointer;
+    max-width: 130px;
+  }
+  .status-select:focus { border-color: rgba(201,168,76,0.5); }
+  .status-select:disabled { opacity: 0.5; cursor: default; }
+  .status-select option { background: #0a0a0a; color: #fff; }
+
   .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
   /* ---------- skeleton loading (real network wait: /api/admin-data) ---------- */
   .sk-grid {
@@ -355,6 +370,68 @@
       .replace(/'/g, '&#39;');
   }
 
+  var ORDER_STATUSES = ['قيد المراجعة', 'قيد التجهيز', 'تم الشحن', 'تم التسليم', 'ملغى'];
+  var EMAIL_TRIGGER_STATUSES = ['تم الشحن', 'تم التسليم'];
+
+  function buildStatusSelect(orderId, currentStatus) {
+    const select = document.createElement('select');
+    select.className = 'status-select';
+    ORDER_STATUSES.forEach((s) => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === currentStatus) opt.selected = true;
+      select.appendChild(opt);
+    });
+    // the order may currently hold a status outside the canonical list
+    // (e.g. the old default "قيد المراجعة (تجريبي)") — keep it selectable
+    // rather than silently overwriting it on load
+    if (currentStatus && ORDER_STATUSES.indexOf(currentStatus) === -1) {
+      const opt = document.createElement('option');
+      opt.value = currentStatus;
+      opt.textContent = currentStatus;
+      opt.selected = true;
+      select.insertBefore(opt, select.firstChild);
+    }
+
+    let previousValue = select.value;
+    select.addEventListener('change', () => {
+      const newStatus = select.value;
+      if (EMAIL_TRIGGER_STATUSES.indexOf(newStatus) !== -1) {
+        const ok = window.confirm('هاد رح يبعت إيميل تلقائي للزبون (' + newStatus + '). أكيد؟');
+        if (!ok) { select.value = previousValue; return; }
+      }
+
+      let key = '';
+      try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+      select.disabled = true;
+
+      fetch('/api/admin-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'updateOrderStatus', key, orderId, newStatus }),
+      })
+        .then((r) => r.json())
+        .then((result) => {
+          select.disabled = false;
+          if (result.status === 'success') {
+            previousValue = newStatus;
+            if (window.DirbalkToast) DirbalkToast.success('تحدّثت حالة الطلب.');
+          } else {
+            select.value = previousValue;
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'ما قدرنا نحدّث الحالة.');
+          }
+        })
+        .catch(() => {
+          select.disabled = false;
+          select.value = previousValue;
+          if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+        });
+    });
+
+    return select;
+  }
+
   function renderOrders(orders) {
     const body = document.getElementById('ordersBody');
     body.innerHTML = '';
@@ -377,7 +454,9 @@
         '<td class="wrap">' + escapeHtml(o.address) + safeLocationLink + '</td>' +
         '<td class="wrap">' + escapeHtml(o.items) + '</td>' +
         '<td>' + escapeHtml(o.total) + ' JD</td>' +
-        '<td>' + escapeHtml(o.status) + '</td>';
+        '<td></td>';
+      const statusTd = tr.lastElementChild;
+      statusTd.appendChild(buildStatusSelect(o.orderId, o.status));
       body.appendChild(tr);
     });
   }
