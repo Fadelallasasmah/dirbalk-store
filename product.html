@@ -119,6 +119,32 @@
   }
   .side-menu-links a:hover { color: #C9A84C; }
 
+  .side-menu-row {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .side-menu-row a { flex: 1; border-bottom: none; }
+  .submenu-toggle {
+    background: none; border: none; color: rgba(201,168,76,0.75);
+    font-size: 15px; cursor: pointer; padding: 12px 8px;
+    transition: transform 0.25s ease;
+    font-family: Arial, sans-serif;
+  }
+  .submenu-toggle.open { transform: rotate(45deg); }
+
+  .side-submenu {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .side-submenu.open { max-height: 200px; }
+  .side-submenu a {
+    display: block;
+    color: rgba(255,255,255,0.6); text-decoration: none;
+    font-size: 12.5px; padding: 10px 4px 10px 18px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.05);
+  }
+  .side-submenu a:hover { color: #C9A84C; }
+
   #sideMenuPanel .header-actions {
     display: flex !important;
     flex-direction: column; align-items: flex-start; gap: 14px;
@@ -653,7 +679,11 @@
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
   <div class="side-menu-links">
     <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
+    <div class="side-menu-row">
+      <a href="/shop.html">الكوليكشن</a>
+      <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="عرض القطع" aria-expanded="false">+</button>
+    </div>
+    <div class="side-submenu" id="collectionSubmenu"></div>
     <a href="/about.html">عن DIRBALK</a>
   </div>
   <div class="header-actions">
@@ -1403,6 +1433,21 @@
   document.getElementById('sideMenuClose').addEventListener('click', closeSideMenu);
   sideMenuOverlay.addEventListener('click', closeSideMenu);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSideMenu(); });
+
+  /* ---------------- side-menu Collection submenu (built from the shared product list) ---------------- */
+  var collectionSubmenu = document.getElementById('collectionSubmenu');
+  var collectionToggle = document.getElementById('collectionSubmenuToggle');
+  (window.DIRBALK_PRODUCTS || []).forEach(function (p) {
+    var a = document.createElement('a');
+    a.href = '/product.html?id=' + p.id;
+    a.textContent = p.name;
+    collectionSubmenu.appendChild(a);
+  });
+  collectionToggle.addEventListener('click', function () {
+    var isOpen = collectionSubmenu.classList.toggle('open');
+    collectionToggle.classList.toggle('open', isOpen);
+    collectionToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
 
   updateCartBadge();
 })();
