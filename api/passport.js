@@ -1,5 +1,7 @@
 // DIRBALK — passport public layer proxy
-// مهم: بدّل SCRIPT_URL بنفس القيمة الموجودة بـ api/waitlist.js عندك بالضبط
+// Also handles fetching approved product comments (kind: "getComments") —
+// both are public, unauthenticated, PII-free reads, so they share this file
+// instead of adding a new Vercel function.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
 export default async function handler(req, res) {
@@ -7,10 +9,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' });
   }
   try {
+    const kind = (req.body && req.body.kind) || '';
+    const payload = kind === 'getComments'
+      ? { action: 'getComments', product: (req.body && req.body.product) || '' }
+      : { action: 'passport', slug: (req.body && req.body.slug) || '' };
+
     const upstream = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'passport', slug: (req.body && req.body.slug) || '' })
+      body: JSON.stringify(payload)
     });
     const data = await upstream.json();
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
