@@ -121,6 +121,34 @@
   }
   td.wrap { white-space: normal; max-width: 220px; }
   .table-wrap { overflow-x: auto; }
+
+  /* ---------- mobile order cards (table is unreadable below ~700px) ---------- */
+  #ordersCards { display: none; }
+  .order-card {
+    border: 0.5px solid rgba(255,255,255,0.12);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .order-card .oc-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .order-card .oc-id { font-size: 13px; font-weight: bold; color: #C9A84C; letter-spacing: 0.5px; }
+  .order-card .oc-total { font-size: 13px; font-weight: bold; color: #fff; }
+  .order-card .oc-row {
+    display: flex; justify-content: space-between; gap: 10px;
+    font-size: 12px; padding: 6px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .order-card .oc-row:last-of-type { border-bottom: none; }
+  .order-card .oc-label { color: rgba(255,255,255,0.4); flex-shrink: 0; }
+  .order-card .oc-value { color: rgba(255,255,255,0.85); text-align: left; word-break: break-word; }
+  .order-card .oc-status { margin-top: 10px; }
+
+  @media (max-width: 700px) {
+    .table-wrap { display: none; }
+    #ordersCards { display: block; }
+  }
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
   .pending-comment { border: 0.5px solid rgba(255,255,255,0.12); padding: 16px; margin-bottom: 10px; }
@@ -275,8 +303,9 @@
         </thead>
         <tbody id="ordersBody"></tbody>
       </table>
-      <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
     </div>
+    <div id="ordersCards"></div>
+    <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
 
     <div class="invite-section">
       <h2>دعوات الدروب</h2>
@@ -558,17 +587,22 @@
 
   function renderOrders(orders) {
     const body = document.getElementById('ordersBody');
+    const cards = document.getElementById('ordersCards');
     body.innerHTML = '';
+    cards.innerHTML = '';
     if (!orders || orders.length === 0) {
       document.getElementById('ordersEmpty').style.display = 'block';
       return;
     }
+    document.getElementById('ordersEmpty').style.display = 'none';
     orders.forEach((o) => {
-      const tr = document.createElement('tr');
       var safeLocationLink = '';
       if (o.locationLink && /^https?:\/\//i.test(o.locationLink)) {
         safeLocationLink = ' <a href="' + escapeHtml(o.locationLink) + '" target="_blank" style="color:#C9A84C;">(خريطة)</a>';
       }
+
+      // desktop table row
+      const tr = document.createElement('tr');
       tr.innerHTML =
         '<td>' + escapeHtml(o.orderId) + '</td>' +
         '<td>' + escapeHtml(o.name) + '</td>' +
@@ -579,9 +613,25 @@
         '<td class="wrap">' + escapeHtml(o.items) + '</td>' +
         '<td>' + escapeHtml(o.total) + ' JD</td>' +
         '<td></td>';
-      const statusTd = tr.lastElementChild;
-      statusTd.appendChild(buildStatusSelect(o.orderId, o.status));
+      tr.lastElementChild.appendChild(buildStatusSelect(o.orderId, o.status));
       body.appendChild(tr);
+
+      // mobile card — same data, stacked and labeled instead of squeezed into columns
+      const card = document.createElement('div');
+      card.className = 'order-card';
+      card.innerHTML =
+        '<div class="oc-top"><span class="oc-id">' + escapeHtml(o.orderId) + '</span><span class="oc-total">' + escapeHtml(o.total) + ' JD</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الاسم</span><span class="oc-value">' + escapeHtml(o.name) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الإيميل</span><span class="oc-value">' + escapeHtml(o.email) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الهاتف</span><span class="oc-value">' + escapeHtml(o.phone) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">المدينة</span><span class="oc-value">' + escapeHtml(o.city) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">العنوان</span><span class="oc-value">' + escapeHtml(o.address) + safeLocationLink + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">القطع</span><span class="oc-value">' + escapeHtml(o.items) + '</span></div>';
+      const ocStatus = document.createElement('div');
+      ocStatus.className = 'oc-status';
+      ocStatus.appendChild(buildStatusSelect(o.orderId, o.status));
+      card.appendChild(ocStatus);
+      cards.appendChild(card);
     });
   }
 
