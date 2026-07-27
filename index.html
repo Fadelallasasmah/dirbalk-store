@@ -422,21 +422,27 @@
     opacity: 0.7;
     margin-bottom: 10px;
   }
+  /* Arabic script breaks apart visually with letter-spacing (it's a
+     connected/cursive script) — only the English "Collection 01" label
+     should keep the tracked-out spacing. */
+  .story-kicker.ar { letter-spacing: 0; }
   .story-item .big {
     font-size: clamp(20px, 5vw, 25px);
     font-weight: bold;
     line-height: 1.6;
     letter-spacing: 0.2px;
+    max-width: 100%;
     word-break: normal;
-    overflow-wrap: normal;
+    overflow-wrap: break-word;
   }
   .story-item .small {
     margin-top: 14px;
     font-size: 12.5px;
     line-height: 2;
     color: rgba(255,255,255,0.65);
+    max-width: 100%;
     word-break: normal;
-    overflow-wrap: normal;
+    overflow-wrap: break-word;
   }
 
   .lang-switch {
@@ -674,13 +680,13 @@
     </div>
 
     <div class="story-item">
-      <p class="story-kicker">سجل القطعة</p>
+      <p class="story-kicker ar">سجل القطعة</p>
       <p class="big">كل قطعة إلها رقمها.<br>وسجلها الخاص فيها.</p>
       <p class="small">بعد ما توصلك القطعة، بتلاقي رقمها ومعلوماتها بصفحة خاصة فيها بس — مش وصف عام متل أي متجر. القطعة يلي إلك، برقمها.</p>
     </div>
 
     <div class="story-item">
-      <p class="story-kicker">ليش نرقم القطع</p>
+      <p class="story-kicker ar">ليش نرقم القطع</p>
       <p class="big">اللي بتلبسه رقم.<br>مش مجرد مقاس.</p>
       <p class="small">دير بالك على حالك مش شعار — طريقة تفكير. ولما تلبس قطعة من DIRBALK، إنت جزء من عدد محدود قرر يدير باله على حاله.</p>
     </div>
