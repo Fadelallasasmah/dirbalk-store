@@ -219,6 +219,32 @@
     border: 0.5px solid rgba(255,255,255,0.18);
     padding: 4px 10px;
   }
+  .order-status.cancelled { color: rgba(255,120,120,0.85); border-color: rgba(255,120,120,0.35); }
+
+  /* ---------- order journey timeline (compact, per order card) ---------- */
+  .order-journey { margin-top: 14px; padding-top: 14px; border-top: 0.5px solid rgba(255,255,255,0.07); }
+  .journey-steps { display: flex; align-items: flex-start; position: relative; }
+  .journey-steps .track {
+    position: absolute; top: 4px; left: 12.5%; right: 12.5%; height: 1px;
+    background: rgba(255,255,255,0.15); z-index: 1;
+  }
+  .journey-steps .track-fill {
+    position: absolute; top: 4px; right: 12.5%; height: 1px;
+    background: #C9A84C; z-index: 1;
+  }
+  .journey-step { flex: 1; text-align: center; position: relative; z-index: 2; }
+  .journey-step .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #0a0a0a;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    margin: 0 auto 8px;
+  }
+  .journey-step.done .dot { background: #C9A84C; border-color: #C9A84C; }
+  .journey-step .label {
+    font-size: 9.5px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  }
+  .journey-step.done .label { color: rgba(255,255,255,0.8); }
+  .journey-step.current .label { color: #C9A84C; }
 
 
   /* ---------- profile / address / security sections ---------- */
@@ -645,6 +671,32 @@
     });
   }
 
+  var JOURNEY_STEPS = [
+    { key: 'قيد المراجعة', label: 'استلمنا طلبك' },
+    { key: 'قيد التجهيز', label: 'عم نجهز القطع' },
+    { key: 'تم الشحن', label: 'بالطريق إلك' },
+    { key: 'تم التسليم', label: 'بين إيديك' }
+  ];
+
+  function renderJourney(status) {
+    if (status === 'ملغى') {
+      return '<div class="order-journey"><span class="order-status cancelled">ملغى</span></div>';
+    }
+    var currentIdx = JOURNEY_STEPS.findIndex(function (s) { return s.key === status; });
+    if (currentIdx === -1) currentIdx = 0;
+
+    var fillPct = (currentIdx / (JOURNEY_STEPS.length - 1)) * 75; // track spans 75% of the row (12.5% inset each side)
+
+    var stepsHtml = JOURNEY_STEPS.map(function (s, i) {
+      var cls = i < currentIdx ? 'done' : (i === currentIdx ? 'done current' : '');
+      return '<div class="journey-step ' + cls + '"><div class="dot"></div><div class="label">' + s.label + '</div></div>';
+    }).join('');
+
+    return '<div class="order-journey"><div class="journey-steps">' +
+      '<div class="track"></div><div class="track-fill" style="width:' + fillPct + '%"></div>' +
+      stepsHtml + '</div></div>';
+  }
+
   function renderOrders(orders) {
     var area = document.getElementById('ordersArea');
     if (!orders.length) {
@@ -660,7 +712,8 @@
       row.innerHTML =
         '<div class="order-top"><span class="order-id">' + o.orderId + '</span><span class="order-date">' + dateStr + '</span></div>' +
         '<p class="order-items">' + (o.items || '') + '</p>' +
-        '<div class="order-bottom"><span class="order-total">' + (o.total || 0) + ' JD</span><span class="order-status">' + (o.status || '') + '</span></div>';
+        '<div class="order-bottom"><span class="order-total">' + (o.total || 0) + ' JD</span></div>' +
+        renderJourney(o.status || '');
       area.appendChild(row);
     });
   }
