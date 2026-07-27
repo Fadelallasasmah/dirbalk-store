@@ -394,6 +394,48 @@
   }
   .user-menu-item:hover { background: rgba(255,80,80,0.08); color: rgba(255,120,120,0.9); }
 
+  /* ---------- homepage storytelling (fills the gap between form and footer) ---------- */
+  .story-sections {
+    width: 100%;
+    max-width: 460px;
+    padding: 3.5rem 0 1rem;
+    margin: 1rem auto 0;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
+
+  .story-item {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    margin-bottom: 3.2rem;
+  }
+  .story-item:last-child { margin-bottom: 0; }
+  .story-item.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .story-item { opacity: 1; transform: none; transition: none; }
+  }
+
+  .story-kicker {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #C9A84C;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  .story-item .big {
+    font-size: clamp(20px, 5vw, 25px);
+    font-weight: bold;
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+  }
+  .story-item .big .amber { color: #C9A84C; }
+  .story-item .small {
+    margin-top: 14px;
+    font-size: 12.5px;
+    line-height: 2;
+    color: rgba(255,255,255,0.65);
+  }
+
   .lang-switch {
     position: fixed;
     top: 18px;
@@ -618,6 +660,28 @@
     <p class="ig-reminder">
       <span id="ig-reminder-text">وتابعنا على</span> <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
     </p>
+  </div>
+
+  <div class="story-sections" id="storySections">
+
+    <div class="story-item">
+      <p class="story-kicker">Collection 01</p>
+      <p class="big">100 نسخة من كل قطعة<span class="amber">.</span><br>مش أكثر<span class="amber">.</span></p>
+      <p class="small">ثلاث قطع. كل وحدة إلها 100 نسخة بس، ولما تخلص، بتخلص. ما في إعادة طباعة، ما في "الكمية محدودة" كذبة تسويقية — عدد حقيقي، منكتبه لأنه صحيح.</p>
+    </div>
+
+    <div class="story-item">
+      <p class="story-kicker">سجل القطعة</p>
+      <p class="big">كل قطعة إلها رقمها<span class="amber">.</span><br>وسجلها الخاص فيها<span class="amber">.</span></p>
+      <p class="small">بعد ما توصلك القطعة، بتلاقي رقمها ومعلوماتها بصفحة خاصة فيها بس — مش وصف عام متل أي متجر. القطعة يلي إلك، برقمها.</p>
+    </div>
+
+    <div class="story-item">
+      <p class="story-kicker">ليش نرقم القطع</p>
+      <p class="big">اللي بتلبسه رقم<span class="amber">.</span><br>مش مجرد مقاس<span class="amber">.</span></p>
+      <p class="small">دير بالك على حالك مش شعار — طريقة تفكير. ولما تلبس قطعة من DIRBALK، إنت جزء من عدد محدود قرر يدير باله على حاله.</p>
+    </div>
+
   </div>
 
   <div class="page-footer">
@@ -854,6 +918,24 @@
       btn.textContent = 'تسجيل';
     }
   });
+
+  (function initStoryReveal() {
+    var items = document.querySelectorAll('.story-item');
+    if (!items.length) return;
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    items.forEach(function (el) { obs.observe(el); });
+  })();
 
   const shareWhatsapp = document.getElementById('share-whatsapp');
   const copyLinkBtn = document.getElementById('copy-link');
