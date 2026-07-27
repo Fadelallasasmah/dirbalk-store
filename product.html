@@ -476,6 +476,11 @@
   }
   .spec-list li::before { content: '—'; position: absolute; right: 0; color: rgba(201,168,76,0.6); }
 
+  .comment-item { padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-item .comment-name { font-size: 11.5px; color: #C9A84C; margin-bottom: 4px; }
+  .comment-item .comment-text { font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.72); }
+
   .acc-text { font-size: 12px; line-height: 2; color: rgba(255,255,255,0.72); }
   .acc-text .hint { color: rgba(201,168,76,0.75); }
 
@@ -776,6 +781,12 @@
         <button type="button" class="acc-head">التفاصيل <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content">
           <p class="acc-text" id="detailsText"></p>
+        </div></div>
+      </div>
+      <div class="acc" id="accComments">
+        <button type="button" class="acc-head">آراء اللي اشتروا <span class="acc-icon">+</span></button>
+        <div class="acc-body"><div class="acc-content">
+          <div id="commentsList"><p class="acc-text" style="opacity:0.5;">عم نجيب الآراء...</p></div>
         </div></div>
       </div>
     </div>
@@ -1228,6 +1239,15 @@
   }
 
   /* ---------------- accordions ---------------- */
+  var commentsLoaded = false;
+  function escapeHtmlPdp(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
   Array.prototype.forEach.call(document.querySelectorAll('.acc-head'), function (head) {
     head.addEventListener('click', function () {
       var acc = head.parentElement;
@@ -1235,6 +1255,32 @@
       var wasOpen = acc.classList.contains('open');
       acc.classList.toggle('open');
       body.style.maxHeight = wasOpen ? '' : (body.scrollHeight + 'px');
+
+      if (!wasOpen && acc.id === 'accComments' && !commentsLoaded && product) {
+        commentsLoaded = true;
+        fetch('/api/passport', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kind: 'getComments', product: product.id })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (result) {
+            var list = document.getElementById('commentsList');
+            var comments = (result && result.comments) || [];
+            if (!comments.length) {
+              list.innerHTML = '<p class="acc-text" style="opacity:0.6;">لسا ما في آراء منشورة على هالقطعة.</p>';
+            } else {
+              list.innerHTML = comments.map(function (c) {
+                return '<div class="comment-item"><p class="comment-name">' + escapeHtmlPdp(c.name) + '</p><p class="comment-text">' + escapeHtmlPdp(c.text) + '</p></div>';
+              }).join('');
+            }
+            if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
+          })
+          .catch(function () {
+            document.getElementById('commentsList').innerHTML = '<p class="acc-text" style="opacity:0.5;">صار خطأ مؤقت، جرب كمان شوي.</p>';
+            if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
+          });
+      }
     });
   });
   window.addEventListener('resize', function () {
