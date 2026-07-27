@@ -123,6 +123,22 @@
   .table-wrap { overflow-x: auto; }
   .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
 
+  .pending-comment { border: 0.5px solid rgba(255,255,255,0.12); padding: 16px; margin-bottom: 10px; }
+  .pending-comment .pc-meta { font-size: 10.5px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .pending-comment .pc-meta strong { color: #C9A84C; }
+  .pending-comment .pc-text { font-size: 13px; line-height: 1.9; color: rgba(255,255,255,0.85); margin-bottom: 12px; }
+  .pc-actions { display: flex; gap: 8px; }
+  .pc-approve-btn, .pc-reject-btn {
+    padding: 8px 18px; font-size: 11px; letter-spacing: 0.5px;
+    cursor: pointer; font-family: Arial, sans-serif; border: 0.5px solid;
+    background: transparent;
+  }
+  .pc-approve-btn { color: #7fd88f; border-color: rgba(127,216,143,0.4); }
+  .pc-approve-btn:hover { border-color: #7fd88f; }
+  .pc-reject-btn { color: rgba(255,140,140,0.85); border-color: rgba(255,120,120,0.35); }
+  .pc-reject-btn:hover { border-color: rgba(255,120,120,0.7); }
+  .pc-approve-btn:disabled, .pc-reject-btn:disabled { opacity: 0.5; cursor: default; }
+
   .status-select {
     background: transparent;
     border: 0.5px solid rgba(255,255,255,0.18);
@@ -288,6 +304,25 @@
         </div>
       </div>
     </div>
+
+    <div class="invite-section" id="launchSection">
+      <h2>إعلان الإطلاق</h2>
+      <p class="invite-hint">
+        بيبعت إيميل لكل المسجلين (كل قائمة الانتظار، مش بس اللي انبعتلهم دعوة قبل) إنه الكوليكشن صار متاح للكل.<br>
+        بيرسل <strong>100 إيميل بكل ضغطة</strong> (حد Gmail اليومي)، وما بيرسل لنفس الشخص مرتين حتى لو ضغطت أكتر من مرة أو بأيام مختلفة.<br>
+        <strong>ما في تراجع بعد الإرسال — تأكد إنه هذا فعلاً يوم الإطلاق قبل ما تضغط.</strong>
+      </p>
+      <div class="invite-box">
+        <button type="button" class="invite-btn" id="launchBtn">ابعت الدفعة الجاية</button>
+        <p class="invite-status" id="launchStatus"></p>
+      </div>
+    </div>
+
+    <div class="invite-section" id="commentsSection">
+      <h2>تعليقات بانتظار المراجعة</h2>
+      <p class="invite-hint">بس اللي عنده القطعة فعلاً بيقدر يعلّق. راجع كل تعليق قبل ما ينشر.</p>
+      <div id="pendingCommentsArea"><p class="empty-note">جاري التحميل...</p></div>
+    </div>
   </div>
 </div>
 
@@ -319,9 +354,98 @@
         renderStats(result.stats);
         renderCountries(result.stats.countryCounts);
         renderOrders(result.orders);
+        loadPendingComments(key);
       })
       .catch(() => {
         document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      });
+  }
+
+  var PRODUCT_NAMES_COMMENTS = {
+    'DB-TEE-01': 'تيشيرت أوفرسايز',
+    'DB-DEN-01': 'بنطلون دنيم واسع',
+    'DB-JAC-01': 'جاكيت دنيم أوفرسايز'
+  };
+
+  function escapeHtmlAdmin(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function loadPendingComments(key) {
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'getPendingComments', key }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.status !== 'success') {
+          document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">' + (result.message || 'حدث خطأ مؤقت.') + '</p>';
+          return;
+        }
+        renderPendingComments(result.pending || [], key);
+      })
+      .catch(() => {
+        document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">حدث خطأ مؤقت، يرجى المحاولة لاحقًا.</p>';
+      });
+  }
+
+  function renderPendingComments(pending, key) {
+    const area = document.getElementById('pendingCommentsArea');
+    if (!pending.length) {
+      area.innerHTML = '<p class="empty-note">ولا تعليق بانتظار المراجعة.</p>';
+      return;
+    }
+    area.innerHTML = '';
+    pending.forEach((c) => {
+      const card = document.createElement('div');
+      card.className = 'pending-comment';
+      card.innerHTML =
+        '<p class="pc-meta"><strong>' + escapeHtmlAdmin(c.name || 'مجهول') + '</strong> — ' +
+        escapeHtmlAdmin(PRODUCT_NAMES_COMMENTS[c.product] || c.product) + ' — ' + escapeHtmlAdmin(c.email) + '</p>' +
+        '<p class="pc-text">' + escapeHtmlAdmin(c.text) + '</p>' +
+        '<div class="pc-actions">' +
+        '<button type="button" class="pc-approve-btn" data-id="' + escapeHtmlAdmin(c.id) + '">نشر</button>' +
+        '<button type="button" class="pc-reject-btn" data-id="' + escapeHtmlAdmin(c.id) + '">رفض</button>' +
+        '</div>';
+
+      card.querySelector('.pc-approve-btn').addEventListener('click', function () { moderateComment(c.id, 'approve', card, key); });
+      card.querySelector('.pc-reject-btn').addEventListener('click', function () { moderateComment(c.id, 'reject', card, key); });
+
+      area.appendChild(card);
+    });
+  }
+
+  function moderateComment(commentId, decision, card, key) {
+    const btns = card.querySelectorAll('button');
+    btns.forEach((b) => { b.disabled = true; });
+
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'moderateComment', key, commentId, decision }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.status === 'success') {
+          card.remove();
+          if (window.DirbalkToast) DirbalkToast.success(decision === 'approve' ? 'انشر التعليق.' : 'انرفض التعليق.');
+          if (!document.querySelectorAll('.pending-comment').length) {
+            document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">ولا تعليق بانتظار المراجعة.</p>';
+          }
+        } else {
+          btns.forEach((b) => { b.disabled = false; });
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+        }
+      })
+      .catch(() => {
+        btns.forEach((b) => { b.disabled = false; });
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       });
   }
 
@@ -505,6 +629,51 @@
       .catch(() => {
         btn.disabled = false;
         btn.textContent = 'ولّد الدعوات';
+        status.style.display = 'block';
+        status.classList.add('err');
+        status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      });
+  });
+
+  document.getElementById('launchBtn').addEventListener('click', () => {
+    if (!window.confirm('رح تبعت إعلان الإطلاق لدفعة جديدة (حتى 100 شخص). هذا الإجراء ما إله تراجع. متأكد إنه هذا فعلاً يوم الإطلاق؟')) return;
+    if (!window.confirm('تأكيد أخير — رح ينبعت الإيميل هلأ فعلياً. أكيد؟')) return;
+
+    let key = '';
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+
+    const btn = document.getElementById('launchBtn');
+    const status = document.getElementById('launchStatus');
+    btn.disabled = true;
+    btn.textContent = 'جاري الإرسال...';
+    status.style.display = 'none';
+    status.classList.remove('err');
+
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'launchAnnouncement', key, batchSize: 100 }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        btn.disabled = false;
+        status.style.display = 'block';
+        if (result.status !== 'success') {
+          status.classList.add('err');
+          status.textContent = result.message || 'حدث خطأ مؤقت.';
+          btn.textContent = 'ابعت الدفعة الجاية';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'حدث خطأ مؤقت.');
+          return;
+        }
+        status.textContent = 'انبعت لـ ' + result.sent + ' شخص. باقي ' + result.remaining + '.';
+        if (window.DirbalkToast) DirbalkToast.success('انبعت لـ ' + result.sent + ' شخص.');
+        btn.textContent = result.remaining > 0 ? 'ابعت الدفعة الجاية (باقي ' + result.remaining + ')' : 'الكل استلم — خلص';
+        btn.disabled = result.remaining === 0;
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'ابعت الدفعة الجاية';
         status.style.display = 'block';
         status.classList.add('err');
         status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
