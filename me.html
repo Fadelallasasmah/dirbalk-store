@@ -202,6 +202,33 @@
   }
   .passport-link:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
 
+  .comment-toggle-btn {
+    background: none; border: none;
+    color: rgba(255,255,255,0.4); text-decoration: underline;
+    font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-toggle-btn:hover { color: #C9A84C; }
+
+  .comment-form-wrap { display: none; flex: 1 0 100%; margin-top: 10px; }
+  .comment-form-wrap.show { display: block; }
+  .comment-textarea {
+    width: 100%; min-height: 70px;
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 10px 14px; font-size: 12.5px;
+    font-family: Arial, sans-serif; outline: none; resize: vertical;
+    margin-bottom: 8px;
+  }
+  .comment-textarea:focus { border-color: rgba(201,168,76,0.5); }
+  .comment-submit-btn {
+    padding: 9px 20px;
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 11px; letter-spacing: 0.5px;
+    cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-submit-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .comment-submit-btn:disabled { opacity: 0.5; cursor: default; }
+  .comment-form-msg { font-size: 11px; color: rgba(255,120,120,0.85); margin-top: 8px; }
+
   /* orders */
   .order-row {
     border-bottom: 0.5px solid rgba(255,255,255,0.08);
@@ -399,7 +426,7 @@
       </div>
       <div class="acc-field">
         <label for="newPw">كلمة المرور الجديدة</label>
-        <input type="password" id="newPw" placeholder="6 أحرف على الأقل" autocomplete="new-password" />
+        <input type="password" id="newPw" placeholder="8 أحرف على الأقل" autocomplete="new-password" />
       </div>
       <p class="form-error" id="pwError" style="display:none;color:rgba(255,120,120,0.85);font-size:11.5px;margin-bottom:10px;"></p>
       <button type="submit" class="acc-btn" id="pwBtn">حفظ</button>
@@ -526,8 +553,8 @@
     var currentPassword = document.getElementById('currentPw').value;
     var newPw = document.getElementById('newPw').value;
 
-    if (newPw.length < 6) {
-      pwError.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل.';
+    if (newPw.length < 8) {
+      pwError.textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
       pwError.style.display = 'block';
       return;
     }
@@ -667,7 +694,55 @@
         '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100' +
         (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
         '</div>' +
-        '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>';
+        '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>' +
+        '<button type="button" class="comment-toggle-btn">اترك تعليق</button>' +
+        '<div class="comment-form-wrap"></div>';
+
+      var toggleBtn = card.querySelector('.comment-toggle-btn');
+      var formWrap = card.querySelector('.comment-form-wrap');
+      toggleBtn.addEventListener('click', function () {
+        if (formWrap.classList.contains('show')) { formWrap.classList.remove('show'); return; }
+        formWrap.innerHTML =
+          '<textarea class="comment-textarea" maxlength="500" placeholder="شو رأيك بالقطعة؟"></textarea>' +
+          '<button type="button" class="comment-submit-btn">إرسال</button>' +
+          '<p class="comment-form-msg"></p>';
+        formWrap.classList.add('show');
+
+        formWrap.querySelector('.comment-submit-btn').addEventListener('click', function () {
+          var textarea = formWrap.querySelector('.comment-textarea');
+          var msg = formWrap.querySelector('.comment-form-msg');
+          var text = textarea.value.trim();
+          if (!text) { msg.textContent = 'اكتب شي أول.'; return; }
+
+          var submitBtn = this;
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'جاري الإرسال...';
+
+          fetch('/api/account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+              if (result.status === 'success') {
+                formWrap.innerHTML = '<p class="comment-form-msg" style="color:#7fd88f;">' + result.message + '</p>';
+                if (window.DirbalkToast) DirbalkToast.success(result.message);
+              } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال';
+                msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+                if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+              }
+            })
+            .catch(function () {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'إرسال';
+              msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+            });
+        });
+      });
+
       area.appendChild(card);
     });
   }
