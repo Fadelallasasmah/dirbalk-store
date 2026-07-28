@@ -50,6 +50,12 @@ export default async function handler(req, res) {
       key: (req.body?.key || '').toString(),
       batchSize: parseInt(req.body?.batchSize, 10) || 100,
     };
+  } else if (kind === 'registerPushToken') {
+    payload = {
+      action: 'registerPushToken',
+      key: (req.body?.key || '').toString(),
+      token: (req.body?.token || '').toString(),
+    };
   } else {
     payload = {
       action: 'admin',
