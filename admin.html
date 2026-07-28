@@ -3,25 +3,12 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
-<script src="/assets/password-ux.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حسابي — DIRBALَK</title>
-<meta name="robots" content="noindex">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FMPZV540CP');
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<title>لوحة التحكم — DIRBALَK</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
 
   body {
     background: #0a0a0a;
@@ -32,135 +19,189 @@
 
   a { color: inherit; }
 
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 25;
-    background: rgba(10,10,10,0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 0.5px solid rgba(255,255,255,0.1);
-  }
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 16px 20px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+  .gate {
+    min-height: 100vh;
+    display: flex;
     align-items: center;
-  }
-  .header-logo { height: 22px; width: auto; display: block; }
-  .logo-link { grid-column: 2; justify-self: center; }
-
-  .hamburger-btn {
-    display: flex;
-    grid-column: 1; justify-self: start;
-    background: transparent; border: none;
-    color: rgba(255,255,255,0.85);
-    cursor: pointer; padding: 4px;
-    width: 24px; height: 24px;
-    flex-direction: column; justify-content: center; gap: 5px;
-  }
-  .hamburger-btn span { display: block; width: 100%; height: 1.4px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
-  .hamburger-btn.open span:nth-child(1) { transform: translateY(6.4px) rotate(45deg); }
-  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
-  .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.4px) rotate(-45deg); }
-
-  .side-menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96; }
-  .side-menu-overlay.open { display: block; }
-
-  #sideMenuPanel {
-    display: flex;
-    position: fixed;
-    top: 0; left: 0;
-    height: 100vh; width: 100%; max-width: 300px;
-    background: #0d0d0d;
-    border-right: 0.5px solid rgba(255,255,255,0.1);
-    z-index: 97;
-    transform: translateX(-100%);
-    transition: transform 0.28s ease;
-    flex-direction: column;
-    padding: 20px 22px;
-    overflow-y: auto;
-  }
-  #sideMenuPanel.open { transform: translateX(0); }
-
-  .side-menu-close {
-    align-self: flex-start;
-    background: none; border: none; color: rgba(255,255,255,0.5);
-    font-size: 18px; cursor: pointer; margin-bottom: 30px; padding: 4px;
+    justify-content: center;
+    padding: 20px;
   }
 
-  .side-menu-links { display: flex; flex-direction: column; gap: 4px; }
-  .side-menu-links a {
-    color: rgba(255,255,255,0.85); text-decoration: none;
-    font-size: 14px; padding: 12px 4px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.07);
-  }
-  .side-menu-links a:hover { color: #C9A84C; }
-
-  .wrap { max-width: 640px; margin: 0 auto; padding: 46px 24px 70px; }
-
-  /* reveal */
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
-
-  /* gate */
-  .gate-box { max-width: 420px; margin: 60px auto; text-align: center; }
-  .gate-box p { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 1.9; margin-bottom: 22px; }
-  .gate-actions { display: flex; gap: 10px; }
-  .gate-btn {
-    flex: 1; padding: 13px;
-    border: 0.5px solid rgba(255,255,255,0.2);
-    color: #ffffff; font-size: 12px; letter-spacing: 0px;
-    text-decoration: none; transition: all 0.2s; text-align: center;
-  }
-  .gate-btn:hover { border-color: rgba(201,168,76,0.4); }
-  .gate-btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
-
-  /* greeting */
-  .greet { margin-bottom: 40px; }
-  .greet h1 { font-size: 22px; margin-bottom: 4px; }
-  .greet p { font-size: 12px; color: rgba(255,255,255,0.45); overflow-wrap: break-word; word-break: break-word; }
-  .logout-btn {
-    background: transparent; border: none;
-    color: rgba(255,255,255,0.35);
-    font-size: 11px; text-decoration: underline;
-    cursor: pointer; font-family: Arial, sans-serif;
-    margin-top: 10px;
-  }
-  .logout-btn:hover { color: rgba(255,120,120,0.85); }
-
-  h2.sec-title {
-    font-size: 11px;
+  .gate-card { width: 100%; max-width: 340px; text-align: center; }
+  .gate-card img { height: 26px; margin-bottom: 30px; }
+  .gate-card label {
+    display: block;
+    font-size: 10px;
     letter-spacing: 0px;
-    color: #C9A84C;
-    font-weight: normal;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .gate-card input {
+    width: 100%;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 13px 16px;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    font-family: Arial, sans-serif;
     margin-bottom: 16px;
   }
-  section { margin-bottom: 46px; }
+  .gate-card input:focus { border-color: rgba(201,168,76,0.5); }
+  .gate-btn {
+    width: 100%;
+    padding: 13px;
+    background: #C9A84C;
+    border: none;
+    color: #0a0a0a;
+    font-size: 12px;
+    letter-spacing: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .gate-error { color: rgba(255,120,120,0.85); font-size: 11.5px; margin-top: 12px; display: none; }
 
+  .dash { display: none; max-width: 1000px; margin: 0 auto; padding: 30px 20px 80px; }
 
-  /* ---------- skeleton loading (real network wait: /api/me) ---------- */
-  .sk-piece, .sk-order {
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .dash-header img { height: 22px; }
+  .dash-header .home-link { font-size: 11px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .dash-header .home-link:hover { color: #C9A84C; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    border: 0.5px solid rgba(255,255,255,0.12);
+    padding: 18px;
+  }
+  .stat-card .num { font-size: 24px; font-weight: bold; color: #C9A84C; margin-bottom: 6px; }
+  .stat-card .label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0px; }
+
+  h2 { font-size: 15px; margin-bottom: 16px; letter-spacing: 0px; }
+
+  .country-list { margin-bottom: 40px; }
+  .country-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+  }
+  .country-row span:last-child { color: #C9A84C; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th {
+    text-align: right;
+    padding: 10px 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 10.5px;
+    letter-spacing: 0px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.15);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 8px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+  }
+  td.wrap { white-space: normal; max-width: 220px; }
+  .table-wrap { overflow-x: auto; }
+
+  /* ---------- mobile order cards (table is unreadable below ~700px) ---------- */
+  #ordersCards { display: none; }
+  .order-card {
+    border: 0.5px solid rgba(255,255,255,0.12);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .order-card .oc-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .order-card .oc-id { font-size: 13px; font-weight: bold; color: #C9A84C; letter-spacing: 0.5px; }
+  .order-card .oc-total { font-size: 13px; font-weight: bold; color: #fff; }
+  .order-card .oc-row {
+    display: flex; justify-content: space-between; gap: 10px;
+    font-size: 12px; padding: 6px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .order-card .oc-row:last-of-type { border-bottom: none; }
+  .order-card .oc-label { color: rgba(255,255,255,0.4); flex-shrink: 0; }
+  .order-card .oc-value { color: rgba(255,255,255,0.85); text-align: left; word-break: break-word; }
+  .order-card .oc-status { margin-top: 10px; }
+
+  @media (max-width: 700px) {
+    .table-wrap { display: none; }
+    #ordersCards { display: block; }
+  }
+  .empty-note { color: rgba(255,255,255,0.35); font-size: 12.5px; padding: 20px 0; }
+
+  .pending-comment { border: 0.5px solid rgba(255,255,255,0.12); padding: 16px; margin-bottom: 10px; }
+  .pending-comment .pc-meta { font-size: 10.5px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .pending-comment .pc-meta strong { color: #C9A84C; }
+  .pending-comment .pc-text { font-size: 13px; line-height: 1.9; color: rgba(255,255,255,0.85); margin-bottom: 12px; }
+  .pc-actions { display: flex; gap: 8px; }
+  .pc-approve-btn, .pc-reject-btn {
+    padding: 8px 18px; font-size: 11px; letter-spacing: 0px;
+    cursor: pointer; font-family: Arial, sans-serif; border: 0.5px solid;
+    background: transparent;
+  }
+  .pc-approve-btn { color: #7fd88f; border-color: rgba(127,216,143,0.4); }
+  .pc-approve-btn:hover { border-color: #7fd88f; }
+  .pc-reject-btn { color: rgba(255,140,140,0.85); border-color: rgba(255,120,120,0.35); }
+  .pc-reject-btn:hover { border-color: rgba(255,120,120,0.7); }
+  .pc-approve-btn:disabled, .pc-reject-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .status-select {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.8);
+    font-size: 11.5px;
+    padding: 6px 8px;
+    font-family: Arial, sans-serif;
+    outline: none;
+    cursor: pointer;
+    max-width: 130px;
+  }
+  .status-select:focus { border-color: rgba(201,168,76,0.5); }
+  .status-select:disabled { opacity: 0.5; cursor: default; }
+  .status-select option { background: #0a0a0a; color: #fff; }
+
+  .loading { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-size: 13px; }
+  /* ---------- skeleton loading (real network wait: /api/admin-data) ---------- */
+  .sk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .sk-card, .sk-row {
     position: relative;
     overflow: hidden;
     background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.1);
   }
-  .sk-piece {
-    height: 76px;
-    margin-bottom: 12px;
-    border: 0.5px solid rgba(255,255,255,0.08);
-  }
-  .sk-order {
-    height: 64px;
-    margin-bottom: 2px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.06);
-  }
-  .sk-piece::after, .sk-order::after {
+  .sk-card { height: 64px; }
+  .sk-row { height: 38px; margin-bottom: 6px; border-radius: 0; }
+  .sk-card::after, .sk-row::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
     animation: skShimmer 1.6s ease-in-out infinite;
   }
   @keyframes skShimmer {
@@ -168,656 +209,578 @@
     100% { transform: translateX(100%); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .sk-piece::after, .sk-order::after { animation: none; opacity: 0.5; }
+    .sk-card::after, .sk-row::after { animation: none; opacity: 0.5; }
   }
 
-  .loading, .empty {
-    color: rgba(255,255,255,0.4);
-    font-size: 12.5px;
-    line-height: 1.9;
-    padding: 14px 0;
-  }
-  .empty a { color: #C9A84C; text-decoration: none; }
 
-  /* pieces */
-  .piece-card {
-    border: 0.5px solid rgba(201,168,76,0.3);
-    padding: 18px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .piece-code { font-size: 17px; font-weight: bold; letter-spacing: 2px; color: #C9A84C; margin-bottom: 4px; }
-  .piece-sub { font-size: 11.5px; color: rgba(255,255,255,0.5); }
-  .passport-link {
-    padding: 11px 20px;
-    border: 0.5px solid rgba(255,255,255,0.2);
-    font-size: 11px; letter-spacing: 0px;
-    text-decoration: none;
-    transition: border-color 0.2s;
-    white-space: nowrap;
-  }
-  .passport-link:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
-
-  .comment-toggle-btn {
-    background: none; border: none;
-    color: rgba(255,255,255,0.4); text-decoration: underline;
-    font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
-  }
-  .comment-toggle-btn:hover { color: #C9A84C; }
-
-  .comment-form-wrap { display: none; flex: 1 0 100%; margin-top: 10px; }
-  .comment-form-wrap.show { display: block; }
-  .comment-textarea {
-    width: 100%; min-height: 70px;
-    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
-    color: #fff; padding: 10px 14px; font-size: 12.5px;
-    font-family: Arial, sans-serif; outline: none; resize: vertical;
-    margin-bottom: 8px;
-  }
-  .comment-textarea:focus { border-color: rgba(201,168,76,0.5); }
-  .comment-submit-btn {
-    padding: 9px 20px;
-    background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
-    color: #fff; font-size: 11px; letter-spacing: 0px;
-    cursor: pointer; font-family: Arial, sans-serif;
-  }
-  .comment-submit-btn:hover { border-color: rgba(201,168,76,0.4); }
-  .comment-submit-btn:disabled { opacity: 0.5; cursor: default; }
-  .comment-form-msg { font-size: 11px; color: rgba(255,120,120,0.85); margin-top: 8px; }
-
-  /* orders */
-  .order-row {
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-    padding: 16px 2px;
-  }
-  .order-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
-  .order-id { font-size: 13.5px; font-weight: bold; letter-spacing: 1px; }
-  .order-date { font-size: 11px; color: rgba(255,255,255,0.35); }
-  .order-items { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 6px; }
-  .order-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-  .order-total { font-size: 12.5px; color: #C9A84C; font-weight: bold; }
-  .order-status {
-    font-size: 10px; letter-spacing: 0px;
-    color: rgba(255,255,255,0.55);
-    border: 0.5px solid rgba(255,255,255,0.18);
-    padding: 4px 10px;
-  }
-  .order-status.cancelled { color: rgba(255,120,120,0.85); border-color: rgba(255,120,120,0.35); }
-
-  /* ---------- order journey timeline (compact, per order card) ---------- */
-  .order-journey { margin-top: 14px; padding-top: 14px; border-top: 0.5px solid rgba(255,255,255,0.07); }
-  .journey-steps { display: flex; align-items: flex-start; position: relative; }
-  .journey-steps .track {
-    position: absolute; top: 4px; left: 12.5%; right: 12.5%; height: 1px;
-    background: rgba(255,255,255,0.15); z-index: 1;
-  }
-  .journey-steps .track-fill {
-    position: absolute; top: 4px; right: 12.5%; height: 1px;
-    background: #C9A84C; z-index: 1;
-  }
-  .journey-step { flex: 1; text-align: center; position: relative; z-index: 2; }
-  .journey-step .dot {
-    width: 9px; height: 9px; border-radius: 50%;
-    background: #0a0a0a;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    margin: 0 auto 8px;
-  }
-  .journey-step.done .dot { background: #C9A84C; border-color: #C9A84C; }
-  .journey-step .label {
-    font-size: 9.5px; color: rgba(255,255,255,0.4); line-height: 1.5;
-  }
-  .journey-step.done .label { color: rgba(255,255,255,0.8); }
-  .journey-step.current .label { color: #C9A84C; }
-
-
-  /* ---------- profile / address / security sections ---------- */
-  .info-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07);
-    font-size: 12.5px; gap: 12px;
-  }
-  .info-row .label { color: rgba(255,255,255,0.45); flex-shrink: 0; }
-  .info-row .value { color: rgba(255,255,255,0.85); text-align: left; min-width: 0; overflow-wrap: break-word; }
-
-  .addr-box {
-    border: 0.5px solid rgba(255,255,255,0.1);
-    padding: 16px;
-  }
-  .addr-box p { font-size: 12.5px; line-height: 2; color: rgba(255,255,255,0.75); }
-  .addr-edit-link {
-    display: inline-block; margin-top: 10px;
-    font-size: 11px; color: #C9A84C; text-decoration: none;
-    border-bottom: 0.5px solid rgba(201,168,76,0.4);
-  }
-
-  .acc-form { margin-top: 4px; }
-  .acc-field { text-align: right; margin-bottom: 12px; }
-  .acc-field label {
-    display: block; color: rgba(255,255,255,0.4);
-    font-size: 10px; letter-spacing: 0px; margin-bottom: 6px;
-  }
-  .acc-field input {
-    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
-    color: #fff; padding: 12px 16px; font-size: 13px;
-    outline: none; text-align: right; font-family: Arial, sans-serif;
-    width: 100%; transition: border-color 0.2s;
-  }
-  .acc-field input:focus { border-color: rgba(201,168,76,0.5); }
-  .acc-btn {
-    padding: 12px 24px;
-    background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
-    color: #fff; font-size: 12px; letter-spacing: 0px;
-    cursor: pointer; font-family: Arial, sans-serif;
-    transition: all 0.2s;
-  }
-  .acc-btn:hover { border-color: rgba(201,168,76,0.4); }
-  .acc-btn:disabled { opacity: 0.5; cursor: default; }
-
-  .danger-zone { border-color: rgba(255,120,120,0.2) !important; }
-  .danger-text { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 14px; }
-  .danger-btn {
-    padding: 12px 24px;
-    background: transparent; border: 0.5px solid rgba(255,120,120,0.35);
-    color: rgba(255,140,140,0.9); font-size: 12px; letter-spacing: 0px;
-    cursor: pointer; font-family: Arial, sans-serif;
-    transition: all 0.2s;
-  }
-  .danger-btn:hover { border-color: rgba(255,120,120,0.7); background: rgba(255,80,80,0.06); }
-
-  .confirm-delete-box {
-    display: none;
-    margin-top: 16px;
-    padding: 16px;
-    border: 0.5px solid rgba(255,120,120,0.3);
-  }
-  .confirm-delete-box.show { display: block; }
-  .confirm-delete-box p { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 12px; }
-  .confirm-delete-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .closing { text-align: center; margin-top: 20px; }
-  .closing .phrase { color: #C9A84C; font-size: 13px; opacity: 0.9; }
-
-  /* unified footer */
-  .site-footer {
+  /* ---------- drop invites ---------- */
+  .invite-section { margin-top: 50px; padding-top: 30px; border-top: 0.5px solid rgba(255,255,255,0.1); }
+  .invite-box textarea {
     width: 100%;
-    border-top: 0.5px solid rgba(255,255,255,0.08);
-    margin-top: 60px;
-    padding: 36px 20px 44px;
-    text-align: center;
+    min-height: 90px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 13px 16px;
+    font-size: 12.5px;
+    outline: none;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    margin-bottom: 12px;
   }
-  .site-footer .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 26px; margin-bottom: 24px; }
-  .site-footer .footer-links a { font-size: 11px; letter-spacing: 0px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
-  .site-footer .footer-links a:hover { color: #C9A84C; }
-  .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
+  .invite-box textarea:focus { border-color: rgba(201,168,76,0.5); }
+  .invite-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+  .invite-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); cursor: pointer; }
+  .invite-check input { accent-color: #C9A84C; }
+  .invite-btn {
+    padding: 12px 26px;
+    background: #C9A84C;
+    border: none;
+    color: #0a0a0a;
+    font-size: 12px;
+    letter-spacing: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .invite-btn:disabled { opacity: 0.5; cursor: default; }
+  .invite-hint { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.9; margin-bottom: 14px; }
+  .invite-status { font-size: 12px; color: #C9A84C; margin-bottom: 14px; display: none; }
+  .invite-status.err { color: rgba(255,120,120,0.85); }
+  .copy-btn {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    font-size: 10.5px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }
+  .copy-btn:hover { border-color: rgba(201,168,76,0.4); color: #C9A84C; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
-  </div>
-</header>
-
-<div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
-  <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
-  </div>
-</nav>
-
-<div class="gate-box" id="gateBox" style="display:none;">
-  <p>سجّل دخولك عشان تشوف حسابك.</p>
-  <div class="gate-actions">
-    <a href="/" class="gate-btn primary">أنشئ حساب</a>
-    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="/logo.png" alt="DIRBALK" />
+    <label for="adminKey">رمز الدخول</label>
+    <input type="password" id="adminKey" placeholder="••••••••" />
+    <button type="button" class="gate-btn" id="gateBtn">دخول</button>
+    <p class="gate-error" id="gateError">رمز الدخول غير صحيح.</p>
   </div>
 </div>
 
-<div class="wrap" id="accountWrap" style="display:none;">
-
-  <div class="greet reveal">
-    <h1 id="greetName"></h1>
-    <p id="greetEmail"></p>
-    <button type="button" class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
+<div class="dash" id="dash">
+  <div class="dash-header">
+    <img src="/logo.png" alt="DIRBALK" />
+    <a href="/" class="home-link">← الرئيسية</a>
   </div>
 
-  <section class="reveal" style="transition-delay:0.1s;">
-    <h2 class="sec-title">قطعي</h2>
-    <div id="piecesArea"><div class="sk-piece"></div><div class="sk-piece"></div></div>
-  </section>
+  <div id="loadingNote"><div class="sk-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div></div>
 
-  <section class="reveal" style="transition-delay:0.2s;">
-    <h2 class="sec-title">طلباتي</h2>
-    <div id="ordersArea"><div class="sk-order"></div><div class="sk-order"></div><div class="sk-order"></div></div>
-  </section>
+  <div id="dashContent" style="display:none;">
+    <div class="stat-grid" id="statGrid"></div>
 
+    <h2>التسجيلات حسب الدولة</h2>
+    <div class="country-list" id="countryList"></div>
 
-  <section class="reveal" style="transition-delay:0.28s;">
-    <h2 class="sec-title">ملفي</h2>
-    <div id="profileArea"></div>
-  </section>
-
-  <section class="reveal" style="transition-delay:0.34s;">
-    <h2 class="sec-title">عنواني</h2>
-    <div class="addr-box" id="addrBox">
-      <p id="addrText">ما في عنوان محفوظ لسا.</p>
-      <a href="/checkout.html" class="addr-edit-link">تعديل من صفحة الشحن ←</a>
+    <h2>آخر الطلبات</h2>
+    <div class="table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>الاسم</th>
+            <th>الإيميل</th>
+            <th>الهاتف</th>
+            <th>المدينة</th>
+            <th>العنوان</th>
+            <th>القطع</th>
+            <th>المجموع</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
     </div>
-  </section>
+    <div id="ordersCards"></div>
+    <p class="empty-note" id="ordersEmpty" style="display:none;">ما في طلبات لسا.</p>
 
-  <section class="reveal" style="transition-delay:0.4s;">
-    <h2 class="sec-title">كلمة المرور</h2>
-    <form class="acc-form" id="pwForm">
-      <div class="acc-field" id="currentPwField" style="display:none;">
-        <label for="currentPw">كلمة المرور الحالية</label>
-        <input type="password" id="currentPw" autocomplete="current-password" />
-      </div>
-      <div class="acc-field">
-        <label for="newPw">كلمة المرور الجديدة</label>
-        <input type="password" id="newPw" placeholder="8 أحرف على الأقل" autocomplete="new-password" />
-      </div>
-      <p class="form-error" id="pwError" style="display:none;color:rgba(255,120,120,0.85);font-size:11.5px;margin-bottom:10px;"></p>
-      <button type="submit" class="acc-btn" id="pwBtn">حفظ</button>
-    </form>
-  </section>
-
-  <section class="reveal" style="transition-delay:0.46s;">
-    <h2 class="sec-title">منطقة الخطر</h2>
-    <div class="addr-box danger-zone">
-      <p class="danger-text">حذف حسابك نهائي بالنسبة لبياناتك الشخصية. القطع اللي تملكها وسجل طلباتك بيظلوا محفوظين كسجل تاريخي (عشان توثيق ملكية القطع)، بس اسمك وإيميلك بينمسحوا.</p>
-      <button type="button" class="danger-btn" id="showDeleteBtn">حذف حسابي</button>
-
-      <div class="confirm-delete-box" id="confirmDeleteBox">
-        <p>اكتب <strong>حذف</strong> بالخانة تحت، وأدخل كلمة مرورك (إذا عندك وحدة)، للتأكيد.</p>
-        <div class="acc-field">
-          <input type="text" id="deleteConfirmWord" placeholder="اكتب: حذف" />
+    <div class="invite-section">
+      <h2>دعوات الدروب</h2>
+      <p class="invite-hint">
+        كل مدعو بياخد رابط دخول شخصي صالح 24 ساعة — بيفتحه وبيدخل الشوب مباشرة بدون كلمة سر، من أي جهاز.<br>
+        اترك الخانة فاضية لدعوة <strong>كل</strong> المسجلين، أو حط إيميلات محددة (كل إيميل بسطر).
+      </p>
+      <div class="invite-box">
+        <textarea id="inviteEmails" placeholder="example1@email.com&#10;example2@email.com"></textarea>
+        <div class="invite-controls">
+          <label class="invite-check">
+            <input type="checkbox" id="inviteSendEmails" checked />
+            ابعت إيميل الدعوة لكل واحد
+          </label>
+          <button type="button" class="invite-btn" id="inviteBtn">ولّد الدعوات</button>
         </div>
-        <div class="acc-field">
-          <input type="password" id="deletePw" placeholder="كلمة المرور (إذا موجودة)" autocomplete="current-password" />
-        </div>
-        <div class="confirm-delete-actions">
-          <button type="button" class="danger-btn" id="confirmDeleteBtn">تأكيد الحذف</button>
-          <button type="button" class="acc-btn" id="cancelDeleteBtn">تراجع</button>
+        <p class="invite-status" id="inviteStatus"></p>
+        <div class="table-wrap">
+          <table id="inviteTable" style="display:none;">
+            <thead>
+              <tr><th>الاسم</th><th>الإيميل</th><th>الرابط</th></tr>
+            </thead>
+            <tbody id="inviteBody"></tbody>
+          </table>
         </div>
       </div>
     </div>
-  </section>
 
-  <div class="closing">
-    <p class="phrase brand-phrase" id="closingPhrase">دير بالك على حالك.</p>
+    <div class="invite-section" id="launchSection">
+      <h2>إعلان الإطلاق</h2>
+      <p class="invite-hint">
+        بيبعت إيميل لكل المسجلين (كل قائمة الانتظار، مش بس اللي انبعتلهم دعوة قبل) إنه الكوليكشن صار متاح للكل.<br>
+        بيرسل <strong>100 إيميل بكل ضغطة</strong> (حد Gmail اليومي)، وما بيرسل لنفس الشخص مرتين حتى لو ضغطت أكتر من مرة أو بأيام مختلفة.<br>
+        <strong>ما في تراجع بعد الإرسال — تأكد إنه هذا فعلاً يوم الإطلاق قبل ما تضغط.</strong>
+      </p>
+      <div class="invite-box">
+        <button type="button" class="invite-btn" id="launchBtn">ابعت الدفعة الجاية</button>
+        <p class="invite-status" id="launchStatus"></p>
+      </div>
+    </div>
+
+    <div class="invite-section" id="commentsSection">
+      <h2>تعليقات بانتظار المراجعة</h2>
+      <p class="invite-hint">بس اللي عنده القطعة فعلاً بيقدر يعلّق. راجع كل تعليق قبل ما ينشر.</p>
+      <div id="pendingCommentsArea"><p class="empty-note">جاري التحميل...</p></div>
+    </div>
   </div>
-
 </div>
-
-<footer class="site-footer">
-  <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
-  </nav>
-  <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
-</footer>
 
 <script>
 (function () {
-  if (window.DirbalkPassword) {
-    DirbalkPassword.attachCapsLock('currentPw');
-    DirbalkPassword.attachStrength('newPw');
-    DirbalkPassword.attachCapsLock('newPw');
-    DirbalkPassword.attachCapsLock('deletePw');
+  const ADMIN_KEY_STORAGE = 'dirbalk_admin_key';
+
+  function loadDashboard(key) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dash').style.display = 'block';
+
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        document.getElementById('loadingNote').style.display = 'none';
+        if (result.status !== 'success') {
+          document.getElementById('gate').style.display = 'flex';
+          document.getElementById('dash').style.display = 'none';
+          document.getElementById('gateError').style.display = 'block';
+          try { sessionStorage.removeItem(ADMIN_KEY_STORAGE); } catch (e) {}
+          return;
+        }
+
+        document.getElementById('dashContent').style.display = 'block';
+        renderStats(result.stats);
+        renderCountries(result.stats.countryCounts);
+        renderOrders(result.orders);
+        loadPendingComments(key);
+      })
+      .catch(() => {
+        document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      });
   }
-  var PRODUCT_NAMES = {
+
+  var PRODUCT_NAMES_COMMENTS = {
     'DB-TEE-01': 'تيشيرت أوفرسايز',
     'DB-DEN-01': 'بنطلون دنيم واسع',
     'DB-JAC-01': 'جاكيت دنيم أوفرسايز'
   };
 
-  var loggedIn = false, email = '', name = '', gender = '';
-  try {
-    loggedIn = localStorage.getItem('dirbalk_logged_in') === '1';
-    email = (localStorage.getItem('dirbalk_email') || '').toLowerCase();
-    name = localStorage.getItem('dirbalk_name') || '';
-    gender = localStorage.getItem('dirbalk_gender') || '';
-  } catch (e) { /* ignore */ }
-
-  if (!loggedIn || !email) {
-    document.getElementById('gateBox').style.display = 'block';
-    return;
+  function escapeHtmlAdmin(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
-  document.getElementById('accountWrap').style.display = 'block';
-  var first = name.trim().split(' ')[0] || '';
-  var isFemale = gender === 'female';
-  document.getElementById('greetName').textContent = 'أهلاً ' + first;
-  document.getElementById('greetEmail').textContent = email;
-  document.getElementById('closingPhrase').textContent = isFemale ? 'ديري بالك على حالك.' : 'دير بالك على حالك.';
-
-  document.getElementById('logoutBtn').addEventListener('click', function () {
-    try {
-      ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position']
-        .forEach(function (k) { localStorage.removeItem(k); });
-    } catch (e) { /* ignore */ }
-    window.location.href = '/';
-  });
-
-
-  /* ---------------- profile ---------------- */
-  var phone = '';
-  try { phone = localStorage.getItem('dirbalk_phone') || ''; } catch (e) { /* ignore */ }
-  document.getElementById('profileArea').innerHTML =
-    '<div class="info-row"><span class="label">الاسم</span><span class="value">' + (name || '—') + '</span></div>' +
-    '<div class="info-row"><span class="label">الإيميل</span><span class="value">' + email + '</span></div>' +
-    '<div class="info-row"><span class="label">الهاتف</span><span class="value">' + (phone || '—') + '</span></div>';
-
-  /* ---------------- saved address ---------------- */
-  try {
-    var saved = JSON.parse(localStorage.getItem('dirbalk_saved_shipping') || 'null');
-    if (saved) {
-      document.getElementById('addrText').innerHTML =
-        '<strong>' + (saved.fullName || '') + '</strong><br>' +
-        (saved.phone || '') + '<br>' +
-        (saved.city || '') + ' — ' + (saved.address || '');
-    }
-  } catch (e) { /* ignore */ }
-
-  /* ---------------- change / set password ---------------- */
-  var hasPassword = false;
-  try { hasPassword = localStorage.getItem('dirbalk_has_password') === '1'; } catch (e) { /* ignore */ }
-  if (hasPassword) document.getElementById('currentPwField').style.display = 'block';
-
-  var pwForm = document.getElementById('pwForm');
-  var pwBtn = document.getElementById('pwBtn');
-  var pwError = document.getElementById('pwError');
-  var pwSubmitting = false;
-
-  pwForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (pwSubmitting) return;
-    pwError.style.display = 'none';
-
-    var currentPassword = document.getElementById('currentPw').value;
-    var newPw = document.getElementById('newPw').value;
-
-    if (newPw.length < 8) {
-      pwError.textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
-      pwError.style.display = 'block';
-      return;
-    }
-
-    pwSubmitting = true;
-    pwBtn.disabled = true;
-    pwBtn.textContent = 'جاري الحفظ...';
-
-    fetch('/api/account', {
+  function loadPendingComments(key) {
+    fetch('/api/admin-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
+      body: JSON.stringify({ kind: 'getPendingComments', key }),
     })
-      .then(function (r) { return r.json(); })
-      .then(function (result) {
-        pwSubmitting = false;
-        pwBtn.disabled = false;
-        pwBtn.textContent = 'حفظ';
-        if (result.status === 'success') {
-          if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم الحفظ.');
-          pwForm.reset();
-          try { localStorage.setItem('dirbalk_has_password', '1'); } catch (e) { /* ignore */ }
-          document.getElementById('currentPwField').style.display = 'block';
-        } else {
-          pwError.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
-          pwError.style.display = 'block';
-          if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.status !== 'success') {
+          document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">' + (result.message || 'حدث خطأ مؤقت.') + '</p>';
+          return;
         }
+        renderPendingComments(result.pending || [], key);
       })
-      .catch(function () {
-        pwSubmitting = false;
-        pwBtn.disabled = false;
-        pwBtn.textContent = 'حفظ';
-        pwError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
-        pwError.style.display = 'block';
-        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      .catch(() => {
+        document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">حدث خطأ مؤقت، يرجى المحاولة لاحقًا.</p>';
       });
-  });
-
-  /* ---------------- delete account ---------------- */
-  document.getElementById('showDeleteBtn').addEventListener('click', function () {
-    document.getElementById('confirmDeleteBox').classList.add('show');
-  });
-  document.getElementById('cancelDeleteBtn').addEventListener('click', function () {
-    document.getElementById('confirmDeleteBox').classList.remove('show');
-    document.getElementById('deleteConfirmWord').value = '';
-    document.getElementById('deletePw').value = '';
-  });
-
-  var deleteSubmitting = false;
-  document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-    if (deleteSubmitting) return;
-    var word = document.getElementById('deleteConfirmWord').value.trim();
-    if (word !== 'حذف') {
-      if (window.DirbalkToast) DirbalkToast.warning('اكتب "حذف" بالضبط للتأكيد.');
-      return;
-    }
-    var delBtn = this;
-    var pw = document.getElementById('deletePw').value;
-
-    deleteSubmitting = true;
-    delBtn.disabled = true;
-    delBtn.textContent = 'جاري الحذف...';
-
-    fetch('/api/account', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (result) {
-        if (result.status === 'success') {
-          if (window.DirbalkToast) DirbalkToast.success('تم حذف حسابك. دير بالك على حالك.');
-          try {
-            ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position','dirbalk_has_password']
-              .forEach(function (k) { localStorage.removeItem(k); });
-          } catch (e) { /* ignore */ }
-          setTimeout(function () { window.location.href = '/'; }, 1200);
-        } else {
-          deleteSubmitting = false;
-          delBtn.disabled = false;
-          delBtn.textContent = 'تأكيد الحذف';
-          if (window.DirbalkToast) DirbalkToast.error(result.message || 'ما قدرنا نحذف الحساب.');
-        }
-      })
-      .catch(function () {
-        deleteSubmitting = false;
-        delBtn.disabled = false;
-        delBtn.textContent = 'تأكيد الحذف';
-        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
-      });
-  });
-
-  /* reveal */
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal:not(.visible)');
-    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('visible'); }); return; }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(function (el) { obs.observe(el); });
   }
-  initReveal();
 
-  /* data */
-  fetch('/api/me', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email })
-  })
-    .then(function (r) { return r.json(); })
-    .then(function (result) {
-      renderPieces(result.pieces || []);
-      renderOrders(result.orders || []);
-    })
-    .catch(function () {
-      document.getElementById('piecesArea').innerHTML = '<p class="empty">صار خطأ مؤقت — جرب كمان شوي.</p>';
-      document.getElementById('ordersArea').innerHTML = '';
-    });
-
-  function renderPieces(pieces) {
-    var area = document.getElementById('piecesArea');
-    if (!pieces.length) {
-      area.innerHTML = '<p class="empty">ما عندك قطع لسا.<br><a href="/shop.html">Collection 01 ←</a></p>';
+  function renderPendingComments(pending, key) {
+    const area = document.getElementById('pendingCommentsArea');
+    if (!pending.length) {
+      area.innerHTML = '<p class="empty-note">ولا تعليق بانتظار المراجعة.</p>';
       return;
     }
     area.innerHTML = '';
-    pieces.forEach(function (pc) {
-      var serial = parseInt(pc.serial, 10);
-      var card = document.createElement('div');
-      card.className = 'piece-card';
+    pending.forEach((c) => {
+      const card = document.createElement('div');
+      card.className = 'pending-comment';
       card.innerHTML =
-        '<div>' +
-        '<p class="piece-code">' + pc.code + '</p>' +
-        '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100' +
-        (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
-        '</div>' +
-        '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>' +
-        '<button type="button" class="comment-toggle-btn">اترك تعليق</button>' +
-        '<div class="comment-form-wrap"></div>';
+        '<p class="pc-meta"><strong>' + escapeHtmlAdmin(c.name || 'مجهول') + '</strong> — ' +
+        escapeHtmlAdmin(PRODUCT_NAMES_COMMENTS[c.product] || c.product) + ' — ' + escapeHtmlAdmin(c.email) + '</p>' +
+        '<p class="pc-text">' + escapeHtmlAdmin(c.text) + '</p>' +
+        '<div class="pc-actions">' +
+        '<button type="button" class="pc-approve-btn" data-id="' + escapeHtmlAdmin(c.id) + '">نشر</button>' +
+        '<button type="button" class="pc-reject-btn" data-id="' + escapeHtmlAdmin(c.id) + '">رفض</button>' +
+        '</div>';
 
-      var toggleBtn = card.querySelector('.comment-toggle-btn');
-      var formWrap = card.querySelector('.comment-form-wrap');
-      toggleBtn.addEventListener('click', function () {
-        if (formWrap.classList.contains('show')) { formWrap.classList.remove('show'); return; }
-        formWrap.innerHTML =
-          '<textarea class="comment-textarea" maxlength="500" placeholder="شو رأيك بالقطعة؟"></textarea>' +
-          '<button type="button" class="comment-submit-btn">إرسال</button>' +
-          '<p class="comment-form-msg"></p>';
-        formWrap.classList.add('show');
-
-        formWrap.querySelector('.comment-submit-btn').addEventListener('click', function () {
-          var textarea = formWrap.querySelector('.comment-textarea');
-          var msg = formWrap.querySelector('.comment-form-msg');
-          var text = textarea.value.trim();
-          if (!text) { msg.textContent = 'اكتب شي أول.'; return; }
-
-          var submitBtn = this;
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'جاري الإرسال...';
-
-          fetch('/api/account', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
-          })
-            .then(function (r) { return r.json(); })
-            .then(function (result) {
-              if (result.status === 'success') {
-                formWrap.innerHTML = '<p class="comment-form-msg" style="color:#7fd88f;">' + result.message + '</p>';
-                if (window.DirbalkToast) DirbalkToast.success(result.message);
-              } else {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'إرسال';
-                msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
-                if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
-              }
-            })
-            .catch(function () {
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'إرسال';
-              msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
-            });
-        });
-      });
+      card.querySelector('.pc-approve-btn').addEventListener('click', function () { moderateComment(c.id, 'approve', card, key); });
+      card.querySelector('.pc-reject-btn').addEventListener('click', function () { moderateComment(c.id, 'reject', card, key); });
 
       area.appendChild(card);
     });
   }
 
-  var JOURNEY_STEPS = [
-    { key: 'قيد المراجعة', label: 'استلمنا طلبك' },
-    { key: 'قيد التجهيز', label: 'عم نجهز القطع' },
-    { key: 'تم الشحن', label: 'بالطريق إلك' },
-    { key: 'تم التسليم', label: 'بين إيديك' }
-  ];
+  function moderateComment(commentId, decision, card, key) {
+    const btns = card.querySelectorAll('button');
+    btns.forEach((b) => { b.disabled = true; });
 
-  function renderJourney(status) {
-    if (status === 'ملغى') {
-      return '<div class="order-journey"><span class="order-status cancelled">ملغى</span></div>';
-    }
-    var currentIdx = JOURNEY_STEPS.findIndex(function (s) { return s.key === status; });
-    if (currentIdx === -1) currentIdx = 0;
-
-    var fillPct = (currentIdx / (JOURNEY_STEPS.length - 1)) * 75; // track spans 75% of the row (12.5% inset each side)
-
-    var stepsHtml = JOURNEY_STEPS.map(function (s, i) {
-      var cls = i < currentIdx ? 'done' : (i === currentIdx ? 'done current' : '');
-      return '<div class="journey-step ' + cls + '"><div class="dot"></div><div class="label">' + s.label + '</div></div>';
-    }).join('');
-
-    return '<div class="order-journey"><div class="journey-steps">' +
-      '<div class="track"></div><div class="track-fill" style="width:' + fillPct + '%"></div>' +
-      stepsHtml + '</div></div>';
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'moderateComment', key, commentId, decision }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.status === 'success') {
+          card.remove();
+          if (window.DirbalkToast) DirbalkToast.success(decision === 'approve' ? 'انشر التعليق.' : 'انرفض التعليق.');
+          if (!document.querySelectorAll('.pending-comment').length) {
+            document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">ولا تعليق بانتظار المراجعة.</p>';
+          }
+        } else {
+          btns.forEach((b) => { b.disabled = false; });
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+        }
+      })
+      .catch(() => {
+        btns.forEach((b) => { b.disabled = false; });
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      });
   }
 
-  function renderOrders(orders) {
-    var area = document.getElementById('ordersArea');
-    if (!orders.length) {
-      area.innerHTML = '<p class="empty">ما في طلبات لسا.</p>';
-      return;
-    }
-    area.innerHTML = '';
-    orders.forEach(function (o) {
-      var d = o.time ? new Date(o.time) : null;
-      var dateStr = d ? d.toLocaleDateString('ar-JO', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-      var row = document.createElement('div');
-      row.className = 'order-row';
-      row.innerHTML =
-        '<div class="order-top"><span class="order-id">' + o.orderId + '</span><span class="order-date">' + dateStr + '</span></div>' +
-        '<p class="order-items">' + (o.items || '') + '</p>' +
-        '<div class="order-bottom"><span class="order-total">' + (o.total || 0) + ' JD</span></div>' +
-        renderJourney(o.status || '');
-      area.appendChild(row);
+  function renderStats(stats) {
+    const cards = [
+      { num: stats.totalAccounts, label: 'إجمالي الحسابات' },
+      { num: stats.verifiedAccounts, label: 'حسابات مفعّلة' },
+      { num: stats.maleCount, label: 'ذكور' },
+      { num: stats.femaleCount, label: 'إناث' },
+      { num: stats.totalOrders, label: 'إجمالي الطلبات' },
+      { num: stats.totalRevenue + ' JD', label: 'إجمالي المبيعات (تجريبي)' },
+    ];
+    const grid = document.getElementById('statGrid');
+    grid.innerHTML = '';
+    cards.forEach((c) => {
+      const div = document.createElement('div');
+      div.className = 'stat-card';
+      div.innerHTML = '<div class="num">' + c.num + '</div><div class="label">' + c.label + '</div>';
+      grid.appendChild(div);
     });
   }
 
-  if (window.gtag) gtag('event', 'page_view_me');
-  /* ---------------- mobile hamburger + side menu ---------------- */
-  var hamburgerBtn = document.getElementById('hamburgerBtn');
-  var sideMenuPanel = document.getElementById('sideMenuPanel');
-  var sideMenuOverlay = document.getElementById('sideMenuOverlay');
+  function renderCountries(countryCounts) {
+    const list = document.getElementById('countryList');
+    list.innerHTML = '';
+    const entries = Object.entries(countryCounts || {}).sort((a, b) => b[1] - a[1]);
+    if (entries.length === 0) {
+      list.innerHTML = '<p class="empty-note">ما في بيانات لسا.</p>';
+      return;
+    }
+    entries.forEach(([country, count]) => {
+      const row = document.createElement('div');
+      row.className = 'country-row';
+      row.innerHTML = '<span>' + country + '</span><span>' + count + '</span>';
+      list.appendChild(row);
+    });
+  }
 
-  function openSideMenu() {
-    sideMenuPanel.classList.add('open');
-    sideMenuOverlay.classList.add('open');
-    hamburgerBtn.classList.add('open');
-    hamburgerBtn.setAttribute('aria-expanded', 'true');
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
-  function closeSideMenu() {
-    sideMenuPanel.classList.remove('open');
-    sideMenuOverlay.classList.remove('open');
-    hamburgerBtn.classList.remove('open');
-    hamburgerBtn.setAttribute('aria-expanded', 'false');
+
+  var ORDER_STATUSES = ['قيد المراجعة', 'قيد التجهيز', 'تم الشحن', 'تم التسليم', 'ملغى'];
+  var EMAIL_TRIGGER_STATUSES = ['تم الشحن', 'تم التسليم'];
+
+  function buildStatusSelect(orderId, currentStatus) {
+    const select = document.createElement('select');
+    select.className = 'status-select';
+    ORDER_STATUSES.forEach((s) => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === currentStatus) opt.selected = true;
+      select.appendChild(opt);
+    });
+    // the order may currently hold a status outside the canonical list
+    // (e.g. the old default "قيد المراجعة (تجريبي)") — keep it selectable
+    // rather than silently overwriting it on load
+    if (currentStatus && ORDER_STATUSES.indexOf(currentStatus) === -1) {
+      const opt = document.createElement('option');
+      opt.value = currentStatus;
+      opt.textContent = currentStatus;
+      opt.selected = true;
+      select.insertBefore(opt, select.firstChild);
+    }
+
+    let previousValue = select.value;
+    select.addEventListener('change', () => {
+      const newStatus = select.value;
+      if (EMAIL_TRIGGER_STATUSES.indexOf(newStatus) !== -1) {
+        const ok = window.confirm('هاد رح يبعت إيميل تلقائي للزبون (' + newStatus + '). أكيد؟');
+        if (!ok) { select.value = previousValue; return; }
+      }
+
+      let key = '';
+      try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+      select.disabled = true;
+
+      fetch('/api/admin-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'updateOrderStatus', key, orderId, newStatus }),
+      })
+        .then((r) => r.json())
+        .then((result) => {
+          select.disabled = false;
+          if (result.status === 'success') {
+            previousValue = newStatus;
+            if (window.DirbalkToast) DirbalkToast.success('تحدّثت حالة الطلب.');
+          } else {
+            select.value = previousValue;
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'ما قدرنا نحدّث الحالة.');
+          }
+        })
+        .catch(() => {
+          select.disabled = false;
+          select.value = previousValue;
+          if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+        });
+    });
+
+    return select;
   }
-  hamburgerBtn.addEventListener('click', function () {
-    if (sideMenuPanel.classList.contains('open')) closeSideMenu(); else openSideMenu();
+
+  function renderOrders(orders) {
+    const body = document.getElementById('ordersBody');
+    const cards = document.getElementById('ordersCards');
+    body.innerHTML = '';
+    cards.innerHTML = '';
+    if (!orders || orders.length === 0) {
+      document.getElementById('ordersEmpty').style.display = 'block';
+      return;
+    }
+    document.getElementById('ordersEmpty').style.display = 'none';
+    orders.forEach((o) => {
+      var safeLocationLink = '';
+      if (o.locationLink && /^https?:\/\//i.test(o.locationLink)) {
+        safeLocationLink = ' <a href="' + escapeHtml(o.locationLink) + '" target="_blank" style="color:#C9A84C;">(خريطة)</a>';
+      }
+
+      // desktop table row
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + escapeHtml(o.orderId) + '</td>' +
+        '<td>' + escapeHtml(o.name) + '</td>' +
+        '<td>' + escapeHtml(o.email) + '</td>' +
+        '<td>' + escapeHtml(o.phone) + '</td>' +
+        '<td>' + escapeHtml(o.city) + '</td>' +
+        '<td class="wrap">' + escapeHtml(o.address) + safeLocationLink + '</td>' +
+        '<td class="wrap">' + escapeHtml(o.items) + '</td>' +
+        '<td>' + escapeHtml(o.total) + ' JD</td>' +
+        '<td></td>';
+      tr.lastElementChild.appendChild(buildStatusSelect(o.orderId, o.status));
+      body.appendChild(tr);
+
+      // mobile card — same data, stacked and labeled instead of squeezed into columns
+      const card = document.createElement('div');
+      card.className = 'order-card';
+      card.innerHTML =
+        '<div class="oc-top"><span class="oc-id">' + escapeHtml(o.orderId) + '</span><span class="oc-total">' + escapeHtml(o.total) + ' JD</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الاسم</span><span class="oc-value">' + escapeHtml(o.name) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الإيميل</span><span class="oc-value">' + escapeHtml(o.email) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">الهاتف</span><span class="oc-value">' + escapeHtml(o.phone) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">المدينة</span><span class="oc-value">' + escapeHtml(o.city) + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">العنوان</span><span class="oc-value">' + escapeHtml(o.address) + safeLocationLink + '</span></div>' +
+        '<div class="oc-row"><span class="oc-label">القطع</span><span class="oc-value">' + escapeHtml(o.items) + '</span></div>';
+      const ocStatus = document.createElement('div');
+      ocStatus.className = 'oc-status';
+      ocStatus.appendChild(buildStatusSelect(o.orderId, o.status));
+      card.appendChild(ocStatus);
+      cards.appendChild(card);
+    });
+  }
+
+  /* ---------- drop invites ---------- */
+  document.getElementById('inviteBtn').addEventListener('click', () => {
+    const raw = document.getElementById('inviteEmails').value;
+    const emails = raw.split('\n').map((e) => e.trim().toLowerCase()).filter(Boolean);
+    const sendEmails = document.getElementById('inviteSendEmails').checked;
+
+    const confirmMsg = emails.length === 0
+      ? 'رح تنولّد دعوات لكل المسجلين' + (sendEmails ? ' وينبعتلهم إيميل' : '') + '. أكيد؟'
+      : 'رح تنولّد دعوات لـ ' + emails.length + ' شخص' + (sendEmails ? ' وينبعتلهم إيميل' : '') + '. أكيد؟';
+    if (!window.confirm(confirmMsg)) return;
+
+    let key = '';
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+
+    const btn = document.getElementById('inviteBtn');
+    const status = document.getElementById('inviteStatus');
+    btn.disabled = true;
+    btn.textContent = 'جاري التوليد...';
+    status.style.display = 'none';
+    status.classList.remove('err');
+
+    fetch('/api/invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, emails, sendEmails }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        btn.disabled = false;
+        btn.textContent = 'ولّد الدعوات';
+        status.style.display = 'block';
+        if (result.status !== 'success') {
+          status.classList.add('err');
+          status.textContent = result.message || 'حدث خطأ مؤقت.';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'حدث خطأ مؤقت.');
+          return;
+        }
+        status.textContent = 'انولّدت ' + result.count + ' دعوة' + (sendEmails ? ' وانبعتت الإيميلات.' : '.') + ' الروابط صالحة 24 ساعة.';
+        if (window.DirbalkToast) DirbalkToast.success('انولّدت ' + result.count + ' دعوة.');
+        renderInvites(result.invites || []);
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'ولّد الدعوات';
+        status.style.display = 'block';
+        status.classList.add('err');
+        status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      });
   });
-  document.getElementById('sideMenuClose').addEventListener('click', closeSideMenu);
-  sideMenuOverlay.addEventListener('click', closeSideMenu);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSideMenu(); });
+
+  document.getElementById('launchBtn').addEventListener('click', () => {
+    if (!window.confirm('رح تبعت إعلان الإطلاق لدفعة جديدة (حتى 100 شخص). هذا الإجراء ما إله تراجع. متأكد إنه هذا فعلاً يوم الإطلاق؟')) return;
+    if (!window.confirm('تأكيد أخير — رح ينبعت الإيميل هلأ فعلياً. أكيد؟')) return;
+
+    let key = '';
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+
+    const btn = document.getElementById('launchBtn');
+    const status = document.getElementById('launchStatus');
+    btn.disabled = true;
+    btn.textContent = 'جاري الإرسال...';
+    status.style.display = 'none';
+    status.classList.remove('err');
+
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'launchAnnouncement', key, batchSize: 100 }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        btn.disabled = false;
+        status.style.display = 'block';
+        if (result.status !== 'success') {
+          status.classList.add('err');
+          status.textContent = result.message || 'حدث خطأ مؤقت.';
+          btn.textContent = 'ابعت الدفعة الجاية';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'حدث خطأ مؤقت.');
+          return;
+        }
+        status.textContent = 'انبعت لـ ' + result.sent + ' شخص. باقي ' + result.remaining + '.';
+        if (window.DirbalkToast) DirbalkToast.success('انبعت لـ ' + result.sent + ' شخص.');
+        btn.textContent = result.remaining > 0 ? 'ابعت الدفعة الجاية (باقي ' + result.remaining + ')' : 'الكل استلم — خلص';
+        btn.disabled = result.remaining === 0;
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'ابعت الدفعة الجاية';
+        status.style.display = 'block';
+        status.classList.add('err');
+        status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      });
+  });
+
+  function renderInvites(invites) {
+    const table = document.getElementById('inviteTable');
+    const body = document.getElementById('inviteBody');
+    body.innerHTML = '';
+    if (invites.length === 0) { table.style.display = 'none'; return; }
+    invites.forEach((inv) => {
+      const tr = document.createElement('tr');
+      const nameTd = document.createElement('td');
+      nameTd.textContent = inv.name;
+      const emailTd = document.createElement('td');
+      emailTd.textContent = inv.email;
+      const linkTd = document.createElement('td');
+      const copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = 'نسخ الرابط';
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(inv.link);
+          copyBtn.textContent = 'تم ✓';
+          setTimeout(() => { copyBtn.textContent = 'نسخ الرابط'; }, 1600);
+        } catch (e) {
+          window.prompt('انسخ الرابط:', inv.link);
+        }
+      });
+      linkTd.appendChild(copyBtn);
+      tr.appendChild(nameTd);
+      tr.appendChild(emailTd);
+      tr.appendChild(linkTd);
+      body.appendChild(tr);
+    });
+    table.style.display = 'table';
+  }
+
+  document.getElementById('gateBtn').addEventListener('click', () => {
+    const key = document.getElementById('adminKey').value.trim();
+    if (!key) return;
+    document.getElementById('gateError').style.display = 'none';
+    try { sessionStorage.setItem(ADMIN_KEY_STORAGE, key); } catch (e) {}
+    loadDashboard(key);
+  });
+
+  document.getElementById('adminKey').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('gateBtn').click();
+  });
+
+  try {
+    const savedKey = sessionStorage.getItem(ADMIN_KEY_STORAGE);
+    if (savedKey) loadDashboard(savedKey);
+  } catch (e) { /* ignore */ }
 })();
 </script>
 
