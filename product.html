@@ -1261,7 +1261,7 @@
         fetch('/api/passport', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'getComments', product: product.id })
+          body: JSON.stringify({ kind: 'getComments', product: product.id })
         })
           .then(function (r) { return r.json(); })
           .then(function (result) {
