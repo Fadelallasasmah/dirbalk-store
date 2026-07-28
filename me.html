@@ -222,12 +222,25 @@
   .comment-submit-btn {
     padding: 9px 20px;
     background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
-    color: #fff; font-size: 11px; letter-spacing: 0.5px;
+    color: #fff; font-size: 11px; letter-spacing: 0;
     cursor: pointer; font-family: Arial, sans-serif;
   }
   .comment-submit-btn:hover { border-color: rgba(201,168,76,0.4); }
   .comment-submit-btn:disabled { opacity: 0.5; cursor: default; }
-  .comment-form-msg { font-size: 11px; color: rgba(255,120,120,0.85); margin-top: 8px; }
+  .comment-form-msg { font-size: 11px; color: rgba(255,120,140,0.85); margin-top: 8px; }
+  .comment-existing-text {
+    font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.8);
+    border: 0.5px solid rgba(255,255,255,0.12); padding: 10px 14px; margin-bottom: 8px;
+  }
+  .comment-existing-status { font-size: 10px; color: rgba(201,168,76,0.85); margin-bottom: 10px; }
+  .comment-delete-btn {
+    padding: 9px 20px;
+    background: transparent; border: 0.5px solid rgba(255,120,120,0.4);
+    color: rgba(255,140,140,0.9); font-size: 11px;
+    cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-delete-btn:hover { border-color: rgba(255,120,120,0.7); }
+  .comment-delete-btn:disabled { opacity: 0.5; cursor: default; }
 
   /* orders */
   .order-row {
@@ -669,7 +682,7 @@
   })
     .then(function (r) { return r.json(); })
     .then(function (result) {
-      renderPieces(result.pieces || []);
+      renderPieces(result.pieces || [], result.myComments || []);
       renderOrders(result.orders || []);
     })
     .catch(function () {
@@ -677,15 +690,19 @@
       document.getElementById('ordersArea').innerHTML = '';
     });
 
-  function renderPieces(pieces) {
+  function renderPieces(pieces, myComments) {
     var area = document.getElementById('piecesArea');
     if (!pieces.length) {
       area.innerHTML = '<p class="empty">ما عندك قطع لسا.<br><a href="/shop.html">Collection 01 ←</a></p>';
       return;
     }
+    var commentsByProduct = {};
+    myComments.forEach(function (c) { commentsByProduct[c.product] = c; });
+
     area.innerHTML = '';
     pieces.forEach(function (pc) {
       var serial = parseInt(pc.serial, 10);
+      var existing = commentsByProduct[pc.product];
       var card = document.createElement('div');
       card.className = 'piece-card';
       card.innerHTML =
@@ -695,13 +712,61 @@
         (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
         '</div>' +
         '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>' +
-        '<button type="button" class="comment-toggle-btn">اترك تعليق</button>' +
-        '<div class="comment-form-wrap"></div>';
+        (existing
+          ? '<button type="button" class="comment-toggle-btn">تعليقك</button><div class="comment-form-wrap"></div>'
+          : '<button type="button" class="comment-toggle-btn">اترك تعليق</button><div class="comment-form-wrap"></div>');
 
       var toggleBtn = card.querySelector('.comment-toggle-btn');
       var formWrap = card.querySelector('.comment-form-wrap');
       toggleBtn.addEventListener('click', function () {
         if (formWrap.classList.contains('show')) { formWrap.classList.remove('show'); return; }
+
+        if (existing) {
+          formWrap.innerHTML =
+            '<p class="comment-existing-text">' + existing.text.replace(/[&<>"']/g, function (c) {
+              return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            }) + '</p>' +
+            '<p class="comment-existing-status">' + (existing.approved ? 'منشور' : 'بانتظار المراجعة') + '</p>' +
+            '<button type="button" class="comment-delete-btn">حذف تعليقي</button>' +
+            '<p class="comment-form-msg"></p>';
+          formWrap.classList.add('show');
+
+          formWrap.querySelector('.comment-delete-btn').addEventListener('click', function () {
+            var delBtn = this;
+            var msg = formWrap.querySelector('.comment-form-msg');
+            if (!confirm('متأكد بدك تحذف تعليقك؟')) return;
+            delBtn.disabled = true;
+            delBtn.textContent = 'جاري الحذف...';
+
+            fetch('/api/account', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ kind: 'deleteComment', email: email, commentId: existing.id })
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (result) {
+                if (result.status === 'success') {
+                  existing = null;
+                  toggleBtn.textContent = 'اترك تعليق';
+                  formWrap.innerHTML = '';
+                  formWrap.classList.remove('show');
+                  if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم حذف تعليقك.');
+                } else {
+                  delBtn.disabled = false;
+                  delBtn.textContent = 'حذف تعليقي';
+                  msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+                  if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+                }
+              })
+              .catch(function () {
+                delBtn.disabled = false;
+                delBtn.textContent = 'حذف تعليقي';
+                msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+              });
+          });
+          return;
+        }
+
         formWrap.innerHTML =
           '<textarea class="comment-textarea" maxlength="500" placeholder="شو رأيك بالقطعة؟"></textarea>' +
           '<button type="button" class="comment-submit-btn">إرسال</button>' +
@@ -726,6 +791,8 @@
             .then(function (r) { return r.json(); })
             .then(function (result) {
               if (result.status === 'success') {
+                existing = { id: result.commentId, text: text, approved: false };
+                toggleBtn.textContent = 'تعليقك';
                 formWrap.innerHTML = '<p class="comment-form-msg" style="color:#7fd88f;">' + result.message + '</p>';
                 if (window.DirbalkToast) DirbalkToast.success(result.message);
               } else {
