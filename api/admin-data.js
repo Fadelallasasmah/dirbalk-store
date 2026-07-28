@@ -1,10 +1,16 @@
 // DIRBALK — /api/admin-data
 // Same-origin backend proxy for the admin dashboard, forwarding to the
-// same Google Apps Script. Handles two request kinds so a second Vercel
-// function isn't needed (Hobby plan is capped at 12):
+// same Google Apps Script. Handles several request kinds so extra Vercel
+// functions aren't needed (Hobby plan is capped at 12):
 //   - default / no "kind": fetch dashboard data (action: "admin")
 //   - kind: "updateOrderStatus": update an order's status, which may
 //     trigger a shipping/delivered email on the backend (action: "updateOrderStatus")
+//   - kind: "adminComments": fetch the pending (unapproved) comment queue
+//     (action: "adminComments")
+//   - kind: "moderateComment": approve/reject a pending comment
+//     (action: "moderateComment")
+//   - kind: "launchAnnouncement": send a batch of the launch-announcement
+//     email (action: "launchAnnouncement")
 // The Apps Script itself checks the secret key before doing anything either way.
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
@@ -24,6 +30,24 @@ export default async function handler(req, res) {
       key: (req.body?.key || '').toString(),
       orderId: (req.body?.orderId || '').toString(),
       newStatus: (req.body?.newStatus || '').toString(),
+    };
+  } else if (kind === 'adminComments') {
+    payload = {
+      action: 'adminComments',
+      key: (req.body?.key || '').toString(),
+    };
+  } else if (kind === 'moderateComment') {
+    payload = {
+      action: 'moderateComment',
+      key: (req.body?.key || '').toString(),
+      commentId: (req.body?.commentId || '').toString(),
+      decision: (req.body?.decision || '').toString(),
+    };
+  } else if (kind === 'launchAnnouncement') {
+    payload = {
+      action: 'launchAnnouncement',
+      key: (req.body?.key || '').toString(),
+      batchSize: parseInt(req.body?.batchSize, 10) || 100,
     };
   } else {
     payload = {
