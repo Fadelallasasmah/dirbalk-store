@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/push.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم — DIRBALَK</title>
@@ -274,6 +275,7 @@
 <div class="dash" id="dash">
   <div class="dash-header">
     <img src="/logo.png" alt="DIRBALK" />
+    <button type="button" class="invite-btn" id="enablePushBtn" style="margin-inline-start:10px;">فعّل الإشعارات</button>
     <a href="/" class="home-link">← الرئيسية</a>
   </div>
 
@@ -364,6 +366,24 @@
 <script>
 (function () {
   const ADMIN_KEY_STORAGE = 'dirbalk_admin_key';
+
+  document.getElementById('enablePushBtn').addEventListener('click', function () {
+    var btn = this;
+    var adminKey = '';
+    try { adminKey = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+    if (!adminKey) return;
+    btn.disabled = true;
+    btn.textContent = 'جاري التفعيل...';
+    DirbalkPush.enable('/api/admin-data', { kind: 'registerPushToken', key: adminKey }, function (result) {
+      btn.disabled = false;
+      btn.textContent = 'فعّل الإشعارات';
+      if (result.ok) {
+        if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم تفعيل الإشعارات.');
+      } else {
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+      }
+    });
+  });
 
   function loadDashboard(key) {
     document.getElementById('gate').style.display = 'none';
