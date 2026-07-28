@@ -566,7 +566,7 @@
     fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
+      body: JSON.stringify({ action: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
@@ -622,7 +622,7 @@
     fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
+      body: JSON.stringify({ action: 'deleteAccount', email: email, password: pw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
@@ -721,7 +721,7 @@
           fetch('/api/account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
+            body: JSON.stringify({ action: 'submitComment', email: email, product: pc.product, text: text })
           })
             .then(function (r) { return r.json(); })
             .then(function (result) {
