@@ -352,6 +352,12 @@
       <p class="invite-hint">بس اللي عنده القطعة فعلاً بيقدر يعلّق. راجع كل تعليق قبل ما ينشر.</p>
       <div id="pendingCommentsArea"><p class="empty-note">جاري التحميل...</p></div>
     </div>
+
+    <div class="invite-section" id="publishedCommentsSection">
+      <h2>التعليقات المنشورة</h2>
+      <p class="invite-hint">تعليقات منشورة فعلياً على صفحات المنتجات. احذف أي تعليق من هون لو احتجت.</p>
+      <div id="publishedCommentsArea"><p class="empty-note">جاري التحميل...</p></div>
+    </div>
   </div>
 </div>
 
@@ -384,6 +390,7 @@
         renderCountries(result.stats.countryCounts);
         renderOrders(result.orders);
         loadPendingComments(key);
+        loadPublishedComments(key);
       })
       .catch(() => {
         document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
@@ -450,7 +457,53 @@
     });
   }
 
-  function moderateComment(commentId, decision, card, key) {
+  function loadPublishedComments(key) {
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'adminComments', key, status: 'approved' }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.status !== 'success') {
+          document.getElementById('publishedCommentsArea').innerHTML = '<p class="empty-note">' + (result.message || 'حدث خطأ مؤقت.') + '</p>';
+          return;
+        }
+        renderPublishedComments(result.pending || [], key);
+      })
+      .catch(() => {
+        document.getElementById('publishedCommentsArea').innerHTML = '<p class="empty-note">حدث خطأ مؤقت، يرجى المحاولة لاحقًا.</p>';
+      });
+  }
+
+  function renderPublishedComments(published, key) {
+    const area = document.getElementById('publishedCommentsArea');
+    if (!published.length) {
+      area.innerHTML = '<p class="empty-note">ولا تعليق منشور لسا.</p>';
+      return;
+    }
+    area.innerHTML = '';
+    published.forEach((c) => {
+      const card = document.createElement('div');
+      card.className = 'pending-comment';
+      card.innerHTML =
+        '<p class="pc-meta"><strong>' + escapeHtmlAdmin(c.name || 'مجهول') + '</strong> — ' +
+        escapeHtmlAdmin(PRODUCT_NAMES_COMMENTS[c.product] || c.product) + ' — ' + escapeHtmlAdmin(c.email) + '</p>' +
+        '<p class="pc-text">' + escapeHtmlAdmin(c.text) + '</p>' +
+        '<div class="pc-actions">' +
+        '<button type="button" class="pc-reject-btn" data-id="' + escapeHtmlAdmin(c.id) + '">حذف</button>' +
+        '</div>';
+
+      card.querySelector('.pc-reject-btn').addEventListener('click', function () {
+        if (!confirm('متأكد بدك تحذف هالتعليق نهائياً؟')) return;
+        moderateComment(c.id, 'reject', card, key, true);
+      });
+
+      area.appendChild(card);
+    });
+  }
+
+  function moderateComment(commentId, decision, card, key, isPublished) {
     const btns = card.querySelectorAll('button');
     btns.forEach((b) => { b.disabled = true; });
 
@@ -462,10 +515,11 @@
       .then((r) => r.json())
       .then((result) => {
         if (result.status === 'success') {
+          const area = isPublished ? document.getElementById('publishedCommentsArea') : document.getElementById('pendingCommentsArea');
           card.remove();
-          if (window.DirbalkToast) DirbalkToast.success(decision === 'approve' ? 'انشر التعليق.' : 'انرفض التعليق.');
-          if (!document.querySelectorAll('.pending-comment').length) {
-            document.getElementById('pendingCommentsArea').innerHTML = '<p class="empty-note">ولا تعليق بانتظار المراجعة.</p>';
+          if (window.DirbalkToast) DirbalkToast.success(isPublished ? 'تم حذف التعليق.' : (decision === 'approve' ? 'انشر التعليق.' : 'انرفض التعليق.'));
+          if (!area.querySelectorAll('.pending-comment').length) {
+            area.innerHTML = '<p class="empty-note">' + (isPublished ? 'ولا تعليق منشور لسا.' : 'ولا تعليق بانتظار المراجعة.') + '</p>';
           }
         } else {
           btns.forEach((b) => { b.disabled = false; });
