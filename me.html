@@ -112,7 +112,7 @@
   .gate-btn {
     flex: 1; padding: 13px;
     border: 0.5px solid rgba(255,255,255,0.2);
-    color: #ffffff; font-size: 12px; letter-spacing: 0px;
+    color: #ffffff; font-size: 12px; letter-spacing: 1px;
     text-decoration: none; transition: all 0.2s; text-align: center;
   }
   .gate-btn:hover { border-color: rgba(201,168,76,0.4); }
@@ -133,7 +133,7 @@
 
   h2.sec-title {
     font-size: 11px;
-    letter-spacing: 0px;
+    letter-spacing: 2px;
     color: #C9A84C;
     font-weight: normal;
     margin-bottom: 16px;
@@ -195,7 +195,7 @@
   .passport-link {
     padding: 11px 20px;
     border: 0.5px solid rgba(255,255,255,0.2);
-    font-size: 11px; letter-spacing: 0px;
+    font-size: 11px; letter-spacing: 1px;
     text-decoration: none;
     transition: border-color 0.2s;
     white-space: nowrap;
@@ -222,7 +222,7 @@
   .comment-submit-btn {
     padding: 9px 20px;
     background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
-    color: #fff; font-size: 11px; letter-spacing: 0px;
+    color: #fff; font-size: 11px; letter-spacing: 0.5px;
     cursor: pointer; font-family: Arial, sans-serif;
   }
   .comment-submit-btn:hover { border-color: rgba(201,168,76,0.4); }
@@ -241,7 +241,7 @@
   .order-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
   .order-total { font-size: 12.5px; color: #C9A84C; font-weight: bold; }
   .order-status {
-    font-size: 10px; letter-spacing: 0px;
+    font-size: 10px; letter-spacing: 1px;
     color: rgba(255,255,255,0.55);
     border: 0.5px solid rgba(255,255,255,0.18);
     padding: 4px 10px;
@@ -298,7 +298,7 @@
   .acc-field { text-align: right; margin-bottom: 12px; }
   .acc-field label {
     display: block; color: rgba(255,255,255,0.4);
-    font-size: 10px; letter-spacing: 0px; margin-bottom: 6px;
+    font-size: 10px; letter-spacing: 1px; margin-bottom: 6px;
   }
   .acc-field input {
     background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
@@ -310,7 +310,7 @@
   .acc-btn {
     padding: 12px 24px;
     background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
-    color: #fff; font-size: 12px; letter-spacing: 0px;
+    color: #fff; font-size: 12px; letter-spacing: 1px;
     cursor: pointer; font-family: Arial, sans-serif;
     transition: all 0.2s;
   }
@@ -322,7 +322,7 @@
   .danger-btn {
     padding: 12px 24px;
     background: transparent; border: 0.5px solid rgba(255,120,120,0.35);
-    color: rgba(255,140,140,0.9); font-size: 12px; letter-spacing: 0px;
+    color: rgba(255,140,140,0.9); font-size: 12px; letter-spacing: 1px;
     cursor: pointer; font-family: Arial, sans-serif;
     transition: all 0.2s;
   }
@@ -350,7 +350,7 @@
     text-align: center;
   }
   .site-footer .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 26px; margin-bottom: 24px; }
-  .site-footer .footer-links a { font-size: 11px; letter-spacing: 0px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+  .site-footer .footer-links a { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
   .site-footer .footer-links a:hover { color: #C9A84C; }
   .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
 </style>
@@ -566,7 +566,7 @@
     fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
+      body: JSON.stringify({ kind: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
@@ -622,7 +622,7 @@
     fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'deleteAccount', email: email, password: pw })
+      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
@@ -721,7 +721,7 @@
           fetch('/api/account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'submitComment', email: email, product: pc.product, text: text })
+            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
           })
             .then(function (r) { return r.json(); })
             .then(function (result) {
