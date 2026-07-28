@@ -1,4 +1,4 @@
-// DIRBALK — account actions proxy (change password / delete account / submit comment)
+// DIRBALK — account actions proxy (change password / delete account / submit comment / delete comment)
 // Merged into one function to stay within Vercel Hobby's serverless function limit.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -22,6 +22,12 @@ export default async function handler(req, res) {
       email: (req.body && req.body.email) || '',
       product: (req.body && req.body.product) || '',
       text: (req.body && req.body.text) || ''
+    };
+  } else if (kind === 'deleteComment') {
+    payload = {
+      action: 'deleteComment',
+      email: (req.body && req.body.email) || '',
+      commentId: (req.body && req.body.commentId) || ''
     };
   } else {
     payload = {
