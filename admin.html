@@ -409,7 +409,7 @@
     fetch('/api/admin-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'adminComments', key }),
+      body: JSON.stringify({ kind: 'adminComments', key }),
     })
       .then((r) => r.json())
       .then((result) => {
@@ -457,7 +457,7 @@
     fetch('/api/admin-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'moderateComment', key, commentId, decision }),
+      body: JSON.stringify({ kind: 'moderateComment', key, commentId, decision }),
     })
       .then((r) => r.json())
       .then((result) => {
@@ -562,7 +562,7 @@
       fetch('/api/admin-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'updateOrderStatus', key, orderId, newStatus }),
+        body: JSON.stringify({ kind: 'updateOrderStatus', key, orderId, newStatus }),
       })
         .then((r) => r.json())
         .then((result) => {
@@ -703,7 +703,7 @@
     fetch('/api/admin-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'launchAnnouncement', key, batchSize: 100 }),
+      body: JSON.stringify({ kind: 'launchAnnouncement', key, batchSize: 100 }),
     })
       .then((r) => r.json())
       .then((result) => {
