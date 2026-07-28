@@ -71,8 +71,9 @@ window.DirbalkPush = (function () {
             onDone({ ok: result.status === 'success', message: result.message || (result.status === 'success' ? 'تم تفعيل الإشعارات.' : 'صار خطأ، جرب كمان مرة.') });
           });
       })
-      .catch(function () {
-        onDone({ ok: false, message: 'صار خطأ، جرب كمان مرة.' });
+      .catch(function (err) {
+        console.error('DirbalkPush error:', err);
+        onDone({ ok: false, message: 'صار خطأ: ' + (err && err.message ? err.message : String(err)) });
       });
   }
 
