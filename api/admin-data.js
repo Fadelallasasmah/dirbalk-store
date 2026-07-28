@@ -35,6 +35,7 @@ export default async function handler(req, res) {
     payload = {
       action: 'adminComments',
       key: (req.body?.key || '').toString(),
+      status: (req.body?.status || 'pending').toString(),
     };
   } else if (kind === 'moderateComment') {
     payload = {
