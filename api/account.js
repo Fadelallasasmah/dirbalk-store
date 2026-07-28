@@ -29,6 +29,12 @@ export default async function handler(req, res) {
       email: (req.body && req.body.email) || '',
       commentId: (req.body && req.body.commentId) || ''
     };
+  } else if (kind === 'registerPushToken') {
+    payload = {
+      action: 'registerPushToken',
+      email: (req.body && req.body.email) || '',
+      token: (req.body && req.body.token) || ''
+    };
   } else {
     payload = {
       action: 'changePassword',
