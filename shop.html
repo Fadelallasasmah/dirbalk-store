@@ -587,6 +587,16 @@
 
   .modal-msg { font-size: 11px; color: rgba(255,120,120,0.85); margin-top: 10px; display: none; }
 
+  .modal-more-link { margin-top: 16px; text-align: center; }
+  .modal-more-link a {
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(255,255,255,0.2);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .modal-more-link a:hover { color: #C9A84C; border-color: rgba(201,168,76,0.5); }
+
   /* ---------- zoom lightbox ---------- */
   .lightbox {
     display: none;
@@ -783,6 +793,7 @@
       <div class="size-row" id="sizeRow"></div>
       <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
       <p class="modal-msg" id="modalMsg"></p>
+      <p class="modal-more-link"><a href="#" id="modalMoreLink">التفاصيل الكاملة، دليل المقاسات، والتقييمات ←</a></p>
     </div>
   </div>
 </div>
@@ -964,6 +975,10 @@
       }, true);
     }
 
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', p.name + ' — ' + p.price + ' دينار');
+
     card.addEventListener('click', () => {
       if (window.gtag) {
         gtag('event', 'select_item', {
@@ -971,7 +986,12 @@
           items: [{ item_id: p.id, item_name: p.name, price: p.price }]
         });
       }
-      window.location.href = '/product.html?id=' + p.id;
+      openModal(p.id);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      card.click();
     });
     grid.appendChild(card);
   });
@@ -1013,6 +1033,7 @@
     document.getElementById('modalPrice').textContent = modalProduct.price + ' دينار';
     document.getElementById('modalDesc').textContent = modalProduct.desc;
     document.getElementById('modalMsg').style.display = 'none';
+    document.getElementById('modalMoreLink').href = '/product.html?id=' + modalProduct.id;
 
     renderSpecSection('fitList', modalProduct.fit);
     renderSpecSection('careList', modalProduct.care);
