@@ -26,6 +26,10 @@
 
   /* ---------- atmospheres ---------- */
   var css = ''
+    /* ---------- amber text selection (instead of default browser blue) ---------- */
+    + '::selection { background: rgba(201,168,76,0.35); color: #ffffff; }'
+    + '::-moz-selection { background: rgba(201,168,76,0.35); color: #ffffff; }'
+
     /* ---------- global keyboard focus visibility (site-wide, a11y) ---------- */
     + 'a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, '
     + '[tabindex]:focus-visible, .card:focus-visible, .size-btn:focus-visible {'
