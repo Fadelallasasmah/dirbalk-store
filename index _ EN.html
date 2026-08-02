@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIRBALK</title>
+<meta name="description" content="DIRBALK — Take care of yourself. Collection 01, Winter 2026.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dirbalk.com/en/">
+<meta property="og:title" content="DIRBALK — Take Care of Yourself">
+<meta property="og:description" content="Collection 01 · Winter 2026. Register now, be the first to know when it drops.">
+<meta property="og:image" content="https://dirbalk.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://dirbalk.com/en/">
+<meta property="og:locale" content="en_JO">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DIRBALK — Take Care of Yourself">
+<meta name="twitter:description" content="Collection 01 · Winter 2026. Register now, be the first to know when it drops.">
+<meta name="twitter:image" content="https://dirbalk.com/og-image.png">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<style>
+
+  /* ---------- intro splash (video) ---------- */
+  #splash {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+  }
+  #splash.hide { opacity: 0; pointer-events: none; }
+
+  #splash video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #splash .splash-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.25) 0%, rgba(10,10,10,0.55) 100%);
+  }
+
+  #splash .splash-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+  }
+
+  #splash .splash-logo {
+    width: min(56vw, 230px);
+    height: auto;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: splashIn 0.7s ease forwards 0.3s;
+  }
+
+  #splash .splash-phrase {
+    color: #C9A84C;
+    font-size: 15px;
+    letter-spacing: 0px;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: splashIn 0.7s ease forwards 0.7s;
+  }
+
+  #splash .splash-line {
+    width: 0;
+    height: 1px;
+    background: #C9A84C;
+    opacity: 0.5;
+    animation: splashLine 0.8s ease forwards 1.15s;
+  }
+
+  @keyframes splashIn { to { opacity: 1; transform: translateY(0); } }
+  @keyframes splashLine { to { width: 40px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    #splash { display: none; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 0 3rem;
+  }
+
+  .container { width: 100%; max-width: 460px; text-align: center; padding: 0 2rem; }
+
+  .hero-media {
+    width: 100%;
+    max-height: 62vh;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2.2rem;
+  }
+
+  .hero-media video,
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0) 60%, rgba(10,10,10,1) 100%);
+    pointer-events: none;
+  }
+
+  .brand-logo {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    margin: 0 auto 0.4rem;
+    display: block;
+  }
+
+  .brand-arabic {
+    color: #C9A84C;
+    font-size: 14px;
+    letter-spacing: 0px;
+    margin-bottom: 2.5rem;
+    opacity: 0.85;
+  }
+
+  .divider { width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 2.5rem; opacity: 0.4; }
+
+  .shop-cta {
+    display: inline-block;
+    color: #C9A84C;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 0.5px solid rgba(201,168,76,0.4);
+    padding: 11px 26px;
+    margin-bottom: 2.5rem;
+    transition: all 0.2s;
+  }
+  .shop-cta:hover { border-color: #C9A84C; background: rgba(201,168,76,0.08); }
+
+  .description {
+    color: rgba(255,255,255,0.72);
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 2.2rem;
+    letter-spacing: 0px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+  .field { text-align: left; }
+
+  label {
+    display: block;
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    letter-spacing: 0px;
+    margin-bottom: 6px;
+  }
+
+  input {
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: #ffffff;
+    padding: 14px 18px;
+    font-size: 13px;
+    letter-spacing: 0px;
+    outline: none;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  input::placeholder { color: rgba(255,255,255,0.25); }
+  input:focus { border-color: rgba(201,168,76,0.5); }
+  input.field-error { border-color: rgba(255,80,80,0.6); }
+
+  .field-msg {
+    color: rgba(255,80,80,0.75);
+    font-size: 10px;
+    margin-top: 5px;
+    letter-spacing: 0px;
+    min-height: 12px;
+    display: none;
+  }
+
+  .gender-row { display: flex; gap: 8px; }
+  .gender-btn {
+    flex: 1;
+    padding: 13px 8px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    letter-spacing: 0px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s;
+  }
+  .gender-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .gender-btn.selected { border-color: #C9A84C; color: #C9A84C; background: rgba(201,168,76,0.08); }
+  .gender-btn.field-error { border-color: rgba(255,80,80,0.6); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s;
+    margin-top: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .submit-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .submit-btn:disabled { cursor: default; opacity: 0.6; }
+
+  .footer-text { color: rgba(255,255,255,0.15); font-size: 10px; letter-spacing: 2px; margin-bottom: 1.2rem; }
+
+  .contact-row { display: flex; justify-content: center; gap: 14px; margin-top: 2.5rem; margin-bottom: 1.2rem; }
+  .contact-btn {
+    width: 38px; height: 38px;
+    border: 0.5px solid rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .contact-btn:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
+  .contact-btn svg { width: 17px; height: 17px; }
+
+  .page-footer { margin-top: 1rem; text-align: center; }
+  .page-footer .brand-mark { color: #C9A84C; font-size: 11px; letter-spacing: 4px; opacity: 0.6; }
+
+  .privacy-link {
+    display: block;
+    margin-top: 0.6rem;
+    color: rgba(255,255,255,0.25);
+    font-size: 10px;
+    letter-spacing: 0px;
+    text-decoration: underline;
+  }
+
+  .has-account {
+    text-align: center;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1.4rem;
+    margin-bottom: 2rem;
+  }
+  .has-account a {
+    color: #C9A84C;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+  }
+
+  .form-error {
+    color: rgba(255,80,80,0.85);
+    font-size: 12px;
+    margin-top: 10px;
+    display: none;
+    letter-spacing: 0px;
+    line-height: 1.6;
+  }
+
+  .success-msg { display: none; text-align: center; padding: 1.5rem 0; }
+
+  .success-icon { margin: 0 auto 1.5rem; width: 56px; height: 56px; }
+  .success-icon circle { stroke: rgba(201,168,76,0.4); stroke-width: 1; fill: none; }
+  .success-icon path {
+    stroke: #C9A84C; stroke-width: 2; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 30; stroke-dashoffset: 30;
+    animation: drawCheck 0.6s ease forwards 0.2s;
+  }
+  @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+
+  .success-msg p { color: #C9A84C; font-size: 13px; letter-spacing: 0px; line-height: 2; opacity: 0.85; }
+
+  .position-line {
+    margin: 6px 0 18px;
+    color: rgba(255,255,255,0.72) !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .position-line .pos-num {
+    display: block;
+    color: #C9A84C;
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .success-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .share-btn {
+    padding: 13px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .share-btn:hover { border-color: rgba(201,168,76,0.5); }
+  .share-btn svg { width: 15px; height: 15px; }
+
+  .ig-reminder {
+    margin-top: 1.8rem;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0px;
+    line-height: 1.8;
+  }
+  .ig-reminder a {
+    color: #C9A84C;
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+  }
+
+  .user-badge {
+    display: none;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 30;
+  }
+  .user-badge-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: transparent;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 6px 12px 6px 6px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s;
+  }
+  .user-badge-btn:hover, .user-badge.open .user-badge-btn { border-color: rgba(201,168,76,0.4); }
+  .user-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(201,168,76,0.15); color: #C9A84C;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: bold; flex-shrink: 0;
+  }
+  .user-name { color: rgba(255,255,255,0.7); font-size: 11px; letter-spacing: 0px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-menu {
+    display: none; position: absolute; top: calc(100% + 6px); left: 0;
+    background: #141414; border: 0.5px solid rgba(255,255,255,0.15);
+    min-width: 160px; flex-direction: column;
+  }
+  .user-badge.open .user-menu { display: flex; }
+  .user-menu-item {
+    background: transparent; border: none; color: rgba(255,255,255,0.75);
+    font-size: 11.5px; text-align: left; padding: 11px 14px; cursor: pointer;
+    font-family: Arial, sans-serif; letter-spacing: 0px; transition: all 0.15s;
+  }
+  .user-menu-item:hover { background: rgba(255,80,80,0.08); color: rgba(255,120,120,0.9); }
+
+  /* ---------- homepage storytelling (fills the gap between form and footer) ---------- */
+  .story-sections {
+    width: 100%;
+    max-width: 460px;
+    padding: 3.5rem 0 1rem;
+    margin: 1rem auto 0;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
+
+  .story-item {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    margin-bottom: 3.2rem;
+  }
+  .story-item:last-child { margin-bottom: 0; }
+  .story-item.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .story-item { opacity: 1; transform: none; transition: none; }
+  }
+
+  .story-kicker {
+    font-size: 10px;
+    letter-spacing: 0px;
+    color: #C9A84C;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  /* Arabic script breaks apart visually with letter-spacing (it's a
+     connected/cursive script) — only the English "Collection 01" label
+     should keep the tracked-out spacing. */
+  .story-kicker.ar { letter-spacing: 0; }
+  .story-item .big {
+    font-size: clamp(20px, 5vw, 25px);
+    font-weight: bold;
+    line-height: 1.6;
+    letter-spacing: 0px;
+    max-width: 100%;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .story-item .small {
+    margin-top: 14px;
+    font-size: 12.5px;
+    line-height: 2;
+    color: rgba(255,255,255,0.65);
+    max-width: 100%;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .lang-switch {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    transition: all 0.2s;
+    font-family: Arial, sans-serif;
+    z-index: 30;
+  }
+  .lang-switch:hover { color: #C9A84C; border-color: rgba(201,168,76,0.4); }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "DIRBALK",
+  "alternateName": "دير بالك",
+  "url": "https://dirbalk.com",
+  "logo": "https://dirbalk.com/logo.png",
+  "image": "https://dirbalk.com/og-image.png",
+  "description": "DIRBALK — Jordanian streetwear brand, Amman.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Amman",
+    "addressCountry": "JO"
+  },
+  "sameAs": [
+    "https://instagram.com/dirbalk__"
+  ]
+}
+</script>
+</head>
+<body>
+
+<script>
+(function () {
+  var ASSETS = {
+    day:   { video: '/hero-day.mp4',       poster: '/hero-drawing-day.jpg' },
+    night: { video: '/hero-animation.mp4', poster: '/hero-drawing.jpg' }
+  };
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'day' ? 'day' : 'night';
+  }
+
+  function applyHero(theme) {
+    var a = ASSETS[theme] || ASSETS.night;
+
+    var splashVid = document.getElementById('splashVideo');
+    var splashSrc = document.getElementById('splashSource');
+    if (splashVid && splashSrc && splashVid.parentNode) {
+      splashSrc.src = a.video;
+      splashVid.poster = a.poster;
+      splashVid.load();
+      splashVid.play && splashVid.play().catch(function () {});
+    }
+
+    var heroVid = document.getElementById('heroVideo');
+    var heroSrc = document.getElementById('heroSource');
+    if (heroVid && heroSrc) {
+      if (heroSrc.src.indexOf(a.video) === -1) {
+        var t = heroVid.currentTime;
+        heroSrc.src = a.video;
+        heroVid.poster = a.poster;
+        heroVid.load();
+        heroVid.addEventListener('loadedmetadata', function onMeta() {
+          heroVid.removeEventListener('loadedmetadata', onMeta);
+          try { heroVid.currentTime = t; } catch (e) { /* ignore */ }
+        });
+        heroVid.play && heroVid.play().catch(function () {});
+      }
+    }
+  }
+
+  applyHero(currentTheme());
+  document.addEventListener('dirbalk:theme', function (e) {
+    applyHero(e.detail && e.detail.theme ? e.detail.theme : currentTheme());
+  });
+})();
+</script>
+
+<div id="splash" aria-hidden="true">
+  <video id="splashVideo" autoplay muted playsinline poster="/hero-drawing.jpg">
+    <source id="splashSource" src="/hero-animation.mp4" type="video/mp4">
+  </video>
+  <div class="splash-veil"></div>
+  <div class="splash-center">
+    <img src="/logo.png" alt="" class="splash-logo" />
+    <p class="splash-phrase brand-phrase">دير بالك على حالك</p>
+    <div class="splash-line"></div>
+  </div>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('splash');
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var shown = false;
+  try { shown = sessionStorage.getItem('dirbalk_splash_shown') === '1'; } catch (e) { /* ignore */ }
+  if (shown || reduced) {
+    el.parentNode.removeChild(el);
+    return;
+  }
+  try { sessionStorage.setItem('dirbalk_splash_shown', '1'); } catch (e) { /* ignore */ }
+  document.documentElement.style.overflow = 'hidden';
+
+  function dismiss() {
+    if (!el.parentNode) return;
+    // hand the splash video's exact position to the hero video so playback continues seamlessly
+    var heroVid = document.querySelector('.hero-media video');
+    var splashVid = document.getElementById('splashVideo');
+    if (heroVid && splashVid && !isNaN(splashVid.currentTime)) {
+      try { heroVid.currentTime = splashVid.currentTime; } catch (e) { /* ignore */ }
+    }
+    el.classList.add('hide');
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      document.documentElement.style.overflow = '';
+    }, 850);
+  }
+
+  setTimeout(dismiss, 3400);
+  // if the video can't play (very slow network), don't trap the user
+  var splashVid = document.getElementById('splashVideo');
+  splashVid.addEventListener('error', dismiss);
+})();
+</script>
+
+<a href="/" class="lang-switch">عربي</a>
+
+<div class="user-badge" id="userBadge">
+  <button type="button" class="user-badge-btn" id="userBadgeBtn">
+    <span class="user-avatar" id="userAvatar">?</span>
+    <span class="user-name" id="userNameLabel"></span>
+  </button>
+  <div class="user-menu">
+    <button type="button" class="user-menu-item" id="logoutBtn">Log out</button>
+  </div>
+</div>
+
+<div class="hero-media">
+  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="container">
+
+  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
+  <p class="brand-arabic brand-phrase">دير بالك على حالك</p>
+  <div class="divider"></div>
+
+
+  <div id="form-section">
+    <p class="description">
+      When the collection drops — we might let you know.<br>
+      Registering doesn't guarantee access.
+    </p>
+
+    <form id="reg-form" novalidate>
+      <div class="form-group">
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="e.g. Zakaria" autocomplete="name" />
+          <p class="field-msg" id="name-msg"></p>
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <div class="gender-row" id="genderRow">
+            <button type="button" class="gender-btn" data-gender="male">Male</button>
+            <button type="button" class="gender-btn" data-gender="female">Female</button>
+          </div>
+          <input type="hidden" id="genderInput" value="" />
+          <p class="field-msg" id="gender-msg"></p>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
+          <p class="field-msg" id="email-msg"></p>
+        </div>
+      </div>
+
+      <p class="form-error" id="form-error"></p>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        Register
+      </button>
+    </form>
+
+    <p class="has-account">Already have an account? <a href="/en/signin.html">Sign in</a></p>
+
+    <p class="footer-text">COLLECTION 01 · WINTER 2026</p>
+    <a href="/en/privacy.html" class="privacy-link">Privacy Policy</a>
+  </div>
+
+  <div class="success-msg" id="success-msg">
+    <svg class="success-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="26"></circle>
+      <path d="M17 29 L24 36 L39 20"></path>
+    </svg>
+    <p class="position-line" id="positionLine" style="display:none;"><span id="positionLabel"></span><span class="pos-num" id="positionNum"></span></p>
+    <p id="success-text">
+      You're registered.<br>
+      When Collection 01 drops, you might be the first to know.<br>
+      <span class="brand-phrase">دير بالك على حالك.</span>
+    </p>
+
+    <div class="success-actions">
+      <button type="button" class="share-btn" id="share-whatsapp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+        <span id="share-btn-text">Share with a friend</span>
+      </button>
+      <button type="button" class="share-btn" id="copy-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <span id="copy-link-text">Copy link</span>
+      </button>
+    </div>
+
+    <p class="ig-reminder">
+      <span id="ig-reminder-text">and follow us on</span> <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
+    </p>
+  </div>
+
+  <div class="story-sections" id="storySections">
+
+    <div class="story-item">
+      <p class="story-kicker">From Amman</p>
+      <p class="big brand-phrase">دير بالك على حالك</p>
+      <p class="small">It's a phrase we grew up hearing — the thing you say to someone you love when they're leaving. We made it a name.</p>
+    </div>
+
+    <div class="story-item">
+      <p class="big">From the outside, nothing.</p>
+      <p class="small">No big logo. No loud text. The piece speaks quietly — because whoever's wearing it isn't an ad for anyone.</p>
+    </div>
+
+    <div class="story-item">
+      <p class="big">The details, for those who look.</p>
+      <p class="small">There's something in every piece that isn't written down anywhere — a phrase, a thread, a cut, a story. Details in more than one place. Try and find them.</p>
+    </div>
+
+    <div class="story-item">
+      <p class="big">The name has a story.</p>
+      <p class="small">Think about it.</p>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="contact-row">
+      <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="contact-btn" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+      </a>
+      <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer" class="contact-btn" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+    <img src="/logo.png" alt="DIRBALK" style="height:18px;width:auto;opacity:0.65;" />
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const form = document.getElementById('reg-form');
+  const btn = document.getElementById('submit-btn');
+  const formError = document.getElementById('form-error');
+  const fields = ['name', 'email'];
+  let formStarted = false;
+
+  const GENDER_KEY = 'dirbalk_gender';
+  const NAME_KEY = 'dirbalk_name';
+  const STORAGE_KEY = 'dirbalk_logged_in';
+
+  fields.forEach((id) => {
+    document.getElementById(id).addEventListener('focus', () => {
+      if (!formStarted) {
+        formStarted = true;
+        if (window.gtag) gtag('event', 'form_start', { form_name: 'dirbalk_waitlist' });
+      }
+    });
+  });
+
+  function showFieldError(id, message) {
+    const input = document.getElementById(id);
+    const msg = document.getElementById(id + '-msg');
+    input.classList.add('field-error');
+    msg.textContent = message;
+    msg.style.display = 'block';
+  }
+  function clearFieldError(id) {
+    const input = document.getElementById(id);
+    const msg = document.getElementById(id + '-msg');
+    input.classList.remove('field-error');
+    msg.style.display = 'none';
+  }
+  function clearAllErrors() {
+    fields.forEach(clearFieldError);
+    document.getElementById('genderRow').classList.remove('field-error');
+    document.getElementById('gender-msg').style.display = 'none';
+    formError.style.display = 'none';
+  }
+
+  const POSITION_KEY = 'dirbalk_position';
+
+  function showPosition(isFemale) {
+    let pos = '';
+    try { pos = localStorage.getItem(POSITION_KEY) || ''; } catch (e) { /* ignore */ }
+    const line = document.getElementById('positionLine');
+    if (!pos) { line.style.display = 'none'; return; }
+    document.getElementById('positionLabel').textContent = "You're on the list, your number: ";
+    document.getElementById('positionNum').textContent = pos;
+    line.style.display = 'block';
+  }
+
+  function applyGenderedText(isFemale) {
+    document.getElementById('success-text').innerHTML =
+      'You\'re registered.<br>\n      When Collection 01 drops, you might be the first to know.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
+    document.getElementById('share-btn-text').textContent = 'Share with a friend';
+    document.getElementById('ig-reminder-text').textContent = 'and follow us on';
+  }
+
+  const userBadge = document.getElementById('userBadge');
+  const userBadgeBtn = document.getElementById('userBadgeBtn');
+  const userAvatar = document.getElementById('userAvatar');
+  const userNameLabel = document.getElementById('userNameLabel');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  function showUserBadge(name) {
+    const first = (name || '').trim().split(' ')[0] || '';
+    userAvatar.textContent = first ? first.charAt(0).toUpperCase() : '?';
+    userNameLabel.textContent = first;
+    userBadge.style.display = 'block';
+  }
+
+  userBadgeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userBadge.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!userBadge.contains(e.target)) userBadge.classList.remove('open');
+  });
+
+  function resetToForm() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(GENDER_KEY);
+      localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(POSITION_KEY);
+    } catch (e) { /* ignore */ }
+    userBadge.style.display = 'none';
+    userBadge.classList.remove('open');
+    document.getElementById('success-msg').style.display = 'none';
+    document.getElementById('form-section').style.display = 'block';
+    form.reset();
+    genderButtons.forEach((b) => b.classList.remove('selected'));
+    document.getElementById('genderInput').value = '';
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_waitlist' });
+    resetToForm();
+  });
+
+  const genderButtons = document.querySelectorAll('.gender-btn');
+  genderButtons.forEach((b) => {
+    b.addEventListener('click', () => {
+      document.getElementById('genderInput').value = b.getAttribute('data-gender');
+      genderButtons.forEach((btn2) => btn2.classList.remove('selected'));
+      b.classList.add('selected');
+      document.getElementById('genderRow').classList.remove('field-error');
+      document.getElementById('gender-msg').style.display = 'none';
+    });
+  });
+
+  function showLoggedIn(name, isFemale) {
+    applyGenderedText(isFemale);
+    showPosition(isFemale);
+    showUserBadge(name);
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  }
+
+  try {
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      showLoggedIn(localStorage.getItem(NAME_KEY) || '', localStorage.getItem(GENDER_KEY) === 'female');
+    }
+  } catch (e) { /* localStorage unavailable, ignore */ }
+
+  const FAKE_NAMES = ['test', 'testtest', 'admin', 'asdf', 'asdfasdf', 'qwerty', 'name', 'user', 'xxxx', 'aaaa', 'none', 'null', 'na'];
+
+  function isFakeName(name) {
+    var n = name.toLowerCase().replace(/\s+/g, '');
+    if (n.length < 2) return true;
+    if (/^\d+$/.test(n)) return true;                 // digits only, e.g. "12345"
+    if (/^(.)\1+$/.test(n)) return true;               // same character repeated, e.g. "aaaaa"
+    if (FAKE_NAMES.indexOf(n) !== -1) return true;      // known placeholder words
+    return false;
+  }
+
+  function validate(data) {
+    let valid = true;
+    if (!data.name) {
+      showFieldError('name', 'Please enter your full name.');
+      valid = false;
+    } else if (isFakeName(data.name)) {
+      showFieldError('name', 'Please enter your real name.');
+      valid = false;
+    }
+    if (!data.gender) {
+      document.getElementById('genderRow').classList.add('field-error');
+      const gm = document.getElementById('gender-msg');
+      gm.textContent = 'Please select a gender.';
+      gm.style.display = 'block';
+      valid = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('email', 'Please enter a valid email.'); valid = false; }
+    return valid;
+  }
+
+  let isSubmitting = false;
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (isSubmitting) return;
+    clearAllErrors();
+
+    const data = {
+      name: document.getElementById('name').value.trim().replace(/\s+/g, ' '),
+      gender: document.getElementById('genderInput').value || '',
+      email: document.getElementById('email').value.trim().toLowerCase(),
+    };
+
+    if (!validate(data)) {
+      if (window.gtag) gtag('event', 'form_validation_error', { form_name: 'dirbalk_waitlist' });
+      return;
+    }
+
+    isSubmitting = true;
+    btn.disabled = true;
+    btn.textContent = 'Registering...';
+    if (window.gtag) gtag('event', 'form_submit_attempt', { form_name: 'dirbalk_waitlist' });
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+
+      if (result.status === 'success') {
+        if (window.gtag) {
+          gtag('event', 'form_submit_success', { form_name: 'dirbalk_waitlist' });
+          gtag('event', 'sign_up', { method: 'waitlist' });
+        }
+        try {
+          localStorage.setItem(STORAGE_KEY, '1');
+          localStorage.setItem(GENDER_KEY, data.gender);
+          localStorage.setItem(NAME_KEY, data.name);
+          if (result.position) localStorage.setItem(POSITION_KEY, String(result.position));
+        } catch (e) { /* ignore */ }
+        showLoggedIn(data.name, data.gender === 'female');
+      } else {
+        if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: result.message || 'unknown' });
+        formError.textContent = result.message || 'Something went wrong, please try again.';
+        formError.style.display = 'block';
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'Registration failed.');
+        isSubmitting = false;
+        btn.disabled = false;
+        btn.textContent = 'Register';
+      }
+    } catch (err) {
+      if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: 'network' });
+      formError.textContent = 'Something went wrong, please try again.';
+      formError.style.display = 'block';
+      if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
+      isSubmitting = false;
+      btn.disabled = false;
+      btn.textContent = 'Register';
+    }
+  });
+
+  (function initStoryReveal() {
+    var items = document.querySelectorAll('.story-item');
+    if (!items.length) return;
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    items.forEach(function (el) { obs.observe(el); });
+  })();
+
+  const shareWhatsapp = document.getElementById('share-whatsapp');
+  const copyLinkBtn = document.getElementById('copy-link');
+  const copyLinkText = document.getElementById('copy-link-text');
+  const siteUrl = 'https://dirbalk.com';
+
+  function getShareText() {
+    return 'I just signed up for DIRBALK — when the collection drops you might be first to know. Sign up too: ' + siteUrl;
+  }
+
+  if (shareWhatsapp) {
+    shareWhatsapp.addEventListener('click', () => {
+      if (window.gtag) gtag('event', 'share_click', { method: 'whatsapp' });
+      window.open('https://wa.me/?text=' + encodeURIComponent(getShareText()), '_blank');
+    });
+  }
+
+  if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', async () => {
+      if (window.gtag) gtag('event', 'share_click', { method: 'copy_link' });
+      try {
+        await navigator.clipboard.writeText(siteUrl);
+        copyLinkText.textContent = 'Copied ✓';
+        setTimeout(() => { copyLinkText.textContent = 'Copy link'; }, 2000);
+      } catch (err) {
+        copyLinkText.textContent = siteUrl;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
