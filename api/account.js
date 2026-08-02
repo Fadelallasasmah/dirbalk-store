@@ -35,6 +35,12 @@ export default async function handler(req, res) {
       email: (req.body && req.body.email) || '',
       token: (req.body && req.body.token) || ''
     };
+  } else if (kind === 'updatePhone') {
+    payload = {
+      action: 'updatePhone',
+      email: (req.body && req.body.email) || '',
+      phone: (req.body && req.body.phone) || ''
+    };
   } else {
     payload = {
       action: 'changePassword',
