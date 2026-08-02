@@ -307,6 +307,30 @@
   }
   .info-row .label { color: rgba(255,255,255,0.45); flex-shrink: 0; }
   .info-row .value { color: rgba(255,255,255,0.85); text-align: left; min-width: 0; overflow-wrap: break-word; }
+  .info-row .value-wrap { display: flex; align-items: center; gap: 10px; }
+  .phone-edit-link {
+    background: none; border: none; padding: 0; cursor: pointer;
+    color: #C9A84C; font-size: 11px; text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+    font-family: Arial, sans-serif;
+  }
+  .phone-edit-form {
+    display: none; gap: 8px; align-items: center; margin-top: 8px;
+    padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .phone-edit-form.show { display: flex; }
+  .phone-edit-form input {
+    flex: 1; background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 10px 12px; font-size: 12.5px; text-align: left;
+    direction: ltr; outline: none; font-family: Arial, sans-serif;
+  }
+  .phone-edit-form input:focus { border-color: rgba(201,168,76,0.5); }
+  .phone-edit-form button {
+    padding: 10px 16px; font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
+    background: #C9A84C; border: none; color: #0a0a0a; font-weight: bold;
+  }
+  .phone-edit-form button:disabled { opacity: 0.5; cursor: default; }
+  .phone-edit-msg { font-size: 10.5px; color: rgba(255,120,120,0.85); margin-top: 4px; display: none; }
 
   .addr-box {
     border: 0.5px solid rgba(255,255,255,0.1);
@@ -563,7 +587,72 @@
   document.getElementById('profileArea').innerHTML =
     '<div class="info-row"><span class="label">الاسم</span><span class="value">' + (name || '—') + '</span></div>' +
     '<div class="info-row"><span class="label">الإيميل</span><span class="value">' + email + '</span></div>' +
-    '<div class="info-row"><span class="label">الهاتف</span><span class="value">' + (phone || '—') + '</span></div>';
+    '<div class="info-row">' +
+      '<span class="label">الهاتف</span>' +
+      '<span class="value-wrap"><span class="value" id="phoneDisplay">' + (phone || '—') + '</span>' +
+      '<button type="button" class="phone-edit-link" id="phoneEditToggle">' + (phone ? 'تعديل' : 'أضف رقم') + '</button></span>' +
+    '</div>' +
+    '<div class="phone-edit-form" id="phoneEditForm">' +
+      '<input type="tel" id="phoneEditInput" placeholder="0785734499" inputmode="tel" value="' + (phone ? phone.replace(/^\+962/, '0') : '') + '" />' +
+      '<button type="button" id="phoneEditSave">حفظ</button>' +
+    '</div>' +
+    '<p class="phone-edit-msg" id="phoneEditMsg"></p>';
+
+  (function () {
+    var toggleBtn = document.getElementById('phoneEditToggle');
+    var form = document.getElementById('phoneEditForm');
+    var input = document.getElementById('phoneEditInput');
+    var saveBtn = document.getElementById('phoneEditSave');
+    var msg = document.getElementById('phoneEditMsg');
+
+    toggleBtn.addEventListener('click', function () {
+      form.classList.toggle('show');
+      if (form.classList.contains('show')) input.focus();
+    });
+
+    saveBtn.addEventListener('click', function () {
+      var raw = input.value.trim().replace(/\s/g, '');
+      msg.style.display = 'none';
+
+      if (!/^0?7[0-9]{8}$/.test(raw)) {
+        msg.textContent = 'رقم الهاتف غير صحيح.';
+        msg.style.display = 'block';
+        return;
+      }
+      var international = '+962' + raw.replace(/^0/, '');
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'جاري الحفظ...';
+
+      fetch('/api/account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'updatePhone', email: email, phone: international })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (result) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'حفظ';
+          if (result.status === 'success') {
+            try { localStorage.setItem('dirbalk_phone', international); } catch (e) { /* ignore */ }
+            document.getElementById('phoneDisplay').textContent = international;
+            toggleBtn.textContent = 'تعديل';
+            form.classList.remove('show');
+            if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم حفظ رقم الهاتف.');
+          } else {
+            msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+            msg.style.display = 'block';
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+          }
+        })
+        .catch(function () {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'حفظ';
+          msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+          msg.style.display = 'block';
+        });
+    });
+  })();
 
   /* ---------------- saved address ---------------- */
   try {
