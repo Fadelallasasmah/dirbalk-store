@@ -540,10 +540,18 @@
     }
   }
 
-  applyHero(currentTheme());
-  document.addEventListener('dirbalk:theme', function (e) {
-    applyHero(e.detail && e.detail.theme ? e.detail.theme : currentTheme());
-  });
+  function initHero() {
+    applyHero(currentTheme());
+    document.addEventListener('dirbalk:theme', function (e) {
+      applyHero(e.detail && e.detail.theme ? e.detail.theme : currentTheme());
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHero);
+  } else {
+    initHero();
+  }
 })();
 </script>
 
