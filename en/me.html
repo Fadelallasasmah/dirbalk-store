@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<script src="/assets/theme.js"></script>
+<script src="/assets/toast.js"></script>
+<script src="/assets/password-ux.js"></script>
+<script src="/assets/push.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — DIRBALK</title>
+<meta name="robots" content="noindex">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FMPZV540CP');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  a { color: inherit; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  .header-logo { height: 22px; width: auto; display: block; }
+  .logo-link { grid-column: 2; justify-self: center; }
+
+  .hamburger-btn {
+    display: flex;
+    grid-column: 1; justify-self: start;
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer; padding: 4px;
+    width: 24px; height: 24px;
+    flex-direction: column; justify-content: center; gap: 5px;
+  }
+  .hamburger-btn span { display: block; width: 100%; height: 1.4px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
+  .hamburger-btn.open span:nth-child(1) { transform: translateY(6.4px) rotate(45deg); }
+  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+  .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.4px) rotate(-45deg); }
+
+  .side-menu-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.7s ease;
+  }
+  .side-menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  #sideMenuPanel {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh; width: 100%; max-width: 300px;
+    background: #0d0d0d;
+    border-right: 0.5px solid rgba(255,255,255,0.1);
+    z-index: 97;
+    transform: translateX(-100%);
+    transition: transform 0.7s cubic-bezier(.16,1,.3,1);
+    flex-direction: column;
+    padding: 20px 22px;
+    overflow-y: auto;
+  }
+  #sideMenuPanel.open { transform: translateX(0); }
+
+  .side-menu-close {
+    align-self: flex-start;
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    font-size: 18px; cursor: pointer; margin-bottom: 30px; padding: 4px;
+  }
+
+  .side-menu-links { display: flex; flex-direction: column; gap: 4px; }
+  .side-menu-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 14px; padding: 12px 4px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    opacity: 0;
+    transform: translateX(-14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .side-menu-links a:hover { color: #C9A84C; }
+  .side-menu-links a.mlink-visible { opacity: 1; transform: translateX(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .side-menu-links a { transition: none; opacity: 1; transform: none; }
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 46px 24px 70px; }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  /* gate */
+  .gate-box { max-width: 420px; margin: 60px auto; text-align: center; }
+  .gate-box p { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 1.9; margin-bottom: 22px; }
+  .gate-actions { display: flex; gap: 10px; }
+  .gate-btn {
+    flex: 1; padding: 13px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: #ffffff; font-size: 12px; letter-spacing: 1px;
+    text-decoration: none; transition: all 0.2s; text-align: center;
+  }
+  .gate-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .gate-btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
+
+  /* greeting */
+  .greet { margin-bottom: 40px; }
+  .greet h1 { font-size: 22px; margin-bottom: 4px; }
+  .greet p { font-size: 12px; color: rgba(255,255,255,0.45); overflow-wrap: break-word; word-break: break-word; }
+  .logout-btn {
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px; text-decoration: underline;
+    cursor: pointer; font-family: Arial, sans-serif;
+    margin-top: 10px;
+  }
+  .logout-btn:hover { color: rgba(255,120,120,0.85); }
+
+  h2.sec-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C9A84C;
+    font-weight: normal;
+    margin-bottom: 16px;
+  }
+  section { margin-bottom: 46px; }
+
+
+  /* ---------- skeleton loading (real network wait: /api/me) ---------- */
+  .sk-piece, .sk-order {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+  }
+  .sk-piece {
+    height: 76px;
+    margin-bottom: 12px;
+    border: 0.5px solid rgba(255,255,255,0.08);
+  }
+  .sk-order {
+    height: 64px;
+    margin-bottom: 2px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .sk-piece::after, .sk-order::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: skShimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes skShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk-piece::after, .sk-order::after { animation: none; opacity: 0.5; }
+  }
+
+  .loading, .empty {
+    color: rgba(255,255,255,0.4);
+    font-size: 12.5px;
+    line-height: 1.9;
+    padding: 14px 0;
+  }
+  .empty a { color: #C9A84C; text-decoration: none; }
+
+  /* pieces */
+  .piece-card {
+    border: 0.5px solid rgba(201,168,76,0.3);
+    padding: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .piece-code { font-size: 17px; font-weight: bold; letter-spacing: 2px; color: #C9A84C; margin-bottom: 4px; }
+  .piece-sub { font-size: 11.5px; color: rgba(255,255,255,0.5); }
+  .passport-link {
+    padding: 11px 20px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    font-size: 11px; letter-spacing: 1px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+    white-space: nowrap;
+  }
+  .passport-link:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
+
+  .comment-toggle-btn {
+    background: none; border: none;
+    color: rgba(255,255,255,0.4); text-decoration: underline;
+    font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-toggle-btn:hover { color: #C9A84C; }
+
+  .comment-form-wrap { display: none; flex: 1 0 100%; margin-top: 10px; }
+  .comment-form-wrap.show { display: block; }
+  .comment-textarea {
+    width: 100%; min-height: 70px;
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 10px 14px; font-size: 12.5px;
+    font-family: Arial, sans-serif; outline: none; resize: vertical;
+    margin-bottom: 8px;
+  }
+  .comment-textarea:focus { border-color: rgba(201,168,76,0.5); }
+  .comment-submit-btn {
+    padding: 9px 20px;
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 11px; letter-spacing: 0;
+    cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-submit-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .comment-submit-btn:disabled { opacity: 0.5; cursor: default; }
+  .comment-form-msg { font-size: 11px; color: rgba(255,120,140,0.85); margin-top: 8px; }
+  .comment-existing-text {
+    font-size: 12.5px; line-height: 1.9; color: rgba(255,255,255,0.8);
+    border: 0.5px solid rgba(255,255,255,0.12); padding: 10px 14px; margin-bottom: 8px;
+  }
+  .comment-existing-status { font-size: 10px; color: rgba(201,168,76,0.85); margin-bottom: 10px; }
+  .comment-delete-btn {
+    padding: 9px 20px;
+    background: transparent; border: 0.5px solid rgba(255,120,120,0.4);
+    color: rgba(255,140,140,0.9); font-size: 11px;
+    cursor: pointer; font-family: Arial, sans-serif;
+  }
+  .comment-delete-btn:hover { border-color: rgba(255,120,120,0.7); }
+  .comment-delete-btn:disabled { opacity: 0.5; cursor: default; }
+
+  /* orders */
+  .order-row {
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    padding: 16px 2px;
+  }
+  .order-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+  .order-id { font-size: 13.5px; font-weight: bold; letter-spacing: 1px; }
+  .order-date { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .order-items { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 6px; }
+  .order-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .order-total { font-size: 12.5px; color: #C9A84C; font-weight: bold; }
+  .order-status {
+    font-size: 10px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.55);
+    border: 0.5px solid rgba(255,255,255,0.18);
+    padding: 4px 10px;
+  }
+  .order-status.cancelled { color: rgba(255,120,120,0.85); border-color: rgba(255,120,120,0.35); }
+
+  /* ---------- order journey timeline (compact, per order card) ---------- */
+  .order-journey { margin-top: 14px; padding-top: 14px; border-top: 0.5px solid rgba(255,255,255,0.07); }
+  .journey-steps { display: flex; align-items: flex-start; position: relative; }
+  .journey-steps .track {
+    position: absolute; top: 4px; left: 12.5%; right: 12.5%; height: 1px;
+    background: rgba(255,255,255,0.15); z-index: 1;
+  }
+  .journey-steps .track-fill {
+    position: absolute; top: 4px; right: 12.5%; height: 1px;
+    background: #C9A84C; z-index: 1;
+  }
+  .journey-step { flex: 1; text-align: center; position: relative; z-index: 2; }
+  .journey-step .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #0a0a0a;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    margin: 0 auto 8px;
+  }
+  .journey-step.done .dot { background: #C9A84C; border-color: #C9A84C; }
+  .journey-step .label {
+    font-size: 9.5px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  }
+  .journey-step.done .label { color: rgba(255,255,255,0.8); }
+  .journey-step.current .label { color: #C9A84C; }
+
+
+  /* ---------- profile / address / security sections ---------- */
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    font-size: 12.5px; gap: 12px;
+  }
+  .info-row .label { color: rgba(255,255,255,0.45); flex-shrink: 0; }
+  .info-row .value { color: rgba(255,255,255,0.85); text-align: left; min-width: 0; overflow-wrap: break-word; }
+  .info-row .value-wrap { display: flex; align-items: center; gap: 10px; }
+  .phone-edit-link {
+    background: none; border: none; padding: 0; cursor: pointer;
+    color: #C9A84C; font-size: 11px; text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+    font-family: Arial, sans-serif;
+  }
+  .phone-edit-form {
+    display: none; flex-direction: column; gap: 10px; margin-top: 8px;
+    padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .phone-edit-form.show { display: flex; }
+  .phone-input-row {
+    display: flex; align-items: stretch; gap: 0;
+    border: 0.5px solid rgba(255,255,255,0.15);
+  }
+  .phone-input-row:focus-within { border-color: rgba(201,168,76,0.5); }
+  .phone-cc-select {
+    background: #0d0d0d; border: none; border-left: 0.5px solid rgba(255,255,255,0.12);
+    color: #fff; padding: 10px 8px; font-size: 12.5px; outline: none;
+    font-family: Arial, sans-serif; cursor: pointer; flex-shrink: 0;
+    max-width: 108px;
+  }
+  .phone-cc-select option { background: #0d0d0d; }
+  .phone-edit-form input[type="tel"] {
+    flex: 1; min-width: 0; background: transparent; border: none;
+    color: #fff; padding: 10px 12px; font-size: 12.5px; text-align: left;
+    direction: ltr; outline: none; font-family: Arial, sans-serif;
+  }
+  .phone-edit-actions { display: flex; justify-content: flex-end; }
+  .phone-edit-form button {
+    padding: 10px 20px; font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
+    background: #C9A84C; border: none; color: #0a0a0a; font-weight: bold;
+  }
+  .phone-edit-form button:disabled { opacity: 0.5; cursor: default; }
+  .phone-edit-msg { font-size: 10.5px; color: rgba(255,120,120,0.85); margin-top: 4px; display: none; }
+
+  .addr-box {
+    border: 0.5px solid rgba(255,255,255,0.1);
+    padding: 16px;
+  }
+  .addr-box p { font-size: 12.5px; line-height: 2; color: rgba(255,255,255,0.75); }
+  .addr-edit-link {
+    display: inline-block; margin-top: 10px;
+    font-size: 11px; color: #C9A84C; text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+    background: none; border-top: none; border-left: none; border-right: none;
+    padding: 0; cursor: pointer; font-family: Arial, sans-serif;
+  }
+
+  .acc-form { margin-top: 4px; }
+  .acc-field { text-align: right; margin-bottom: 12px; }
+  .acc-field label {
+    display: block; color: rgba(255,255,255,0.4);
+    font-size: 10px; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .acc-field input {
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 12px 16px; font-size: 13px;
+    outline: none; text-align: right; font-family: Arial, sans-serif;
+    width: 100%; transition: border-color 0.2s;
+  }
+  .acc-field input:focus { border-color: rgba(201,168,76,0.5); }
+  .acc-btn {
+    padding: 12px 24px;
+    background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 12px; letter-spacing: 1px;
+    cursor: pointer; font-family: Arial, sans-serif;
+    transition: all 0.2s;
+  }
+  .acc-btn:hover { border-color: rgba(201,168,76,0.4); }
+  .acc-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .danger-zone { border-color: rgba(255,120,120,0.2) !important; }
+  .danger-text { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 14px; }
+  .danger-btn {
+    padding: 12px 24px;
+    background: transparent; border: 0.5px solid rgba(255,120,120,0.35);
+    color: rgba(255,140,140,0.9); font-size: 12px; letter-spacing: 1px;
+    cursor: pointer; font-family: Arial, sans-serif;
+    transition: all 0.2s;
+  }
+  .danger-btn:hover { border-color: rgba(255,120,120,0.7); background: rgba(255,80,80,0.06); }
+
+  .confirm-delete-box {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    border: 0.5px solid rgba(255,120,120,0.3);
+  }
+  .confirm-delete-box.show { display: block; }
+  .confirm-delete-box p { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.9; margin-bottom: 12px; }
+  .confirm-delete-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .closing { text-align: center; margin-top: 20px; }
+  .closing .phrase { color: #C9A84C; font-size: 13px; opacity: 0.9; }
+
+  /* unified footer */
+  .site-footer {
+    width: 100%;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    margin-top: 60px;
+    padding: 36px 20px 44px;
+    text-align: center;
+  }
+  .site-footer .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 26px; margin-bottom: 24px; }
+  .site-footer .footer-links a { font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+  .site-footer .footer-links a:hover { color: #C9A84C; }
+  .site-footer .footer-logo { height: 18px; width: auto; opacity: 0.65; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
+  </div>
+</header>
+
+<div class="side-menu-overlay" id="sideMenuOverlay"></div>
+<nav id="sideMenuPanel" aria-label="Main menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
+  <div class="side-menu-links">
+    <a href="/en/">Home</a>
+    <a href="/en/shop.html">Collection</a>
+    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/me.html">My Account</a>
+  </div>
+</nav>
+
+<div class="gate-box" id="gateBox" style="display:none;">
+  <p>Sign in to view your account.</p>
+  <div class="gate-actions">
+    <a href="/en/" class="gate-btn primary">Create Account</a>
+    <a href="/en/signin.html" class="gate-btn">Sign In</a>
+  </div>
+</div>
+
+<div class="wrap" id="accountWrap" style="display:none;">
+
+  <div class="greet reveal">
+    <h1 id="greetName"></h1>
+    <p id="greetEmail"></p>
+    <button type="button" class="logout-btn" id="enablePushBtn" style="margin-inline-end:14px;">Enable Notifications</button>
+    <button type="button" class="logout-btn" id="logoutBtn">Log Out</button>
+  </div>
+
+  <section class="reveal" style="transition-delay:0.1s;">
+    <h2 class="sec-title">My Pieces</h2>
+    <div id="piecesArea"><div class="sk-piece"></div><div class="sk-piece"></div></div>
+  </section>
+
+  <section class="reveal" style="transition-delay:0.2s;">
+    <h2 class="sec-title">My Orders</h2>
+    <div id="ordersArea"><div class="sk-order"></div><div class="sk-order"></div><div class="sk-order"></div></div>
+  </section>
+
+
+  <section class="reveal" style="transition-delay:0.28s;">
+    <h2 class="sec-title">My Profile</h2>
+    <div id="profileArea"></div>
+  </section>
+
+  <section class="reveal" style="transition-delay:0.34s;">
+    <h2 class="sec-title">My Address</h2>
+    <div class="addr-box" id="addrBox">
+      <p id="addrText">No saved address yet.</p>
+      <button type="button" class="addr-edit-link" id="addrEditToggle">Edit address ←</button>
+    </div>
+    <div class="phone-edit-form" id="addrEditForm" style="margin-top:10px;">
+      <div class="acc-field">
+        <label for="addrFullName">Full Name</label>
+        <input type="text" id="addrFullName" />
+      </div>
+      <div class="acc-field">
+        <label for="addrPhone">Phone Number</label>
+        <div class="phone-input-row">
+          <select class="phone-cc-select" id="addrCcSelect"></select>
+          <input type="tel" id="addrPhone" placeholder="7XXXXXXXX" inputmode="tel" />
+        </div>
+      </div>
+      <div class="acc-field">
+        <label for="addrCity">City</label>
+        <input type="text" id="addrCity" />
+      </div>
+      <div class="acc-field">
+        <label for="addrAddress">Detailed Address</label>
+        <input type="text" id="addrAddress" />
+      </div>
+      <div class="acc-field">
+        <label for="addrLocationLink">Location Link (optional)</label>
+        <input type="text" id="addrLocationLink" placeholder="https://maps.google.com/..." />
+      </div>
+      <p class="phone-edit-msg" id="addrEditMsg"></p>
+      <div class="phone-edit-actions"><button type="button" id="addrEditSave">Save Address</button></div>
+    </div>
+  </section>
+
+  <section class="reveal" style="transition-delay:0.4s;">
+    <h2 class="sec-title">Password</h2>
+    <form class="acc-form" id="pwForm">
+      <div class="acc-field" id="currentPwField" style="display:none;">
+        <label for="currentPw">Current Password</label>
+        <input type="password" id="currentPw" autocomplete="current-password" />
+      </div>
+      <div class="acc-field">
+        <label for="newPw">New Password</label>
+        <input type="password" id="newPw" placeholder="8+ characters" autocomplete="new-password" />
+      </div>
+      <p class="form-error" id="pwError" style="display:none;color:rgba(255,120,120,0.85);font-size:11.5px;margin-bottom:10px;"></p>
+      <button type="submit" class="acc-btn" id="pwBtn">Save</button>
+    </form>
+  </section>
+
+  <section class="reveal" style="transition-delay:0.46s;">
+    <h2 class="sec-title">Danger Zone</h2>
+    <div class="addr-box danger-zone">
+      <p class="danger-text">Deleting your account is permanent for your personal data. The pieces you own and your order history stay on record (to document piece ownership), but your name and email get erased.</p>
+      <button type="button" class="danger-btn" id="showDeleteBtn">Delete My Account</button>
+
+      <div class="confirm-delete-box" id="confirmDeleteBox">
+        <p>Type <strong>DELETE</strong> in the box below, and enter your password (if you have one), to confirm.</p>
+        <div class="acc-field">
+          <input type="text" id="deleteConfirmWord" placeholder="Type: DELETE" />
+        </div>
+        <div class="acc-field">
+          <input type="password" id="deletePw" placeholder="Password (if you have one)" autocomplete="current-password" />
+        </div>
+        <div class="confirm-delete-actions">
+          <button type="button" class="danger-btn" id="confirmDeleteBtn">Confirm Deletion</button>
+          <button type="button" class="acc-btn" id="cancelDeleteBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <p class="phrase brand-phrase" id="closingPhrase">دير بالك على حالك.</p>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <nav class="footer-links">
+    <a href="/en/">Home</a>
+    <a href="/en/shop.html">Collection</a>
+    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shipping.html">Shipping &amp; Returns</a>
+    <a href="/en/privacy.html">Privacy Policy</a>
+    <a href="/en/signin.html">Sign In</a>
+  </nav>
+  <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
+</footer>
+
+<script>
+(function () {
+  if (window.DirbalkPassword) {
+    DirbalkPassword.attachCapsLock('currentPw');
+    DirbalkPassword.attachStrength('newPw');
+    DirbalkPassword.attachCapsLock('newPw');
+    DirbalkPassword.attachCapsLock('deletePw');
+  }
+  var PRODUCT_NAMES = {
+    'DB-TEE-01': 'Oversized T-Shirt',
+    'DB-DEN-01': 'Wide-Leg Denim Pants',
+    'DB-JAC-01': 'Oversized Denim Jacket'
+  };
+
+  var loggedIn = false, email = '', name = '', gender = '';
+  try {
+    loggedIn = localStorage.getItem('dirbalk_logged_in') === '1';
+    email = (localStorage.getItem('dirbalk_email') || '').toLowerCase();
+    name = localStorage.getItem('dirbalk_name') || '';
+    gender = localStorage.getItem('dirbalk_gender') || '';
+  } catch (e) { /* ignore */ }
+
+  if (!loggedIn || !email) {
+    document.getElementById('gateBox').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('accountWrap').style.display = 'block';
+  var first = name.trim().split(' ')[0] || '';
+  var isFemale = gender === 'female';
+  document.getElementById('greetName').textContent = 'Hi, ' + first;
+  document.getElementById('greetEmail').textContent = email;
+  document.getElementById('closingPhrase').textContent = 'دير بالك على حالك.';
+
+  document.getElementById('enablePushBtn').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Enabling...';
+    DirbalkPush.enable('/api/account', { kind: 'registerPushToken', email: email }, function (result) {
+      btn.disabled = false;
+      btn.textContent = 'Enable Notifications';
+      if (result.ok) {
+        if (window.DirbalkToast) DirbalkToast.success(result.message || 'Notifications enabled.');
+      } else {
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
+      }
+    });
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    try {
+      ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position']
+        .forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) { /* ignore */ }
+    window.location.href = '/';
+  });
+
+
+  /* ---------------- profile ---------------- */
+  var COUNTRY_CODES = [
+    { code: '+962', flag: '🇯🇴', label: 'Jordan' },
+    { code: '+966', flag: '🇸🇦', label: 'Saudi Arabia' },
+    { code: '+971', flag: '🇦🇪', label: 'UAE' },
+    { code: '+965', flag: '🇰🇼', label: 'Kuwait' },
+    { code: '+974', flag: '🇶🇦', label: 'Qatar' },
+    { code: '+973', flag: '🇧🇭', label: 'Bahrain' },
+    { code: '+968', flag: '🇴🇲', label: 'Oman' },
+    { code: '+20',  flag: '🇪🇬', label: 'Egypt' }
+  ];
+
+  function splitPhone(intlPhone) {
+    for (var i = 0; i < COUNTRY_CODES.length; i++) {
+      if (intlPhone.indexOf(COUNTRY_CODES[i].code) === 0) {
+        return { cc: COUNTRY_CODES[i].code, local: intlPhone.slice(COUNTRY_CODES[i].code.length) };
+      }
+    }
+    return { cc: '+962', local: intlPhone.replace(/^\+/, '') };
+  }
+
+  var phone = '';
+  try { phone = localStorage.getItem('dirbalk_phone') || ''; } catch (e) { /* ignore */ }
+  var phoneParts = splitPhone(phone);
+
+  var ccOptionsHtml = COUNTRY_CODES.map(function (c) {
+    var sel = c.code === phoneParts.cc ? ' selected' : '';
+    return '<option value="' + c.code + '"' + sel + '>' + c.flag + ' ' + c.code + '</option>';
+  }).join('');
+
+  document.getElementById('profileArea').innerHTML =
+    '<div class="info-row"><span class="label">Name</span><span class="value">' + (name || '—') + '</span></div>' +
+    '<div class="info-row"><span class="label">Email</span><span class="value">' + email + '</span></div>' +
+    '<div class="info-row">' +
+      '<span class="label">Phone</span>' +
+      '<span class="value-wrap"><span class="value" id="phoneDisplay">' + (phone || '—') + '</span>' +
+      '<button type="button" class="phone-edit-link" id="phoneEditToggle">' + (phone ? 'Edit' : 'Add number') + '</button></span>' +
+    '</div>' +
+    '<div class="phone-edit-form" id="phoneEditForm">' +
+      '<div class="phone-input-row">' +
+        '<select class="phone-cc-select" id="phoneCcSelect">' + ccOptionsHtml + '</select>' +
+        '<input type="tel" id="phoneEditInput" placeholder="7XXXXXXXX" inputmode="tel" value="' + (phone ? phoneParts.local.replace(/^0/, '') : '') + '" />' +
+      '</div>' +
+      '<div class="phone-edit-actions"><button type="button" id="phoneEditSave">Save</button></div>' +
+    '</div>' +
+    '<p class="phone-edit-msg" id="phoneEditMsg"></p>';
+
+  (function () {
+    var toggleBtn = document.getElementById('phoneEditToggle');
+    var form = document.getElementById('phoneEditForm');
+    var ccSelect = document.getElementById('phoneCcSelect');
+    var input = document.getElementById('phoneEditInput');
+    var saveBtn = document.getElementById('phoneEditSave');
+    var msg = document.getElementById('phoneEditMsg');
+
+    toggleBtn.addEventListener('click', function () {
+      form.classList.toggle('show');
+      if (form.classList.contains('show')) input.focus();
+    });
+
+    saveBtn.addEventListener('click', function () {
+      var localDigits = input.value.trim().replace(/\s/g, '').replace(/^0/, '');
+      msg.style.display = 'none';
+
+      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) {
+        msg.textContent = 'Please enter a valid phone number.';
+        msg.style.display = 'block';
+        return;
+      }
+      var international = ccSelect.value + localDigits;
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+
+      fetch('/api/account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'updatePhone', email: email, phone: international })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (result) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save';
+          if (result.status === 'success') {
+            try { localStorage.setItem('dirbalk_phone', international); } catch (e) { /* ignore */ }
+            document.getElementById('phoneDisplay').textContent = international;
+            toggleBtn.textContent = 'Edit';
+            form.classList.remove('show');
+            if (window.DirbalkToast) DirbalkToast.success(result.message || 'Phone number saved.');
+          } else {
+            msg.textContent = result.message || 'Something went wrong, please try again.';
+            msg.style.display = 'block';
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
+          }
+        })
+        .catch(function () {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save';
+          msg.textContent = 'Something went wrong, please try again.';
+          msg.style.display = 'block';
+        });
+    });
+  })();
+
+  /* ---------------- saved address ---------------- */
+  var savedShipping = null;
+  try {
+    savedShipping = JSON.parse(localStorage.getItem('dirbalk_saved_shipping') || 'null');
+    if (savedShipping) {
+      document.getElementById('addrText').innerHTML =
+        '<strong>' + (savedShipping.fullName || '') + '</strong><br>' +
+        (savedShipping.phone || '') + '<br>' +
+        (savedShipping.city || '') + ' — ' + (savedShipping.address || '');
+    }
+  } catch (e) { /* ignore */ }
+
+  (function () {
+    var toggleBtn = document.getElementById('addrEditToggle');
+    var form = document.getElementById('addrEditForm');
+    var ccSelect = document.getElementById('addrCcSelect');
+    var fullNameInput = document.getElementById('addrFullName');
+    var phoneInput = document.getElementById('addrPhone');
+    var cityInput = document.getElementById('addrCity');
+    var addressInput = document.getElementById('addrAddress');
+    var linkInput = document.getElementById('addrLocationLink');
+    var saveBtn = document.getElementById('addrEditSave');
+    var msg = document.getElementById('addrEditMsg');
+    var opened = false;
+
+    ccSelect.innerHTML = COUNTRY_CODES.map(function (c) {
+      return '<option value="' + c.code + '">' + c.flag + ' ' + c.code + '</option>';
+    }).join('');
+
+    function fillForm() {
+      fullNameInput.value = (savedShipping && savedShipping.fullName) || name || '';
+      cityInput.value = (savedShipping && savedShipping.city) || '';
+      addressInput.value = (savedShipping && savedShipping.address) || '';
+      linkInput.value = (savedShipping && savedShipping.locationLink) || '';
+      var savedPhoneParts = splitPhone((savedShipping && savedShipping.phone) || phone || '');
+      ccSelect.value = savedPhoneParts.cc;
+      phoneInput.value = savedPhoneParts.local.replace(/^0/, '');
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      opened = !opened;
+      form.classList.toggle('show', opened);
+      if (opened) { fillForm(); fullNameInput.focus(); }
+    });
+
+    saveBtn.addEventListener('click', function () {
+      msg.style.display = 'none';
+      var fullName = fullNameInput.value.trim();
+      var localDigits = phoneInput.value.trim().replace(/\s/g, '').replace(/^0/, '');
+      var city = cityInput.value.trim();
+      var address = addressInput.value.trim();
+      var locationLink = linkInput.value.trim();
+
+      if (!fullName) { msg.textContent = 'Please enter your full name.'; msg.style.display = 'block'; return; }
+      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) { msg.textContent = 'Please enter a valid phone number.'; msg.style.display = 'block'; return; }
+      if (!city) { msg.textContent = 'Please enter your city.'; msg.style.display = 'block'; return; }
+      if (!address) { msg.textContent = 'Please enter your address.'; msg.style.display = 'block'; return; }
+      if (locationLink && !/^https?:\/\/.+/i.test(locationLink)) { msg.textContent = 'The link must start with http:// or https://'; msg.style.display = 'block'; return; }
+
+      savedShipping = {
+        fullName: fullName,
+        email: email,
+        phone: ccSelect.value + localDigits,
+        city: city,
+        address: address,
+        locationLink: locationLink
+      };
+      try { localStorage.setItem('dirbalk_saved_shipping', JSON.stringify(savedShipping)); } catch (e) { /* ignore */ }
+
+      document.getElementById('addrText').innerHTML =
+        '<strong>' + fullName + '</strong><br>' + savedShipping.phone + '<br>' + city + ' — ' + address;
+      form.classList.remove('show');
+      opened = false;
+      if (window.DirbalkToast) DirbalkToast.success('Address saved.');
+    });
+  })();
+
+  /* ---------------- change / set password ---------------- */
+  var hasPassword = false;
+  try { hasPassword = localStorage.getItem('dirbalk_has_password') === '1'; } catch (e) { /* ignore */ }
+  if (hasPassword) document.getElementById('currentPwField').style.display = 'block';
+
+  var pwForm = document.getElementById('pwForm');
+  var pwBtn = document.getElementById('pwBtn');
+  var pwError = document.getElementById('pwError');
+  var pwSubmitting = false;
+
+  pwForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (pwSubmitting) return;
+    pwError.style.display = 'none';
+
+    var currentPassword = document.getElementById('currentPw').value;
+    var newPw = document.getElementById('newPw').value;
+
+    if (newPw.length < 8) {
+      pwError.textContent = 'Password must be at least 8 characters.';
+      pwError.style.display = 'block';
+      return;
+    }
+
+    pwSubmitting = true;
+    pwBtn.disabled = true;
+    pwBtn.textContent = 'Saving...';
+
+    fetch('/api/account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'changePassword', email: email, currentPassword: currentPassword, newPassword: newPw })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (result) {
+        pwSubmitting = false;
+        pwBtn.disabled = false;
+        pwBtn.textContent = 'Save';
+        if (result.status === 'success') {
+          if (window.DirbalkToast) DirbalkToast.success(result.message || 'Saved.');
+          pwForm.reset();
+          try { localStorage.setItem('dirbalk_has_password', '1'); } catch (e) { /* ignore */ }
+          document.getElementById('currentPwField').style.display = 'block';
+        } else {
+          pwError.textContent = result.message || 'Something went wrong, please try again.';
+          pwError.style.display = 'block';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
+        }
+      })
+      .catch(function () {
+        pwSubmitting = false;
+        pwBtn.disabled = false;
+        pwBtn.textContent = 'Save';
+        pwError.textContent = 'Something went wrong, please try again.';
+        pwError.style.display = 'block';
+        if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
+      });
+  });
+
+  /* ---------------- delete account ---------------- */
+  document.getElementById('showDeleteBtn').addEventListener('click', function () {
+    document.getElementById('confirmDeleteBox').classList.add('show');
+  });
+  document.getElementById('cancelDeleteBtn').addEventListener('click', function () {
+    document.getElementById('confirmDeleteBox').classList.remove('show');
+    document.getElementById('deleteConfirmWord').value = '';
+    document.getElementById('deletePw').value = '';
+  });
+
+  var deleteSubmitting = false;
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    if (deleteSubmitting) return;
+    var word = document.getElementById('deleteConfirmWord').value.trim();
+    if (word.toUpperCase() !== 'DELETE') {
+      if (window.DirbalkToast) DirbalkToast.warning('Type "DELETE" exactly to confirm.');
+      return;
+    }
+    var delBtn = this;
+    var pw = document.getElementById('deletePw').value;
+
+    deleteSubmitting = true;
+    delBtn.disabled = true;
+    delBtn.textContent = 'Deleting...';
+
+    fetch('/api/account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (result) {
+        if (result.status === 'success') {
+          if (window.DirbalkToast) DirbalkToast.success('Your account has been deleted. دير بالك على حالك.');
+          try {
+            ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position','dirbalk_has_password']
+              .forEach(function (k) { localStorage.removeItem(k); });
+          } catch (e) { /* ignore */ }
+          setTimeout(function () { window.location.href = '/'; }, 1200);
+        } else {
+          deleteSubmitting = false;
+          delBtn.disabled = false;
+          delBtn.textContent = 'Confirm Deletion';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || "Couldn't delete the account.");
+        }
+      })
+      .catch(function () {
+        deleteSubmitting = false;
+        delBtn.disabled = false;
+        delBtn.textContent = 'Confirm Deletion';
+        if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
+      });
+  });
+
+  /* reveal */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal:not(.visible)');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('visible'); }); return; }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { obs.observe(el); });
+  }
+  initReveal();
+
+  /* data */
+  fetch('/api/me', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (result) {
+      renderPieces(result.pieces || [], result.myComments || []);
+      renderOrders(result.orders || []);
+    })
+    .catch(function () {
+      document.getElementById('piecesArea').innerHTML = '<p class="empty">Something went wrong — try again shortly.</p>';
+      document.getElementById('ordersArea').innerHTML = '';
+    });
+
+  function renderPieces(pieces, myComments) {
+    var area = document.getElementById('piecesArea');
+    if (!pieces.length) {
+      area.innerHTML = '<p class="empty">No pieces yet.<br><a href="/en/shop.html">Collection 01 ←</a></p>';
+      return;
+    }
+    var commentsByProduct = {};
+    myComments.forEach(function (c) { commentsByProduct[c.product] = c; });
+
+    area.innerHTML = '';
+    pieces.forEach(function (pc) {
+      var serial = parseInt(pc.serial, 10);
+      var existing = commentsByProduct[pc.product];
+      var card = document.createElement('div');
+      card.className = 'piece-card';
+      card.innerHTML =
+        '<div>' +
+        '<p class="piece-code">' + pc.code + '</p>' +
+        '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · Piece ' + serial + ' of 100' +
+        (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
+        '</div>' +
+        '<a class="passport-link" href="/p/' + pc.slug + '">View passport</a>' +
+        (existing
+          ? '<button type="button" class="comment-toggle-btn">Your review</button><div class="comment-form-wrap"></div>'
+          : '<button type="button" class="comment-toggle-btn">Leave a review</button><div class="comment-form-wrap"></div>');
+
+      var toggleBtn = card.querySelector('.comment-toggle-btn');
+      var formWrap = card.querySelector('.comment-form-wrap');
+      toggleBtn.addEventListener('click', function () {
+        if (formWrap.classList.contains('show')) { formWrap.classList.remove('show'); return; }
+
+        if (existing) {
+          formWrap.innerHTML =
+            '<p class="comment-existing-text">' + existing.text.replace(/[&<>"']/g, function (c) {
+              return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            }) + '</p>' +
+            '<p class="comment-existing-status">' + (existing.approved ? 'Published' : 'Pending review') + '</p>' +
+            '<button type="button" class="comment-delete-btn">Delete my review</button>' +
+            '<p class="comment-form-msg"></p>';
+          formWrap.classList.add('show');
+
+          formWrap.querySelector('.comment-delete-btn').addEventListener('click', function () {
+            var delBtn = this;
+            var msg = formWrap.querySelector('.comment-form-msg');
+            if (!confirm('Are you sure you want to delete your review?')) return;
+            delBtn.disabled = true;
+            delBtn.textContent = 'Deleting...';
+
+            fetch('/api/account', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ kind: 'deleteComment', email: email, commentId: existing.id })
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (result) {
+                if (result.status === 'success') {
+                  existing = null;
+                  toggleBtn.textContent = 'Leave a review';
+                  formWrap.innerHTML = '';
+                  formWrap.classList.remove('show');
+                  if (window.DirbalkToast) DirbalkToast.success(result.message || 'Your review has been deleted.');
+                } else {
+                  delBtn.disabled = false;
+                  delBtn.textContent = 'Delete my review';
+                  msg.textContent = result.message || 'Something went wrong, please try again.';
+                  if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
+                }
+              })
+              .catch(function () {
+                delBtn.disabled = false;
+                delBtn.textContent = 'Delete my review';
+                msg.textContent = 'Something went wrong, please try again.';
+              });
+          });
+          return;
+        }
+
+        formWrap.innerHTML =
+          '<textarea class="comment-textarea" maxlength="500" placeholder="What do you think of the piece?"></textarea>' +
+          '<button type="button" class="comment-submit-btn">Submit</button>' +
+          '<p class="comment-form-msg"></p>';
+        formWrap.classList.add('show');
+
+        formWrap.querySelector('.comment-submit-btn').addEventListener('click', function () {
+          var textarea = formWrap.querySelector('.comment-textarea');
+          var msg = formWrap.querySelector('.comment-form-msg');
+          var text = textarea.value.trim();
+          if (!text) { msg.textContent = 'Write something first.'; return; }
+
+          var submitBtn = this;
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
+
+          fetch('/api/account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
+              if (result.status === 'success') {
+                existing = { id: result.commentId, text: text, approved: false };
+                toggleBtn.textContent = 'Your review';
+                formWrap.innerHTML = '<p class="comment-form-msg" style="color:#7fd88f;">' + result.message + '</p>';
+                if (window.DirbalkToast) DirbalkToast.success(result.message);
+              } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+                msg.textContent = result.message || 'Something went wrong, please try again.';
+                if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
+              }
+            })
+            .catch(function () {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Submit';
+              msg.textContent = 'Something went wrong, please try again.';
+            });
+        });
+      });
+
+      area.appendChild(card);
+    });
+  }
+
+  var JOURNEY_STEPS = [
+    { key: 'قيد المراجعة', label: 'Order received' },
+    { key: 'قيد التجهيز', label: "We're preparing your pieces" },
+    { key: 'تم الشحن', label: 'On its way to you' },
+    { key: 'تم التسليم', label: 'In your hands' }
+  ];
+
+  function renderJourney(status) {
+    if (status === 'ملغى') {
+      return '<div class="order-journey"><span class="order-status cancelled">Cancelled</span></div>';
+    }
+    var currentIdx = JOURNEY_STEPS.findIndex(function (s) { return s.key === status; });
+    if (currentIdx === -1) currentIdx = 0;
+
+    var fillPct = (currentIdx / (JOURNEY_STEPS.length - 1)) * 75; // track spans 75% of the row (12.5% inset each side)
+
+    var stepsHtml = JOURNEY_STEPS.map(function (s, i) {
+      var cls = i < currentIdx ? 'done' : (i === currentIdx ? 'done current' : '');
+      return '<div class="journey-step ' + cls + '"><div class="dot"></div><div class="label">' + s.label + '</div></div>';
+    }).join('');
+
+    return '<div class="order-journey"><div class="journey-steps">' +
+      '<div class="track"></div><div class="track-fill" style="width:' + fillPct + '%"></div>' +
+      stepsHtml + '</div></div>';
+  }
+
+  function renderOrders(orders) {
+    var area = document.getElementById('ordersArea');
+    if (!orders.length) {
+      area.innerHTML = '<p class="empty">No orders yet.</p>';
+      return;
+    }
+    area.innerHTML = '';
+    orders.forEach(function (o) {
+      var d = o.time ? new Date(o.time) : null;
+      var dateStr = d ? d.toLocaleDateString('ar-JO', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+      var row = document.createElement('div');
+      row.className = 'order-row';
+      row.innerHTML =
+        '<div class="order-top"><span class="order-id">' + o.orderId + '</span><span class="order-date">' + dateStr + '</span></div>' +
+        '<p class="order-items">' + (o.items || '') + '</p>' +
+        '<div class="order-bottom"><span class="order-total">' + (o.total || 0) + ' JD</span></div>' +
+        renderJourney(o.status || '');
+      area.appendChild(row);
+    });
+  }
+
+  if (window.gtag) gtag('event', 'page_view_me');
+  /* ---------------- mobile hamburger + side menu ---------------- */
+  var hamburgerBtn = document.getElementById('hamburgerBtn');
+  var sideMenuPanel = document.getElementById('sideMenuPanel');
+  var sideMenuOverlay = document.getElementById('sideMenuOverlay');
+
+  var menuLinks = sideMenuPanel.querySelectorAll('.side-menu-links a');
+  var LINK_STEP = 0.18;
+  var LINK_START = 0.2;
+
+  function openSideMenu() {
+    sideMenuPanel.classList.add('open');
+    sideMenuOverlay.classList.add('open');
+    hamburgerBtn.classList.add('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    menuLinks.forEach(function (link, i) {
+      link.style.transitionDelay = (LINK_START + i * LINK_STEP) + 's';
+      link.classList.add('mlink-visible');
+    });
+  }
+  function closeSideMenu() {
+    sideMenuPanel.classList.remove('open');
+    sideMenuOverlay.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    var n = menuLinks.length;
+    menuLinks.forEach(function (link, i) {
+      link.style.transitionDelay = ((n - 1 - i) * LINK_STEP) + 's';
+      link.classList.remove('mlink-visible');
+    });
+  }
+  hamburgerBtn.addEventListener('click', function () {
+    if (sideMenuPanel.classList.contains('open')) closeSideMenu(); else openSideMenu();
+  });
+  document.getElementById('sideMenuClose').addEventListener('click', closeSideMenu);
+  sideMenuOverlay.addEventListener('click', closeSideMenu);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSideMenu(); });
+})();
+</script>
+
+</body>
+</html>
