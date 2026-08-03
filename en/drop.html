@@ -130,7 +130,7 @@
     opacity: 0;
     transform: translateY(18px);
     transition: opacity 0.9s ease, transform 0.9s ease;
-    margin-bottom: 15vh;
+    margin-bottom: 12vh;
   }
   .statement.visible { opacity: 1; transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) { .statement { opacity: 1; transform: none; transition: none; } }
@@ -158,7 +158,17 @@
     margin-bottom: 16px;
   }
 
-  .divider { width: 40px; height: 1px; background: #C9A84C; opacity: 0.4; margin: 0 0 15vh; }
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: #C9A84C;
+    opacity: 0;
+    margin: 0 0 12vh;
+    transform: translateY(12px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .divider.visible { opacity: 0.4; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .divider { opacity: 0.4; transform: none; transition: none; } }
 
   /* ---------- steps ---------- */
   .steps {
@@ -211,8 +221,8 @@
 
   @media (max-width: 520px) {
     .statements { padding-top: 9vh; }
-    .statement { margin-bottom: 11vh; }
-    .divider { margin-bottom: 11vh; }
+    .statement { margin-bottom: 9vh; }
+    .divider { margin-bottom: 9vh; }
   }
 </style>
 </head>
@@ -241,9 +251,9 @@
 
   <div class="statement">
     <p class="kicker">The System</p>
-    <p class="big">The shop isn't open to everyone.</p>
+    <p class="big">Not everyone gets in.</p>
     <p class="small">
-      Registering on the list puts you in place. When we open, we choose who gets in. Not random — but not guaranteed either.
+      Joining the list doesn't guarantee a piece. It just puts you among the first to know.
     </p>
   </div>
 
@@ -252,21 +262,21 @@
   <div class="statement">
     <p class="big">The invite comes to you. That's the only way in.</p>
     <p class="small">
-      A personal link, for you only. It reaches you by email or WhatsApp. No line, no waiting — but you have to be invited.
+      If it arrives, you have 24 hours. That's enough — the next part explains the rest.
     </p>
   </div>
 
   <div class="statement">
     <p class="big">24 hours. Then it closes.</p>
     <p class="small">
-      The invite is a chance — like any other. If you miss it, it's not the end of the world. But some chances don't repeat, and someone else might take it.
+      After that, your spot is gone.
     </p>
   </div>
 
   <div class="statement">
     <p class="big">Every piece has a number.</p>
     <p class="small">
-      Claim yours.
+      It won't be made again. Claim yours.
     </p>
   </div>
 
@@ -277,23 +287,23 @@
     <div class="steps">
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>Join the list</strong> — just your name and email. You get your spot in line.</p>
+        <p class="step-text"><strong>Join.</strong> Name. Email. Done.</p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>Wait for the invite</strong> — when we open a drop, we send it to a limited number of registrants.</p>
+        <p class="step-text"><strong>Wait for your invitation.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>Get in within 24 hours</strong> — from any device, with your personal link.</p>
+        <p class="step-text"><strong>24 hours.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>Pick your piece</strong> — the system assigns the lowest available number in your size.</p>
+        <p class="step-text"><strong>Pick your number.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>The piece is yours</strong> — with its number, and its own record.</p>
+        <p class="step-text"><strong>That's it.</strong></p>
       </div>
     </div>
   </div>
@@ -321,7 +331,7 @@
 
 <script>
 (function () {
-  var statements = document.querySelectorAll('.statement');
+  var animatedEls = document.querySelectorAll('.statement, .divider');
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -331,9 +341,9 @@
         }
       });
     }, { threshold: 0.25 });
-    statements.forEach(function (s) { observer.observe(s); });
+    animatedEls.forEach(function (s) { observer.observe(s); });
   } else {
-    statements.forEach(function (s) { s.classList.add('visible'); });
+    animatedEls.forEach(function (s) { s.classList.add('visible'); });
   }
   if (window.gtag) gtag('event', 'page_view_drop');
 
