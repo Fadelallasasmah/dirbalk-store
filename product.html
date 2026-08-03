@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المنتج — DIRBALَK</title>
+<title>Product — DIRBALK</title>
 <meta name="description" content="DIRBALK — Collection 01, Winter 2026.">
 <meta name="robots" content="noindex">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
@@ -677,63 +677,63 @@
 
 <header>
   <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <a href="/shop.html" class="back-link">→ الكوليكشن</a>
-    <a href="/shop.html" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
-    <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
+    <a href="/en/shop.html" class="back-link">→ Collection</a>
+    <a href="/en/shop.html" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
+    <button type="button" class="icon-btn" id="cartBtn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
       <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
     </button>
     <div class="header-actions">
-      <a href="/signin.html" class="account-link" id="accountLink">تسجيل الدخول</a>
+      <a href="/en/signin.html" class="account-link" id="accountLink">Sign In</a>
       <div class="user-chip" id="userChip" style="display:none;">
         <span class="user-chip-avatar" id="userChipAvatar">?</span>
-        <a href="/me.html" id="userChipName" style="text-decoration:none;color:inherit;"></a>
-        <button type="button" class="user-chip-logout" id="userChipLogout">خروج</button>
+        <a href="/en/me.html" id="userChipName" style="text-decoration:none;color:inherit;"></a>
+        <button type="button" class="user-chip-logout" id="userChipLogout">Log out</button>
       </div>
     </div>
   </div>
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+<nav id="sideMenuPanel" aria-label="Main menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
+    <a href="/en/">Home</a>
     <div class="side-menu-row">
-      <a href="/shop.html">الكوليكشن</a>
-      <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="عرض القطع" aria-expanded="false">+</button>
+      <a href="/en/shop.html">Collection</a>
+      <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="Show pieces" aria-expanded="false">+</button>
     </div>
     <div class="side-submenu" id="collectionSubmenu"></div>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
+    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/me.html">My Account</a>
   </div>
   <div class="header-actions">
-    <a href="/signin.html" class="account-link" id="accountLinkM">تسجيل الدخول</a>
+    <a href="/en/signin.html" class="account-link" id="accountLinkM">Sign In</a>
     <div class="user-chip" id="userChipM" style="display:none;">
       <span class="user-chip-avatar" id="userChipAvatarM">?</span>
-      <a href="/me.html" id="userChipNameM" style="text-decoration:none;color:inherit;"></a>
-      <button type="button" class="user-chip-logout" id="userChipLogoutM">خروج</button>
+      <a href="/en/me.html" id="userChipNameM" style="text-decoration:none;color:inherit;"></a>
+      <button type="button" class="user-chip-logout" id="userChipLogoutM">Log out</button>
     </div>
   </div>
 </nav>
 
 <!-- login gate -->
 <div class="gate-box" id="gateBox" style="display:none;">
-  <p>لازم يكون عندك حساب مفعّل عشان تشوف القطعة.</p>
+  <p>You need a verified account to view this piece.</p>
   <div class="gate-actions">
-    <a href="/" class="gate-btn primary">أنشئ حساب</a>
-    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
+    <a href="/en/" class="gate-btn primary">Create Account</a>
+    <a href="/en/signin.html" class="gate-btn">Sign In</a>
   </div>
 </div>
 
 <!-- unknown product -->
 <div class="notfound" id="notFound" style="display:none;">
-  <p class="brand-mark">DIRBALَK</p>
-  <p>هالقطعة مش موجودة.<br>ارجع للكوليكشن وشوف القطع المتوفرة.</p>
-  <a href="/shop.html" class="gate-btn primary" style="display:inline-block; padding: 13px 30px;">Collection 01</a>
+  <p class="brand-mark">DIRBALK</p>
+  <p>This piece doesn't exist.<br>Go back to the collection and see what's available.</p>
+  <a href="/en/shop.html" class="gate-btn primary" style="display:inline-block; padding: 13px 30px;">Collection 01</a>
 </div>
 
 <div id="magPane"></div>
@@ -753,26 +753,26 @@
     <p class="pdp-price" id="pdpPrice"></p>
     <p class="pdp-delivery">
       <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.6"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
-      <span id="pdpDelivery">التوصيل خلال 2–4 أيام عمل داخل الأردن</span>
+      <span id="pdpDelivery">Delivery within 2–4 business days in Jordan</span>
     </p>
     <span class="pdp-tag" id="pdpTag"></span>
 
     <p class="pdp-story reveal" id="pdpStory" style="transition-delay:0.2s;"></p>
 
-    <p class="size-label">المقاس</p>
+    <p class="size-label">Size</p>
     <div class="size-row" id="sizeRow"></div>
-    <p class="low-stock-note" id="lowStockNote">بقي القليل من هالمقاس.</p>
+    <p class="low-stock-note" id="lowStockNote">Only a few left in this size.</p>
 
-    <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
+    <button type="button" class="add-btn" id="addToCartBtn">Add to Cart</button>
     <p class="pdp-msg" id="pdpMsg"></p>
 
     <div class="accordions">
       <div class="acc" id="accFit">
-        <button type="button" class="acc-head">القصة والمقاس <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">The Fit &amp; Size <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content"><ul class="spec-list" id="fitList"></ul></div></div>
       </div>
       <div class="acc" id="accSize">
-        <button type="button" class="acc-head">دليل المقاسات <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">Size Guide <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content">
           <table class="sg-table">
             <thead id="sgHead"></thead>
@@ -782,29 +782,29 @@
         </div></div>
       </div>
       <div class="acc" id="accCare">
-        <button type="button" class="acc-head">التركيب والعناية <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">Composition &amp; Care <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content"><ul class="spec-list" id="careList"></ul></div></div>
       </div>
       <div class="acc" id="accShip">
-        <button type="button" class="acc-head">الشحن والإرجاع <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">Shipping &amp; Returns <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content">
           <p class="acc-text">
-            التوصيل داخل الأردن خلال 2–4 أيام عمل.<br>
-            الاستبدال ممكن خلال 7 أيام إذا القطعة بحالتها الأصلية.<br>
-            للتفاصيل تواصل معنا على واتساب.
+            Delivery within Jordan takes 2–4 business days.<br>
+            Exchanges are possible within 7 days if the piece is in its original condition.<br>
+            For details, reach out to us on WhatsApp.
           </p>
         </div></div>
       </div>
       <div class="acc" id="accDetails">
-        <button type="button" class="acc-head">التفاصيل <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">Details <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content">
           <p class="acc-text" id="detailsText"></p>
         </div></div>
       </div>
       <div class="acc" id="accComments">
-        <button type="button" class="acc-head">آراء اللي اشتروا <span class="acc-icon">+</span></button>
+        <button type="button" class="acc-head">What Buyers Say <span class="acc-icon">+</span></button>
         <div class="acc-body"><div class="acc-content">
-          <div id="commentsList"><p class="acc-text" style="opacity:0.5;">عم نجيب الآراء...</p></div>
+          <div id="commentsList"><p class="acc-text" style="opacity:0.5;">Loading reviews...</p></div>
         </div></div>
       </div>
     </div>
@@ -812,7 +812,7 @@
     <p class="pdp-meta" id="pdpMeta"></p>
 
     <div class="other-pieces">
-      <p class="other-label">باقي الكوليكشن</p>
+      <p class="other-label">Rest of the Collection</p>
       <div class="other-row" id="otherRow"></div>
     </div>
   </div>
@@ -822,30 +822,30 @@
 <!-- mobile sticky bar -->
 <div class="mobile-bar" id="mobileBar" style="display:none;">
   <span class="mb-price" id="mbPrice"></span>
-  <button type="button" class="add-btn" id="mbAddBtn" style="flex:1;">أضف للسلة</button>
+  <button type="button" class="add-btn" id="mbAddBtn" style="flex:1;">Add to Cart</button>
 </div>
 
 <!-- cart drawer -->
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
-    <h2>السلة</h2>
-    <button type="button" class="icon-btn" id="cartClose" aria-label="إغلاق السلة">✕</button>
+    <h2>Cart</h2>
+    <button type="button" class="icon-btn" id="cartClose" aria-label="Close cart">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-subtotal">
-      <span>المجموع</span>
+      <span>Subtotal</span>
       <strong id="cartSubtotal">0 JD</strong>
     </div>
-    <a href="/checkout.html" class="checkout-btn" id="checkoutBtn">إتمام الشراء</a>
+    <a href="/en/checkout.html" class="checkout-btn" id="checkoutBtn">Checkout</a>
   </div>
 </div>
 
 <div class="lightbox" id="lightbox">
-  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="إغلاق">✕</button>
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
   <img id="lightboxImg" src="" alt="" />
-  <p class="lightbox-hint">كبّر بأصابعك · دبل-كبسة للتكبير السريع</p>
+  <p class="lightbox-hint">Pinch to zoom · Double-tap for quick zoom</p>
 </div>
 
 <script>
@@ -892,37 +892,37 @@
 
   var CART_KEY = 'dirbalk_cart';
 
-  /* دليل المقاسات — قياسات مختارة للزبون من الـ tech pack (بالسنتيمتر، والقطعة مفرودة) */
+  /* Size guide — measurements picked from the tech pack for the customer (in centimeters, garment laid flat) */
   var SIZE_GUIDE = {
     'DB-TEE-01': {
       rows: [
-        ['عرض الصدر', '58', '63', '68'],
-        ['طول القطعة', '65', '68', '71'],
-        ['عرض الكتف', '50', '54', '58'],
-        ['طول الكم', '21', '23', '25']
+        ['Chest width', '58', '63', '68'],
+        ['Body length', '65', '68', '71'],
+        ['Shoulder width', '50', '54', '58'],
+        ['Sleeve length', '21', '23', '25']
       ],
-      note: 'كل القياسات بالسنتيمتر والقطعة مفرودة. هامش ±1 سم.<br>أسهل طريقة: قيس تيشيرت بلبسك مريح وهو مفرود وقارن الأرقام.'
+      note: 'All measurements in centimeters, garment laid flat. ±1 cm margin.<br>Easiest way: lay flat a T-shirt that fits you comfortably and compare the numbers.'
     },
     'DB-DEN-01': {
       rows: [
-        ['الخصر (مفرود)', '38–40', '41–43', '44–47'],
-        ['الورك (مفرود)', '54', '58', '62'],
-        ['الفخذ (مفرود)', '35', '37', '39'],
-        ['فتحة الرجل (مفرودة)', '28–29', '29–30', '30–31'],
-        ['الطول الداخلي', '76', '78', '80'],
-        ['الطول الكلي', '105', '107', '109']
+        ['Waist (flat)', '38–40', '41–43', '44–47'],
+        ['Hip (flat)', '54', '58', '62'],
+        ['Thigh (flat)', '35', '37', '39'],
+        ['Leg opening (flat)', '28–29', '29–30', '30–31'],
+        ['Inseam', '76', '78', '80'],
+        ['Total length', '105', '107', '109']
       ],
-      note: 'كل القياسات بالسنتيمتر والبنطلون مفرود — قياسات الخصر والورك هي عرض القطعة وهي مفرودة (نص المحيط). هامش ±1 سم.<br>أسهل طريقة: افرد بنطلون بلبسك مريح وقيسه وقارن.'
+      note: 'All measurements in centimeters, pants laid flat — waist and hip figures are the garment width laid flat (half the circumference). ±1 cm margin.<br>Easiest way: lay flat a pair of pants that fit you comfortably and measure them, then compare.'
     },
     'DB-JAC-01': {
       rows: [
-        ['عرض الصدر', '62', '67', '72'],
-        ['طول القطعة', '63', '66', '69'],
-        ['عرض الكتف', '52', '56', '60'],
-        ['طول الكم', '59', '61', '63'],
-        ['فتحة الكم', '18', '20', '22']
+        ['Chest width', '62', '67', '72'],
+        ['Body length', '63', '66', '69'],
+        ['Shoulder width', '52', '56', '60'],
+        ['Sleeve length', '59', '61', '63'],
+        ['Cuff opening', '18', '20', '22']
       ],
-      note: 'كل القياسات بالسنتيمتر والجاكيت مفرود. هامش ±1 سم.<br>القصة أوفرسايز — إذا محتار بين مقاسين وبدك قصة أهدى، خذ الأصغر.'
+      note: 'All measurements in centimeters, jacket laid flat. ±1 cm margin.<br>Oversized fit — if you\'re between two sizes and want a more relaxed cut, size down.'
     }
   };
 
@@ -990,7 +990,7 @@
   var selectedSize = null;
 
   function renderProduct(p) {
-    document.title = p.name + ' — DIRBALَK';
+    document.title = p.name + ' — DIRBALK';
     document.getElementById('pdp').style.display = 'grid';
     document.getElementById('mobileBar').style.display = '';
 
@@ -1033,12 +1033,12 @@
     var navPrev = document.createElement('button');
     navPrev.type = 'button';
     navPrev.className = 'gallery-nav prev';
-    navPrev.setAttribute('aria-label', 'الصورة السابقة');
+    navPrev.setAttribute('aria-label', 'Previous image');
     navPrev.textContent = '›';
     var navNext = document.createElement('button');
     navNext.type = 'button';
     navNext.className = 'gallery-nav next';
-    navNext.setAttribute('aria-label', 'الصورة التالية');
+    navNext.setAttribute('aria-label', 'Next image');
     navNext.textContent = '‹';
     navPrev.addEventListener('click', function () { goToMedia(-1); });
     navNext.addEventListener('click', function () { goToMedia(1); });
@@ -1064,16 +1064,16 @@
     document.getElementById('pdpCode').textContent = p.id;
     document.getElementById('pdpTitle').textContent = p.name;
     document.getElementById('pdpColorway').textContent = p.colorway;
-    document.getElementById('pdpPrice').textContent = p.price + ' دينار';
-    document.getElementById('mbPrice').textContent = p.price + ' دينار';
+    document.getElementById('pdpPrice').textContent = p.price + ' JD';
+    document.getElementById('mbPrice').textContent = p.price + ' JD';
     document.getElementById('pdpStory').textContent = p.story;
     document.getElementById('detailsText').innerHTML = p.details;
-    document.getElementById('pdpMeta').innerHTML = 'كود: ' + p.id + '<br>اللون: ' + p.colorway + '<br>صُنع في مصر<br>Collection 01 · Winter 2026';
+    document.getElementById('pdpMeta').innerHTML = 'Code: ' + p.id + '<br>Color: ' + p.colorway + '<br>Made in Egypt<br>Collection 01 · Winter 2026';
 
     var soldOut = totalStock(p) === 0;
     var tag = document.getElementById('pdpTag');
     if (soldOut) {
-      tag.textContent = 'نفذت الكمية';
+      tag.textContent = 'Sold Out';
       tag.classList.add('sold-out');
     } else {
       tag.style.display = 'none';
@@ -1094,7 +1094,7 @@
     var sg = SIZE_GUIDE[p.id];
     if (sg) {
       document.getElementById('sgHead').innerHTML =
-        '<tr><th>القياس</th><th class="c">S</th><th class="c">M</th><th class="c">L</th></tr>';
+        '<tr><th>Measurement</th><th class="c">S</th><th class="c">M</th><th class="c">L</th></tr>';
       var sgBody = document.getElementById('sgBody');
       sgBody.innerHTML = '';
       sg.rows.forEach(function (r) {
@@ -1142,7 +1142,7 @@
       if (op.id === p.id) return;
       var a = document.createElement('a');
       a.className = 'other-link';
-      a.href = '/product.html?id=' + op.id;
+      a.href = '/en/product.html?id=' + op.id;
       a.innerHTML = '<span class="oc">' + op.id + '</span><span class="on">' + op.name + '</span>';
       otherRow.appendChild(a);
     });
@@ -1286,7 +1286,7 @@
             var list = document.getElementById('commentsList');
             var comments = (result && result.comments) || [];
             if (!comments.length) {
-              list.innerHTML = '<p class="acc-text" style="opacity:0.6;">لسا ما في آراء منشورة على هالقطعة.</p>';
+              list.innerHTML = '<p class="acc-text" style="opacity:0.6;">No reviews published for this piece yet.</p>';
             } else {
               list.innerHTML = comments.map(function (c) {
                 return '<div class="comment-item"><p class="comment-name">' + escapeHtmlPdp(c.name) + '</p><p class="comment-text">' + escapeHtmlPdp(c.text) + '</p></div>';
@@ -1295,7 +1295,7 @@
             if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
           })
           .catch(function () {
-            document.getElementById('commentsList').innerHTML = '<p class="acc-text" style="opacity:0.5;">صار خطأ مؤقت، جرب كمان شوي.</p>';
+            document.getElementById('commentsList').innerHTML = '<p class="acc-text" style="opacity:0.5;">Something went wrong, try again shortly.</p>';
             if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
           });
       }
@@ -1347,9 +1347,9 @@
     if (!product) return;
     if (!selectedSize) {
       var msg = document.getElementById('pdpMsg');
-      msg.textContent = 'اختر مقاس أول.';
+      msg.textContent = 'Please select a size first.';
       msg.style.display = 'block';
-      if (window.DirbalkToast) DirbalkToast.warning('اختر مقاس أول.');
+      if (window.DirbalkToast) DirbalkToast.warning('Please select a size first.');
       return;
     }
     var existing = null;
@@ -1359,9 +1359,9 @@
     var currentQty = existing ? existing.qty : 0;
     if (currentQty + 1 > product.sizes[selectedSize]) {
       var msg2 = document.getElementById('pdpMsg');
-      msg2.textContent = 'ما في كمية كافية من هالمقاس.';
+      msg2.textContent = 'Not enough stock in this size.';
       msg2.style.display = 'block';
-      if (window.DirbalkToast) DirbalkToast.warning('ما في كمية كافية من هالمقاس.');
+      if (window.DirbalkToast) DirbalkToast.warning('Not enough stock in this size.');
       return;
     }
     if (existing) existing.qty += 1;
@@ -1369,7 +1369,7 @@
     saveCart(cart);
     updateCartBadge();
     flyToCart();
-    if (window.DirbalkToast) DirbalkToast.success('انضافت للسلة — ' + product.name + ' (' + selectedSize + ')');
+    if (window.DirbalkToast) DirbalkToast.success('Added to cart — ' + product.name + ' (' + selectedSize + ')');
     playAddSound();
     if (window.gtag) {
       gtag('event', 'add_to_cart', {
@@ -1388,7 +1388,7 @@
     var container = document.getElementById('cartItems');
     container.innerHTML = '';
     if (cart.length === 0) {
-      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">السلة نايمة.</p><p>لسا ما اخترت قطعة — <a href="/shop.html">شوف الكوليكشن</a></p></div>';
+      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Your cart is empty.</p><p>You haven\'t picked a piece yet — <a href="/en/shop.html">browse the collection</a></p></div>';
     } else {
       cart.forEach(function (line) {
         var p = findProduct(line.id);
@@ -1399,16 +1399,16 @@
           '<div class="cart-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
           '<div class="cart-item-info">' +
           '<p class="cart-item-name">' + p.name + '</p>' +
-          '<p class="cart-item-size">مقاس ' + line.size + '</p>' +
+          '<p class="cart-item-size">Size ' + line.size + '</p>' +
           '<div class="cart-item-row">' +
           '<div class="qty-controls">' +
-          '<button type="button" class="qty-btn" data-action="dec" aria-label="إنقاص الكمية">−</button>' +
+          '<button type="button" class="qty-btn" data-action="dec" aria-label="Decrease quantity">−</button>' +
           '<span>' + line.qty + '</span>' +
-          '<button type="button" class="qty-btn" data-action="inc" aria-label="زيادة الكمية">+</button>' +
+          '<button type="button" class="qty-btn" data-action="inc" aria-label="Increase quantity">+</button>' +
           '</div>' +
           '<span class="cart-item-price">' + (p.price * line.qty) + ' JD</span>' +
           '</div>' +
-          '<button type="button" class="remove-btn" data-action="remove">إزالة</button>' +
+          '<button type="button" class="remove-btn" data-action="remove">Remove</button>' +
           '</div>';
 
         row.querySelector('[data-action="dec"]').addEventListener('click', function () {
@@ -1418,7 +1418,7 @@
         });
         row.querySelector('[data-action="inc"]').addEventListener('click', function () {
           var stock = p.sizes[line.size] || 0;
-          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('ما في كمية كافية.'); return; }
+          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Not enough stock.'); return; }
           line.qty += 1;
           saveCart(cart); renderCart(); updateCartBadge();
         });
@@ -1517,7 +1517,7 @@
   var collectionToggle = document.getElementById('collectionSubmenuToggle');
   (window.DIRBALK_PRODUCTS || []).forEach(function (p) {
     var a = document.createElement('a');
-    a.href = '/product.html?id=' + p.id;
+    a.href = '/en/product.html?id=' + p.id;
     a.textContent = p.name;
     collectionSubmenu.appendChild(a);
   });
@@ -1559,12 +1559,12 @@
 </style>
 <footer class="site-footer">
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
+    <a href="/en/">Home</a>
+    <a href="/en/shop.html">Collection</a>
+    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shipping.html">Shipping &amp; Returns</a>
+    <a href="/en/privacy.html">Privacy Policy</a>
+    <a href="/en/signin.html">Sign In</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>
