@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/lang-switch.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
 <meta charset="UTF-8">
@@ -167,6 +168,8 @@
   .secondary-link:hover { color: #C9A84C; }
 
   .form-error { color: rgba(255,80,80,0.85); font-size: 12px; margin-top: 14px; display: none; line-height: 1.6; }
+
+  .test-mode-note { font-size: 10.5px; color: rgba(255,255,255,0.5); margin-bottom: 18px; line-height: 1.7; }
 
   .confirm-box { text-align: center; padding: 40px 0; }
 
@@ -339,6 +342,8 @@
   <span class="step-dot" data-step="2"><span></span>الشحن</span>
   <span class="step-sep">—</span>
   <span class="step-dot" data-step="3"><span></span>المراجعة</span>
+  <span class="step-sep">—</span>
+  <span class="step-dot" data-step="4"><span></span>الدفع</span>
 </div>
 
 <div class="wrap">
@@ -418,17 +423,41 @@
     </div>
 
     <div class="review-block">
-      <h3>الدفع</h3>
-      <div class="rb-body"><p>كاش عند الاستلام — بتدفع لما توصلك القطعة وتشوفها بعينك.</p></div>
-    </div>
-
-    <div class="review-block">
       <div class="review-totals" id="reviewTotals"></div>
     </div>
 
-    <p class="form-error" id="submitOrderError"></p>
-    <button type="button" class="primary-btn" id="confirmOrderBtn">تأكيد الطلب</button>
+    <button type="button" class="primary-btn" id="toPaymentBtn">متابعة للدفع</button>
     <button type="button" class="secondary-link" id="backToStep2FromReview">← الرجوع لبيانات الشحن</button>
+  </div>
+
+  <div class="step-section" id="step4">
+    <h1>الدفع</h1>
+    <p class="test-mode-note">وضع تجريبي — ما رح يتم خصم أي مبلغ حقيقي. هاد بس لاختبار تجربة الشراء.</p>
+    <form id="paymentForm" novalidate>
+      <div class="form-group">
+        <div class="field">
+          <label for="cardNumber">رقم البطاقة</label>
+          <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" inputmode="numeric" />
+          <p class="field-msg" id="cardNumber-msg"></p>
+        </div>
+        <div class="field-row">
+          <div class="field half">
+            <label for="cardExpiry">تاريخ الانتهاء</label>
+            <input type="text" id="cardExpiry" placeholder="MM/YY" />
+            <p class="field-msg" id="cardExpiry-msg"></p>
+          </div>
+          <div class="field half">
+            <label for="cardCvc">CVC</label>
+            <input type="text" id="cardCvc" placeholder="123" inputmode="numeric" />
+            <p class="field-msg" id="cardCvc-msg"></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="form-error" id="paymentError"></p>
+      <button type="submit" class="primary-btn" id="payBtn">إتمام الدفع</button>
+    </form>
+    <button type="button" class="secondary-link" id="backToStep3">← الرجوع للمراجعة</button>
   </div>
 
   <div class="step-section" id="step5">
@@ -564,7 +593,7 @@
     document.querySelectorAll('.step-section').forEach((s) => s.classList.remove('active'));
     document.getElementById('step' + n).classList.add('active');
     document.querySelectorAll('.step-dot').forEach((d) => {
-      d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 3);
+      d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 4);
     });
     window.scrollTo(0, 0);
   }
@@ -671,6 +700,8 @@
   });
   document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
   document.getElementById('backToStep2FromReview').addEventListener('click', () => goToStep(2));
+  document.getElementById('toPaymentBtn').addEventListener('click', () => goToStep(4));
+  document.getElementById('backToStep3').addEventListener('click', () => goToStep(3));
 
   try {
     if (localStorage.getItem('dirbalk_logged_in') === '1') {
@@ -777,15 +808,45 @@
     goToStep(3);
   });
 
-  const confirmOrderBtn = document.getElementById('confirmOrderBtn');
-  let isSubmittingOrder = false;
+  const paymentForm = document.getElementById('paymentForm');
+  const payBtn = document.getElementById('payBtn');
+  let isSubmittingPayment = false;
 
-  async function submitOrder() {
-    if (isSubmittingOrder) return;
-    isSubmittingOrder = true;
-    confirmOrderBtn.disabled = true;
-    confirmOrderBtn.textContent = 'جاري إرسال الطلب...';
-    document.getElementById('submitOrderError').style.display = 'none';
+  paymentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('paymentError').style.display = 'none';
+
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    const cardExpiry = document.getElementById('cardExpiry').value.trim();
+    const cardCvc = document.getElementById('cardCvc').value.trim();
+
+    if (isSubmittingPayment) return;
+
+    let valid = true;
+    ['cardNumber', 'cardExpiry', 'cardCvc'].forEach((id) => {
+      document.getElementById(id).classList.remove('field-error');
+      document.getElementById(id + '-msg').style.display = 'none';
+    });
+    if (cardNumber.length < 12) { showFieldError('cardNumber', 'رقم بطاقة غير صحيح.'); valid = false; }
+    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+      showFieldError('cardExpiry', 'صيغة غير صحيحة (MM/YY).');
+      valid = false;
+    } else {
+      var expParts = cardExpiry.split('/');
+      var expMonth = parseInt(expParts[0], 10);
+      var expYear = 2000 + parseInt(expParts[1], 10);
+      var expDate = new Date(expYear, expMonth, 0, 23, 59, 59);
+      if (expMonth < 1 || expMonth > 12 || expDate < new Date()) {
+        showFieldError('cardExpiry', 'البطاقة منتهية الصلاحية.');
+        valid = false;
+      }
+    }
+    if (cardCvc.length < 3) { showFieldError('cardCvc', 'CVC غير صحيح.'); valid = false; }
+    if (!valid) return;
+
+    isSubmittingPayment = true;
+    payBtn.disabled = true;
+    payBtn.textContent = 'جاري المعالجة...';
 
     const total = cartTotal();
 
@@ -837,26 +898,25 @@
         saveCart(cart);
         goToStep(5);
       } else {
-        // business-logic decline (e.g. size just sold out) — fixable inline, stays on the review step
-        document.getElementById('submitOrderError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
-        document.getElementById('submitOrderError').style.display = 'block';
+        // business-logic decline (e.g. size just sold out) — fixable inline, stays on the payment form
+        document.getElementById('paymentError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        document.getElementById('paymentError').style.display = 'block';
         if (window.DirbalkToast) DirbalkToast.error(result.message || 'الطلب ما نجح، جرب كمان مرة.');
-        isSubmittingOrder = false;
-        confirmOrderBtn.disabled = false;
-        confirmOrderBtn.textContent = 'تأكيد الطلب';
+        isSubmittingPayment = false;
+        payBtn.disabled = false;
+        payBtn.textContent = 'إتمام الدفع';
       }
     } catch (err) {
       // genuine network/unexpected failure — dedicated failure step instead of an easy-to-miss inline message
-      isSubmittingOrder = false;
-      confirmOrderBtn.disabled = false;
-      confirmOrderBtn.textContent = 'تأكيد الطلب';
+      isSubmittingPayment = false;
+      payBtn.disabled = false;
+      payBtn.textContent = 'إتمام الدفع';
       if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
       goToStep(6);
     }
-  }
+  });
 
-  confirmOrderBtn.addEventListener('click', submitOrder);
-  document.getElementById('retryPaymentBtn').addEventListener('click', function () { goToStep(3); });
+  document.getElementById('retryPaymentBtn').addEventListener('click', function () { goToStep(4); });
 
   if (cart.length === 0) goToStep(1);
 })();
