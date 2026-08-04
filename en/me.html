@@ -371,6 +371,47 @@
     width: 100%; transition: border-color 0.2s;
   }
   .acc-field input:focus { border-color: rgba(201,168,76,0.5); }
+
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-left: 44px; }
+  .pw-toggle {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(212,180,131,0.55);
+    transition: color 0.25s ease, transform 0.15s ease;
+  }
+  .pw-toggle svg { width: 18px; height: 18px; display: block; }
+  .pw-toggle:hover { color: #D4B483; transform: translateY(-50%) scale(1.06); }
+  .pw-toggle.active { color: #D4B483; }
+  .pw-toggle:active { transform: translateY(-50%) scale(0.92); }
+  .pw-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(212,180,131,0.35);
+  }
+  html[data-theme="day"] .pw-toggle { color: rgba(212,180,131,0.6); }
+  html[data-theme="day"] .pw-toggle:hover,
+  html[data-theme="day"] .pw-toggle.active { color: #D4B483; }
+
+  @keyframes dirbalkWink {
+    0% { transform: scaleY(1); }
+    35% { transform: scaleY(0.15); }
+    60% { transform: scaleY(1); }
+    100% { transform: scaleY(1); }
+  }
+  .pw-toggle.winking svg { animation: dirbalkWink 0.42s cubic-bezier(.4,0,.2,1); transform-origin: 50% 55%; }
+  @media (prefers-reduced-motion: reduce) {
+    .pw-toggle.winking svg { animation: none; }
+  }
   .acc-btn {
     padding: 12px 24px;
     background: transparent; border: 0.5px solid rgba(255,255,255,0.2);
@@ -514,11 +555,17 @@
     <form class="acc-form" id="pwForm">
       <div class="acc-field" id="currentPwField" style="display:none;">
         <label for="currentPw">Current Password</label>
-        <input type="password" id="currentPw" autocomplete="current-password" />
+        <div class="password-wrap">
+          <input type="password" id="currentPw" autocomplete="current-password" />
+          <button type="button" class="pw-toggle" data-target="currentPw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
+        </div>
       </div>
       <div class="acc-field">
         <label for="newPw">New Password</label>
-        <input type="password" id="newPw" placeholder="8+ characters" autocomplete="new-password" />
+        <div class="password-wrap">
+          <input type="password" id="newPw" placeholder="8+ characters" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" data-target="newPw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
+        </div>
       </div>
       <p class="form-error" id="pwError" style="display:none;color:rgba(255,120,120,0.85);font-size:11.5px;margin-bottom:10px;"></p>
       <button type="submit" class="acc-btn" id="pwBtn">Save</button>
@@ -573,6 +620,19 @@
     DirbalkPassword.attachCapsLock('newPw');
     DirbalkPassword.attachCapsLock('deletePw');
   }
+
+  document.querySelectorAll('.pw-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const showing = target.type === 'text';
+      target.type = showing ? 'password' : 'text';
+      btn.classList.toggle('active', !showing);
+      btn.classList.remove('winking');
+      void btn.offsetWidth;
+      btn.classList.add('winking');
+      setTimeout(() => btn.classList.remove('winking'), 450);
+    });
+  });
   var PRODUCT_NAMES = {
     'DB-TEE-01': 'Oversized T-Shirt',
     'DB-DEN-01': 'Wide-Leg Denim Pants',
