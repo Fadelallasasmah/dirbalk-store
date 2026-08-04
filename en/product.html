@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/lang-switch.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
 <meta charset="UTF-8">
@@ -680,7 +681,7 @@
     <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <a href="/en/shop.html" class="back-link">→ Collection</a>
+    <a href="/en/shop.html" class="back-link">← Collection 01</a>
     <a href="/en/shop.html" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
     <button type="button" class="icon-btn" id="cartBtn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
@@ -698,16 +699,16 @@
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="Main menu">
+<nav id="sideMenuPanel" aria-label="Menu">
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
     <a href="/en/">Home</a>
     <div class="side-menu-row">
-      <a href="/en/shop.html">Collection</a>
+      <a href="/en/shop.html">Collection 01</a>
       <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="Show pieces" aria-expanded="false">+</button>
     </div>
     <div class="side-submenu" id="collectionSubmenu"></div>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/me.html">My Account</a>
   </div>
   <div class="header-actions">
@@ -722,7 +723,7 @@
 
 <!-- login gate -->
 <div class="gate-box" id="gateBox" style="display:none;">
-  <p>You need a verified account to view this piece.</p>
+  <p>Access starts with an account.</p>
   <div class="gate-actions">
     <a href="/en/" class="gate-btn primary">Create Account</a>
     <a href="/en/signin.html" class="gate-btn">Sign In</a>
@@ -732,7 +733,7 @@
 <!-- unknown product -->
 <div class="notfound" id="notFound" style="display:none;">
   <p class="brand-mark">DIRBALK</p>
-  <p>This piece doesn't exist.<br>Go back to the collection and see what's available.</p>
+  <p>This piece doesn't exist.<br>Head back to the collection.</p>
   <a href="/en/shop.html" class="gate-btn primary" style="display:inline-block; padding: 13px 30px;">Collection 01</a>
 </div>
 
@@ -1286,7 +1287,7 @@
             var list = document.getElementById('commentsList');
             var comments = (result && result.comments) || [];
             if (!comments.length) {
-              list.innerHTML = '<p class="acc-text" style="opacity:0.6;">No reviews published for this piece yet.</p>';
+              list.innerHTML = '<p class="acc-text" style="opacity:0.6;">No reviews yet.</p>';
             } else {
               list.innerHTML = comments.map(function (c) {
                 return '<div class="comment-item"><p class="comment-name">' + escapeHtmlPdp(c.name) + '</p><p class="comment-text">' + escapeHtmlPdp(c.text) + '</p></div>';
@@ -1295,7 +1296,7 @@
             if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
           })
           .catch(function () {
-            document.getElementById('commentsList').innerHTML = '<p class="acc-text" style="opacity:0.5;">Something went wrong, try again shortly.</p>';
+            document.getElementById('commentsList').innerHTML = '<p class="acc-text" style="opacity:0.5;">Couldn\'t load that. Try again in a bit.</p>';
             if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
           });
       }
@@ -1359,9 +1360,9 @@
     var currentQty = existing ? existing.qty : 0;
     if (currentQty + 1 > product.sizes[selectedSize]) {
       var msg2 = document.getElementById('pdpMsg');
-      msg2.textContent = 'Not enough stock in this size.';
+      msg2.textContent = 'Only a few left in that size.';
       msg2.style.display = 'block';
-      if (window.DirbalkToast) DirbalkToast.warning('Not enough stock in this size.');
+      if (window.DirbalkToast) DirbalkToast.warning('Only a few left in that size.');
       return;
     }
     if (existing) existing.qty += 1;
@@ -1369,7 +1370,7 @@
     saveCart(cart);
     updateCartBadge();
     flyToCart();
-    if (window.DirbalkToast) DirbalkToast.success('Added to cart — ' + product.name + ' (' + selectedSize + ')');
+    if (window.DirbalkToast) DirbalkToast.success('Piece added — ' + product.name + ' (' + selectedSize + ')');
     playAddSound();
     if (window.gtag) {
       gtag('event', 'add_to_cart', {
@@ -1388,7 +1389,7 @@
     var container = document.getElementById('cartItems');
     container.innerHTML = '';
     if (cart.length === 0) {
-      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Your cart is empty.</p><p>You haven\'t picked a piece yet — <a href="/en/shop.html">browse the collection</a></p></div>';
+      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Nothing here yet.</p><p>Start with <a href="/en/shop.html">Collection 01</a>.</p></div>';
     } else {
       cart.forEach(function (line) {
         var p = findProduct(line.id);
@@ -1418,7 +1419,7 @@
         });
         row.querySelector('[data-action="inc"]').addEventListener('click', function () {
           var stock = p.sizes[line.size] || 0;
-          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Not enough stock.'); return; }
+          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Only a few left.'); return; }
           line.qty += 1;
           saveCart(cart); renderCart(); updateCartBadge();
         });
@@ -1560,8 +1561,8 @@
 <footer class="site-footer">
   <nav class="footer-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/shipping.html">Shipping &amp; Returns</a>
     <a href="/en/privacy.html">Privacy Policy</a>
     <a href="/en/signin.html">Sign In</a>
