@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,15 +135,7 @@
   }
 
   .statement {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
     margin-bottom: 13vh;
-  }
-  .statement.visible { opacity: 1; transform: translateY(0); }
-
-  @media (prefers-reduced-motion: reduce) {
-    .statement { opacity: 1; transform: none; transition: none; }
   }
 
   .statement .big {
@@ -173,9 +166,9 @@
     width: 40px;
     height: 1px;
     background: #C9A84C;
-    opacity: 0.4;
     margin: 0 0 13vh;
   }
+  .divider[data-reveal].dm-visible { opacity: 0.4; }
 
   /* ---------- closing ---------- */
   .closing {
@@ -272,15 +265,15 @@
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/me.html">My Account</a>
   </div>
 </nav>
 
 <div class="statements">
 
-  <div class="statement">
+  <div class="statement" data-reveal data-reveal-group="story">
     <p class="kicker">From Amman</p>
     <p class="big brand-phrase">دير بالك على حالك</p>
     <p class="small">
@@ -288,24 +281,24 @@
     </p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" data-reveal data-reveal-group="story"></div>
 
-  <div class="statement">
-    <p class="big">Nothing loud.</p>
+  <div class="statement" data-reveal data-reveal-group="story">
+    <p class="big" data-motion="type">Nothing loud.</p>
     <p class="small">
       No logo across the chest. No text shouting at strangers. Whoever's wearing it isn't an ad — not for us, not for anyone.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">Look closer.</p>
+  <div class="statement" data-reveal data-reveal-group="story">
+    <p class="big" data-motion="type">Look closer.</p>
     <p class="small">
       Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">It started with a sentence.</p>
+  <div class="statement" data-reveal data-reveal-group="story">
+    <p class="big" data-motion="type">It started with a sentence.</p>
     <p class="small">
       Some of it, we'll keep.
     </p>
@@ -335,22 +328,6 @@
 
 <script>
 (function () {
-  var statements = document.querySelectorAll('.statement');
-
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-    statements.forEach(function (s) { observer.observe(s); });
-  } else {
-    statements.forEach(function (s) { s.classList.add('visible'); });
-  }
-
   if (window.gtag) gtag('event', 'page_view_about');
 
   /* ---------------- mobile hamburger + side menu ---------------- */
