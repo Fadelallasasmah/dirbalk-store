@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/lang-switch.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/password-ux.js"></script>
 <script src="/assets/push.js"></script>
@@ -430,21 +431,21 @@
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="Main menu">
+<nav id="sideMenuPanel" aria-label="Menu">
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/me.html">My Account</a>
   </div>
 </nav>
 
 <div class="gate-box" id="gateBox" style="display:none;">
-  <p>Sign in to view your account.</p>
+  <p>Access starts with an account.</p>
   <div class="gate-actions">
-    <a href="/en/" class="gate-btn primary">Create Account</a>
-    <a href="/en/signin.html" class="gate-btn">Sign In</a>
+    <a href="/en/" class="gate-btn primary">Join DIRBALK</a>
+    <a href="/en/signin.html" class="gate-btn">Welcome Back</a>
   </div>
 </div>
 
@@ -555,11 +556,11 @@
 <footer class="site-footer">
   <nav class="footer-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/shipping.html">Shipping &amp; Returns</a>
     <a href="/en/privacy.html">Privacy Policy</a>
-    <a href="/en/signin.html">Sign In</a>
+    <a href="/en/signin.html">Welcome Back</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>
@@ -948,7 +949,7 @@
   function renderPieces(pieces, myComments) {
     var area = document.getElementById('piecesArea');
     if (!pieces.length) {
-      area.innerHTML = '<p class="empty">No pieces yet.<br><a href="/en/shop.html">Collection 01 ←</a></p>';
+      area.innerHTML = '<p class="empty">Nothing here yet.<br><a href="/en/shop.html">Collection 01 →</a></p>';
       return;
     }
     var commentsByProduct = {};
