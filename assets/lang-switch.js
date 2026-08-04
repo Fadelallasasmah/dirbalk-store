@@ -6,7 +6,7 @@
   var STORAGE_KEY = 'dirbalk:lang';
 
   // Pages that don't have a live route in the other language yet.
-  var NO_SWITCH_PATHS = ['/admin.html', '/p.html'];
+  var NO_SWITCH_PATHS = ['/admin.html'];
 
   function currentLang() {
     return document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'ar';
@@ -14,7 +14,6 @@
 
   function hasEquivalent() {
     var path = window.location.pathname;
-    if (/^\/p\//.test(path)) return false; // /p/{slug} passport rewrite
     for (var i = 0; i < NO_SWITCH_PATHS.length; i++) {
       if (path === NO_SWITCH_PATHS[i] || path === '/en' + NO_SWITCH_PATHS[i]) return false;
     }
