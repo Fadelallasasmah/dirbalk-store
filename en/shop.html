@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
+<script src="/assets/lang-switch.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.en.js"></script>
 <meta charset="UTF-8">
@@ -730,7 +731,7 @@
     <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <a href="/en/" class="home-link">← Home</a>
+    <a href="/en/" class="home-link">← Back</a>
     <a href="/en/shop.html" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
     <button type="button" class="icon-btn" id="cartBtn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
@@ -748,16 +749,16 @@
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="Main menu">
+<nav id="sideMenuPanel" aria-label="Menu">
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
     <a href="/en/">Home</a>
     <div class="side-menu-row">
-      <a href="/en/shop.html">Collection</a>
+      <a href="/en/shop.html">Collection 01</a>
       <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="Show pieces" aria-expanded="false">+</button>
     </div>
     <div class="side-submenu" id="collectionSubmenu"></div>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/me.html">My Account</a>
   </div>
   <div class="header-actions">
@@ -814,7 +815,7 @@
       <div class="size-row" id="sizeRow"></div>
       <button type="button" class="add-btn" id="addToCartBtn">Add to Cart</button>
       <p class="modal-msg" id="modalMsg"></p>
-      <p class="modal-more-link"><a href="#" id="modalMoreLink">Full details, size guide, and reviews ←</a></p>
+      <p class="modal-more-link"><a href="#" id="modalMoreLink">Full details, size guide, and reviews →</a></p>
     </div>
   </div>
 </div>
@@ -1194,7 +1195,7 @@
     const stock = modalProduct.sizes[modalSize];
     if (currentQty + 1 > stock) {
       const msg = document.getElementById('modalMsg');
-      msg.textContent = 'Not enough stock in this size.';
+      msg.textContent = 'Only a few left in that size.';
       msg.style.display = 'block';
       return;
     }
@@ -1204,7 +1205,7 @@
     updateCartBadge();
     flyToCart(document.getElementById('modalMedia'));
     document.getElementById('modalOverlay').classList.remove('open');
-    if (window.DirbalkToast) DirbalkToast.success('Added to cart — ' + modalProduct.name + ' (' + modalSize + ')');
+    if (window.DirbalkToast) DirbalkToast.success('Piece added — ' + modalProduct.name + ' (' + modalSize + ')');
     playAddSound();
     if (window.gtag) {
       gtag('event', 'add_to_cart', {
@@ -1220,7 +1221,7 @@
     const container = document.getElementById('cartItems');
     container.innerHTML = '';
     if (cart.length === 0) {
-      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Your cart is empty.</p><p>You haven\'t picked a piece yet — <a href="/en/shop.html">browse the collection</a></p></div>';
+      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Nothing here yet.</p><p>Start with <a href="/en/shop.html">Collection 01</a>.</p></div>';
     } else {
       cart.forEach((line) => {
         const p = findProduct(line.id);
@@ -1250,7 +1251,7 @@
         });
         row.querySelector('[data-action="inc"]').addEventListener('click', () => {
           const stock = p.sizes[line.size] || 0;
-          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Not enough stock.'); return; }
+          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Only a few left.'); return; }
           line.qty += 1;
           saveCart(cart); renderCart(); updateCartBadge();
         });
@@ -1404,8 +1405,8 @@
 <footer class="site-footer">
   <nav class="footer-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/shipping.html">Shipping &amp; Returns</a>
     <a href="/en/privacy.html">Privacy Policy</a>
     <a href="/en/signin.html">Sign In</a>
