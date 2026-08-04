@@ -65,6 +65,26 @@
     container.appendChild(a);
   }
 
+  // Some pages (currently: the homepage, which has no hamburger nav by
+  // design) ship a standalone .lang-switch anchor instead. It used to be a
+  // static hardcoded link with no localStorage awareness, which meant
+  // clicking it never updated the saved preference — so the very next page
+  // load would silently auto-redirect right back. Wire it up the same way
+  // as the injected switcher so it stays in sync.
+  function wireLegacyButton() {
+    if (!hasEquivalent()) return;
+    var btns = document.querySelectorAll('.lang-switch');
+    if (!btns.length) return;
+    var otherLang = currentLang() === 'ar' ? 'en' : 'ar';
+    btns.forEach(function (btn) {
+      btn.setAttribute('href', pathFor(otherLang, window.location.pathname));
+      btn.textContent = otherLang === 'en' ? 'English' : 'عربي';
+      btn.addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, otherLang);
+      });
+    });
+  }
+
   // Visual + timing safety: some pages animate .side-menu-links a on open via
   // JS-driven transitionDelay computed from the children present at load time;
   // since we inject after that, force this one to just be visible with the
@@ -79,8 +99,12 @@
   document.head.appendChild(style);
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectSwitcher);
+    document.addEventListener('DOMContentLoaded', function () {
+      injectSwitcher();
+      wireLegacyButton();
+    });
   } else {
     injectSwitcher();
+    wireLegacyButton();
   }
 })();
