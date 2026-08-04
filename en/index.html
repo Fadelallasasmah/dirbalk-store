@@ -269,8 +269,14 @@
   .contact-btn:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
   .contact-btn svg { width: 17px; height: 17px; }
 
-  .page-footer { margin-top: 1rem; text-align: center; }
+  .page-footer { margin-top: 2.4rem; text-align: center; }
   .page-footer .brand-mark { color: #C9A84C; font-size: 11px; letter-spacing: 4px; opacity: 0.6; }
+  .page-footer .copyright {
+    margin-top: 1.4rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 10px;
+    letter-spacing: 0px;
+  }
 
   .privacy-link {
     display: block;
@@ -415,7 +421,7 @@
   .story-sections {
     width: 100%;
     max-width: 460px;
-    padding: 3.5rem 0 1rem;
+    padding: 2.8rem 0 1rem;
     margin: 1rem auto 0;
     border-top: 0.5px solid rgba(255,255,255,0.08);
   }
@@ -424,7 +430,7 @@
     opacity: 0;
     transform: translateY(14px);
     transition: opacity 0.8s ease, transform 0.8s ease;
-    margin-bottom: 3.2rem;
+    margin-bottom: 2.6rem;
   }
   .story-item:last-child { margin-bottom: 0; }
   .story-item.visible { opacity: 1; transform: translateY(0); }
@@ -676,8 +682,8 @@
     </svg>
     <p class="position-line" id="positionLine" style="display:none;"><span id="positionLabel"></span><span class="pos-num" id="positionNum"></span></p>
     <p id="success-text">
-      You're registered.<br>
-      When Collection 01 drops, you might be the first to know.<br>
+      Good.<br>
+      We'll let you know first.<br>
       <span class="brand-phrase">دير بالك على حالك.</span>
     </p>
 
@@ -693,7 +699,7 @@
     </div>
 
     <p class="ig-reminder">
-      <span id="ig-reminder-text">and follow us on</span> <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer">@dirbalk__</a><br>
+      <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer" id="ig-reminder-text">Follow the journey</a><br>
     </p>
   </div>
 
@@ -702,22 +708,22 @@
     <div class="story-item">
       <p class="story-kicker">From Amman</p>
       <p class="big brand-phrase">دير بالك على حالك</p>
-      <p class="small">It's a phrase we grew up hearing — the thing you say to someone you love when they're leaving. We made it a name.</p>
+      <p class="small">Said to someone you love, just before they leave.</p>
     </div>
 
     <div class="story-item">
-      <p class="big">From the outside, nothing.</p>
-      <p class="small">No big logo. No loud text. The piece speaks quietly — because whoever's wearing it isn't an ad for anyone.</p>
+      <p class="big">Nothing loud.</p>
+      <p class="small">No logo across the chest. No text shouting at strangers. Whoever's wearing it isn't an ad — not for us, not for anyone.</p>
     </div>
 
     <div class="story-item">
-      <p class="big">The details, for those who look.</p>
-      <p class="small">There's something in every piece that isn't written down anywhere — a phrase, a thread, a cut, a story. Details in more than one place. Try and find them.</p>
+      <p class="big">Look closer.</p>
+      <p class="small">Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.</p>
     </div>
 
     <div class="story-item">
-      <p class="big">The name has a story.</p>
-      <p class="small">Think about it.</p>
+      <p class="big">It started with a sentence.</p>
+      <p class="small">Some of it, we'll keep.</p>
     </div>
 
   </div>
@@ -732,6 +738,7 @@
       </a>
     </div>
     <img src="/logo.png" alt="DIRBALK" style="height:18px;width:auto;opacity:0.65;" />
+    <p class="copyright">© 2026</p>
   </div>
 
 </div>
@@ -791,9 +798,9 @@
 
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML =
-      'You\'re registered.<br>\n      When Collection 01 drops, you might be the first to know.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
+      'Good.<br>\n      We\'ll let you know first.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
     document.getElementById('share-btn-text').textContent = 'Share with a friend';
-    document.getElementById('ig-reminder-text').textContent = 'and follow us on';
+    document.getElementById('ig-reminder-text').textContent = 'Follow the journey';
   }
 
   const userBadge = document.getElementById('userBadge');
