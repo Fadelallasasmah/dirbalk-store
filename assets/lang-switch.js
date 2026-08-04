@@ -54,7 +54,7 @@
 
     var otherLang = currentLang() === 'ar' ? 'en' : 'ar';
     var a = document.createElement('a');
-    a.href = pathFor(otherLang, window.location.pathname);
+    a.href = pathFor(otherLang, window.location.pathname) + window.location.search + window.location.hash;
     a.textContent = otherLang === 'en' ? 'English' : 'العربية';
     a.setAttribute('data-lang-switch', otherLang);
     a.setAttribute('aria-label', otherLang === 'en' ? 'Switch to English' : 'التبديل للعربية');
@@ -76,7 +76,7 @@
     if (!btns.length) return;
     var otherLang = currentLang() === 'ar' ? 'en' : 'ar';
     btns.forEach(function (btn) {
-      btn.setAttribute('href', pathFor(otherLang, window.location.pathname));
+      btn.setAttribute('href', pathFor(otherLang, window.location.pathname) + window.location.search + window.location.hash);
       btn.textContent = otherLang === 'en' ? 'English' : 'عربي';
       btn.addEventListener('click', function () {
         localStorage.setItem(STORAGE_KEY, otherLang);
