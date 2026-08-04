@@ -189,7 +189,7 @@
 
   // slug from /p/{slug} (vercel rewrite) or ?s= fallback
   var slug = '';
-  var m = window.location.pathname.match(/^\/p\/([2-9a-z]+)$/);
+  var m = window.location.pathname.match(/^\/en\/p\/([2-9a-z]+)$/);
   if (m) slug = m[1];
   if (!slug) slug = new URLSearchParams(window.location.search).get('s') || '';
 
