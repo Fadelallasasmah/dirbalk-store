@@ -308,6 +308,43 @@
   }
   .info-row .label { color: rgba(255,255,255,0.45); flex-shrink: 0; }
   .info-row .value { color: rgba(255,255,255,0.85); text-align: left; min-width: 0; overflow-wrap: break-word; }
+  .info-row .value-wrap { display: flex; align-items: center; gap: 10px; }
+  .phone-edit-link {
+    background: none; border: none; padding: 0; cursor: pointer;
+    color: #C9A84C; font-size: 11px; text-decoration: none;
+    border-bottom: 0.5px solid rgba(201,168,76,0.4);
+    font-family: Arial, sans-serif;
+  }
+  .phone-edit-form {
+    display: none; flex-direction: column; gap: 10px; margin-top: 8px;
+    padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .phone-edit-form.show { display: flex; }
+  .phone-input-row {
+    display: flex; align-items: stretch; gap: 0;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    direction: ltr;
+  }
+  .phone-input-row:focus-within { border-color: rgba(201,168,76,0.5); }
+  .phone-cc-select {
+    background: #0d0d0d; border: none; border-left: 0.5px solid rgba(255,255,255,0.12);
+    color: #fff; padding: 10px 8px; font-size: 12.5px; outline: none;
+    font-family: Arial, sans-serif; cursor: pointer; flex-shrink: 0;
+    max-width: 108px;
+  }
+  .phone-cc-select option { background: #0d0d0d; }
+  .phone-edit-form input[type="tel"] {
+    flex: 1; min-width: 0; background: transparent; border: none;
+    color: #fff; padding: 10px 12px; font-size: 12.5px; text-align: left;
+    direction: ltr; outline: none; font-family: Arial, sans-serif;
+  }
+  .phone-edit-actions { display: flex; justify-content: flex-end; }
+  .phone-edit-form button {
+    padding: 10px 20px; font-size: 11px; cursor: pointer; font-family: Arial, sans-serif;
+    background: #C9A84C; border: none; color: #0a0a0a; font-weight: bold;
+  }
+  .phone-edit-form button:disabled { opacity: 0.5; cursor: default; }
+  .phone-edit-msg { font-size: 10.5px; color: rgba(255,120,120,0.85); margin-top: 4px; display: none; }
 
   .addr-box {
     border: 0.5px solid rgba(255,255,255,0.1);
@@ -318,6 +355,8 @@
     display: inline-block; margin-top: 10px;
     font-size: 11px; color: #C9A84C; text-decoration: none;
     border-bottom: 0.5px solid rgba(201,168,76,0.4);
+    background: none; border-top: none; border-left: none; border-right: none;
+    padding: 0; cursor: pointer; font-family: Arial, sans-serif;
   }
 
   .acc-form { margin-top: 4px; }
@@ -440,7 +479,34 @@
     <h2 class="sec-title">عنواني</h2>
     <div class="addr-box" id="addrBox">
       <p id="addrText">ما في عنوان محفوظ لسا.</p>
-      <a href="/checkout.html" class="addr-edit-link">تعديل من صفحة الشحن ←</a>
+      <button type="button" class="addr-edit-link" id="addrEditToggle">تعديل العنوان ←</button>
+    </div>
+    <div class="phone-edit-form" id="addrEditForm" style="margin-top:10px;">
+      <div class="acc-field">
+        <label for="addrFullName">الاسم الكامل</label>
+        <input type="text" id="addrFullName" />
+      </div>
+      <div class="acc-field">
+        <label for="addrPhone">رقم الهاتف</label>
+        <div class="phone-input-row">
+          <select class="phone-cc-select" id="addrCcSelect"></select>
+          <input type="tel" id="addrPhone" placeholder="7XXXXXXXX" inputmode="tel" />
+        </div>
+      </div>
+      <div class="acc-field">
+        <label for="addrCity">المدينة</label>
+        <input type="text" id="addrCity" />
+      </div>
+      <div class="acc-field">
+        <label for="addrAddress">العنوان بالتفصيل</label>
+        <input type="text" id="addrAddress" />
+      </div>
+      <div class="acc-field">
+        <label for="addrLocationLink">رابط الموقع (اختياري)</label>
+        <input type="text" id="addrLocationLink" placeholder="https://maps.google.com/..." />
+      </div>
+      <p class="phone-edit-msg" id="addrEditMsg"></p>
+      <div class="phone-edit-actions"><button type="button" id="addrEditSave">حفظ العنوان</button></div>
     </div>
   </section>
 
@@ -559,23 +625,185 @@
 
 
   /* ---------------- profile ---------------- */
+  var COUNTRY_CODES = [
+    { code: '+962', flag: '🇯🇴', label: 'الأردن' },
+    { code: '+966', flag: '🇸🇦', label: 'السعودية' },
+    { code: '+971', flag: '🇦🇪', label: 'الإمارات' },
+    { code: '+965', flag: '🇰🇼', label: 'الكويت' },
+    { code: '+974', flag: '🇶🇦', label: 'قطر' },
+    { code: '+973', flag: '🇧🇭', label: 'البحرين' },
+    { code: '+968', flag: '🇴🇲', label: 'عُمان' },
+    { code: '+20',  flag: '🇪🇬', label: 'مصر' }
+  ];
+
+  function splitPhone(intlPhone) {
+    for (var i = 0; i < COUNTRY_CODES.length; i++) {
+      if (intlPhone.indexOf(COUNTRY_CODES[i].code) === 0) {
+        return { cc: COUNTRY_CODES[i].code, local: intlPhone.slice(COUNTRY_CODES[i].code.length) };
+      }
+    }
+    return { cc: '+962', local: intlPhone.replace(/^\+/, '') };
+  }
+
   var phone = '';
   try { phone = localStorage.getItem('dirbalk_phone') || ''; } catch (e) { /* ignore */ }
+  var phoneParts = splitPhone(phone);
+
+  var ccOptionsHtml = COUNTRY_CODES.map(function (c) {
+    var sel = c.code === phoneParts.cc ? ' selected' : '';
+    return '<option value="' + c.code + '"' + sel + '>' + c.flag + ' ' + c.code + '</option>';
+  }).join('');
+
   document.getElementById('profileArea').innerHTML =
     '<div class="info-row"><span class="label">الاسم</span><span class="value">' + (name || '—') + '</span></div>' +
     '<div class="info-row"><span class="label">الإيميل</span><span class="value">' + email + '</span></div>' +
-    '<div class="info-row"><span class="label">الهاتف</span><span class="value">' + (phone || '—') + '</span></div>';
+    '<div class="info-row">' +
+      '<span class="label">الهاتف</span>' +
+      '<span class="value-wrap"><span class="value" id="phoneDisplay">' + (phone || '—') + '</span>' +
+      '<button type="button" class="phone-edit-link" id="phoneEditToggle">' + (phone ? 'تعديل' : 'إضافة رقم') + '</button></span>' +
+    '</div>' +
+    '<div class="phone-edit-form" id="phoneEditForm">' +
+      '<div class="phone-input-row">' +
+        '<select class="phone-cc-select" id="phoneCcSelect">' + ccOptionsHtml + '</select>' +
+        '<input type="tel" id="phoneEditInput" placeholder="7XXXXXXXX" inputmode="tel" value="' + (phone ? phoneParts.local.replace(/^0/, '') : '') + '" />' +
+      '</div>' +
+      '<div class="phone-edit-actions"><button type="button" id="phoneEditSave">حفظ</button></div>' +
+    '</div>' +
+    '<p class="phone-edit-msg" id="phoneEditMsg"></p>';
+
+  (function () {
+    var toggleBtn = document.getElementById('phoneEditToggle');
+    var form = document.getElementById('phoneEditForm');
+    var ccSelect = document.getElementById('phoneCcSelect');
+    var input = document.getElementById('phoneEditInput');
+    var saveBtn = document.getElementById('phoneEditSave');
+    var msg = document.getElementById('phoneEditMsg');
+
+    toggleBtn.addEventListener('click', function () {
+      form.classList.toggle('show');
+      if (form.classList.contains('show')) input.focus();
+    });
+
+    saveBtn.addEventListener('click', function () {
+      var localDigits = input.value.trim().replace(/\s/g, '').replace(/^0/, '');
+      msg.style.display = 'none';
+
+      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) {
+        msg.textContent = 'الرجاء إدخال رقم هاتف صحيح.';
+        msg.style.display = 'block';
+        return;
+      }
+      var international = ccSelect.value + localDigits;
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'جاري الحفظ...';
+
+      fetch('/api/account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: 'updatePhone', email: email, phone: international })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (result) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'حفظ';
+          if (result.status === 'success') {
+            try { localStorage.setItem('dirbalk_phone', international); } catch (e) { /* ignore */ }
+            document.getElementById('phoneDisplay').textContent = international;
+            toggleBtn.textContent = 'تعديل';
+            form.classList.remove('show');
+            if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم حفظ رقم الهاتف.');
+          } else {
+            msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+            msg.style.display = 'block';
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+          }
+        })
+        .catch(function () {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'حفظ';
+          msg.textContent = 'صار خطأ، جرب كمان مرة.';
+          msg.style.display = 'block';
+        });
+    });
+  })();
 
   /* ---------------- saved address ---------------- */
+  var savedShipping = null;
   try {
-    var saved = JSON.parse(localStorage.getItem('dirbalk_saved_shipping') || 'null');
-    if (saved) {
+    savedShipping = JSON.parse(localStorage.getItem('dirbalk_saved_shipping') || 'null');
+    if (savedShipping) {
       document.getElementById('addrText').innerHTML =
-        '<strong>' + (saved.fullName || '') + '</strong><br>' +
-        (saved.phone || '') + '<br>' +
-        (saved.city || '') + ' — ' + (saved.address || '');
+        '<strong>' + (savedShipping.fullName || '') + '</strong><br>' +
+        (savedShipping.phone || '') + '<br>' +
+        (savedShipping.city || '') + ' — ' + (savedShipping.address || '');
     }
   } catch (e) { /* ignore */ }
+
+  (function () {
+    var toggleBtn = document.getElementById('addrEditToggle');
+    var form = document.getElementById('addrEditForm');
+    var ccSelect = document.getElementById('addrCcSelect');
+    var fullNameInput = document.getElementById('addrFullName');
+    var phoneInput = document.getElementById('addrPhone');
+    var cityInput = document.getElementById('addrCity');
+    var addressInput = document.getElementById('addrAddress');
+    var linkInput = document.getElementById('addrLocationLink');
+    var saveBtn = document.getElementById('addrEditSave');
+    var msg = document.getElementById('addrEditMsg');
+    var opened = false;
+
+    ccSelect.innerHTML = COUNTRY_CODES.map(function (c) {
+      return '<option value="' + c.code + '">' + c.flag + ' ' + c.code + '</option>';
+    }).join('');
+
+    function fillForm() {
+      fullNameInput.value = (savedShipping && savedShipping.fullName) || name || '';
+      cityInput.value = (savedShipping && savedShipping.city) || '';
+      addressInput.value = (savedShipping && savedShipping.address) || '';
+      linkInput.value = (savedShipping && savedShipping.locationLink) || '';
+      var savedPhoneParts = splitPhone((savedShipping && savedShipping.phone) || phone || '');
+      ccSelect.value = savedPhoneParts.cc;
+      phoneInput.value = savedPhoneParts.local.replace(/^0/, '');
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      opened = !opened;
+      form.classList.toggle('show', opened);
+      if (opened) { fillForm(); fullNameInput.focus(); }
+    });
+
+    saveBtn.addEventListener('click', function () {
+      msg.style.display = 'none';
+      var fullName = fullNameInput.value.trim();
+      var localDigits = phoneInput.value.trim().replace(/\s/g, '').replace(/^0/, '');
+      var city = cityInput.value.trim();
+      var address = addressInput.value.trim();
+      var locationLink = linkInput.value.trim();
+
+      if (!fullName) { msg.textContent = 'الرجاء إدخال اسمك الكامل.'; msg.style.display = 'block'; return; }
+      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) { msg.textContent = 'الرجاء إدخال رقم هاتف صحيح.'; msg.style.display = 'block'; return; }
+      if (!city) { msg.textContent = 'الرجاء إدخال مدينتك.'; msg.style.display = 'block'; return; }
+      if (!address) { msg.textContent = 'الرجاء إدخال عنوانك.'; msg.style.display = 'block'; return; }
+      if (locationLink && !/^https?:\/\/.+/i.test(locationLink)) { msg.textContent = 'الرابط لازم يبدأ بـ http:// أو https://'; msg.style.display = 'block'; return; }
+
+      savedShipping = {
+        fullName: fullName,
+        email: email,
+        phone: ccSelect.value + localDigits,
+        city: city,
+        address: address,
+        locationLink: locationLink
+      };
+      try { localStorage.setItem('dirbalk_saved_shipping', JSON.stringify(savedShipping)); } catch (e) { /* ignore */ }
+
+      document.getElementById('addrText').innerHTML =
+        '<strong>' + fullName + '</strong><br>' + savedShipping.phone + '<br>' + city + ' — ' + address;
+      form.classList.remove('show');
+      opened = false;
+      if (window.DirbalkToast) DirbalkToast.success('تم حفظ العنوان.');
+    });
+  })();
 
   /* ---------------- change / set password ---------------- */
   var hasPassword = false;
