@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,13 +129,8 @@
   .statements { max-width: 700px; margin: 0 auto; padding: 14vh 24px 8vh; }
 
   .statement {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
     margin-bottom: 12vh;
   }
-  .statement.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .statement { opacity: 1; transform: none; transition: none; } }
 
   .statement .big {
     font-size: clamp(24px, 5.4vw, 40px);
@@ -163,13 +159,9 @@
     width: 40px;
     height: 1px;
     background: #C9A84C;
-    opacity: 0;
     margin: 0 0 12vh;
-    transform: translateY(12px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
   }
-  .divider.visible { opacity: 0.4; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .divider { opacity: 0.4; transform: none; transition: none; } }
+  .divider[data-reveal].dm-visible { opacity: 0.4; }
 
   /* ---------- steps ---------- */
   .steps {
@@ -242,48 +234,48 @@
   <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/me.html">My Account</a>
   </div>
 </nav>
 
 <div class="statements">
 
-  <div class="statement">
+  <div class="statement" data-reveal data-reveal-group="drop">
     <p class="kicker">The System</p>
-    <p class="big">Not everyone gets in.</p>
+    <p class="big" data-motion="type">Not everyone gets in.</p>
     <p class="small">
       Joining the list doesn't guarantee a piece. It just puts you among the first to know.
     </p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" data-reveal data-reveal-group="drop"></div>
 
-  <div class="statement">
-    <p class="big">The invite comes to you. That's the only way in.</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">The invite comes to you. That's the only way in.</p>
     <p class="small">
       If it arrives, you have 24 hours. That's enough — the next part explains the rest.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">24 hours. Then it closes.</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">24 hours. Then it closes.</p>
     <p class="small">
       After that, your spot is gone.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">Every piece has a number.</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">Every piece has a number.</p>
     <p class="small">
       It won't be made again. Claim yours.
     </p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" data-reveal data-reveal-group="drop"></div>
 
-  <div class="statement">
+  <div class="statement" data-reveal data-reveal-group="drop">
     <p class="kicker">Step by step</p>
     <div class="steps">
       <div class="step">
@@ -317,13 +309,13 @@
 
   <div class="closing-actions">
     <a href="/en/" class="closing-btn primary">Join the list</a>
-    <a href="/en/about.html" class="closing-btn">About DIRBALK</a>
+    <a href="/en/about.html" class="closing-btn">About</a>
   </div>
 
   <nav class="footer-links">
     <a href="/en/">Home</a>
-    <a href="/en/shop.html">Collection</a>
-    <a href="/en/about.html">About DIRBALK</a>
+    <a href="/en/shop.html">Collection 01</a>
+    <a href="/en/about.html">About</a>
     <a href="/en/shipping.html">Shipping &amp; Returns</a>
     <a href="/en/privacy.html">Privacy Policy</a>
     <a href="/en/signin.html">Sign In</a>
@@ -332,20 +324,6 @@
 
 <script>
 (function () {
-  var animatedEls = document.querySelectorAll('.statement, .divider');
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.25 });
-    animatedEls.forEach(function (s) { observer.observe(s); });
-  } else {
-    animatedEls.forEach(function (s) { s.classList.add('visible'); });
-  }
   if (window.gtag) gtag('event', 'page_view_drop');
 
   /* ---------------- mobile hamburger + side menu ---------------- */
