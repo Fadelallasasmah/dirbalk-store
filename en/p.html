@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +41,8 @@
   .msg { color: rgba(255,255,255,0.72); font-size: 13px; line-height: 2; }
 
   /* ---------- passport ---------- */
-  .pp-kicker { font-size: 10px; letter-spacing: 0px; color: #C9A84C; opacity: 0.7; margin-bottom: 14px; }
+  .pp-kicker { font-size: 10px; letter-spacing: 0px; color: #C9A84C; margin-bottom: 14px; }
+  .pp-kicker[data-reveal].dm-visible { opacity: 0.7; }
 
   .pp-serial {
     font-size: clamp(40px, 12vw, 64px);
@@ -93,8 +95,8 @@
     margin-top: 44px;
     color: #C9A84C;
     font-size: 14px;
-    opacity: 0.9;
   }
+  .pp-phrase[data-reveal].dm-visible { opacity: 0.9; }
 
   .err-actions { margin-top: 2rem; }
   .btn {
@@ -125,31 +127,31 @@
     </div>
 
     <div class="state" id="statePassport">
-      <p class="pp-kicker">Piece Passport</p>
-      <p class="pp-serial" id="ppSerial"></p>
-      <p class="pp-of" id="ppOf"></p>
-      <p class="pp-code" id="ppCode"></p>
+      <p class="pp-kicker" data-reveal data-reveal-delay="0.05">Piece Passport</p>
+      <p class="pp-serial" id="ppSerial" data-reveal data-reveal-delay="0.1"></p>
+      <p class="pp-of" id="ppOf" data-reveal data-reveal-delay="0.15"></p>
+      <p class="pp-code" id="ppCode" data-reveal data-reveal-delay="0.2"></p>
 
-      <p class="pp-name" id="ppName"></p>
-      <p class="pp-colorway" id="ppColorway"></p>
-      <p class="pp-collection">COLLECTION 01 · WINTER 2026</p>
+      <p class="pp-name" id="ppName" data-reveal data-reveal-delay="0.3"></p>
+      <p class="pp-colorway" id="ppColorway" data-reveal data-reveal-delay="0.35"></p>
+      <p class="pp-collection" data-reveal data-reveal-delay="0.4">COLLECTION 01 · WINTER 2026</p>
 
-      <div class="pp-section">
+      <div class="pp-section" data-reveal data-reveal-group="pp-sections">
         <h3>Materials</h3>
         <ul id="ppMaterials"></ul>
       </div>
 
-      <div class="pp-section">
+      <div class="pp-section" data-reveal data-reveal-group="pp-sections">
         <h3>Care</h3>
         <ul id="ppCare"></ul>
       </div>
 
-      <div class="pp-section">
+      <div class="pp-section" data-reveal data-reveal-group="pp-sections">
         <h3>Hidden Details</h3>
         <p class="hidden-hint" id="ppHidden"></p>
       </div>
 
-      <p class="pp-phrase brand-phrase">دير بالك على حالك.</p>
+      <p class="pp-phrase brand-phrase" data-reveal data-reveal-delay="0.9">دير بالك على حالك.</p>
     </div>
   </div>
 
@@ -185,6 +187,7 @@
   function show(id) {
     document.querySelectorAll('.state').forEach(function (s) { s.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
+    if (window.DirbalkMotion) window.DirbalkMotion.rescan();
   }
 
   // slug from /p/{slug} (vercel rewrite) or ?s= fallback
