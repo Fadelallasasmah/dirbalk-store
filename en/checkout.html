@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.en.js"></script>
 <meta charset="UTF-8">
@@ -408,22 +409,22 @@
   <div class="step-section" id="step3">
     <h1>Review Your Order</h1>
 
-    <div class="review-block">
+    <div class="review-block" data-reveal data-reveal-group="review">
       <h3>Items</h3>
       <div id="reviewItems"></div>
     </div>
 
-    <div class="review-block">
+    <div class="review-block" data-reveal data-reveal-group="review">
       <h3>Shipping To</h3>
       <div class="rb-body" id="reviewShipping"></div>
     </div>
 
-    <div class="review-block">
+    <div class="review-block" data-reveal data-reveal-group="review">
       <h3>Payment</h3>
       <div class="rb-body"><p>Cash on delivery — you pay when the piece arrives and you've seen it for yourself.</p></div>
     </div>
 
-    <div class="review-block">
+    <div class="review-block" data-reveal data-reveal-group="review">
       <div class="review-totals" id="reviewTotals"></div>
     </div>
 
@@ -434,11 +435,11 @@
 
   <div class="step-section" id="step5">
     <div class="confirm-box">
-      <div class="confirm-icon">
+      <div class="confirm-icon" data-reveal data-reveal-delay="0.05">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <h2>Your order is with us</h2>
-      <p class="confirm-order-id" id="orderIdDisplay"></p>
+      <h2 data-reveal data-reveal-delay="0.15">Your order is with us</h2>
+      <p class="confirm-order-id" id="orderIdDisplay" data-reveal data-reveal-delay="0.22"></p>
 
       <div class="piece-reveal" id="pieceReveal" style="display:none;">
         <p class="pr-label">Your pieces — by number</p>
@@ -446,28 +447,28 @@
       </div>
 
       <div class="journey">
-        <div class="j-step done">
+        <div class="j-step done" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
             <p class="j-title">We received your order</p>
             <p class="j-sub">A confirmation email with all the details is on its way</p>
           </div>
         </div>
-        <div class="j-step">
+        <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
             <p class="j-title">We're preparing your pieces</p>
             <p class="j-sub">We'll reach out on WhatsApp to confirm your address</p>
           </div>
         </div>
-        <div class="j-step">
+        <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
             <p class="j-title">On its way to you</p>
             <p class="j-sub">Delivery within Jordan takes 2–4 business days</p>
           </div>
         </div>
-        <div class="j-step">
+        <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
             <p class="j-title">In your hands</p>
@@ -476,7 +477,7 @@
         </div>
       </div>
 
-      <p class="confirm-phrase brand-phrase">دير بالك على حالك.</p>
+      <p class="confirm-phrase brand-phrase" data-reveal data-reveal-delay="0.7">دير بالك على حالك.</p>
 
       <div class="confirm-actions">
         <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="confirm-wa">
@@ -568,6 +569,7 @@
       d.classList.toggle('active', parseInt(d.dataset.step, 10) <= n && n <= 3);
     });
     window.scrollTo(0, 0);
+    if (window.DirbalkMotion) window.DirbalkMotion.rescan();
   }
 
   function renderSummary() {
