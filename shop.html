@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
 <meta charset="UTF-8">
@@ -772,9 +773,9 @@
 </nav>
 
 <section class="hero" id="shopHero">
-  <img src="/logo.png" alt="DIRBALK" class="reveal" style="height:20px;width:auto;margin-bottom:1rem;transition-delay:0.05s;" />
-  <h1 class="reveal" style="transition-delay:0.15s;">Collection 01</h1>
-  <p class="brand-phrase reveal" style="transition-delay:0.25s;">دير بالك على حالك.</p>
+  <img src="/logo.png" alt="DIRBALK" data-reveal data-reveal-delay="0.05" style="height:20px;width:auto;margin-bottom:1rem;" />
+  <h1 data-reveal data-reveal-delay="0.15">Collection 01</h1>
+  <p class="brand-phrase" data-reveal data-reveal-delay="0.25">دير بالك على حالك.</p>
 </section>
 
 <div class="gate-box" id="gateBox" style="display:none;">
@@ -929,8 +930,9 @@
     const hasMulti = images.length > 1;
 
     const card = document.createElement('div');
-    card.className = 'card reveal';
-    card.style.transitionDelay = (idx * 0.12) + 's';
+    card.className = 'card';
+    card.setAttribute('data-reveal', '');
+    card.setAttribute('data-reveal-group', 'products');
 
     const imgsHtml = images.length
       ? images.map((src, i) => '<img class="cm-img' + (i === 0 ? ' cm-current' : '') + '" data-idx="' + i + '" src="' + src + '" alt="' + p.name + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />').join('')
@@ -1018,24 +1020,9 @@
     grid.appendChild(card);
   });
 
-  /* ---------------- scroll reveal ---------------- */
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal:not(.visible)');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(function (el) { obs.observe(el); });
-  }
-  initReveal();
+  /* ---------------- scroll reveal (cards added after load, so tell
+     motion.js to re-scan for new [data-reveal] elements) ---------------- */
+  if (window.DirbalkMotion) window.DirbalkMotion.rescan();
 
   /* ---------------- quick view modal ---------------- */
   let modalProduct = null;
@@ -1365,17 +1352,6 @@
 </script>
 <style>
   /* ---------- unified site footer ---------- */
-
-  /* ---------- scroll reveal motion ---------- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-  }
 
   .site-footer {
     width: 100%;
