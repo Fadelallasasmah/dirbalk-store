@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,16 +139,7 @@
   }
 
 
-  /* ---------- scroll reveal motion ---------- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-  }
+
 
   .sec {
     border-top: 0.5px solid rgba(255,255,255,0.1);
@@ -236,32 +228,32 @@
   <h1>Shipping &amp; Returns</h1>
   <p class="subtitle">What you need to know before you order.</p>
 
-  <div class="sec reveal">
+  <div class="sec" data-reveal>
     <h2>Payment</h2>
     <p><strong>Cash on delivery.</strong> You pay when the piece arrives and you've seen it.</p>
     <p>Online payments are coming soon.</p>
   </div>
 
-  <div class="sec reveal">
+  <div class="sec" data-reveal>
     <h2>Delivery</h2>
     <p>Delivery <strong>within Jordan</strong> takes <strong>2–4 business days</strong> from order confirmation.</p>
     <p>After you order, we'll confirm your address on WhatsApp before shipping — make sure your number's right.</p>
     <p>We'll confirm delivery fees with you based on your area.</p>
   </div>
 
-  <div class="sec reveal">
+  <div class="sec" data-reveal>
     <h2>Exchanges</h2>
     <p>Need a different size? <strong>Exchanges are possible within 7 days</strong> of delivery, as long as the piece is in its original condition — not worn outside the house, not washed, with all its details intact.</p>
     <p>Every piece has its own number. An exchange means a different piece — a different number — in your size.</p>
     <p>To avoid this altogether, check the <strong>size guide</strong> on each product page before you order — measurements in centimeters, with an easy way to compare against something you already own.</p>
   </div>
 
-  <div class="sec reveal">
+  <div class="sec" data-reveal>
     <h2>Returns</h2>
     <p>If your piece arrives with a manufacturing defect — rare, but it happens — send us a photo within <strong>48 hours</strong> of delivery. We'll sort it out directly: exchange or full refund.</p>
   </div>
 
-  <div class="sec reveal">
+  <div class="sec" data-reveal>
     <h2>Questions?</h2>
     <p>WhatsApp is the fastest way to reach us — have your order number (DB-XXXX) ready.</p>
     <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="wa-btn">
@@ -288,25 +280,6 @@
 
 <script>
 (function(){
-  /* ---------------- scroll reveal ---------------- */
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal:not(.visible)');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(function (el) { obs.observe(el); });
-  }
-
-initReveal();
 
   /* ---------------- mobile hamburger + side menu ---------------- */
   var hamburgerBtn = document.getElementById('hamburgerBtn');
