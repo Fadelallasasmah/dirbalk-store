@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -421,22 +422,14 @@
   }
 
   .story-item {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    margin-bottom: 3.2rem;
+    margin-bottom: 2.6rem;
   }
   .story-item:last-child { margin-bottom: 0; }
-  .story-item.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .story-item { opacity: 1; transform: none; transition: none; }
-  }
 
   .story-kicker {
     font-size: 10px;
     letter-spacing: 0px;
     color: #C9A84C;
-    opacity: 0.7;
     margin-bottom: 10px;
   }
   /* Arabic script breaks apart visually with letter-spacing (it's a
@@ -699,24 +692,24 @@
 
   <div class="story-sections" id="storySections">
 
-    <div class="story-item">
+    <div class="story-item" data-reveal data-reveal-group="story">
       <p class="story-kicker ar">من عمّان</p>
       <p class="big brand-phrase">دير بالك على حالك</p>
-      <p class="small">جملة بنسمعها من صغرنا، وبنقولها لحدا بنحبه لما يروح </p>
+      <p class="small">جملة بنسمعها من صغرنا، وبنقولها لحدا بنحبه لما يروح خليناها اسم</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">من برّا، ولا شي</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">من برّا، ولا شي</p>
       <p class="small">ما في لوجو كبير ولا في كتابة كثير القطعة بتلمع — لأنه اللي بيلبسها مش إعلان لحدا</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">التفاصيل للي بيدوّر</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">التفاصيل للي بيدوّر</p>
       <p class="small">في أشياء بكل قطعة مش مكتوبة بأي مكان جملة، خيط، قَصّة، قِصّة. تفاصيل بكذا مكان حاول لاقيها</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">الاسم إله قصة</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">الاسم إله قصة</p>
       <p class="small">فكر فيها</p>
     </div>
 
@@ -956,24 +949,6 @@
       btn.textContent = 'تسجيل';
     }
   });
-
-  (function initStoryReveal() {
-    var items = document.querySelectorAll('.story-item');
-    if (!items.length) return;
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-    items.forEach(function (el) { obs.observe(el); });
-  })();
 
   const shareWhatsapp = document.getElementById('share-whatsapp');
   const copyLinkBtn = document.getElementById('copy-link');
