@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -427,22 +428,14 @@
   }
 
   .story-item {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
     margin-bottom: 2.6rem;
   }
   .story-item:last-child { margin-bottom: 0; }
-  .story-item.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .story-item { opacity: 1; transform: none; transition: none; }
-  }
 
   .story-kicker {
     font-size: 10px;
     letter-spacing: 0px;
     color: #C9A84C;
-    opacity: 0.7;
     margin-bottom: 10px;
   }
   /* Arabic script breaks apart visually with letter-spacing (it's a
@@ -705,24 +698,24 @@
 
   <div class="story-sections" id="storySections">
 
-    <div class="story-item">
+    <div class="story-item" data-reveal data-reveal-group="story">
       <p class="story-kicker">From Amman</p>
       <p class="big brand-phrase">دير بالك على حالك</p>
       <p class="small">Said to someone you love, just before they leave.</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">Nothing loud.</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">Nothing loud.</p>
       <p class="small">No logo across the chest. No text shouting at strangers. Whoever's wearing it isn't an ad — not for us, not for anyone.</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">Look closer.</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">Look closer.</p>
       <p class="small">Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.</p>
     </div>
 
-    <div class="story-item">
-      <p class="big">It started with a sentence.</p>
+    <div class="story-item" data-reveal data-reveal-group="story">
+      <p class="big" data-motion="type">It started with a sentence.</p>
       <p class="small">Some of it, we'll keep.</p>
     </div>
 
@@ -962,24 +955,6 @@
       btn.textContent = 'Register';
     }
   });
-
-  (function initStoryReveal() {
-    var items = document.querySelectorAll('.story-item');
-    if (!items.length) return;
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-    items.forEach(function (el) { obs.observe(el); });
-  })();
 
   const shareWhatsapp = document.getElementById('share-whatsapp');
   const copyLinkBtn = document.getElementById('copy-link');
