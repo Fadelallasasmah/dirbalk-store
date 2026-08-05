@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/password-ux.js"></script>
 <meta charset="UTF-8">
@@ -126,16 +127,16 @@
     font-size: 14px;
     letter-spacing: 0px;
     margin-bottom: 3rem;
-    opacity: 0.85;
   }
+  .brand-arabic[data-reveal].dm-visible { opacity: 0.85; }
 
   .divider {
     width: 40px;
     height: 1px;
     background: #C9A84C;
     margin: 0 auto 3rem;
-    opacity: 0.4;
   }
+  .divider[data-reveal].dm-visible { opacity: 0.4; }
 
   h1 {
     font-size: 15px;
@@ -319,11 +320,11 @@
 
 <div class="container">
 
-  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
-  <p class="brand-arabic">دير بالك على حالك</p>
-  <div class="divider"></div>
+  <img src="/logo.png" alt="DIRBALK" class="brand-logo" data-reveal data-reveal-delay="0.05" />
+  <p class="brand-arabic" data-reveal data-reveal-delay="0.1">دير بالك على حالك</p>
+  <div class="divider" data-reveal data-reveal-delay="0.15"></div>
 
-  <h1>تسجيل الدخول لحسابك</h1>
+  <h1 data-reveal data-reveal-delay="0.2" data-motion="type">تسجيل الدخول لحسابك</h1>
 
   <form id="signin-form" novalidate>
     <div class="form-group">
