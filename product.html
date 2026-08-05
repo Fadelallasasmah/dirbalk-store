@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
 <meta charset="UTF-8">
@@ -281,17 +282,6 @@
   }
 
 
-
-  /* ---------- scroll reveal motion ---------- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-  }
 
   /* ---------- real image frames + zoom ---------- */
   .media-frame img,
@@ -730,8 +720,8 @@
   </div>
 
   <div class="pdp-info">
-    <p class="pdp-code reveal" id="pdpCode" style="transition-delay:0.05s;"></p>
-    <h1 class="pdp-title reveal" id="pdpTitle" style="transition-delay:0.12s;"></h1>
+    <p class="pdp-code" id="pdpCode" data-reveal data-reveal-delay="0.05"></p>
+    <h1 class="pdp-title" id="pdpTitle" data-reveal data-reveal-delay="0.12"></h1>
     <p class="pdp-colorway" id="pdpColorway"></p>
     <p class="pdp-price" id="pdpPrice"></p>
     <p class="pdp-delivery">
@@ -740,7 +730,7 @@
     </p>
     <span class="pdp-tag" id="pdpTag"></span>
 
-    <p class="pdp-story reveal" id="pdpStory" style="transition-delay:0.2s;"></p>
+    <p class="pdp-story" id="pdpStory" data-reveal data-reveal-delay="0.2"></p>
 
     <p class="size-label">المقاس</p>
     <div class="size-row" id="sizeRow"></div>
@@ -985,7 +975,9 @@
     var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     p.media.forEach(function (m, mIdx) {
       var frame = document.createElement('div');
-      frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '') + ' reveal';
+      frame.className = 'media-frame ratio-' + m.ratio + (m.src ? ' has-img' : '');
+      frame.setAttribute('data-reveal', '');
+      frame.setAttribute('data-reveal-group', 'media');
       if (m.src) {
         var loadAttr = mIdx === 0 ? 'eager' : 'lazy'; // first image is above-the-fold — load it immediately
         frame.innerHTML = '<img src="' + m.src + '" alt="' + p.name + ' — ' + m.caption + '" loading="' + loadAttr + '" />' +
@@ -1130,7 +1122,7 @@
       otherRow.appendChild(a);
     });
 
-    initReveal();
+    if (window.DirbalkMotion) window.DirbalkMotion.rescan();
     if (window.gtag) {
       gtag('event', 'view_item', {
         currency: 'JOD',
@@ -1219,25 +1211,6 @@
   }
   lb.addEventListener('pointerup', lbPointerEnd);
   lb.addEventListener('pointercancel', lbPointerEnd);
-
-
-  /* ---------------- scroll reveal ---------------- */
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal:not(.visible)');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(function (el) { obs.observe(el); });
-  }
 
   /* ---------------- accordions ---------------- */
   var commentsLoaded = false;
