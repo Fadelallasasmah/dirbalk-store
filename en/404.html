@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +73,7 @@
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" data-reveal>
     <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
     <p class="code">4<span>0</span>4</p>
     <p class="msg" id="msg404">
@@ -90,7 +91,7 @@
   var h = new Date().getHours();
   var isNight = h < 6 || h >= 18;
   if (isNight) {
-    document.getElementById('msg404').innerHTML = "Wrong turn. It happens.<br> Dirbalk where you go";
+    document.getElementById('msg404').innerHTML = "Wrong turn. It happens.<br>Even at night, Dirbalk where you go";
   }
 })();
 </script>
