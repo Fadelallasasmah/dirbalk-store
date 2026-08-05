@@ -3,6 +3,7 @@
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/password-ux.js"></script>
 <script src="/assets/push.js"></script>
@@ -112,11 +113,6 @@
   }
 
   .wrap { max-width: 640px; margin: 0 auto; padding: 46px 24px 70px; }
-
-  /* reveal */
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
   /* gate */
   .gate-box { max-width: 420px; margin: 60px auto; text-align: center; }
@@ -493,30 +489,30 @@
 
 <div class="wrap" id="accountWrap" style="display:none;">
 
-  <div class="greet reveal">
+  <div class="greet" data-reveal>
     <h1 id="greetName"></h1>
     <p id="greetEmail"></p>
     <button type="button" class="logout-btn" id="enablePushBtn" style="margin-inline-end:14px;">فعّل الإشعارات</button>
     <button type="button" class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
   </div>
 
-  <section class="reveal" style="transition-delay:0.1s;">
+  <section data-reveal data-reveal-delay="0.1">
     <h2 class="sec-title">قطعي</h2>
     <div id="piecesArea"><div class="sk-piece"></div><div class="sk-piece"></div></div>
   </section>
 
-  <section class="reveal" style="transition-delay:0.2s;">
+  <section data-reveal data-reveal-delay="0.2">
     <h2 class="sec-title">طلباتي</h2>
     <div id="ordersArea"><div class="sk-order"></div><div class="sk-order"></div><div class="sk-order"></div></div>
   </section>
 
 
-  <section class="reveal" style="transition-delay:0.28s;">
+  <section data-reveal data-reveal-delay="0.28">
     <h2 class="sec-title">ملفي</h2>
     <div id="profileArea"></div>
   </section>
 
-  <section class="reveal" style="transition-delay:0.34s;">
+  <section data-reveal data-reveal-delay="0.34">
     <h2 class="sec-title">عنواني</h2>
     <div class="addr-box" id="addrBox">
       <p id="addrText">ما في عنوان محفوظ لسا.</p>
@@ -551,7 +547,7 @@
     </div>
   </section>
 
-  <section class="reveal" style="transition-delay:0.4s;">
+  <section data-reveal data-reveal-delay="0.4">
     <h2 class="sec-title">كلمة المرور</h2>
     <form class="acc-form" id="pwForm">
       <div class="acc-field" id="currentPwField" style="display:none;">
@@ -573,7 +569,7 @@
     </form>
   </section>
 
-  <section class="reveal" style="transition-delay:0.46s;">
+  <section data-reveal data-reveal-delay="0.46">
     <h2 class="sec-title">منطقة الخطر</h2>
     <div class="addr-box danger-zone">
       <p class="danger-text">حذف حسابك نهائي بالنسبة لبياناتك الشخصية. القطع اللي تملكها وسجل طلباتك بيظلوا محفوظين كسجل تاريخي (عشان توثيق ملكية القطع)، بس اسمك وإيميلك بينمسحوا.</p>
@@ -654,6 +650,7 @@
   }
 
   document.getElementById('accountWrap').style.display = 'block';
+  if (window.DirbalkMotion) window.DirbalkMotion.rescan();
   var first = name.trim().split(' ')[0] || '';
   var isFemale = gender === 'female';
   document.getElementById('greetName').textContent = 'أهلاً ' + first;
@@ -979,18 +976,6 @@
   });
 
   /* reveal */
-  function initReveal() {
-    var els = document.querySelectorAll('.reveal:not(.visible)');
-    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('visible'); }); return; }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(function (el) { obs.observe(el); });
-  }
-  initReveal();
-
   /* data */
   fetch('/api/me', {
     method: 'POST',
