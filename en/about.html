@@ -127,6 +127,37 @@
     .side-menu-links a { transition: none; opacity: 1; transform: none; }
   }
 
+  /* ---------- image placeholders ---------- */
+  .img-slot {
+    background: #111111;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-slot svg { opacity: 0.22; }
+
+  .img-cover {
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    aspect-ratio: 21 / 9;
+    border-left: none;
+    border-right: none;
+  }
+
+  .img-inline {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin: 2.4rem 0 0;
+  }
+
+  @media (max-width: 520px) {
+    .img-cover { aspect-ratio: 4 / 3; }
+  }
+
   /* ---------- statements ---------- */
   .statements {
     max-width: 700px;
@@ -271,6 +302,14 @@
   </div>
 </nav>
 
+<div class="img-slot img-cover" data-reveal data-image-slot="about-cover">
+  <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="6" width="40" height="36" rx="2"/>
+    <circle cx="16" cy="18" r="4"/>
+    <path d="M4 32l10-10 8 8 6-6 16 16"/>
+  </svg>
+</div>
+
 <div class="statements">
 
   <div class="statement" data-reveal data-reveal-group="story">
@@ -295,6 +334,14 @@
     <p class="small">
       Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.
     </p>
+  </div>
+
+  <div class="img-slot img-inline" data-reveal data-image-slot="about-detail">
+    <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="6" width="40" height="36" rx="2"/>
+      <circle cx="16" cy="18" r="4"/>
+      <path d="M4 32l10-10 8 8 6-6 16 16"/>
+    </svg>
   </div>
 
   <div class="statement" data-reveal data-reveal-group="story">
