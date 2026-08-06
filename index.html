@@ -784,8 +784,8 @@
 
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
-      ? 'تم تسجيلك.<br>\n      لما ينزل Collection 01⁩ يمكن تكوني أول من يعلم.<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
-      : 'تم تسجيلك.<br>\n      لما ينزل ⁦Collection 01⁩ يمكن تكون أول من يعلم.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
+      ? 'تم تسجيلك.<br>\n      لما ينزل Collection 01⁩ يمكن تكوني أول من يعلم<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
+      : 'تم تسجيلك.<br>\n      لما ينزل ⁦Collection 01⁩ يمكن تكون أول من يعلم <br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
   }
