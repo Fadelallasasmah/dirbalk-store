@@ -37,6 +37,18 @@
       (hover-capable) only — does nothing on touch devices, since a "hover"
       state that only shows on tap-and-hold is just confusing there.
 
+   4) SHRINK-ON-SCROLL HERO
+      A full-width hero (video, image, or placeholder) that shrinks and
+      rounds its corners as the visitor scrolls past it, then continues
+      scrolling away — the "collapsing hero" effect seen on agency sites.
+        <div class="shrink-hero-wrap" data-shrink-hero>
+          <div class="shrink-hero-media">...</div>
+        </div>
+      The wrapper needs an explicit tall height in CSS (e.g. height: 180vh)
+      to set how much scroll distance the shrink plays out over — taller
+      wrap = slower, more gradual shrink. The media element must be
+      position: sticky; top: 0; in CSS so it stays pinned while shrinking.
+
    ============================================================
 */
 (function () {
@@ -138,8 +150,56 @@
     allEls.forEach(function (el) { observer.observe(el); });
   }
 
-  /* ---------------- hover-capability flag (shared convention already
-     used elsewhere on the site, e.g. shop.html's window.canHover) ---------------- */
+  /* ---------------- shrink-on-scroll hero ----------------
+     Usage:
+       <div class="shrink-hero-wrap" data-shrink-hero>
+         <div class="shrink-hero-media">...video or image or SVG placeholder...</div>
+       </div>
+     The wrapper needs a tall height (set via CSS, e.g. 180vh) to define how
+     much scroll distance the shrink happens over. The media element inside
+     is position:sticky and gets scaled + rounded as the user scrolls past,
+     then scrolls away normally once the wrapper's height is exhausted. */
+  function initShrinkHero() {
+    var wraps = document.querySelectorAll('[data-shrink-hero]');
+    if (!wraps.length || REDUCED_MOTION) return;
+
+    var instances = [];
+    wraps.forEach(function (wrap) {
+      var media = wrap.querySelector('.shrink-hero-media');
+      if (!media) return;
+      instances.push({ wrap: wrap, media: media });
+    });
+    if (!instances.length) return;
+
+    var minScale = 0.4;   // final size at end of shrink, as a fraction of full width
+    var maxRadius = 20;   // px, corner rounding at full shrink
+
+    function update() {
+      instances.forEach(function (inst) {
+        var rect = inst.wrap.getBoundingClientRect();
+        var scrollRange = inst.wrap.offsetHeight - window.innerHeight;
+        if (scrollRange <= 0) return;
+        var scrolled = -rect.top;
+        var progress = Math.min(Math.max(scrolled / scrollRange, 0), 1);
+        var scale = 1 - progress * (1 - minScale);
+        inst.media.style.transform = 'scale(' + scale.toFixed(4) + ')';
+        inst.media.style.borderRadius = (progress * maxRadius).toFixed(1) + 'px';
+        inst.media.style.opacity = (1 - progress * 0.15).toFixed(3);
+      });
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+
   if (typeof window.canHover === 'undefined') {
     window.canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   }
@@ -150,6 +210,7 @@
       document.body.classList.add('can-hover');
     }
     initReveal();
+    initShrinkHero();
   }
 
   if (document.readyState === 'loading') {
