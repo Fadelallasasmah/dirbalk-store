@@ -126,8 +126,20 @@
     width: 100%;
     max-height: 62vh;
     overflow: hidden;
-    position: relative;
+    position: sticky;
+    top: 0;
     margin-bottom: 2.2rem;
+    transform-origin: center top;
+    will-change: transform;
+  }
+
+  .shrink-hero-wrap {
+    height: 160vh;
+    position: relative;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shrink-hero-wrap { height: auto; }
+    .hero-media { position: relative; }
   }
 
   .hero-media video,
@@ -607,10 +619,12 @@
   </div>
 </div>
 
-<div class="hero-media">
-  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
-    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
-  </video>
+<div class="shrink-hero-wrap" data-shrink-hero>
+  <div class="hero-media shrink-hero-media">
+    <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+      <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
+    </video>
+  </div>
 </div>
 
 <div class="container">
@@ -695,7 +709,7 @@
     <div class="story-item" data-reveal data-reveal-group="story">
       <p class="story-kicker ar">من عمّان</p>
       <p class="big brand-phrase">دير بالك على حالك</p>
-      <p class="small">جملة بنسمعها من لما كنا صغار، وبنقولها لحدا بنحبه لما يروح </p>
+      <p class="small">جملة بنسمعها من صغرنا، وبنقولها لحدا بنحبه لما يروح خليناها اسم</p>
     </div>
 
     <div class="story-item" data-reveal data-reveal-group="story">
@@ -784,8 +798,8 @@
 
   function applyGenderedText(isFemale) {
     document.getElementById('success-text').innerHTML = isFemale
-      ? 'تم تسجيلك.<br>\n      لما ينزل Collection 01⁩ يمكن تكوني أول من يعلم<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
-      : 'تم تسجيلك.<br>\n      لما ينزل ⁦Collection 01⁩ يمكن تكون أول من يعلم <br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
+      ? 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكونين أول من يعرف.<br>\n      <span class="brand-phrase">ديري بالك على حالك.</span>'
+      : 'تم تسجيلك.<br>\n      عندما يصدر ⁦Collection 01⁩ ربما ستكون أول من يعرف.<br>\n      <span class="brand-phrase">دير بالك على حالك.</span>';
     document.getElementById('share-btn-text').textContent = isFemale ? 'شاركِ مع صديقاتك' : 'شارك مع صديق';
     document.getElementById('ig-reminder-text').textContent = isFemale ? 'وتابعينا على' : 'وتابعنا على';
   }
