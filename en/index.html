@@ -139,6 +139,14 @@
     display: block;
   }
 
+  @media (max-aspect-ratio: 4/5) {
+    .hero-media video,
+    .hero-media img {
+      object-fit: contain;
+      background: #0a0a0a;
+    }
+  }
+
   .hero-media::after {
     content: '';
     position: absolute;
