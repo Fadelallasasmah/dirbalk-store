@@ -157,6 +157,21 @@
     .img-cover { aspect-ratio: 16 / 9; }
   }
 
+  .shrink-hero-wrap {
+    height: 160vh;
+    position: relative;
+  }
+  .shrink-hero-media {
+    position: sticky;
+    top: 0;
+    transform-origin: center top;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shrink-hero-wrap { height: auto; }
+    .shrink-hero-media { position: static; }
+  }
+
   /* ---------- statements ---------- */
   .statements {
     max-width: 700px;
@@ -301,12 +316,14 @@
   </div>
 </nav>
 
-<div class="img-slot img-cover" data-reveal data-image-slot="about-cover">
-  <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4" y="6" width="40" height="36" rx="2"/>
-    <circle cx="16" cy="18" r="4"/>
-    <path d="M4 32l10-10 8 8 6-6 16 16"/>
-  </svg>
+<div class="shrink-hero-wrap" data-shrink-hero>
+  <div class="img-slot img-cover shrink-hero-media" data-reveal data-image-slot="about-cover">
+    <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="6" width="40" height="36" rx="2"/>
+      <circle cx="16" cy="18" r="4"/>
+      <path d="M4 32l10-10 8 8 6-6 16 16"/>
+    </svg>
+  </div>
 </div>
 
 <div class="statements">
