@@ -124,22 +124,10 @@
 
   .hero-media {
     width: 100%;
-    max-height: 62vh;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    position: sticky;
-    top: 0;
-    margin-bottom: 2.2rem;
-    transform-origin: center top;
-    will-change: transform;
-  }
-
-  .shrink-hero-wrap {
-    height: 160vh;
     position: relative;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .shrink-hero-wrap { height: auto; }
-    .hero-media { position: relative; }
+    margin-bottom: 2.2rem;
   }
 
   .hero-media video,
@@ -619,12 +607,10 @@
   </div>
 </div>
 
-<div class="shrink-hero-wrap" data-shrink-hero>
-  <div class="hero-media shrink-hero-media">
-    <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
-      <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
-    </video>
-  </div>
+<div class="hero-media">
+  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
+  </video>
 </div>
 
 <div class="container">
