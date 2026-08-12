@@ -49,6 +49,19 @@
       wrap = slower, more gradual shrink. The media element must be
       position: sticky; top: 0; in CSS so it stays pinned while shrinking.
 
+   5) HERO SETTLE-TRANSITION
+      A subtler cousin of (4) — for a hero that should feel like it "settles"
+      into the section that follows rather than collapsing away. Small scale
+      reduction (down to ~82%), a slight rise, soft corner rounding, over a
+      short scroll distance, then releases to normal flow:
+        <div class="hero-transition-wrap" data-hero-transition>
+          <div class="hero-transition-media">...img or video...</div>
+        </div>
+      Wrapper height should be "the hero's own height + a short buffer"
+      (e.g. height: calc(100vh + 40vh)) — the buffer is how much scroll
+      distance the settle plays out over. The media element must be
+      position: sticky; top: 0; in CSS.
+
    ============================================================
 */
 (function () {
@@ -57,9 +70,9 @@
   /* ---------------- inject base styles once ---------------- */
   var style = document.createElement('style');
   style.textContent =
-    '[data-reveal]{opacity:0;transform:translateY(16px);' +
-    'transition:opacity 0.8s ease,transform 0.8s ease;}' +
-    '[data-reveal].dm-visible{opacity:1;transform:translateY(0);}' +
+    '[data-reveal]{opacity:0;transform:translateY(16px) scale(0.97);' +
+    'transition:opacity 0.8s ease,transform 0.8s cubic-bezier(.2,.8,.2,1);}' +
+    '[data-reveal].dm-visible{opacity:1;transform:translateY(0) scale(1);}' +
 
     '[data-motion="type"] .dm-word{display:inline-block;opacity:0;' +
     'transform:translateY(0.35em);transition:opacity 0.5s ease,transform 0.5s ease;}' +
@@ -199,6 +212,59 @@
     update();
   }
 
+  /* ---------------- hero settle-transition ----------------
+     Usage:
+       <div class="hero-transition-wrap" data-hero-transition>
+         <div class="hero-transition-media">...img or video...</div>
+       </div>
+     Similar mechanism to shrink-hero, but tuned for a SUBTLE, SHORT settle
+     effect (not a dramatic collapse) as the hero is scrolled past — a
+     gentle scale-down + slight rise + soft corner rounding, meant to
+     visually connect the hero into whatever section follows it, rather
+     than shrink it into a small floating box. Wrapper height should be
+     "100vh (or hero's own height) + a short buffer" (e.g. calc(100vh + 40vh))
+     so the effect plays out over that buffer distance only, then releases
+     to normal scroll. */
+  function initHeroTransition() {
+    var wraps = document.querySelectorAll('[data-hero-transition]');
+    if (!wraps.length || REDUCED_MOTION) return;
+
+    var instances = [];
+    wraps.forEach(function (wrap) {
+      var media = wrap.querySelector('.hero-transition-media');
+      if (!media) return;
+      instances.push({ wrap: wrap, media: media });
+    });
+    if (!instances.length) return;
+
+    var minScale = 0.82;
+    var maxRadius = 18;
+    var maxRiseVh = 6;
+
+    function update() {
+      instances.forEach(function (inst) {
+        var rect = inst.wrap.getBoundingClientRect();
+        var scrollRange = inst.wrap.offsetHeight - window.innerHeight;
+        if (scrollRange <= 0) return;
+        var scrolled = -rect.top;
+        var progress = Math.min(Math.max(scrolled / scrollRange, 0), 1);
+        var scale = 1 - progress * (1 - minScale);
+        var rise = progress * maxRiseVh;
+        inst.media.style.transform = 'scale(' + scale.toFixed(4) + ') translateY(-' + rise.toFixed(2) + 'vh)';
+        inst.media.style.borderRadius = (progress * maxRadius).toFixed(1) + 'px';
+      });
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
 
   if (typeof window.canHover === 'undefined') {
     window.canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -211,6 +277,7 @@
     }
     initReveal();
     initShrinkHero();
+    initHeroTransition();
   }
 
   if (document.readyState === 'loading') {
