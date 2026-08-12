@@ -122,27 +122,12 @@
 
   .container { width: 100%; max-width: 460px; text-align: center; padding: 0 2rem; }
 
-  .hero-transition-wrap {
-    position: relative;
-    width: 100%;
-    height: calc(80vh + 40vh);
-  }
   .hero-media {
-    position: sticky;
-    top: 0;
     width: 100%;
-    height: 80vh;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    transform-origin: center top;
-    will-change: transform;
-  }
-  @media (min-width: 900px) {
-    .hero-transition-wrap { height: calc(78vh + 45vh); }
-    .hero-media { height: 78vh; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-transition-wrap { height: auto; }
-    .hero-media { position: relative; }
+    position: relative;
+    margin-bottom: 2.2rem;
   }
 
   .hero-media video,
@@ -652,12 +637,10 @@
   </div>
 </div>
 
-<div class="hero-transition-wrap" data-hero-transition>
-  <div class="hero-media hero-transition-media">
-    <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
-      <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
-    </video>
-  </div>
+<div class="hero-media">
+  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
+  </video>
 </div>
 
 <div class="container">
