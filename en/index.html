@@ -122,12 +122,26 @@
 
   .container { width: 100%; max-width: 460px; text-align: center; padding: 0 2rem; }
 
-  .hero-media {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
+  .hero-transition-wrap {
     position: relative;
-    margin-bottom: 2.2rem;
+    height: calc(80vh + 40vh);
+  }
+  .hero-media {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+    transform-origin: center top;
+    will-change: transform;
+  }
+  @media (min-width: 900px) {
+    .hero-transition-wrap { height: calc(78vh + 45vh); }
+    .hero-media { height: 78vh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-transition-wrap { height: auto; }
+    .hero-media { position: relative; }
   }
 
   .hero-media video,
@@ -162,7 +176,8 @@
     opacity: 0.85;
   }
 
-  .divider { width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 2.5rem; opacity: 0.4; }
+  .divider { width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 2.5rem; }
+  .divider[data-reveal].dm-visible { opacity: 0.4; }
 
   .shop-cta {
     display: inline-block;
@@ -642,21 +657,23 @@
   </div>
 </div>
 
-<div class="hero-media">
-  <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
-    <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
-  </video>
+<div class="hero-transition-wrap" data-hero-transition>
+  <div class="hero-media hero-transition-media">
+    <video id="heroVideo" autoplay muted loop playsinline poster="/hero-drawing.jpg">
+      <source id="heroSource" src="/hero-animation.mp4" type="video/mp4">
+    </video>
+  </div>
 </div>
 
 <div class="container">
 
-  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
-  <p class="brand-arabic brand-phrase">دير بالك على حالك</p>
-  <div class="divider"></div>
+  <img src="/logo.png" alt="DIRBALK" class="brand-logo" data-reveal data-reveal-delay="0" />
+  <p class="brand-arabic brand-phrase" data-reveal data-reveal-delay="0.15">دير بالك على حالك</p>
+  <div class="divider" data-reveal data-reveal-delay="0.3"></div>
 
 
   <div id="form-section">
-    <p class="description">
+    <p class="description" data-reveal data-reveal-delay="0.42">
       When the collection drops — we might let you know.<br>
       Registering doesn't guarantee access.
     </p>
@@ -698,12 +715,12 @@
   </div>
 
   <div class="success-msg" id="success-msg">
-    <svg class="success-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <svg class="success-icon" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" data-reveal data-reveal-delay="0">
       <circle cx="28" cy="28" r="26"></circle>
       <path d="M17 29 L24 36 L39 20"></path>
     </svg>
-    <p class="position-line" id="positionLine" style="display:none;"><span id="positionLabel"></span><span class="pos-num" id="positionNum"></span></p>
-    <p id="success-text">
+    <p class="position-line" id="positionLine" style="display:none;" data-reveal data-reveal-delay="0.15"><span id="positionLabel"></span><span class="pos-num" id="positionNum"></span></p>
+    <p id="success-text" data-reveal data-reveal-delay="0.3">
       Good.<br>
       We'll let you know first.<br>
       <span class="brand-phrase">دير بالك على حالك.</span>
@@ -740,7 +757,7 @@
 
     <div class="story-item" data-reveal data-reveal-group="story">
       <p class="big" data-motion="type">Look closer.</p>
-      <p class="small">Every piece carries something. A phrase. A thread. A story. A number we're not going to explain. Look closely.</p>
+      <p class="small">Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.</p>
     </div>
 
     <div class="img-slot img-inline" data-reveal data-image-slot="home-detail">
@@ -754,7 +771,7 @@
 
     <div class="story-item" data-reveal data-reveal-group="story">
       <p class="big" data-motion="type">It started with a sentence.</p>
-      <p class="small">We built everything around it.</p>
+      <p class="small">Some of it, we'll keep.</p>
     </div>
 
   </div>
@@ -893,6 +910,7 @@
     showUserBadge(name);
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
+    if (window.DirbalkMotion) window.DirbalkMotion.rescan();
   }
 
   try {
