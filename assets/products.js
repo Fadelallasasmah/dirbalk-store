@@ -1,23 +1,20 @@
 /* DIRBALK — assets/products.js
-   Single source of truth for Collection 01 product data.
-   Loaded by shop.html, product.html, and checkout.html — each page reads
-   only the fields it needs from window.DIRBALK_PRODUCTS instead of keeping
-   its own independent copy. Change a price/name/stock here once, not three
-   times. (This file replaced three drifting local PRODUCTS arrays that had
-   already gone out of sync with each other — see ARCHITECTURE.md ADR log.) */
+   Single source of truth for Collection 01 product data (the site is
+   English-only). Loaded by shop.html, product.html, and checkout.html.
+   Colours / per-colour stock are layered on top by assets/catalog.js. */
 window.DIRBALK_PRODUCTS = [
   {
     id: 'DB-TEE-01',
     img: '/img/tee-front.jpg',
     images: ['/img/tee-front.jpg', '/img/tee-back.jpg'],
-    name: 'تيشيرت أوفرسايز',
-    colorway: 'أبيض نقي',
+    name: 'Oversized T-Shirt',
+    colorway: 'Pure White',
     price: 22,
-    desc: 'قماش قطن ثقيل 260 جرام، قصة أوفرسايز، بدون أي طباعة خارجية. تفاصيله كلها بالداخل.',
-    story: 'قماش قطن ثقيل 260 جرام، قصة أوفرسايز، بدون أي طباعة خارجية. من برا، ولا شي. كل التفاصيل بالداخل — وهاد المقصود.',
-    fit: ['قصة أوفرسايز واسعة', 'الطول لنص الفخذ تقريباً', 'الأكمام طويلة وعريضة'],
-    care: ['100% قطن، 260 جرام/م²', 'غسيل بارد', 'لا تستخدم مبيض', 'تجفيف بحرارة منخفضة'],
-    details: 'سطح نظيف بالكامل. في إشي مخبى بالقطعة — <span class="hint">رح تكتشفه لحالك</span>.',
+    desc: 'Heavy 260gsm cotton, oversized cut, no external print. All the detail is on the inside.',
+    story: 'Heavy 260gsm cotton, oversized cut, no external print. Clean from the outside, nothing. All the detail is on the inside — that\'s the point.',
+    fit: ['Wide, oversized cut', 'Falls to roughly mid-thigh', 'Long, wide sleeves'],
+    care: ['100% cotton, 260 gsm', 'Cold wash', 'Do not bleach', 'Low heat dry'],
+    details: 'Completely clean surface. There\'s something hidden on this piece — <span class="hint">you\'ll find it yourself</span>.',
     swatch: '#f2f0ea',
     silhouette: 'tee',
     sizes: { S: 20, M: 60, L: 20 },
@@ -33,14 +30,14 @@ window.DIRBALK_PRODUCTS = [
     id: 'DB-DEN-01',
     img: '/img/den-back.jpg',
     images: ['/img/den-back.jpg'],
-    name: 'بنطلون دنيم واسع',
-    colorway: 'إندجو خام 13oz',
+    name: 'Wide-Leg Denim Pants',
+    colorway: 'Raw Indigo 13oz',
     price: 50,
-    desc: 'دنيم خام 13oz، أزرار وأسنان معدن فضي مطفي، خيط تطريز أمبر مخفي.',
-    story: 'دنيم خام 13oz بقصة واسعة. أزرار وأسنان معدن فضي مطفي، وخيط تطريز أمبر مخفي بأماكن ما بتشوفها إلا إذا دورت.',
-    fit: ['قصة واسعة (Wide-leg)', 'خصر عادي', 'طول كامل للكاحل'],
-    care: ['دنيم خام 13oz، 100% قطن', 'أزرار وأسنان معدن فضي مطفي', 'خيط تطريز أمبر مخفي', 'اغسله لحاله أول مرة، ماء بارد'],
-    details: 'الدنيم الخام بيتغير معك — كل لبسة بتترك أثرها. وفي تفاصيل مخفية بالقطعة <span class="hint">رح تكتشفها لحالك</span>.',
+    desc: '13oz raw denim, matte silver hardware and zipper teeth, hidden amber embroidery thread.',
+    story: '13oz raw denim in a wide-leg cut. Matte silver hardware and zipper teeth, with hidden amber embroidery thread in places you won\'t see unless you look.',
+    fit: ['Wide-leg cut', 'Regular waist', 'Full length to the ankle'],
+    care: ['13oz raw denim, 100% cotton', 'Matte silver hardware and zipper teeth', 'Hidden amber embroidery thread', 'Wash alone the first time, cold water'],
+    details: 'Raw denim changes with you — every wear leaves its mark. There are hidden details on this piece <span class="hint">you\'ll find them yourself</span>.',
     swatch: '#3a4a63',
     silhouette: 'pants',
     sizes: { S: 20, M: 60, L: 20 },
@@ -56,14 +53,14 @@ window.DIRBALK_PRODUCTS = [
     id: 'DB-JAC-01',
     img: '/img/jac-front.jpg',
     images: ['/img/jac-front.jpg', '/img/jac-back.jpg', '/img/jac-side.jpg'],
-    name: 'جاكيت دنيم أوفرسايز',
-    colorway: 'إندجو خام 13oz',
+    name: 'Oversized Denim Jacket',
+    colorway: 'Raw Indigo 13oz',
     price: 65,
-    desc: 'دنيم خام 13oz، ستة أزرار أمامية، أزرار وأسنان فضية مطفية، قصة أوفرسايز.',
-    story: 'دنيم خام 13oz بقصة أوفرسايز. ستة أزرار أمامية فضية مطفية. من برا هادي تماماً — القصة كلها بالتفاصيل الصغيرة.',
-    fit: ['قصة أوفرسايز', 'ستة أزرار أمامية', 'الطول لمنتصف الحوض تقريباً'],
-    care: ['دنيم خام 13oz، 100% قطن', 'أزرار معدن فضي مطفي', 'اغسله لحاله أول مرة، ماء بارد'],
-    details: 'ستة أزرار، سطح نظيف، وشغلات مش مكتوبة بأي مكان. <span class="hint">افتح الجاكيت ودور</span>.',
+    desc: '13oz raw denim, six front buttons, matte silver hardware, oversized cut.',
+    story: '13oz raw denim in an oversized cut. Six matte silver front buttons. Quiet from the outside — the whole story is in the small details.',
+    fit: ['Oversized cut', 'Six front buttons', 'Falls to roughly mid-hip'],
+    care: ['13oz raw denim, 100% cotton', 'Matte silver hardware', 'Wash alone the first time, cold water'],
+    details: 'Six buttons, a clean surface, and things that aren\'t written down anywhere. <span class="hint">Open the jacket and look around</span>.',
     swatch: '#2d3a52',
     silhouette: 'jacket',
     sizes: { S: 20, M: 60, L: 20 },
