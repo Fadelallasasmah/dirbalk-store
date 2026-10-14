@@ -1,6 +1,8 @@
 // DIRBALK — /api/login
-// Same-origin backend proxy for sign-in, forwarding to the same Google Apps Script
-// used for registration (with action: "login").
+// Same-origin backend proxy for sign-in, forwarding to the same Google Apps Script.
+//   - kind: "link" → email a one-tap login link (action: "loginLink") — the
+//     normal way in now that registration has no password
+//   - default      → legacy email + password login (action: "login")
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -11,11 +13,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const payload = {
-      action: 'login',
-      email: (req.body?.email || '').toString(),
-      password: (req.body?.password || '').toString(),
-    };
+    const kind = (req.body?.kind || '').toString();
+    const payload = kind === 'link'
+      ? { action: 'loginLink', email: (req.body?.email || '').toString() }
+      : {
+          action: 'login',
+          email: (req.body?.email || '').toString(),
+          password: (req.body?.password || '').toString(),
+        };
 
     const scriptRes = await fetch(SCRIPT_URL, {
       method: 'POST',

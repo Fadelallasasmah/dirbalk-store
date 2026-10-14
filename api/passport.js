@@ -1,7 +1,8 @@
-// DIRBALK — passport public layer proxy
-// Also handles fetching approved product comments (kind: "getComments") —
-// both are public, unauthenticated, PII-free reads, so they share this file
-// instead of adding a new Vercel function.
+// DIRBALK — public read proxy (shares one Vercel function, Hobby cap = 12)
+//   - kind: "stock"       → live stock per product / colour / size (action: "stock")
+//   - kind: "getComments" → approved product comments
+//   - default             → passport public layer (legacy; Collection 01 has no passports)
+// All public, unauthenticated, PII-free reads.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
 export default async function handler(req, res) {
@@ -10,9 +11,11 @@ export default async function handler(req, res) {
   }
   try {
     const kind = (req.body && req.body.kind) || '';
-    const payload = kind === 'getComments'
-      ? { action: 'getComments', product: (req.body && req.body.product) || '' }
-      : { action: 'passport', slug: (req.body && req.body.slug) || '' };
+    const payload = kind === 'stock'
+      ? { action: 'stock' }
+      : kind === 'getComments'
+        ? { action: 'getComments', product: (req.body && req.body.product) || '' }
+        : { action: 'passport', slug: (req.body && req.body.slug) || '' };
 
     const upstream = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -20,7 +23,7 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload)
     });
     const data = await upstream.json();
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+    res.setHeader('Cache-Control', kind === 'stock' ? 's-maxage=15, stale-while-revalidate=30' : 's-maxage=60, stale-while-revalidate=300');
     return res.status(200).json(data);
   } catch (err) {
     return res.status(200).json({ status: 'error', message: 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.' });

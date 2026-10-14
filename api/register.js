@@ -1,4 +1,7 @@
 // DIRBALK — /api/register
+// Quick registration before buying: name + email + phone only, no password
+// (action: "register"). If the email already exists, the backend emails a
+// one-tap login link and answers status:"exists".
 // Same-origin backend proxy: browser -> this function -> Google Apps Script.
 // This avoids CORS issues entirely (server-to-server calls aren't restricted by CORS),
 // gives us the visitor's real IP + country from Vercel's own headers, and lets the
@@ -20,13 +23,10 @@ export default async function handler(req, res) {
     const country = req.headers['x-vercel-ip-country'] || '';
 
     const payload = {
-      action: 'signup',
+      action: 'register',
       name: (req.body?.name || '').toString(),
-      age: (req.body?.age || '').toString(),
-      gender: (req.body?.gender || '').toString(),
       phone: (req.body?.phone || '').toString(),
       email: (req.body?.email || '').toString(),
-      password: (req.body?.password || '').toString(),
       ip,
       country,
     };
