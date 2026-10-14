@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
-<script src="/assets/lang-switch.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إتمام الشراء — DIRBALَK</title>
+<title>Checkout — DIRBALK</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -169,7 +170,6 @@
   .secondary-link:hover { color: #C9A84C; }
 
   .form-error { color: rgba(255,80,80,0.85); font-size: 12px; margin-top: 14px; display: none; line-height: 1.6; }
-
 
   .confirm-box { text-align: center; padding: 40px 0; }
 
@@ -331,98 +331,98 @@
 
 <header>
   <div class="header-inner">
-    <a href="/shop.html" class="back-link">← الرجوع للمتجر</a>
+    <a href="/shop.html" class="back-link">← Back to shop</a>
     <img src="/logo.png" alt="DIRBALK" class="header-logo" />
   </div>
 </header>
 
 <div class="steps" id="stepsIndicator">
-  <span class="step-dot active" data-step="1"><span></span>السلة</span>
+  <span class="step-dot active" data-step="1"><span></span>Cart</span>
   <span class="step-sep">—</span>
-  <span class="step-dot" data-step="2"><span></span>الشحن</span>
+  <span class="step-dot" data-step="2"><span></span>Shipping</span>
   <span class="step-sep">—</span>
-  <span class="step-dot" data-step="3"><span></span>المراجعة</span>
+  <span class="step-dot" data-step="3"><span></span>Review</span>
 </div>
 
 <div class="wrap">
 
   <div class="step-section active" id="step1">
-    <h1>ملخص الطلب</h1>
+    <h1>Order Summary</h1>
     <div id="summaryItems"></div>
     <div class="summary-total" id="summaryTotalRow" style="display:none;">
-      <span>المجموع</span>
+      <span>Total</span>
       <strong id="summaryTotal">0 JD</strong>
     </div>
     <div id="emptyCartMsg" class="empty-cart" style="display:none;">
-      السلة فاضية. <a href="/shop.html"> شيك عالكوليكشن</a>
+      Nothing here yet. <a href="/shop.html">Start with Collection 01</a>
     </div>
-    <button type="button" class="primary-btn" id="toShippingBtn" style="display:none;">متابعة لبيانات الشحن</button>
+    <button type="button" class="primary-btn" id="toShippingBtn" style="display:none;">Continue to Shipping</button>
   </div>
 
   <div class="step-section" id="step2">
-    <h1>بيانات الشحن</h1>
+    <h1>Shipping Details</h1>
     <p class="logged-in-note" id="loggedInNote"></p>
     <form id="shippingForm" novalidate>
       <div class="form-group">
         <div class="field">
-          <label for="fullName">الاسم الكامل</label>
-          <input type="text" id="fullName" placeholder="مثال: خالد أحمد" />
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="e.g. Khaled Ahmad" />
           <p class="field-msg" id="fullName-msg"></p>
         </div>
         <div class="field">
-          <label for="ckEmail">البريد الإلكتروني</label>
+          <label for="ckEmail">Email</label>
           <input type="email" id="ckEmail" placeholder="example@email.com" />
           <p class="field-msg" id="ckEmail-msg"></p>
         </div>
         <div class="field">
-          <label for="ckPhone">رقم الهاتف</label>
+          <label for="ckPhone">Phone Number</label>
           <input type="tel" id="ckPhone" placeholder="07XXXXXXXX" inputmode="numeric" />
           <p class="field-msg" id="ckPhone-msg"></p>
         </div>
         <div class="field">
-          <label for="city">المدينة</label>
-          <input type="text" id="city" placeholder="مثال: عمّان" />
+          <label for="city">City</label>
+          <input type="text" id="city" placeholder="e.g. Amman" />
           <p class="field-msg" id="city-msg"></p>
         </div>
         <div class="field">
-          <label for="address">العنوان بالتفصيل</label>
-          <input type="text" id="address" placeholder="الحي، الشارع، أقرب معلم" />
+          <label for="address">Detailed Address</label>
+          <input type="text" id="address" placeholder="Neighborhood, street, nearest landmark" />
           <p class="field-msg" id="address-msg"></p>
         </div>
         <div class="field">
-          <label for="locationLink">رابط الموقع (اختياري)</label>
-          <input type="text" id="locationLink" placeholder="رابط من Google Maps أو Apple Maps" />
+          <label for="locationLink">Location Link (optional)</label>
+          <input type="text" id="locationLink" placeholder="Link from Google Maps or Apple Maps" />
           <p class="field-msg" id="locationLink-msg"></p>
         </div>
       </div>
 
       <div class="save-info-row">
         <input type="checkbox" id="saveInfoCheck" />
-        <label for="saveInfoCheck">احفظ بياناتي للمرة الجاية</label>
+        <label for="saveInfoCheck">Save my info for next time</label>
       </div>
 
       <p class="form-error" id="shippingError"></p>
-      <button type="submit" class="primary-btn">متابعة للمراجعة</button>
+      <button type="submit" class="primary-btn">Continue to Review</button>
     </form>
-    <button type="button" class="secondary-link" id="backToStep1">← الرجوع للسلة</button>
+    <button type="button" class="secondary-link" id="backToStep1">← Back to cart</button>
   </div>
 
   <div class="step-section" id="step3">
-    <h1>راجع طلبك</h1>
+    <h1>Review Your Order</h1>
 
     <div class="review-block" data-reveal data-reveal-group="review">
-      <h3>القطع</h3>
+      <h3>Items</h3>
       <div id="reviewItems"></div>
     </div>
 
     <div class="review-block" data-reveal data-reveal-group="review">
-      <h3>الشحن إلى</h3>
+      <h3>Shipping To</h3>
       <div class="rb-body" id="reviewShipping"></div>
     </div>
 
     <div class="review-block" data-reveal data-reveal-group="review">
-      <h3>الدفع</h3>
-      <div class="rb-body"><p>كاش عند الاستلام — بتدفع لما توصلك القطعة وتشوفها بعينك.</p></div>
+      <h3>Payment</h3>
+      <div class="rb-body"><p>Cash on delivery — you pay when the piece arrives and you've seen it for yourself.</p></div>
     </div>
 
     <div class="review-block" data-reveal data-reveal-group="review">
@@ -430,8 +430,8 @@
     </div>
 
     <p class="form-error" id="submitOrderError"></p>
-    <button type="button" class="primary-btn" id="confirmOrderBtn">تأكيد الطلب</button>
-    <button type="button" class="secondary-link" id="backToStep2FromReview">← الرجوع لبيانات الشحن</button>
+    <button type="button" class="primary-btn" id="confirmOrderBtn">Confirm Order</button>
+    <button type="button" class="secondary-link" id="backToStep2FromReview">← Back to shipping details</button>
   </div>
 
   <div class="step-section" id="step5">
@@ -439,11 +439,11 @@
       <div class="confirm-icon" data-reveal data-reveal-delay="0.05">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <h2 data-reveal data-reveal-delay="0.15">طلبك صار عنا</h2>
+      <h2 data-reveal data-reveal-delay="0.15">Your order is with us</h2>
       <p class="confirm-order-id" id="orderIdDisplay" data-reveal data-reveal-delay="0.22"></p>
 
       <div class="piece-reveal" id="pieceReveal" style="display:none;">
-        <p class="pr-label">قطعك — بالأرقام</p>
+        <p class="pr-label">Your pieces — by number</p>
         <div id="pieceRevealList"></div>
       </div>
 
@@ -451,29 +451,29 @@
         <div class="j-step done" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
-            <p class="j-title">استلمنا طلبك</p>
-            <p class="j-sub">وصلك إيميل تأكيد فيه كل التفاصيل</p>
+            <p class="j-title">We received your order</p>
+            <p class="j-sub">A confirmation email with all the details is on its way</p>
           </div>
         </div>
         <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
-            <p class="j-title">عم نجهز القطع</p>
-            <p class="j-sub">رح نتواصل معك على واتساب لتأكيد العنوان</p>
+            <p class="j-title">We're preparing your pieces</p>
+            <p class="j-sub">We'll reach out on WhatsApp to confirm your address</p>
           </div>
         </div>
         <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
-            <p class="j-title">بالطريق إلك</p>
-            <p class="j-sub">التوصيل داخل الأردن خلال 2–4 أيام عمل</p>
+            <p class="j-title">On its way to you</p>
+            <p class="j-sub">Delivery within Jordan takes 2–4 business days</p>
           </div>
         </div>
         <div class="j-step" data-reveal data-reveal-group="journey">
           <div class="j-dot"></div>
           <div>
-            <p class="j-title">بين إيديك</p>
-            <p class="j-sub">افتح الباكيت على مهلك — في تفاصيل بتستاهل</p>
+            <p class="j-title">In your hands</p>
+            <p class="j-sub">Open the package slowly — there are details worth noticing</p>
           </div>
         </div>
       </div>
@@ -483,9 +483,9 @@
       <div class="confirm-actions">
         <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="confirm-wa">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
-          أي سؤال؟ واتساب
+          Questions? WhatsApp
         </a>
-        <a href="/shop.html" class="primary-btn">الرجوع للمتجر</a>
+        <a href="/shop.html" class="primary-btn">Back to shop</a>
       </div>
     </div>
   </div>
@@ -495,16 +495,16 @@
       <div class="confirm-icon" style="border-color:rgba(255,138,138,0.4);color:#ff8a8a;">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7l10 10M17 7L7 17"/></svg>
       </div>
-      <h2>ما قدرنا نكمّل الطلب</h2>
+      <h2>We couldn't complete your order</h2>
       <p style="color:rgba(255,255,255,0.65);font-size:13px;line-height:1.9;max-width:320px;margin:0 auto 26px;">
-        صار خطأ مؤقت وإحنا عم نعالج طلبك. القطع لسا بسلتك — جرب كمان مرة، وإذا تكررت المشكلة تواصل معنا مباشرة.
+        Something went wrong while processing your order. Your items are still in your cart — try again, and if it keeps happening, reach out to us directly.
       </p>
       <div class="confirm-actions">
         <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="confirm-wa">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
-          واتساب
+          WhatsApp
         </a>
-        <button type="button" class="primary-btn" id="retryPaymentBtn">حاول كمان مرة</button>
+        <button type="button" class="primary-btn" id="retryPaymentBtn">Try Again</button>
       </div>
     </div>
   </div>
@@ -530,6 +530,7 @@
     return '<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg"><path d="M70 30 L100 22 L130 30 L155 55 L138 72 L128 60 L128 190 L72 190 L72 60 L62 72 L45 55 Z" fill="' + tint + '" stroke="' + stroke + '" stroke-width="1.5"/></svg>';
   }
 
+  const CAT = window.DirbalkCatalog;
   function findProduct(id) { return PRODUCTS.find((p) => p.id === id); }
 
   function cartTotal() {
@@ -542,14 +543,14 @@
   function cartToGA4Items() {
     return cart.map((line) => {
       const p = findProduct(line.id);
-      return p ? { item_id: p.id, item_name: p.name, price: p.price, item_variant: line.size, quantity: line.qty } : null;
+      return p ? { item_id: p.id, item_name: p.name, price: p.price, item_variant: line.color + '/' + line.size, quantity: line.qty } : null;
     }).filter(Boolean);
   }
 
   function cartItemsSummary() {
     return cart.map((l) => {
       const p = findProduct(l.id);
-      return (p ? p.id + ' (' + l.size + ') x' + l.qty : l.id);
+      return (p ? p.id + ' ' + CAT.colorName(p, l.color) + ' (' + l.size + ') x' + l.qty : l.id);
     }).join(', ');
   }
 
@@ -562,6 +563,7 @@
   }
 
   let cart = loadCart();
+  cart.forEach((l) => CAT.normLine(l));
 
   function goToStep(n) {
     document.querySelectorAll('.step-section').forEach((s) => s.classList.remove('active'));
@@ -594,10 +596,10 @@
       const row = document.createElement('div');
       row.className = 'summary-item';
       row.innerHTML =
-        '<div class="summary-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+        '<div class="summary-media">' + (CAT.lineImage(p, line.color) ? '<img src="' + CAT.lineImage(p, line.color) + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, CAT.swatch(p, line.color))) + '</div>' +
         '<div class="summary-info">' +
         '<p class="summary-name">' + p.name + '</p>' +
-        '<p class="summary-meta">مقاس ' + line.size + ' × ' + line.qty + '</p>' +
+        '<p class="summary-meta">' + CAT.colorName(p, line.color) + ' · Size ' + line.size + ' × ' + line.qty + '</p>' +
         '<p class="summary-price">' + (p.price * line.qty) + ' JD</p>' +
         '</div>';
       container.appendChild(row);
@@ -606,7 +608,7 @@
   }
 
 
-  const revealNamesMap = { 'DB-TEE-01': 'تيشيرت أوفرسايز', 'DB-DEN-01': 'بنطلون دنيم واسع', 'DB-JAC-01': 'جاكيت دنيم أوفرسايز' };
+  const revealNamesMap = { 'DB-TEE-01': 'Oversized T-Shirt', 'DB-DEN-01': 'Wide-Leg Denim Pants', 'DB-JAC-01': 'Oversized Denim Jacket' };
 
 
   function escapeHtml(str) {
@@ -629,15 +631,15 @@
       const row = document.createElement('div');
       row.className = 'review-item';
       row.innerHTML =
-        '<div class="review-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+        '<div class="review-item-media">' + (CAT.lineImage(p, line.color) ? '<img src="' + CAT.lineImage(p, line.color) + '" alt="" loading="lazy" />' : silhouetteSVG(p.silhouette, CAT.swatch(p, line.color))) + '</div>' +
         '<div class="review-item-info">' +
         '<p class="review-item-name">' + p.name + '</p>' +
-        '<p class="review-item-meta">مقاس ' + line.size + ' · الكمية ' + line.qty + '</p>' +
+        '<p class="review-item-meta">' + CAT.colorName(p, line.color) + ' · Size ' + line.size + ' · Qty ' + line.qty + '</p>' +
         '</div>' +
         '<span class="review-item-price">' + (p.price * line.qty) + ' JD</span>';
-      if (p.img) {
+      if (CAT.lineImage(p, line.color)) {
         row.querySelector('.review-item-media').addEventListener('click', () => {
-          document.getElementById('miniLbImg').src = p.img;
+          document.getElementById('miniLbImg').src = CAT.lineImage(p, line.color);
           document.getElementById('miniLb').classList.add('open');
         });
       }
@@ -646,7 +648,7 @@
 
     if (shippingData) {
       var safeLocLink = (shippingData.locationLink && /^https?:\/\//i.test(shippingData.locationLink))
-        ? '<p><a href="' + escapeHtml(shippingData.locationLink) + '" target="_blank" rel="noreferrer">رابط الموقع ↗</a></p>'
+        ? '<p><a href="' + escapeHtml(shippingData.locationLink) + '" target="_blank" rel="noreferrer">Location link ↗</a></p>'
         : '';
       document.getElementById('reviewShipping').innerHTML =
         '<p><strong>' + escapeHtml(shippingData.fullName) + '</strong></p>' +
@@ -656,9 +658,9 @@
     }
 
     document.getElementById('reviewTotals').innerHTML =
-      '<div class="rt-row"><span>المجموع الفرعي</span><span>' + subtotal + ' JD</span></div>' +
-      '<div class="rt-row"><span>الشحن</span><span>يتحدد عند التأكيد</span></div>' +
-      '<div class="rt-row rt-grand"><span>الإجمالي</span><strong>' + subtotal + ' JD</strong></div>';
+      '<div class="rt-row"><span>Subtotal</span><span>' + subtotal + ' JD</span></div>' +
+      '<div class="rt-row"><span>Shipping</span><span>Confirmed at order time</span></div>' +
+      '<div class="rt-row rt-grand"><span>Total</span><strong>' + subtotal + ' JD</strong></div>';
   }
 
   document.getElementById('miniLb').addEventListener('click', () => {
@@ -667,14 +669,36 @@
 
   renderSummary();
 
+  /* buying needs an account — the register popup opens here if needed,
+     and their name/email/phone are prefilled right after */
   document.getElementById('toShippingBtn').addEventListener('click', () => {
-    if (window.gtag) {
-      gtag('event', 'begin_checkout', { currency: 'JOD', value: cartTotal(), items: cartToGA4Items() });
-    }
-    goToStep(2);
+    DirbalkAuth.require(() => {
+      prefillFromAccount();
+      if (window.gtag) {
+        gtag('event', 'begin_checkout', { currency: 'JOD', value: cartTotal(), items: cartToGA4Items() });
+      }
+      goToStep(2);
+    });
   });
   document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
   document.getElementById('backToStep2FromReview').addEventListener('click', () => goToStep(2));
+
+  function prefillFromAccount() {
+    try {
+      if (localStorage.getItem('dirbalk_logged_in') !== '1') return;
+      const name = localStorage.getItem('dirbalk_name') || '';
+      const email = localStorage.getItem('dirbalk_email') || '';
+      const phone = localStorage.getItem('dirbalk_phone') || '';
+      if (name && !document.getElementById('fullName').value) document.getElementById('fullName').value = name;
+      if (email && !document.getElementById('ckEmail').value) document.getElementById('ckEmail').value = email;
+      if (phone && !document.getElementById('ckPhone').value) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
+      if (name) {
+        const note = document.getElementById('loggedInNote');
+        note.innerHTML = 'Signed in as <strong>' + escapeHtml(name) + '</strong> — we filled in your info, just double check it and fill the rest.';
+        note.style.display = 'block';
+      }
+    } catch (e) { /* ignore */ }
+  }
 
   try {
     if (localStorage.getItem('dirbalk_logged_in') === '1') {
@@ -688,7 +712,7 @@
 
       if (name) {
         const note = document.getElementById('loggedInNote');
-        note.innerHTML = 'مسجل دخول كـ <strong>' + name + '</strong> — عبّينالك بياناتك، بس تأكد منها وكمّل الباقي.';
+        note.innerHTML = 'Signed in as <strong>' + name + '</strong> — we filled in your info, just double check it and fill the rest.';
         note.style.display = 'block';
       }
     }
@@ -739,13 +763,13 @@
     };
 
     let valid = true;
-    if (!data.fullName) { showFieldError('fullName', 'الرجاء إدخال الاسم الكامل.'); valid = false; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('ckEmail', 'الرجاء إدخال بريد إلكتروني صحيح.'); valid = false; }
-    if (!/^0?7[0-9]{8}$/.test(data.phone.replace(/\s/g, ''))) { showFieldError('ckPhone', 'رقم الهاتف غير صحيح.'); valid = false; }
-    if (!data.city) { showFieldError('city', 'الرجاء إدخال المدينة.'); valid = false; }
-    if (!data.address) { showFieldError('address', 'الرجاء إدخال العنوان.'); valid = false; }
+    if (!data.fullName) { showFieldError('fullName', 'Please enter your full name.'); valid = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('ckEmail', 'Please enter a valid email.'); valid = false; }
+    if (!/^0?7[0-9]{8}$/.test(data.phone.replace(/\s/g, ''))) { showFieldError('ckPhone', 'Please enter a valid phone number.'); valid = false; }
+    if (!data.city) { showFieldError('city', 'Please enter your city.'); valid = false; }
+    if (!data.address) { showFieldError('address', 'Please enter your address.'); valid = false; }
     if (data.locationLink && !/^https?:\/\/.+/i.test(data.locationLink)) {
-      showFieldError('locationLink', 'الرابط لازم يبدأ بـ http:// أو https://');
+      showFieldError('locationLink', 'The link must start with http:// or https://');
       valid = false;
     }
     if (!valid) return;
@@ -788,7 +812,7 @@
     if (isSubmittingOrder) return;
     isSubmittingOrder = true;
     confirmOrderBtn.disabled = true;
-    confirmOrderBtn.textContent = 'جاري تأكيد الطلب...';
+    confirmOrderBtn.textContent = 'Placing your order...';
     document.getElementById('submitOrderError').style.display = 'none';
 
     const total = cartTotal();
@@ -801,7 +825,7 @@
       address: shippingData.address,
       locationLink: shippingData.locationLink,
       items: cartItemsSummary(),
-      lines: cart.map((l) => ({ id: l.id, size: l.size, qty: l.qty })),
+      lines: cart.map((l) => ({ id: l.id, color: l.color, size: l.size, qty: l.qty })),
       total: total,
     };
 
@@ -822,9 +846,9 @@
             items: cartToGA4Items()
           });
         }
-        document.getElementById('orderIdDisplay').textContent = 'رقم الطلب: ' + (result.orderId || '—');
+        document.getElementById('orderIdDisplay').textContent = 'Order number: ' + (result.orderId || '—');
         if (result.pieces && result.pieces.length) {
-          const revealNames = { 'DB-TEE-01': 'تيشيرت', 'DB-DEN-01': 'بنطلون دنيم', 'DB-JAC-01': 'جاكيت دنيم' };
+          const revealNames = { 'DB-TEE-01': 'T-Shirt', 'DB-DEN-01': 'Denim Pants', 'DB-JAC-01': 'Denim Jacket' };
           const list = document.getElementById('pieceRevealList');
           list.innerHTML = '';
           result.pieces.forEach((pc) => {
@@ -832,7 +856,7 @@
             const div = document.createElement('div');
             div.className = 'pr-item';
             div.innerHTML = '<p class="pr-code">' + pc.code + '</p>' +
-              '<p class="pr-of">' + (revealNames[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100</p>';
+              '<p class="pr-of">' + (revealNames[pc.product] || pc.product) + ' · Piece ' + serial + ' of 100</p>';
             list.appendChild(div);
           });
           document.getElementById('pieceReveal').style.display = 'block';
@@ -842,19 +866,19 @@
         goToStep(5);
       } else {
         // business-logic decline (e.g. size just sold out) — fixable inline, stays on the review step
-        document.getElementById('submitOrderError').textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        document.getElementById('submitOrderError').textContent = result.message || 'Something went wrong, please try again.';
         document.getElementById('submitOrderError').style.display = 'block';
-        if (window.DirbalkToast) DirbalkToast.error(result.message || 'الطلب ما نجح، جرب كمان مرة.');
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'Order failed, please try again.');
         isSubmittingOrder = false;
         confirmOrderBtn.disabled = false;
-        confirmOrderBtn.textContent = 'تأكيد الطلب';
+        confirmOrderBtn.textContent = 'Confirm Order';
       }
     } catch (err) {
       // genuine network/unexpected failure — dedicated failure step instead of an easy-to-miss inline message
       isSubmittingOrder = false;
       confirmOrderBtn.disabled = false;
-      confirmOrderBtn.textContent = 'تأكيد الطلب';
-      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      confirmOrderBtn.textContent = 'Confirm Order';
+      if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
       goToStep(6);
     }
   }
@@ -867,7 +891,7 @@
 </script>
 
 <!--
-  الخطوة 2: انسخ الـ HTML تحت وحطه قبل <style>
+  Step 2: copy the HTML below and place it before <style>
   /* ---------- unified site footer ---------- */
   .site-footer {
     width: 100%;
@@ -895,12 +919,12 @@
 </style>
 <footer class="site-footer">
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/shipping.html">Shipping &amp; Returns</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/signin.html">Welcome Back</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>

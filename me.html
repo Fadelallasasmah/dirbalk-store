@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
-<script src="/assets/lang-switch.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/password-ux.js"></script>
 <script src="/assets/push.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حسابي — DIRBALَK</title>
+<title>My Account — DIRBALK</title>
 <meta name="robots" content="noindex">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
@@ -319,7 +318,6 @@
   .phone-input-row {
     display: flex; align-items: stretch; gap: 0;
     border: 0.5px solid rgba(255,255,255,0.15);
-    direction: ltr;
   }
   .phone-input-row:focus-within { border-color: rgba(201,168,76,0.5); }
   .phone-cc-select {
@@ -461,7 +459,7 @@
 
 <header>
   <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
@@ -469,21 +467,21 @@
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+<nav id="sideMenuPanel" aria-label="Menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/me.html">My Account</a>
   </div>
 </nav>
 
 <div class="gate-box" id="gateBox" style="display:none;">
-  <p>سجّل دخولك عشان تشوف حسابك.</p>
+  <p>Access starts with an account.</p>
   <div class="gate-actions">
-    <a href="/" class="gate-btn primary">أنشئ حساب</a>
-    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
+    <a href="/" class="gate-btn primary">Join DIRBALK</a>
+    <a href="/signin.html" class="gate-btn">Welcome Back</a>
   </div>
 </div>
 
@@ -492,100 +490,100 @@
   <div class="greet" data-reveal>
     <h1 id="greetName"></h1>
     <p id="greetEmail"></p>
-    <button type="button" class="logout-btn" id="enablePushBtn" style="margin-inline-end:14px;">فعّل الإشعارات</button>
-    <button type="button" class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
+    <button type="button" class="logout-btn" id="enablePushBtn" style="margin-inline-end:14px;">Enable Notifications</button>
+    <button type="button" class="logout-btn" id="logoutBtn">Log Out</button>
   </div>
 
   <section data-reveal data-reveal-delay="0.1">
-    <h2 class="sec-title">قطعي</h2>
+    <h2 class="sec-title">My Pieces</h2>
     <div id="piecesArea"><div class="sk-piece"></div><div class="sk-piece"></div></div>
   </section>
 
   <section data-reveal data-reveal-delay="0.2">
-    <h2 class="sec-title">طلباتي</h2>
+    <h2 class="sec-title">My Orders</h2>
     <div id="ordersArea"><div class="sk-order"></div><div class="sk-order"></div><div class="sk-order"></div></div>
   </section>
 
 
   <section data-reveal data-reveal-delay="0.28">
-    <h2 class="sec-title">ملفي</h2>
+    <h2 class="sec-title">My Profile</h2>
     <div id="profileArea"></div>
   </section>
 
   <section data-reveal data-reveal-delay="0.34">
-    <h2 class="sec-title">عنواني</h2>
+    <h2 class="sec-title">My Address</h2>
     <div class="addr-box" id="addrBox">
-      <p id="addrText">ما في عنوان محفوظ لسا.</p>
-      <button type="button" class="addr-edit-link" id="addrEditToggle">تعديل العنوان ←</button>
+      <p id="addrText">No saved address yet.</p>
+      <button type="button" class="addr-edit-link" id="addrEditToggle">Edit address ←</button>
     </div>
     <div class="phone-edit-form" id="addrEditForm" style="margin-top:10px;">
       <div class="acc-field">
-        <label for="addrFullName">الاسم الكامل</label>
+        <label for="addrFullName">Full Name</label>
         <input type="text" id="addrFullName" />
       </div>
       <div class="acc-field">
-        <label for="addrPhone">رقم الهاتف</label>
+        <label for="addrPhone">Phone Number</label>
         <div class="phone-input-row">
           <select class="phone-cc-select" id="addrCcSelect"></select>
           <input type="tel" id="addrPhone" placeholder="7XXXXXXXX" inputmode="tel" />
         </div>
       </div>
       <div class="acc-field">
-        <label for="addrCity">المدينة</label>
+        <label for="addrCity">City</label>
         <input type="text" id="addrCity" />
       </div>
       <div class="acc-field">
-        <label for="addrAddress">العنوان بالتفصيل</label>
+        <label for="addrAddress">Detailed Address</label>
         <input type="text" id="addrAddress" />
       </div>
       <div class="acc-field">
-        <label for="addrLocationLink">رابط الموقع (اختياري)</label>
+        <label for="addrLocationLink">Location Link (optional)</label>
         <input type="text" id="addrLocationLink" placeholder="https://maps.google.com/..." />
       </div>
       <p class="phone-edit-msg" id="addrEditMsg"></p>
-      <div class="phone-edit-actions"><button type="button" id="addrEditSave">حفظ العنوان</button></div>
+      <div class="phone-edit-actions"><button type="button" id="addrEditSave">Save Address</button></div>
     </div>
   </section>
 
   <section data-reveal data-reveal-delay="0.4">
-    <h2 class="sec-title">كلمة المرور</h2>
+    <h2 class="sec-title">Password</h2>
     <form class="acc-form" id="pwForm">
       <div class="acc-field" id="currentPwField" style="display:none;">
-        <label for="currentPw">كلمة المرور الحالية</label>
+        <label for="currentPw">Current Password</label>
         <div class="password-wrap">
           <input type="password" id="currentPw" autocomplete="current-password" />
-          <button type="button" class="pw-toggle" data-target="currentPw" aria-label="إظهار كلمة المرور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
+          <button type="button" class="pw-toggle" data-target="currentPw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
         </div>
       </div>
       <div class="acc-field">
-        <label for="newPw">كلمة المرور الجديدة</label>
+        <label for="newPw">New Password</label>
         <div class="password-wrap">
-          <input type="password" id="newPw" placeholder="8 أحرف على الأقل" autocomplete="new-password" />
-          <button type="button" class="pw-toggle" data-target="newPw" aria-label="إظهار كلمة المرور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
+          <input type="password" id="newPw" placeholder="8+ characters" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" data-target="newPw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
         </div>
       </div>
       <p class="form-error" id="pwError" style="display:none;color:rgba(255,120,120,0.85);font-size:11.5px;margin-bottom:10px;"></p>
-      <button type="submit" class="acc-btn" id="pwBtn">حفظ</button>
+      <button type="submit" class="acc-btn" id="pwBtn">Save</button>
     </form>
   </section>
 
   <section data-reveal data-reveal-delay="0.46">
-    <h2 class="sec-title">منطقة الخطر</h2>
+    <h2 class="sec-title">Danger Zone</h2>
     <div class="addr-box danger-zone">
-      <p class="danger-text">حذف حسابك نهائي بالنسبة لبياناتك الشخصية. القطع اللي تملكها وسجل طلباتك بيظلوا محفوظين كسجل تاريخي (عشان توثيق ملكية القطع)، بس اسمك وإيميلك بينمسحوا.</p>
-      <button type="button" class="danger-btn" id="showDeleteBtn">حذف حسابي</button>
+      <p class="danger-text">Deleting your account is permanent for your personal data. The pieces you own and your order history stay on record (to document piece ownership), but your name and email get erased.</p>
+      <button type="button" class="danger-btn" id="showDeleteBtn">Delete My Account</button>
 
       <div class="confirm-delete-box" id="confirmDeleteBox">
-        <p>اكتب <strong>حذف</strong> بالخانة تحت، وأدخل كلمة مرورك (إذا عندك وحدة)، للتأكيد.</p>
+        <p>Type <strong>DELETE</strong> in the box below, and enter your password (if you have one), to confirm.</p>
         <div class="acc-field">
-          <input type="text" id="deleteConfirmWord" placeholder="اكتب: حذف" />
+          <input type="text" id="deleteConfirmWord" placeholder="Type: DELETE" />
         </div>
         <div class="acc-field">
-          <input type="password" id="deletePw" placeholder="كلمة المرور (إذا موجودة)" autocomplete="current-password" />
+          <input type="password" id="deletePw" placeholder="Password (if you have one)" autocomplete="current-password" />
         </div>
         <div class="confirm-delete-actions">
-          <button type="button" class="danger-btn" id="confirmDeleteBtn">تأكيد الحذف</button>
-          <button type="button" class="acc-btn" id="cancelDeleteBtn">تراجع</button>
+          <button type="button" class="danger-btn" id="confirmDeleteBtn">Confirm Deletion</button>
+          <button type="button" class="acc-btn" id="cancelDeleteBtn">Cancel</button>
         </div>
       </div>
     </div>
@@ -599,12 +597,12 @@
 
 <footer class="site-footer">
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/shipping.html">Shipping &amp; Returns</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/signin.html">Welcome Back</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>
@@ -631,9 +629,9 @@
     });
   });
   var PRODUCT_NAMES = {
-    'DB-TEE-01': 'تيشيرت أوفرسايز',
-    'DB-DEN-01': 'بنطلون دنيم واسع',
-    'DB-JAC-01': 'جاكيت دنيم أوفرسايز'
+    'DB-TEE-01': 'Oversized T-Shirt',
+    'DB-DEN-01': 'Wide-Leg Denim Pants',
+    'DB-JAC-01': 'Oversized Denim Jacket'
   };
 
   var loggedIn = false, email = '', name = '', gender = '';
@@ -653,21 +651,21 @@
   if (window.DirbalkMotion) window.DirbalkMotion.rescan();
   var first = name.trim().split(' ')[0] || '';
   var isFemale = gender === 'female';
-  document.getElementById('greetName').textContent = 'أهلاً ' + first;
+  document.getElementById('greetName').textContent = 'Hi, ' + first;
   document.getElementById('greetEmail').textContent = email;
-  document.getElementById('closingPhrase').textContent = isFemale ? 'ديري بالك على حالك.' : 'دير بالك على حالك.';
+  document.getElementById('closingPhrase').textContent = 'دير بالك على حالك.';
 
   document.getElementById('enablePushBtn').addEventListener('click', function () {
     var btn = this;
     btn.disabled = true;
-    btn.textContent = 'جاري التفعيل...';
+    btn.textContent = 'Enabling...';
     DirbalkPush.enable('/api/account', { kind: 'registerPushToken', email: email }, function (result) {
       btn.disabled = false;
-      btn.textContent = 'فعّل الإشعارات';
+      btn.textContent = 'Enable Notifications';
       if (result.ok) {
-        if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم تفعيل الإشعارات.');
+        if (window.DirbalkToast) DirbalkToast.success(result.message || 'Notifications enabled.');
       } else {
-        if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+        if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
       }
     });
   });
@@ -683,14 +681,14 @@
 
   /* ---------------- profile ---------------- */
   var COUNTRY_CODES = [
-    { code: '+962', flag: '🇯🇴', label: 'الأردن' },
-    { code: '+966', flag: '🇸🇦', label: 'السعودية' },
-    { code: '+971', flag: '🇦🇪', label: 'الإمارات' },
-    { code: '+965', flag: '🇰🇼', label: 'الكويت' },
-    { code: '+974', flag: '🇶🇦', label: 'قطر' },
-    { code: '+973', flag: '🇧🇭', label: 'البحرين' },
-    { code: '+968', flag: '🇴🇲', label: 'عُمان' },
-    { code: '+20',  flag: '🇪🇬', label: 'مصر' }
+    { code: '+962', flag: '🇯🇴', label: 'Jordan' },
+    { code: '+966', flag: '🇸🇦', label: 'Saudi Arabia' },
+    { code: '+971', flag: '🇦🇪', label: 'UAE' },
+    { code: '+965', flag: '🇰🇼', label: 'Kuwait' },
+    { code: '+974', flag: '🇶🇦', label: 'Qatar' },
+    { code: '+973', flag: '🇧🇭', label: 'Bahrain' },
+    { code: '+968', flag: '🇴🇲', label: 'Oman' },
+    { code: '+20',  flag: '🇪🇬', label: 'Egypt' }
   ];
 
   function splitPhone(intlPhone) {
@@ -712,19 +710,19 @@
   }).join('');
 
   document.getElementById('profileArea').innerHTML =
-    '<div class="info-row"><span class="label">الاسم</span><span class="value">' + (name || '—') + '</span></div>' +
-    '<div class="info-row"><span class="label">الإيميل</span><span class="value">' + email + '</span></div>' +
+    '<div class="info-row"><span class="label">Name</span><span class="value">' + (name || '—') + '</span></div>' +
+    '<div class="info-row"><span class="label">Email</span><span class="value">' + email + '</span></div>' +
     '<div class="info-row">' +
-      '<span class="label">الهاتف</span>' +
+      '<span class="label">Phone</span>' +
       '<span class="value-wrap"><span class="value" id="phoneDisplay">' + (phone || '—') + '</span>' +
-      '<button type="button" class="phone-edit-link" id="phoneEditToggle">' + (phone ? 'تعديل' : 'إضافة رقم') + '</button></span>' +
+      '<button type="button" class="phone-edit-link" id="phoneEditToggle">' + (phone ? 'Edit' : 'Add number') + '</button></span>' +
     '</div>' +
     '<div class="phone-edit-form" id="phoneEditForm">' +
       '<div class="phone-input-row">' +
         '<select class="phone-cc-select" id="phoneCcSelect">' + ccOptionsHtml + '</select>' +
         '<input type="tel" id="phoneEditInput" placeholder="7XXXXXXXX" inputmode="tel" value="' + (phone ? phoneParts.local.replace(/^0/, '') : '') + '" />' +
       '</div>' +
-      '<div class="phone-edit-actions"><button type="button" id="phoneEditSave">حفظ</button></div>' +
+      '<div class="phone-edit-actions"><button type="button" id="phoneEditSave">Save</button></div>' +
     '</div>' +
     '<p class="phone-edit-msg" id="phoneEditMsg"></p>';
 
@@ -746,14 +744,14 @@
       msg.style.display = 'none';
 
       if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) {
-        msg.textContent = 'الرجاء إدخال رقم هاتف صحيح.';
+        msg.textContent = 'Please enter a valid phone number.';
         msg.style.display = 'block';
         return;
       }
       var international = ccSelect.value + localDigits;
 
       saveBtn.disabled = true;
-      saveBtn.textContent = 'جاري الحفظ...';
+      saveBtn.textContent = 'Saving...';
 
       fetch('/api/account', {
         method: 'POST',
@@ -763,23 +761,23 @@
         .then(function (r) { return r.json(); })
         .then(function (result) {
           saveBtn.disabled = false;
-          saveBtn.textContent = 'حفظ';
+          saveBtn.textContent = 'Save';
           if (result.status === 'success') {
             try { localStorage.setItem('dirbalk_phone', international); } catch (e) { /* ignore */ }
             document.getElementById('phoneDisplay').textContent = international;
-            toggleBtn.textContent = 'تعديل';
+            toggleBtn.textContent = 'Edit';
             form.classList.remove('show');
-            if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم حفظ رقم الهاتف.');
+            if (window.DirbalkToast) DirbalkToast.success(result.message || 'Phone number saved.');
           } else {
-            msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+            msg.textContent = result.message || 'Something went wrong, please try again.';
             msg.style.display = 'block';
-            if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+            if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
           }
         })
         .catch(function () {
           saveBtn.disabled = false;
-          saveBtn.textContent = 'حفظ';
-          msg.textContent = 'صار خطأ، جرب كمان مرة.';
+          saveBtn.textContent = 'Save';
+          msg.textContent = 'Something went wrong, please try again.';
           msg.style.display = 'block';
         });
     });
@@ -838,11 +836,11 @@
       var address = addressInput.value.trim();
       var locationLink = linkInput.value.trim();
 
-      if (!fullName) { msg.textContent = 'الرجاء إدخال اسمك الكامل.'; msg.style.display = 'block'; return; }
-      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) { msg.textContent = 'الرجاء إدخال رقم هاتف صحيح.'; msg.style.display = 'block'; return; }
-      if (!city) { msg.textContent = 'الرجاء إدخال مدينتك.'; msg.style.display = 'block'; return; }
-      if (!address) { msg.textContent = 'الرجاء إدخال عنوانك.'; msg.style.display = 'block'; return; }
-      if (locationLink && !/^https?:\/\/.+/i.test(locationLink)) { msg.textContent = 'الرابط لازم يبدأ بـ http:// أو https://'; msg.style.display = 'block'; return; }
+      if (!fullName) { msg.textContent = 'Please enter your full name.'; msg.style.display = 'block'; return; }
+      if (!/^[1-9][0-9]{6,9}$/.test(localDigits)) { msg.textContent = 'Please enter a valid phone number.'; msg.style.display = 'block'; return; }
+      if (!city) { msg.textContent = 'Please enter your city.'; msg.style.display = 'block'; return; }
+      if (!address) { msg.textContent = 'Please enter your address.'; msg.style.display = 'block'; return; }
+      if (locationLink && !/^https?:\/\/.+/i.test(locationLink)) { msg.textContent = 'The link must start with http:// or https://'; msg.style.display = 'block'; return; }
 
       savedShipping = {
         fullName: fullName,
@@ -858,7 +856,7 @@
         '<strong>' + fullName + '</strong><br>' + savedShipping.phone + '<br>' + city + ' — ' + address;
       form.classList.remove('show');
       opened = false;
-      if (window.DirbalkToast) DirbalkToast.success('تم حفظ العنوان.');
+      if (window.DirbalkToast) DirbalkToast.success('Address saved.');
     });
   })();
 
@@ -881,14 +879,14 @@
     var newPw = document.getElementById('newPw').value;
 
     if (newPw.length < 8) {
-      pwError.textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
+      pwError.textContent = 'Password must be at least 8 characters.';
       pwError.style.display = 'block';
       return;
     }
 
     pwSubmitting = true;
     pwBtn.disabled = true;
-    pwBtn.textContent = 'جاري الحفظ...';
+    pwBtn.textContent = 'Saving...';
 
     fetch('/api/account', {
       method: 'POST',
@@ -899,25 +897,25 @@
       .then(function (result) {
         pwSubmitting = false;
         pwBtn.disabled = false;
-        pwBtn.textContent = 'حفظ';
+        pwBtn.textContent = 'Save';
         if (result.status === 'success') {
-          if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم الحفظ.');
+          if (window.DirbalkToast) DirbalkToast.success(result.message || 'Saved.');
           pwForm.reset();
           try { localStorage.setItem('dirbalk_has_password', '1'); } catch (e) { /* ignore */ }
           document.getElementById('currentPwField').style.display = 'block';
         } else {
-          pwError.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
+          pwError.textContent = result.message || 'Something went wrong, please try again.';
           pwError.style.display = 'block';
-          if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+          if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
         }
       })
       .catch(function () {
         pwSubmitting = false;
         pwBtn.disabled = false;
-        pwBtn.textContent = 'حفظ';
-        pwError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+        pwBtn.textContent = 'Save';
+        pwError.textContent = 'Something went wrong, please try again.';
         pwError.style.display = 'block';
-        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+        if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
       });
   });
 
@@ -935,8 +933,8 @@
   document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
     if (deleteSubmitting) return;
     var word = document.getElementById('deleteConfirmWord').value.trim();
-    if (word !== 'حذف') {
-      if (window.DirbalkToast) DirbalkToast.warning('اكتب "حذف" بالضبط للتأكيد.');
+    if (word.toUpperCase() !== 'DELETE') {
+      if (window.DirbalkToast) DirbalkToast.warning('Type "DELETE" exactly to confirm.');
       return;
     }
     var delBtn = this;
@@ -944,7 +942,7 @@
 
     deleteSubmitting = true;
     delBtn.disabled = true;
-    delBtn.textContent = 'جاري الحذف...';
+    delBtn.textContent = 'Deleting...';
 
     fetch('/api/account', {
       method: 'POST',
@@ -954,7 +952,7 @@
       .then(function (r) { return r.json(); })
       .then(function (result) {
         if (result.status === 'success') {
-          if (window.DirbalkToast) DirbalkToast.success('تم حذف حسابك. دير بالك على حالك.');
+          if (window.DirbalkToast) DirbalkToast.success('Your account has been deleted. دير بالك على حالك.');
           try {
             ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position','dirbalk_has_password']
               .forEach(function (k) { localStorage.removeItem(k); });
@@ -963,19 +961,18 @@
         } else {
           deleteSubmitting = false;
           delBtn.disabled = false;
-          delBtn.textContent = 'تأكيد الحذف';
-          if (window.DirbalkToast) DirbalkToast.error(result.message || 'ما قدرنا نحذف الحساب.');
+          delBtn.textContent = 'Confirm Deletion';
+          if (window.DirbalkToast) DirbalkToast.error(result.message || "Couldn't delete the account.");
         }
       })
       .catch(function () {
         deleteSubmitting = false;
         delBtn.disabled = false;
-        delBtn.textContent = 'تأكيد الحذف';
-        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+        delBtn.textContent = 'Confirm Deletion';
+        if (window.DirbalkToast) DirbalkToast.error('Something went wrong, please try again.');
       });
   });
 
-  /* reveal */
   /* data */
   fetch('/api/me', {
     method: 'POST',
@@ -988,14 +985,14 @@
       renderOrders(result.orders || []);
     })
     .catch(function () {
-      document.getElementById('piecesArea').innerHTML = '<p class="empty">صار خطأ مؤقت — جرب كمان شوي.</p>';
+      document.getElementById('piecesArea').innerHTML = '<p class="empty">Something went wrong — try again shortly.</p>';
       document.getElementById('ordersArea').innerHTML = '';
     });
 
   function renderPieces(pieces, myComments) {
     var area = document.getElementById('piecesArea');
     if (!pieces.length) {
-      area.innerHTML = '<p class="empty">ما عندك قطع لسا.<br><a href="/shop.html">Collection 01 ←</a></p>';
+      area.innerHTML = '<p class="empty">Nothing here yet.<br><a href="/shop.html">Collection 01 →</a></p>';
       return;
     }
     var commentsByProduct = {};
@@ -1007,16 +1004,25 @@
       var existing = commentsByProduct[pc.product];
       var card = document.createElement('div');
       card.className = 'piece-card';
-      card.innerHTML =
-        '<div>' +
-        '<p class="piece-code">' + pc.code + '</p>' +
-        '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · القطعة ' + serial + ' من 100' +
-        (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
-        '</div>' +
-        '<a class="passport-link" href="/p/' + pc.slug + '">سجل القطعة</a>' +
+      var COLOR_EN = { black: 'Black', blue: 'Blue', indigo: 'Indigo', white: 'White', grey: 'Grey' };
+      /* Collection 01 has no piece numbers: pieces come from orders
+         (product · colour · size). Legacy numbered pieces keep their passport link. */
+      card.innerHTML = pc.code
+        ? '<div>' +
+          '<p class="piece-code">' + pc.code + '</p>' +
+          '<p class="piece-sub">' + (PRODUCT_NAMES[pc.product] || pc.product) + ' · Piece ' + serial + ' of 100' +
+          (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
+          '</div>' +
+          '<a class="passport-link" href="/p/' + pc.slug + '">View passport</a>'
+        : '<div>' +
+          '<p class="piece-code">' + (PRODUCT_NAMES[pc.product] || pc.product) + '</p>' +
+          '<p class="piece-sub">' + (COLOR_EN[pc.color] || pc.color || '') + ' · Size ' + pc.size +
+          (pc.orderId ? ' · ' + pc.orderId : '') + '</p>' +
+          '</div>';
+      card.innerHTML +=
         (existing
-          ? '<button type="button" class="comment-toggle-btn">تعليقك</button><div class="comment-form-wrap"></div>'
-          : '<button type="button" class="comment-toggle-btn">اترك تعليق</button><div class="comment-form-wrap"></div>');
+          ? '<button type="button" class="comment-toggle-btn">Your review</button><div class="comment-form-wrap"></div>'
+          : '<button type="button" class="comment-toggle-btn">Leave a review</button><div class="comment-form-wrap"></div>');
 
       var toggleBtn = card.querySelector('.comment-toggle-btn');
       var formWrap = card.querySelector('.comment-form-wrap');
@@ -1028,17 +1034,17 @@
             '<p class="comment-existing-text">' + existing.text.replace(/[&<>"']/g, function (c) {
               return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
             }) + '</p>' +
-            '<p class="comment-existing-status">' + (existing.approved ? 'منشور' : 'بانتظار المراجعة') + '</p>' +
-            '<button type="button" class="comment-delete-btn">حذف تعليقي</button>' +
+            '<p class="comment-existing-status">' + (existing.approved ? 'Published' : 'Pending review') + '</p>' +
+            '<button type="button" class="comment-delete-btn">Delete my review</button>' +
             '<p class="comment-form-msg"></p>';
           formWrap.classList.add('show');
 
           formWrap.querySelector('.comment-delete-btn').addEventListener('click', function () {
             var delBtn = this;
             var msg = formWrap.querySelector('.comment-form-msg');
-            if (!confirm('متأكد بدك تحذف تعليقك؟')) return;
+            if (!confirm('Are you sure you want to delete your review?')) return;
             delBtn.disabled = true;
-            delBtn.textContent = 'جاري الحذف...';
+            delBtn.textContent = 'Deleting...';
 
             fetch('/api/account', {
               method: 'POST',
@@ -1049,29 +1055,29 @@
               .then(function (result) {
                 if (result.status === 'success') {
                   existing = null;
-                  toggleBtn.textContent = 'اترك تعليق';
+                  toggleBtn.textContent = 'Leave a review';
                   formWrap.innerHTML = '';
                   formWrap.classList.remove('show');
-                  if (window.DirbalkToast) DirbalkToast.success(result.message || 'تم حذف تعليقك.');
+                  if (window.DirbalkToast) DirbalkToast.success(result.message || 'Your review has been deleted.');
                 } else {
                   delBtn.disabled = false;
-                  delBtn.textContent = 'حذف تعليقي';
-                  msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
-                  if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+                  delBtn.textContent = 'Delete my review';
+                  msg.textContent = result.message || 'Something went wrong, please try again.';
+                  if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
                 }
               })
               .catch(function () {
                 delBtn.disabled = false;
-                delBtn.textContent = 'حذف تعليقي';
-                msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+                delBtn.textContent = 'Delete my review';
+                msg.textContent = 'Something went wrong, please try again.';
               });
           });
           return;
         }
 
         formWrap.innerHTML =
-          '<textarea class="comment-textarea" maxlength="500" placeholder="شو رأيك بالقطعة؟"></textarea>' +
-          '<button type="button" class="comment-submit-btn">إرسال</button>' +
+          '<textarea class="comment-textarea" maxlength="500" placeholder="What do you think of the piece?"></textarea>' +
+          '<button type="button" class="comment-submit-btn">Submit</button>' +
           '<p class="comment-form-msg"></p>';
         formWrap.classList.add('show');
 
@@ -1079,11 +1085,11 @@
           var textarea = formWrap.querySelector('.comment-textarea');
           var msg = formWrap.querySelector('.comment-form-msg');
           var text = textarea.value.trim();
-          if (!text) { msg.textContent = 'اكتب شي أول.'; return; }
+          if (!text) { msg.textContent = 'Write something first.'; return; }
 
           var submitBtn = this;
           submitBtn.disabled = true;
-          submitBtn.textContent = 'جاري الإرسال...';
+          submitBtn.textContent = 'Submitting...';
 
           fetch('/api/account', {
             method: 'POST',
@@ -1094,20 +1100,20 @@
             .then(function (result) {
               if (result.status === 'success') {
                 existing = { id: result.commentId, text: text, approved: false };
-                toggleBtn.textContent = 'تعليقك';
+                toggleBtn.textContent = 'Your review';
                 formWrap.innerHTML = '<p class="comment-form-msg" style="color:#7fd88f;">' + result.message + '</p>';
                 if (window.DirbalkToast) DirbalkToast.success(result.message);
               } else {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'إرسال';
-                msg.textContent = result.message || 'صار خطأ، جرب كمان مرة.';
-                if (window.DirbalkToast) DirbalkToast.error(result.message || 'صار خطأ.');
+                submitBtn.textContent = 'Submit';
+                msg.textContent = result.message || 'Something went wrong, please try again.';
+                if (window.DirbalkToast) DirbalkToast.error(result.message || 'Something went wrong.');
               }
             })
             .catch(function () {
               submitBtn.disabled = false;
-              submitBtn.textContent = 'إرسال';
-              msg.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+              submitBtn.textContent = 'Submit';
+              msg.textContent = 'Something went wrong, please try again.';
             });
         });
       });
@@ -1117,15 +1123,15 @@
   }
 
   var JOURNEY_STEPS = [
-    { key: 'قيد المراجعة', label: 'استلمنا طلبك' },
-    { key: 'قيد التجهيز', label: 'عم نجهز القطع' },
-    { key: 'تم الشحن', label: 'بالطريق إلك' },
-    { key: 'تم التسليم', label: 'بين إيديك' }
+    { key: 'قيد المراجعة', label: 'Order received' },
+    { key: 'قيد التجهيز', label: "We're preparing your pieces" },
+    { key: 'تم الشحن', label: 'On its way to you' },
+    { key: 'تم التسليم', label: 'In your hands' }
   ];
 
   function renderJourney(status) {
     if (status === 'ملغى') {
-      return '<div class="order-journey"><span class="order-status cancelled">ملغى</span></div>';
+      return '<div class="order-journey"><span class="order-status cancelled">Cancelled</span></div>';
     }
     var currentIdx = JOURNEY_STEPS.findIndex(function (s) { return s.key === status; });
     if (currentIdx === -1) currentIdx = 0;
@@ -1145,7 +1151,7 @@
   function renderOrders(orders) {
     var area = document.getElementById('ordersArea');
     if (!orders.length) {
-      area.innerHTML = '<p class="empty">ما في طلبات لسا.</p>';
+      area.innerHTML = '<p class="empty">No orders yet.</p>';
       return;
     }
     area.innerHTML = '';

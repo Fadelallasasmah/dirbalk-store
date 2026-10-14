@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
-<script src="/assets/lang-switch.js"></script>
+<script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الدروب — DIRBALَK</title>
-<meta name="description" content="DIRBALK — كيف بيشتغل الدروب. التسجيل لا يضمن الوصول.">
+<title>The Drop — DIRBALK</title>
+<meta name="description" content="DIRBALK — how the drop works. Registering doesn't guarantee access.">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dirbalk.com/drop.html">
-<meta property="og:title" content="الدروب — DIRBALَK">
-<meta property="og:description" content="كيف بيشتغل الدروب. التسجيل لا يضمن الوصول.">
+<meta property="og:title" content="The Drop — DIRBALK">
+<meta property="og:description" content="How the drop works. Registering doesn't guarantee access.">
 <meta property="og:image" content="https://dirbalk.com/og-image.png">
-<meta property="og:locale" content="ar_JO">
+<meta property="og:locale" content="en_JO">
 <link rel="canonical" href="https://dirbalk.com/drop.html">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="الدروب — DIRBALَK">
-<meta name="twitter:description" content="كيف بيشتغل الدروب. التسجيل لا يضمن الوصول.">
+<meta name="twitter:title" content="The Drop — DIRBALK">
+<meta name="twitter:description" content="How the drop works. Registering doesn't guarantee access.">
 <meta name="twitter:image" content="https://dirbalk.com/og-image.png">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
@@ -79,8 +79,12 @@
   .hamburger-btn.open span:nth-child(2) { opacity: 0; }
   .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.4px) rotate(-45deg); }
 
-  .side-menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96; }
-  .side-menu-overlay.open { display: block; }
+  .side-menu-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.7s ease;
+  }
+  .side-menu-overlay.open { opacity: 1; pointer-events: auto; }
 
   #sideMenuPanel {
     display: flex;
@@ -91,7 +95,7 @@
     border-right: 0.5px solid rgba(255,255,255,0.1);
     z-index: 97;
     transform: translateX(-100%);
-    transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+    transition: transform 0.7s cubic-bezier(.16,1,.3,1);
     flex-direction: column;
     padding: 20px 22px;
     overflow-y: auto;
@@ -109,22 +113,12 @@
     color: rgba(255,255,255,0.85); text-decoration: none;
     opacity: 0;
     transform: translateX(-14px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
     font-size: 14px; padding: 12px 4px;
     border-bottom: 0.5px solid rgba(255,255,255,0.07);
   }
   .side-menu-links a:hover { color: #C9A84C; }
-
-  #sideMenuPanel.open .side-menu-links a { opacity: 1; transform: translateX(0); }
-  #sideMenuPanel.open .side-menu-links a:nth-child(1) { transition-delay: 0.15s; }
-  #sideMenuPanel.open .side-menu-links a:nth-child(2) { transition-delay: 0.25s; }
-  #sideMenuPanel.open .side-menu-links a:nth-child(3) { transition-delay: 0.35s; }
-  #sideMenuPanel.open .side-menu-links a:nth-child(4) { transition-delay: 0.45s; }
-
-  #sideMenuPanel.closing .side-menu-links a:nth-child(1) { transition-delay: 0.3s; }
-  #sideMenuPanel.closing .side-menu-links a:nth-child(2) { transition-delay: 0.2s; }
-  #sideMenuPanel.closing .side-menu-links a:nth-child(3) { transition-delay: 0.1s; }
-  #sideMenuPanel.closing .side-menu-links a:nth-child(4) { transition-delay: 0s; }
+  .side-menu-links a.mlink-visible { opacity: 1; transform: translateX(0); }
   @media (prefers-reduced-motion: reduce) {
     .side-menu-links a { transition: none; opacity: 1; transform: none; }
   }
@@ -134,13 +128,8 @@
   .statements { max-width: 700px; margin: 0 auto; padding: 14vh 24px 8vh; }
 
   .statement {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
     margin-bottom: 12vh;
   }
-  .statement.visible { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .statement { opacity: 1; transform: none; transition: none; } }
 
   .statement .big {
     font-size: clamp(24px, 5.4vw, 40px);
@@ -166,13 +155,12 @@
   }
 
   .divider {
-    width: 40px; height: 1px; background: #C9A84C;
-    opacity: 0; margin: 0 0 12vh;
-    transform: translateY(12px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
+    width: 40px;
+    height: 1px;
+    background: #C9A84C;
+    margin: 0 0 12vh;
   }
-  .divider.visible { opacity: 0.4; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .divider { opacity: 0.4; transform: none; transition: none; } }
+  .divider[data-reveal].dm-visible { opacity: 0.4; }
 
   /* ---------- steps ---------- */
   .steps {
@@ -234,80 +222,80 @@
 
 <header>
   <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
   </div>
 </header>
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+<nav id="sideMenuPanel" aria-label="Main menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/me.html">My Account</a>
   </div>
 </nav>
 
 <div class="statements">
 
-  <div class="statement">
-    <p class="kicker">النظام</p>
-    <p class="big">الشوب ما بيفتح للكل</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="kicker">The System</p>
+    <p class="big" data-motion="type">Not everyone gets in.</p>
     <p class="small">
-      التسجيل بالقائمة بيحطك بمكانك، لما نفتح.. بنختار مين يدخل.. مش عشوائي — بس مش مضمون
+      Joining the list doesn't guarantee a piece. It just puts you among the first to know.
     </p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" data-reveal data-reveal-group="drop"></div>
 
-  <div class="statement">
-    <p class="big">الدعوة بتوصلك، وقتها بس بتدخل</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">The invite comes to you. That's the only way in.</p>
     <p class="small">
-      رابط شخصي، إلك أنت بس. بيوصلك إيميل أو واتساب، مش طابور، ما في انتظار — بس لازم تكون مدعو
+      If it arrives, you have 24 hours. That's enough — the next part explains the rest.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">24 ساعة بعدها بيسكر</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">24 hours. Then it closes.</p>
     <p class="small">
-      الدعوة فرصة .. زي باقي الفرص اذا ضيعتها مش نهاية العالم — بس بعض الفرص ما بتتكرر، ممكن تتاخذ
+      After that, your spot is gone.
     </p>
   </div>
 
-  <div class="statement">
-    <p class="big">كل قطعة إلها رقم</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="big" data-motion="type">Every piece has a number.</p>
     <p class="small">
-      احجز رقمك
+      It won't be made again. Claim yours.
     </p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" data-reveal data-reveal-group="drop"></div>
 
-  <div class="statement">
-    <p class="kicker">خطوة خطوة</p>
+  <div class="statement" data-reveal data-reveal-group="drop">
+    <p class="kicker">Step by step</p>
     <div class="steps">
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>سجّل بالقائمة</strong> — اسمك وإيميلك، بس. بتاخد رقمك بالطابور.</p>
+        <p class="step-text"><strong>Join.</strong> Name. Email. Done.</p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>استنى الدعوة</strong> — لما نفتح دروب، منبعت لعدد محدود من المسجلين.</p>
+        <p class="step-text"><strong>Wait for your invitation.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>ادخل خلال 24 ساعة</strong> — من أي جهاز، برابطك الشخصي.</p>
+        <p class="step-text"><strong>24 hours.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>اختار قطعتك</strong> — النظام بياخذ أصغر رقم متاح بمقاسك.</p>
+        <p class="step-text"><strong>Pick your number.</strong></p>
       </div>
       <div class="step">
         <span class="step-num"></span>
-        <p class="step-text"><strong>القطعة صارت إلك</strong> — برقمها، وبسجلها الخاص فيها.</p>
+        <p class="step-text"><strong>That's it.</strong></p>
       </div>
     </div>
   </div>
@@ -319,34 +307,22 @@
   <p class="phrase brand-phrase" style="color:#C9A84C;font-size:14px;opacity:0.9;margin-bottom:2.4rem;">دير بالك على حالك.</p>
 
   <div class="closing-actions">
-    <a href="/" class="closing-btn primary">سجّل بالقائمة</a>
-    <a href="/about.html" class="closing-btn">عن DIRBALK</a>
+    <a href="/" class="closing-btn primary">Join the list</a>
+    <a href="/about.html" class="closing-btn">About</a>
   </div>
 
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/shipping.html">Shipping &amp; Returns</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/signin.html">Sign In</a>
   </nav>
 </div>
 
 <script>
 (function () {
-  var statements = document.querySelectorAll('.statement, .divider');
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.25 });
-    statements.forEach(function (s) { observer.observe(s); });
-  } else {
-    statements.forEach(function (s) { s.classList.add('visible'); });
-  }
   if (window.gtag) gtag('event', 'page_view_drop');
 
   /* ---------------- mobile hamburger + side menu ---------------- */
@@ -354,20 +330,30 @@
   var sideMenuPanel = document.getElementById('sideMenuPanel');
   var sideMenuOverlay = document.getElementById('sideMenuOverlay');
 
+  var menuLinks = sideMenuPanel.querySelectorAll('.side-menu-links a');
+  var LINK_STEP = 0.18;
+  var LINK_START = 0.2;
+
   function openSideMenu() {
-    sideMenuPanel.classList.remove('closing');
     sideMenuPanel.classList.add('open');
     sideMenuOverlay.classList.add('open');
     hamburgerBtn.classList.add('open');
     hamburgerBtn.setAttribute('aria-expanded', 'true');
+    menuLinks.forEach(function (link, i) {
+      link.style.transitionDelay = (LINK_START + i * LINK_STEP) + 's';
+      link.classList.add('mlink-visible');
+    });
   }
   function closeSideMenu() {
-    sideMenuPanel.classList.add('closing');
     sideMenuPanel.classList.remove('open');
     sideMenuOverlay.classList.remove('open');
     hamburgerBtn.classList.remove('open');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
-    setTimeout(function () { sideMenuPanel.classList.remove('closing'); }, 550);
+    var n = menuLinks.length;
+    menuLinks.forEach(function (link, i) {
+      link.style.transitionDelay = ((n - 1 - i) * LINK_STEP) + 's';
+      link.classList.remove('mlink-visible');
+    });
   }
   hamburgerBtn.addEventListener('click', function () {
     if (sideMenuPanel.classList.contains('open')) closeSideMenu(); else openSideMenu();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
@@ -96,20 +96,20 @@
 
     <div class="state active" id="stateChecking">
       <div class="pulse-line"></div>
-      <p class="msg">عم نفتحلك الباب...</p>
+      <p class="msg">Opening the door...</p>
     </div>
 
     <div class="state" id="stateWelcome">
       <p class="welcome-name" id="welcomeName"></p>
-      <p class="open-note" id="openNote">الباب مفتوح.</p>
+      <p class="open-note" id="openNote">The door is open.</p>
       <p class="phrase brand-phrase" id="welcomePhrase">دير بالك على حالك.</p>
     </div>
 
     <div class="state" id="stateError">
-      <p class="msg" id="errMsg">الرابط مش صحيح أو خلص وقته.</p>
+      <p class="msg" id="errMsg">This link isn't valid or has expired.</p>
       <div class="err-actions">
-        <a href="/" class="btn primary">الرئيسية</a>
-        <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="btn">واتساب</a>
+        <a href="/signin.html" class="btn primary">Get a new link</a>
+        <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="btn">WhatsApp</a>
       </div>
     </div>
   </div>
@@ -151,12 +151,19 @@
 
       var first = (result.name || '').trim().split(' ')[0] || '';
       var isFemale = result.gender === 'female';
-      document.getElementById('welcomeName').textContent = 'أهلاً ' + first;
-      document.getElementById('openNote').textContent = isFemale ? 'الباب مفتوح. تفضلي.' : 'الباب مفتوح. تفضل.';
-      document.getElementById('welcomePhrase').textContent = isFemale ? 'ديري بالك على حالك.' : 'دير بالك على حالك.';
+      document.getElementById('welcomeName').textContent = 'Welcome, ' + first;
+      document.getElementById('openNote').textContent = 'The door is open. Come in.';
+      document.getElementById('welcomePhrase').textContent = 'دير بالك على حالك.';
       show('stateWelcome');
 
-      setTimeout(function () { window.location.href = '/shop.html'; }, 1800);
+      /* back to the page they asked for the link from (same browser only), else the shop */
+      var back = '/shop.html';
+      try {
+        var rt = localStorage.getItem('dirbalk_return_to') || '';
+        if (/^\/[^\/]/.test(rt)) back = rt;
+        localStorage.removeItem('dirbalk_return_to');
+      } catch (e) { /* ignore */ }
+      setTimeout(function () { window.location.href = back; }, 1800);
     })
     .catch(function () { show('stateError'); });
 })();

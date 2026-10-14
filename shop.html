@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
-<script src="/assets/lang-switch.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
 <script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Collection 01 — DIRBALَK</title>
-<meta name="description" content="DIRBALK — Collection 01, Winter 2026. تيشيرت، بنطلون، جاكيت.">
+<title>Collection 01 — DIRBALK</title>
+<meta name="description" content="DIRBALK — Collection 01, Winter 2026. T-shirt, pants, jacket.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -729,45 +730,45 @@
 
 <header>
   <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <a href="/" class="home-link">← الرئيسية</a>
+    <a href="/" class="home-link">← Back</a>
     <a href="/shop.html" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
-    <button type="button" class="icon-btn" id="cartBtn" aria-label="السلة">
+    <button type="button" class="icon-btn" id="cartBtn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>
       <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
     </button>
     <div class="header-actions">
-      <a href="/signin.html" class="account-link" id="accountLink">تسجيل الدخول</a>
+      <a href="/signin.html" class="account-link" id="accountLink">Welcome Back</a>
       <div class="user-chip" id="userChip" style="display:none;">
         <span class="user-chip-avatar" id="userChipAvatar">?</span>
         <a href="/me.html" id="userChipName" style="text-decoration:none;color:inherit;"></a>
-        <button type="button" class="user-chip-logout" id="userChipLogout">خروج</button>
+        <button type="button" class="user-chip-logout" id="userChipLogout">Log out</button>
       </div>
     </div>
   </div>
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+<nav id="sideMenuPanel" aria-label="Menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
+    <a href="/">Home</a>
     <div class="side-menu-row">
-      <a href="/shop.html">الكوليكشن</a>
-      <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="عرض القطع" aria-expanded="false">+</button>
+      <a href="/shop.html">Collection 01</a>
+      <button type="button" class="submenu-toggle" id="collectionSubmenuToggle" aria-label="Show pieces" aria-expanded="false">+</button>
     </div>
     <div class="side-submenu" id="collectionSubmenu"></div>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
+    <a href="/about.html">About</a>
+    <a href="/me.html">My Account</a>
   </div>
   <div class="header-actions">
-    <a href="/signin.html" class="account-link" id="accountLinkM">تسجيل الدخول</a>
+    <a href="/signin.html" class="account-link" id="accountLinkM">Welcome Back</a>
     <div class="user-chip" id="userChipM" style="display:none;">
       <span class="user-chip-avatar" id="userChipAvatarM">?</span>
       <a href="/me.html" id="userChipNameM" style="text-decoration:none;color:inherit;"></a>
-      <button type="button" class="user-chip-logout" id="userChipLogoutM">خروج</button>
+      <button type="button" class="user-chip-logout" id="userChipLogoutM">Log out</button>
     </div>
   </div>
 </nav>
@@ -778,15 +779,7 @@
   <p class="brand-phrase" data-reveal data-reveal-delay="0.25">دير بالك على حالك.</p>
 </section>
 
-<div class="gate-box" id="gateBox" style="display:none;">
-  <p>لازم يكون عندك حساب مفعّل عشان تتسوق.</p>
-  <div class="gate-actions">
-    <a href="/" class="gate-btn primary">أنشئ حساب</a>
-    <a href="/signin.html" class="gate-btn">تسجيل الدخول</a>
-  </div>
-</div>
-
-<div class="grid" id="productGrid" style="display:none;"></div>
+<div class="grid" id="productGrid"></div>
 
 <!-- Quick view modal -->
 <div class="overlay" id="modalOverlay">
@@ -794,36 +787,38 @@
     <div class="modal-media" id="modalMedia">
       <span class="zoom-hint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
-        اضغط للتكبير
+        Tap to zoom
       </span>
     </div>
     <div class="modal-body">
-      <button type="button" class="modal-close" id="modalClose" aria-label="إغلاق">✕</button>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Close">✕</button>
       <p class="modal-code" id="modalCode"></p>
       <h2 class="modal-title" id="modalTitle"></h2>
       <p class="modal-colorway" id="modalColorway"></p>
       <p class="modal-price" id="modalPrice"></p>
       <p class="modal-desc" id="modalDesc"></p>
 
-      <p class="spec-heading">القصة</p>
+      <p class="spec-heading">The Story</p>
       <ul class="spec-list" id="fitList"></ul>
 
-      <p class="spec-heading">التركيب والعناية</p>
+      <p class="spec-heading">Composition &amp; Care</p>
       <ul class="spec-list" id="careList"></ul>
 
       <p class="modal-meta" id="modalMeta"></p>
-      <p class="size-label">المقاس</p>
+      <p class="size-label">Colour <span class="swatch-name" id="modalColorName"></span></p>
+      <div id="modalSwatches"></div>
+      <p class="size-label">Size</p>
       <div class="size-row" id="sizeRow"></div>
-      <button type="button" class="add-btn" id="addToCartBtn">أضف للسلة</button>
+      <button type="button" class="add-btn" id="addToCartBtn">Add to Cart</button>
       <p class="modal-msg" id="modalMsg"></p>
-      <p class="modal-more-link"><a href="#" id="modalMoreLink">التفاصيل الكاملة، دليل المقاسات، والتقييمات ←</a></p>
+      <p class="modal-more-link"><a href="#" id="modalMoreLink">Full details, size guide, and reviews →</a></p>
     </div>
   </div>
 </div>
 
 <!-- Zoom lightbox -->
 <div class="lightbox" id="lightbox">
-  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="إغلاق">✕</button>
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
   <div id="lightboxMedia"></div>
 </div>
 
@@ -831,16 +826,16 @@
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
-    <h2>السلة</h2>
-    <button type="button" class="icon-btn" id="cartClose" aria-label="إغلاق السلة">✕</button>
+    <h2>Cart</h2>
+    <button type="button" class="icon-btn" id="cartClose" aria-label="Close cart">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-subtotal">
-      <span>المجموع</span>
+      <span>Subtotal</span>
       <strong id="cartSubtotal">0 JD</strong>
     </div>
-    <a href="/checkout.html" class="checkout-btn" id="checkoutBtn">إتمام الشراء</a>
+    <a href="/checkout.html" class="checkout-btn" id="checkoutBtn">Checkout</a>
   </div>
 </div>
 
@@ -890,7 +885,6 @@
   let cart = loadCart();
 
   function findProduct(id) { return PRODUCTS.find((p) => p.id === id); }
-  function totalStock(p) { return Object.values(p.sizes).reduce((a, b) => a + b, 0); }
 
   function cartCount() { return cart.reduce((s, l) => s + l.qty, 0); }
   function cartSubtotal() {
@@ -907,59 +901,46 @@
     else badge.style.display = 'none';
   }
 
-  /* ---------------- login gate ---------------- */
-  let isLoggedIn = false;
-  try { isLoggedIn = localStorage.getItem('dirbalk_logged_in') === '1'; } catch (e) { /* ignore */ }
-
-  /* ---------------- render product grid (no stock numbers shown) ---------------- */
+  /* ---------------- open browsing: everyone sees the collection;
+     buying asks for a quick registration (assets/auth-gate.js) ---------------- */
+  const CAT = window.DirbalkCatalog;
   const grid = document.getElementById('productGrid');
-  if (isLoggedIn) {
-    grid.style.display = 'grid';
-    if (window.gtag) {
-      gtag('event', 'view_item_list', {
-        item_list_name: 'Collection 01',
-        items: PRODUCTS.map((p) => ({ item_id: p.id, item_name: p.name, price: p.price, item_category: p.silhouette }))
-      });
-    }
-  } else {
-    document.getElementById('gateBox').style.display = 'block';
+  if (window.gtag) {
+    gtag('event', 'view_item_list', {
+      item_list_name: 'Collection 01',
+      items: PRODUCTS.map((p) => ({ item_id: p.id, item_name: p.name, price: p.price, item_category: p.silhouette }))
+    });
   }
-  PRODUCTS.forEach((p, idx) => {
-    const soldOut = totalStock(p) === 0;
-    const images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+
+  /* selected colour per product card */
+  const cardColor = {};
+
+  /* builds the image area of a card for one colour; replacing the whole
+     .card-media element drops the old listeners with it */
+  function buildCardMedia(card, p, colorKey) {
+    const images = CAT.images(p, colorKey);
     const hasMulti = images.length > 1;
+    const soldOut = CAT.totalStock(p, colorKey) === 0;
 
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.setAttribute('data-reveal', '');
-    card.setAttribute('data-reveal-group', 'products');
-
+    const mediaEl = document.createElement('div');
+    mediaEl.className = 'card-media' + (hasMulti ? ' has-multi' : '');
     const imgsHtml = images.length
-      ? images.map((src, i) => '<img class="cm-img' + (i === 0 ? ' cm-current' : '') + '" data-idx="' + i + '" src="' + src + '" alt="' + p.name + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />').join('')
-      : silhouetteSVG(p.silhouette, p.swatch);
-
+      ? images.map((src, i) => '<img class="cm-img' + (i === 0 ? ' cm-current' : '') + '" data-idx="' + i + '" src="' + src + '" alt="' + p.name + ' — ' + CAT.colorName(p, colorKey) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />').join('')
+      : silhouetteSVG(p.silhouette, CAT.swatch(p, colorKey));
     const navHtml = hasMulti
-      ? '<button type="button" class="card-nav prev" aria-label="الصورة السابقة">›</button>' +
-        '<button type="button" class="card-nav next" aria-label="الصورة التالية">‹</button>' +
+      ? '<button type="button" class="card-nav prev" aria-label="Previous image">›</button>' +
+        '<button type="button" class="card-nav next" aria-label="Next image">‹</button>' +
         '<div class="card-dots">' + images.map((_, i) => '<span' + (i === 0 ? ' class="active"' : '') + '></span>').join('') + '</div>'
       : '';
-
-    card.innerHTML =
-      '<div class="card-media' + (hasMulti ? ' has-multi' : '') + '">' + imgsHtml + navHtml +
+    mediaEl.innerHTML = imgsHtml + navHtml +
       '<span class="card-code">' + p.id + '</span>' +
-      (soldOut ? '<span class="card-tag sold-out">نفذت الكمية</span>' : '') +
-      '</div>' +
-      '<div class="card-body">' +
-      '<p class="card-name">' + p.name + '</p>' +
-      '<p class="card-colorway">' + p.colorway + '</p>' +
-      '<p class="card-price">' + p.price + ' دينار</p>' +
-      '</div>';
+      (soldOut ? '<span class="card-tag sold-out">Sold Out</span>' : '');
 
     if (hasMulti) {
-      const mediaEl = card.querySelector('.card-media');
       const imgEls = Array.from(mediaEl.querySelectorAll('.cm-img'));
       const dotEls = Array.from(mediaEl.querySelectorAll('.card-dots span'));
       let current = 0;
+      let suppressClick = false;
 
       function show(i) {
         current = ((i % images.length) + images.length) % images.length;
@@ -967,57 +948,109 @@
         dotEls.forEach((d, di) => d.classList.toggle('active', di === current));
       }
 
-      card.addEventListener('mouseenter', () => show(1));
-      card.addEventListener('mouseleave', () => show(0));
-
+      mediaEl.addEventListener('mouseenter', () => show(1));
+      mediaEl.addEventListener('mouseleave', () => show(0));
       mediaEl.querySelector('.card-nav.prev').addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
       mediaEl.querySelector('.card-nav.next').addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
 
-      /* ---- mobile: swipe right/left on the image to cycle, no arrow tap needed ---- */
+      /* mobile: swipe on the image to cycle */
       let touchStartX = 0, touchStartY = 0, touchMoved = false;
       mediaEl.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
         touchMoved = false;
       }, { passive: true });
-
       mediaEl.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
-
       mediaEl.addEventListener('touchend', (e) => {
         if (!touchMoved) return;
         const dx = e.changedTouches[0].clientX - touchStartX;
         const dy = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(dx) < 32 || Math.abs(dx) < Math.abs(dy)) return; /* mostly vertical scroll — ignore */
+        if (Math.abs(dx) < 32 || Math.abs(dx) < Math.abs(dy)) return;
         e.stopPropagation();
-        if (dx < 0) show(current + 1); else show(current - 1); /* RTL page, but swipe direction stays finger-natural */
+        if (dx < 0) show(current + 1); else show(current - 1);
         suppressClick = true;
       }, { passive: true });
-
-      let suppressClick = false;
-      card.addEventListener('click', (e) => {
+      mediaEl.addEventListener('click', (e) => {
         if (suppressClick) { e.preventDefault(); e.stopPropagation(); suppressClick = false; }
       }, true);
     }
 
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('aria-label', p.name + ' — ' + p.price + ' دينار');
+    const old = card.querySelector('.card-media');
+    if (old) card.replaceChild(mediaEl, old); else card.insertBefore(mediaEl, card.firstChild);
+  }
 
-    card.addEventListener('click', () => {
-      if (window.gtag) {
-        gtag('event', 'select_item', {
-          item_list_name: 'Collection 01',
-          items: [{ item_id: p.id, item_name: p.name, price: p.price }]
-        });
+  function setCardColor(card, p, colorKey) {
+    cardColor[p.id] = colorKey;
+    buildCardMedia(card, p, colorKey);
+    card.querySelector('.card-colorway').textContent = CAT.colorName(p, colorKey);
+    Array.from(card.querySelectorAll('.swatch')).forEach((b) => {
+      const on = b.dataset.color === colorKey;
+      b.classList.toggle('selected', on);
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+  }
+
+  let gridRendered = false;
+  function renderGrid() {
+    /* first render animates in; the re-draw after live stock arrives doesn't */
+    const animate = !gridRendered;
+    gridRendered = true;
+    grid.innerHTML = '';
+    PRODUCTS.forEach((p) => {
+      const colorKey = cardColor[p.id] || CAT.defaultKey(p);
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      if (animate) {
+        card.setAttribute('data-reveal', '');
+        card.setAttribute('data-reveal-group', 'products');
       }
-      openModal(p.id);
+      card.innerHTML =
+        '<div class="card-body">' +
+        '<p class="card-name">' + p.name + '</p>' +
+        '<p class="card-colorway"></p>' +
+        CAT.swatchesHtml(p, colorKey) +
+        '<p class="card-price">' + p.price + ' JD</p>' +
+        '</div>';
+
+      /* the three circles: switch colour without opening the product */
+      Array.from(card.querySelectorAll('.swatch')).forEach((b) => {
+        b.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setCardColor(card, p, b.dataset.color);
+        });
+        b.addEventListener('keydown', (e) => { e.stopPropagation(); });
+      });
+
+      setCardColor(card, p, colorKey);
+
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', p.name + ' — ' + p.price + ' JD');
+
+      card.addEventListener('click', () => {
+        if (window.gtag) {
+          gtag('event', 'select_item', {
+            item_list_name: 'Collection 01',
+            items: [{ item_id: p.id, item_name: p.name, price: p.price, item_variant: cardColor[p.id] }]
+          });
+        }
+        openModal(p.id, cardColor[p.id]);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        card.click();
+      });
+      grid.appendChild(card);
     });
-    card.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      e.preventDefault();
-      card.click();
-    });
-    grid.appendChild(card);
+  }
+
+  renderGrid();
+  /* live stock (per colour + size) — re-draw once it arrives */
+  CAT.loadStock().then((ok) => {
+    if (!ok) return;
+    renderGrid();
   });
 
   /* ---------------- scroll reveal (cards added after load, so tell
@@ -1027,42 +1060,34 @@
   /* ---------------- quick view modal ---------------- */
   let modalProduct = null;
   let modalSize = null;
+  let modalColor = null;
 
-  function openModal(id) {
-    modalProduct = findProduct(id);
-    modalSize = null;
-    const images = (modalProduct.images && modalProduct.images.length) ? modalProduct.images : (modalProduct.img ? [modalProduct.img] : []);
+  function renderModalMedia() {
+    const images = CAT.images(modalProduct, modalColor);
+    const tint = CAT.swatch(modalProduct, modalColor);
     const mediaHtml = images.length
       ? '<img src="' + images[0] + '" alt="' + modalProduct.name + '" style="width:100%;height:100%;object-fit:cover;" />'
-      : silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+      : silhouetteSVG(modalProduct.silhouette, tint);
     const zoomMediaHtml = images.length
       ? '<img src="' + images[0] + '" alt="" style="width:100%;height:100%;object-fit:cover;" />'
-      : silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+      : silhouetteSVG(modalProduct.silhouette, tint);
     document.getElementById('modalMedia').innerHTML = mediaHtml +
       '<span class="zoom-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg> ' +
-      (window.canHover ? 'حرّك الماوس للتكبير' : 'اضغط للتكبير') + '</span>' +
+      (window.canHover ? 'Hover to zoom' : 'Tap to zoom') + '</span>' +
       '<div class="zoom-pane" id="zoomPane">' + zoomMediaHtml + '</div>';
-    document.getElementById('modalCode').textContent = modalProduct.id;
-    document.getElementById('modalTitle').textContent = modalProduct.name;
-    document.getElementById('modalColorway').textContent = modalProduct.colorway;
-    document.getElementById('modalPrice').textContent = modalProduct.price + ' دينار';
-    document.getElementById('modalDesc').textContent = modalProduct.desc;
-    document.getElementById('modalMsg').style.display = 'none';
-    document.getElementById('modalMoreLink').href = '/product.html?id=' + modalProduct.id;
+  }
 
-    renderSpecSection('fitList', modalProduct.fit);
-    renderSpecSection('careList', modalProduct.care);
-    document.getElementById('modalMeta').textContent = 'كود: ' + modalProduct.id + ' · اللون: ' + modalProduct.colorway;
-
+  function renderModalSizes() {
     const sizeRow = document.getElementById('sizeRow');
     sizeRow.innerHTML = '';
-    Object.keys(modalProduct.sizes).forEach((sz) => {
-      const stock = modalProduct.sizes[sz];
+    modalSize = null;
+    const sizes = CAT.sizes(modalProduct, modalColor);
+    Object.keys(sizes).forEach((sz) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'size-btn';
       btn.textContent = sz;
-      if (stock === 0) btn.disabled = true;
+      if (!sizes[sz]) btn.disabled = true;
       btn.addEventListener('click', () => {
         modalSize = sz;
         Array.from(sizeRow.children).forEach((b) => b.classList.remove('selected'));
@@ -1071,13 +1096,45 @@
       });
       sizeRow.appendChild(btn);
     });
+    const soldOut = CAT.totalStock(modalProduct, modalColor) === 0;
+    const addBtn = document.getElementById('addToCartBtn');
+    addBtn.disabled = soldOut;
+    addBtn.textContent = soldOut ? 'Sold Out' : 'Add to Cart';
+  }
+
+  function setModalColor(colorKey) {
+    modalColor = CAT.color(modalProduct, colorKey).key;
+    const colorName = CAT.colorName(modalProduct, modalColor);
+    document.getElementById('modalColorway').textContent = colorName;
+    document.getElementById('modalColorName').textContent = colorName;
+    document.getElementById('modalMeta').textContent = 'Code: ' + modalProduct.id + ' · Colour: ' + colorName;
+    document.getElementById('modalMoreLink').href = '/product.html?id=' + modalProduct.id + '&c=' + modalColor;
+    const sw = document.getElementById('modalSwatches');
+    sw.innerHTML = CAT.swatchesHtml(modalProduct, modalColor, 'lg');
+    Array.from(sw.querySelectorAll('.swatch')).forEach((b) => {
+      b.addEventListener('click', () => setModalColor(b.dataset.color));
+    });
+    renderModalMedia();
+    renderModalSizes();
+    document.getElementById('modalMsg').style.display = 'none';
+  }
+
+  function openModal(id, colorKey) {
+    modalProduct = findProduct(id);
+    document.getElementById('modalCode').textContent = modalProduct.id;
+    document.getElementById('modalTitle').textContent = modalProduct.name;
+    document.getElementById('modalPrice').textContent = modalProduct.price + ' JD';
+    document.getElementById('modalDesc').textContent = modalProduct.desc;
+    renderSpecSection('fitList', modalProduct.fit);
+    renderSpecSection('careList', modalProduct.care);
+    setModalColor(colorKey || CAT.defaultKey(modalProduct));
 
     document.getElementById('modalOverlay').classList.add('open');
     if (window.gtag) {
       gtag('event', 'view_item', {
         currency: 'JOD',
         value: modalProduct.price,
-        items: [{ item_id: modalProduct.id, item_name: modalProduct.name, price: modalProduct.price, item_category: modalProduct.silhouette }]
+        items: [{ item_id: modalProduct.id, item_name: modalProduct.name, price: modalProduct.price, item_category: modalProduct.silhouette, item_variant: modalColor }]
       });
     }
   }
@@ -1106,10 +1163,10 @@
     if (!modalProduct) return;
     // On hover-capable desktops the magnifier already shows on hover,
     // so a click there opens the full lightbox for an even closer look.
-    const lbImages = (modalProduct.images && modalProduct.images.length) ? modalProduct.images : (modalProduct.img ? [modalProduct.img] : []);
+    const lbImages = CAT.images(modalProduct, modalColor);
     document.getElementById('lightboxMedia').innerHTML = lbImages.length
       ? '<img src="' + lbImages[0] + '" alt="" style="max-width:100%;max-height:100%;object-fit:contain;" />'
-      : silhouetteSVG(modalProduct.silhouette, modalProduct.swatch);
+      : silhouetteSVG(modalProduct.silhouette, CAT.swatch(modalProduct, modalColor));
     document.getElementById('lightbox').classList.add('open');
   });
 
@@ -1170,37 +1227,43 @@
     } catch (e) { /* purely cosmetic — never let this break the actual add-to-cart flow */ }
   }
 
-  document.getElementById('addToCartBtn').addEventListener('click', () => {
-    if (!modalSize) {
-      const msg = document.getElementById('modalMsg');
-      msg.textContent = 'اختر مقاس أول.';
-      msg.style.display = 'block';
-      return;
-    }
-    const existing = cart.find((l) => l.id === modalProduct.id && l.size === modalSize);
+  function addModalItemToCart() {
+    const p = modalProduct, color = modalColor, size = modalSize;
+    const existing = cart.find((l) => l.id === p.id && l.color === color && l.size === size);
     const currentQty = existing ? existing.qty : 0;
-    const stock = modalProduct.sizes[modalSize];
-    if (currentQty + 1 > stock) {
+    if (currentQty + 1 > CAT.stock(p, color, size)) {
       const msg = document.getElementById('modalMsg');
-      msg.textContent = 'ما في كمية كافية من هالمقاس.';
+      msg.textContent = 'Only a few left in that size.';
       msg.style.display = 'block';
       return;
     }
     if (existing) existing.qty += 1;
-    else cart.push({ id: modalProduct.id, size: modalSize, qty: 1 });
+    else cart.push({ id: p.id, color: color, size: size, qty: 1 });
     saveCart(cart);
     updateCartBadge();
     flyToCart(document.getElementById('modalMedia'));
     document.getElementById('modalOverlay').classList.remove('open');
-    if (window.DirbalkToast) DirbalkToast.success('انضافت للسلة — ' + modalProduct.name + ' (' + modalSize + ')');
+    if (window.DirbalkToast) DirbalkToast.success('Piece added — ' + p.name + ' · ' + CAT.colorName(p, color) + ' (' + size + ')');
     playAddSound();
     if (window.gtag) {
       gtag('event', 'add_to_cart', {
         currency: 'JOD',
-        value: modalProduct.price,
-        items: [{ item_id: modalProduct.id, item_name: modalProduct.name, price: modalProduct.price, item_variant: modalSize, quantity: 1 }]
+        value: p.price,
+        items: [{ item_id: p.id, item_name: p.name, price: p.price, item_variant: color + '/' + size, quantity: 1 }]
       });
     }
+  }
+
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    if (!modalSize) {
+      const msg = document.getElementById('modalMsg');
+      msg.textContent = 'Please select a size first.';
+      msg.style.display = 'block';
+      return;
+    }
+    /* buying needs an account — register popup opens if not logged in,
+       and the item is added right after registering */
+    DirbalkAuth.require(addModalItemToCart);
   });
 
   /* ---------------- cart drawer ---------------- */
@@ -1208,27 +1271,29 @@
     const container = document.getElementById('cartItems');
     container.innerHTML = '';
     if (cart.length === 0) {
-      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">السلة نايمة.</p><p>لسا ما اخترت قطعة — <a href="/shop.html">شوف الكوليكشن</a></p></div>';
+      container.innerHTML = '<div class="cart-empty"><svg class="ce-icon" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.3"><path d="M6 6h15l-1.5 9h-12z" opacity="0.5"/><circle cx="9" cy="20" r="1" opacity="0.5"/><circle cx="18" cy="20" r="1" opacity="0.5"/><path d="M3 3h3l1 3" opacity="0.5"/><path d="M9 10l2 2 4-4" opacity="0.9"/></svg><p class="ce-title">Nothing here yet.</p><p>Start with <a href="/shop.html">Collection 01</a>.</p></div>';
     } else {
       cart.forEach((line) => {
         const p = findProduct(line.id);
         if (!p) return;
+        CAT.normLine(line);
+        const lineImg = CAT.lineImage(p, line.color);
         const row = document.createElement('div');
         row.className = 'cart-item';
         row.innerHTML =
-          '<div class="cart-item-media">' + (p.img ? '<img src="' + p.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, p.swatch)) + '</div>' +
+          '<div class="cart-item-media">' + (lineImg ? '<img src="' + lineImg + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />' : silhouetteSVG(p.silhouette, CAT.swatch(p, line.color))) + '</div>' +
           '<div class="cart-item-info">' +
           '<p class="cart-item-name">' + p.name + '</p>' +
-          '<p class="cart-item-size">مقاس ' + line.size + '</p>' +
+          '<p class="cart-item-size">' + CAT.colorName(p, line.color) + ' · Size ' + line.size + '</p>' +
           '<div class="cart-item-row">' +
           '<div class="qty-controls">' +
-          '<button type="button" class="qty-btn" data-action="dec" aria-label="إنقاص الكمية">−</button>' +
+          '<button type="button" class="qty-btn" data-action="dec" aria-label="Decrease quantity">−</button>' +
           '<span>' + line.qty + '</span>' +
-          '<button type="button" class="qty-btn" data-action="inc" aria-label="زيادة الكمية">+</button>' +
+          '<button type="button" class="qty-btn" data-action="inc" aria-label="Increase quantity">+</button>' +
           '</div>' +
           '<span class="cart-item-price">' + (p.price * line.qty) + ' JD</span>' +
           '</div>' +
-          '<button type="button" class="remove-btn" data-action="remove">إزالة</button>' +
+          '<button type="button" class="remove-btn" data-action="remove">Remove</button>' +
           '</div>';
 
         row.querySelector('[data-action="dec"]').addEventListener('click', () => {
@@ -1237,8 +1302,8 @@
           saveCart(cart); renderCart(); updateCartBadge();
         });
         row.querySelector('[data-action="inc"]').addEventListener('click', () => {
-          const stock = p.sizes[line.size] || 0;
-          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('ما في كمية كافية.'); return; }
+          const stock = CAT.stock(p, line.color, line.size);
+          if (line.qty + 1 > stock) { if (window.DirbalkToast) DirbalkToast.warning('Only a few left.'); return; }
           line.qty += 1;
           saveCart(cart); renderCart(); updateCartBadge();
         });
@@ -1256,6 +1321,13 @@
     else checkoutBtn.classList.remove('disabled');
   }
 
+  document.getElementById('checkoutBtn').addEventListener('click', (e) => {
+    if (DirbalkAuth.isLoggedIn()) return;
+    e.preventDefault();
+    if (!cart.length) return;
+    DirbalkAuth.require(() => { window.location.href = '/checkout.html'; });
+  });
+
   document.getElementById('cartBtn').addEventListener('click', () => {
     renderCart();
     document.getElementById('cartDrawer').classList.add('open');
@@ -1269,8 +1341,10 @@
   }
 
   /* ---------------- account status ---------------- */
-  try {
-    if (localStorage.getItem('dirbalk_logged_in') === '1') {
+  let logoutBound = false;
+  function renderAccount() {
+    try {
+      if (localStorage.getItem('dirbalk_logged_in') !== '1') return;
       const name = localStorage.getItem('dirbalk_name') || '';
       const first = name.trim().split(' ')[0] || '';
       document.getElementById('accountLink').style.display = 'none';
@@ -1283,17 +1357,21 @@
       document.getElementById('userChipAvatarM').textContent = first ? first.charAt(0).toUpperCase() : '?';
       document.getElementById('userChipNameM').textContent = first;
 
+      if (logoutBound) return;
+      logoutBound = true;
       function doLogout() {
         try {
           ['dirbalk_logged_in', 'dirbalk_gender', 'dirbalk_name', 'dirbalk_pending_verification', 'dirbalk_email', 'dirbalk_phone']
             .forEach((k) => localStorage.removeItem(k));
         } catch (e) { /* ignore */ }
-        window.location.href = '/';
+        window.location.reload();
       }
       document.getElementById('userChipLogout').addEventListener('click', doLogout);
       document.getElementById('userChipLogoutM').addEventListener('click', doLogout);
-    }
-  } catch (e) { /* ignore */ }
+    } catch (e) { /* ignore */ }
+  }
+  renderAccount();
+  window.addEventListener('dirbalk:login', renderAccount);
 
   /* ---------------- mobile hamburger + side menu ---------------- */
   const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -1380,12 +1458,12 @@
 
 <footer class="site-footer">
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/shipping.html">Shipping &amp; Returns</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/signin.html">Welcome Back</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>

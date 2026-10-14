@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <script src="/assets/theme.js"></script>
-<script src="/assets/lang-switch.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
-<script src="/assets/password-ux.js"></script>
+<script src="/assets/auth-gate.js"></script>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تسجيل الدخول — DIRBALَK</title>
-<meta name="description" content="DIRBALK — دير بالك على حالك. سجّل الدخول لحسابك.">
+<title>Sign In — DIRBALK</title>
+<meta name="description" content="DIRBALK — Take care of yourself. Sign in to your account.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -154,7 +153,7 @@
   }
 
   .field {
-    text-align: right;
+    text-align: left;
   }
 
   label {
@@ -173,7 +172,7 @@
     font-size: 16px;
     letter-spacing: 0px;
     outline: none;
-    text-align: right;
+    text-align: left;
     font-family: Arial, sans-serif;
     border-radius: 0;
     width: 100%;
@@ -300,7 +299,7 @@
 
 <header>
   <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="القائمة" aria-expanded="false">
+    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
@@ -308,13 +307,13 @@
 </header>
 
 <div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="القائمة الرئيسية">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="إغلاق القائمة">✕</button>
+<nav id="sideMenuPanel" aria-label="Menu">
+  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
   <div class="side-menu-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/me.html">حسابي</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/me.html">My Account</a>
   </div>
 </nav>
 
@@ -324,35 +323,29 @@
   <p class="brand-arabic" data-reveal data-reveal-delay="0.1">دير بالك على حالك</p>
   <div class="divider" data-reveal data-reveal-delay="0.15"></div>
 
-  <h1 data-reveal data-reveal-delay="0.2" data-motion="type">تسجيل الدخول لحسابك</h1>
+  <h1 data-reveal data-reveal-delay="0.2" data-motion="type">Welcome Back</h1>
+
+  <p class="signin-note" style="font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.9;margin:-6px 0 22px;text-align:center;">No password — enter your email and we'll send you a one-tap login link.</p>
 
   <form id="signin-form" novalidate>
     <div class="form-group">
       <div class="field">
-        <label for="email">البريد الإلكتروني</label>
+        <label for="email">Email</label>
         <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
         <p class="field-msg" id="email-msg"></p>
-      </div>
-      <div class="field">
-        <label for="password">كلمة المرور</label>
-        <div class="password-wrap">
-          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
-          <button type="button" class="pw-toggle" data-target="password" aria-label="إظهار كلمة المرور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2.3-3.3 5.4-5 8-5s5.7 1.7 8 5"/><path d="M14.8 6.3l1.1-1.6"/><path d="M17.3 7.6l1.5-1.2"/><path d="M19.4 9.6l1.7-0.6"/></svg></button>
-        </div>
-        <p class="field-msg" id="password-msg"></p>
-        <a href="forgot-password.html" class="forgot-link">نسيت كلمة المرور؟</a>
       </div>
     </div>
 
     <p class="form-error" id="form-error"></p>
+    <p class="form-ok" id="form-ok" style="display:none;color:#C9A84C;font-size:12.5px;line-height:1.9;text-align:center;margin-top:12px;"></p>
 
     <button type="submit" class="submit-btn" id="submit-btn">
-      تسجيل الدخول
+      Send me a login link
     </button>
   </form>
 
   <p class="no-account">
-    ما عندك حساب؟ <a href="/">أنشئ حساب جديد</a>
+    New here? <a href="#" id="openRegister">Register in seconds</a>
   </p>
 
   <p class="footer-text">COLLECTION 01 · WINTER 2026</p>
@@ -362,23 +355,24 @@
 <script>
 (function () {
   const form = document.getElementById('signin-form');
-  if (window.DirbalkPassword) DirbalkPassword.attachCapsLock('password');
-
-  document.querySelectorAll('.pw-toggle').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      const showing = target.type === 'text';
-      target.type = showing ? 'password' : 'text';
-      btn.classList.toggle('active', !showing);
-      btn.classList.remove('winking');
-      void btn.offsetWidth;
-      btn.classList.add('winking');
-      setTimeout(() => btn.classList.remove('winking'), 450);
-    });
-  });
-
   const btn = document.getElementById('submit-btn');
   const formError = document.getElementById('form-error');
+  const formOk = document.getElementById('form-ok');
+  const BTN_TEXT = 'Send me a login link';
+
+  /* already logged in → nothing to do here */
+  try {
+    if (localStorage.getItem('dirbalk_logged_in') === '1') {
+      formOk.innerHTML = 'You\'re already signed in. <a href="/shop.html" style="color:#C9A84C;">Go to the collection →</a>';
+      formOk.style.display = 'block';
+    }
+  } catch (e) { /* ignore */ }
+
+  /* new here → the same quick register popup used before buying */
+  document.getElementById('openRegister').addEventListener('click', function (e) {
+    e.preventDefault();
+    DirbalkAuth.require(function () { window.location.href = '/shop.html'; });
+  });
 
   function showFieldError(id, message) {
     const input = document.getElementById(id);
@@ -389,11 +383,10 @@
   }
 
   function clearAllErrors() {
-    ['email', 'password'].forEach((id) => {
-      document.getElementById(id).classList.remove('field-error');
-      document.getElementById(id + '-msg').style.display = 'none';
-    });
+    document.getElementById('email').classList.remove('field-error');
+    document.getElementById('email-msg').style.display = 'none';
     formError.style.display = 'none';
+    formOk.style.display = 'none';
   }
 
   let isSubmitting = false;
@@ -403,65 +396,37 @@
     clearAllErrors();
 
     const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = document.getElementById('password').value;
-
-    let valid = true;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showFieldError('email', 'الرجاء إدخال بريد إلكتروني صحيح.');
-      valid = false;
+      showFieldError('email', 'Please enter a valid email.');
+      return;
     }
-    if (!password) {
-      showFieldError('password', 'الرجاء إدخال كلمة المرور.');
-      valid = false;
-    }
-    if (!valid) return;
 
     isSubmitting = true;
     btn.disabled = true;
-    btn.textContent = 'جاري الدخول...';
-    if (window.gtag) gtag('event', 'login_attempt');
+    btn.textContent = 'Sending...';
+    if (window.gtag) gtag('event', 'login_attempt', { method: 'email_link' });
 
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', email, password, lang: 'ar' }),
+        body: JSON.stringify({ kind: 'link', email }),
       });
       const result = await res.json();
-
-      if (result.status === 'success') {
-        if (window.gtag) {
-          gtag('event', 'login_success');
-          gtag('event', 'login', { method: 'password' });
-        }
-        try {
-          localStorage.setItem('dirbalk_logged_in', '1');
-          localStorage.setItem('dirbalk_name', result.name || '');
-          localStorage.setItem('dirbalk_gender', result.gender || '');
-          localStorage.setItem('dirbalk_email', result.email || email);
-          localStorage.setItem('dirbalk_phone', result.phone || '');
-          localStorage.setItem('dirbalk_has_password', '1');  // a successful password login proves the account has one
-          localStorage.removeItem('dirbalk_pending_verification');
-        } catch (err) { /* ignore */ }
-        if (window.DirbalkToast) DirbalkToast.success('أهلاً فيك من جديد.');
-        window.location.href = '/';
-      } else {
-        if (window.gtag) gtag('event', 'login_error', { reason: result.message || 'unknown' });
-        formError.textContent = result.message || 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      if (result.status === 'error') {
+        formError.textContent = result.message || 'Something went wrong, please try again.';
         formError.style.display = 'block';
-        if (window.DirbalkToast) DirbalkToast.error(result.message || 'تسجيل الدخول ما نجح.');
-        isSubmitting = false;
-        btn.disabled = false;
-        btn.textContent = 'تسجيل الدخول';
+      } else {
+        formOk.textContent = result.message || 'If this email is registered, a login link is on its way. Check your inbox (and spam).';
+        formOk.style.display = 'block';
       }
     } catch (err) {
-      formError.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
+      formError.textContent = 'Something went wrong, please try again.';
       formError.style.display = 'block';
-      if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
-      isSubmitting = false;
-      btn.disabled = false;
-      btn.textContent = 'تسجيل الدخول';
     }
+    isSubmitting = false;
+    btn.disabled = false;
+    btn.textContent = BTN_TEXT;
   });
 
   /* ---------------- mobile hamburger + side menu ---------------- */
@@ -531,12 +496,12 @@
 </style>
 <footer class="site-footer">
   <nav class="footer-links">
-    <a href="/">الرئيسية</a>
-    <a href="/shop.html">الكوليكشن</a>
-    <a href="/about.html">عن DIRBALK</a>
-    <a href="/shipping.html">الشحن والإرجاع</a>
-    <a href="/privacy.html">سياسة الخصوصية</a>
-    <a href="/signin.html">تسجيل الدخول</a>
+    <a href="/">Home</a>
+    <a href="/shop.html">Collection 01</a>
+    <a href="/about.html">About</a>
+    <a href="/shipping.html">Shipping &amp; Returns</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/signin.html">Welcome Back</a>
   </nav>
   <img src="/logo.png" alt="DIRBALK" class="footer-logo" />
 </footer>
