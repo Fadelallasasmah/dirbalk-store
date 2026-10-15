@@ -1,5 +1,6 @@
 // DIRBALK — public read proxy (shares one Vercel function, Hobby cap = 12)
 //   - kind: "stock"       → live stock per product / colour / size (action: "stock")
+//   - kind: "status"      → drop switch state { dropOpen } (action: "siteStatus")
 //   - kind: "getComments" → approved product comments
 //   - default             → passport public layer (legacy; Collection 01 has no passports)
 // All public, unauthenticated, PII-free reads.
@@ -11,7 +12,9 @@ export default async function handler(req, res) {
   }
   try {
     const kind = (req.body && req.body.kind) || '';
-    const payload = kind === 'stock'
+    const payload = kind === 'status'
+      ? { action: 'siteStatus' }
+      : kind === 'stock'
       ? { action: 'stock' }
       : kind === 'getComments'
         ? { action: 'getComments', product: (req.body && req.body.product) || '' }
@@ -23,7 +26,9 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload)
     });
     const data = await upstream.json();
-    res.setHeader('Cache-Control', kind === 'stock' ? 's-maxage=15, stale-while-revalidate=30' : 's-maxage=60, stale-while-revalidate=300');
+    res.setHeader('Cache-Control', kind === 'stock' ? 's-maxage=15, stale-while-revalidate=30'
+      : kind === 'status' ? 's-maxage=20, stale-while-revalidate=40'
+      : 's-maxage=60, stale-while-revalidate=300');
     return res.status(200).json(data);
   } catch (err) {
     return res.status(200).json({ status: 'error', message: 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.' });
