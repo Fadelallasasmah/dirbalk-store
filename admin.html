@@ -335,6 +335,19 @@
       </div>
     </div>
 
+    <div class="invite-section" id="dropSection">
+      <h2>وضع الدروب</h2>
+      <p class="invite-hint">
+        لما الدروب <strong>مفتوح</strong>: أي حدا بيفوت على dirbalk.com بيروح مباشرة على صفحة الشوب.<br>
+        لما يكون <strong>مسكّر</strong>: الصفحة الرئيسية بتضل صفحة الانتظار.<br>
+        التغيير بيوصل للزوار خلال حوالي نص دقيقة. (بتقدر كمان تغيّره من تاب Settings بالشيت.)
+      </p>
+      <div class="invite-box">
+        <p class="invite-status" id="dropState" style="display:block;">...</p>
+        <button type="button" class="invite-btn" id="dropBtn" disabled>...</button>
+      </div>
+    </div>
+
     <div class="invite-section" id="launchSection">
       <h2>إعلان الإطلاق</h2>
       <p class="invite-hint">
@@ -738,6 +751,50 @@
         status.classList.add('err');
         status.textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
         if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+      });
+  });
+
+  /* ---------------- drop switch ---------------- */
+  let dropOpen = false;
+  function renderDrop() {
+    const st = document.getElementById('dropState');
+    const btn = document.getElementById('dropBtn');
+    st.textContent = dropOpen ? 'الدروب هلأ: مفتوح — الزوار رايحين مباشرة على الشوب.' : 'الدروب هلأ: مسكّر — الزوار بيشوفوا صفحة الانتظار.';
+    btn.textContent = dropOpen ? 'سكّر الدروب' : 'افتح الدروب';
+    btn.disabled = false;
+  }
+  fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'status' }) })
+    .then((r) => r.json())
+    .then((res) => { dropOpen = !!(res && res.dropOpen); renderDrop(); })
+    .catch(() => { document.getElementById('dropState').textContent = 'ما قدرنا نجيب الحالة — حدّث الصفحة.'; });
+
+  document.getElementById('dropBtn').addEventListener('click', () => {
+    const next = !dropOpen;
+    if (!window.confirm(next ? 'رح تفتح الدروب: كل الزوار رح يروحوا مباشرة على الشوب. أكيد؟' : 'رح تسكّر الدروب: الصفحة الرئيسية بترجع صفحة انتظار. أكيد؟')) return;
+    let key = '';
+    try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+    const btn = document.getElementById('dropBtn');
+    btn.disabled = true;
+    btn.textContent = '...';
+    fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: 'setDrop', key, open: next }),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.status !== 'success') {
+          if (window.DirbalkToast) DirbalkToast.error(res.message || 'حدث خطأ مؤقت.');
+          renderDrop();
+          return;
+        }
+        dropOpen = !!res.dropOpen;
+        renderDrop();
+        if (window.DirbalkToast) DirbalkToast.success(dropOpen ? 'الدروب مفتوح.' : 'الدروب مسكّر.');
+      })
+      .catch(() => {
+        if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت، يرجى المحاولة لاحقًا.');
+        renderDrop();
       });
   });
 

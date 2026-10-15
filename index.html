@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+<script>
+/* Drop switch: while a drop is open (Settings sheet / admin page), the
+   homepage sends everyone straight to the shop. ?home=1 skips it.
+   The page stays hidden for at most 900ms while we check, so visitors
+   never see the waitlist flash before the redirect. */
+(function () {
+  if (/[?&]home=1/.test(location.search)) return;
+  var d = document.documentElement, done = false;
+  d.classList.add('dbk-wait');
+  function show() { if (!done) { done = true; d.classList.remove('dbk-wait'); } }
+  setTimeout(show, 900);
+  fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'status' }) })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+      var open = !!(res && res.dropOpen);
+      if (open) location.replace('/shop.html'); else show();
+    })
+    .catch(show);
+})();
+</script>
+<style>html.dbk-wait body{opacity:0}</style>
 <script src="/assets/theme.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
