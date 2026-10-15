@@ -2,26 +2,45 @@
 <html lang="en" dir="ltr">
 <head>
 <script>
-/* Drop switch: while a drop is open (Settings sheet / admin page), the
-   homepage sends everyone straight to the shop. ?home=1 skips it.
-   The page stays hidden for at most 900ms while we check, so visitors
-   never see the waitlist flash before the redirect. */
+/* Drop switch (Settings sheet / admin page).
+   While a drop is open:
+   - a visitor arriving from OUTSIDE the site (Instagram, a link, typing
+     dirbalk.com) is sent straight to the shop;
+   - a visitor who clicks Home from inside the site goes to the drop
+     homepage (/home.html).
+   ?home=1 always stays here (and shows a "Shop Collection 01" entrance
+   instead of the waitlist while the drop is open). The page is hidden for at most 900ms while we
+   check, so the waitlist never flashes before the redirect. */
 (function () {
-  if (/[?&]home=1/.test(location.search)) return;
   var d = document.documentElement, done = false;
+  var internal = false;
+  try { internal = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
   d.classList.add('dbk-wait');
   function show() { if (!done) { done = true; d.classList.remove('dbk-wait'); } }
   setTimeout(show, 900);
   fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'status' }) })
     .then(function (r) { return r.json(); })
     .then(function (res) {
-      var open = !!(res && res.dropOpen);
-      if (open) location.replace('/shop.html'); else show();
+      if (res && res.dropOpen) {
+        if (/[?&]home=1/.test(location.search)) { d.classList.add('drop-open'); }
+        else { location.replace(internal ? '/home.html' : '/shop.html'); return; }
+      }
+      show();
     })
     .catch(show);
 })();
 </script>
-<style>html.dbk-wait body{opacity:0}</style>
+<style>
+html.dbk-wait body{opacity:0}
+#dropEntrance{display:none;text-align:center}
+html.drop-open #dropEntrance{display:block}
+html.drop-open #form-section{display:none}
+#dropEntrance .drop-note{font-size:13px;line-height:1.9;color:rgba(255,255,255,0.6);margin:0 0 1.6rem}
+#dropEntrance .drop-btn{display:block;width:100%;max-width:360px;margin:0 auto 1.2rem;padding:15px;background:#C9A84C;color:#0a0a0a;text-decoration:none;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:.5px}
+#dropEntrance .drop-btn:hover{opacity:.9}
+#dropEntrance .drop-sub{font-size:11px;color:rgba(255,255,255,0.4)}
+#dropEntrance .drop-sub a{color:#C9A84C;text-decoration:none}
+</style>
 <script src="/assets/theme.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
@@ -674,6 +693,12 @@
   <p class="brand-arabic brand-phrase" data-reveal data-reveal-delay="0.15">دير بالك على حالك</p>
   <div class="divider" data-reveal data-reveal-delay="0.3"></div>
 
+
+  <div id="dropEntrance">
+    <p class="drop-note">Collection 01 is open.</p>
+    <a href="/shop.html" class="drop-btn">Shop Collection 01 →</a>
+    <p class="drop-sub">Already have an account? <a href="/signin.html">Sign in</a></p>
+  </div>
 
   <div id="form-section">
     <p class="description" data-reveal data-reveal-delay="0.42">

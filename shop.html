@@ -1333,6 +1333,8 @@
     document.getElementById('cartDrawer').classList.add('open');
     document.getElementById('cartOverlay').classList.add('open');
   });
+  /* /shop.html?cart=1 (cart icon on the drop homepage) opens the cart straight away */
+  if (/[?&]cart=1/.test(location.search)) document.getElementById('cartBtn').click();
   document.getElementById('cartClose').addEventListener('click', closeCart);
   document.getElementById('cartOverlay').addEventListener('click', closeCart);
   function closeCart() {
