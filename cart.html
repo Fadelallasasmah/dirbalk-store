@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your cart — DIRBALK</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/favicon-180.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-FMPZV540CP');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cairo:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
+<script src="/assets/site.js"></script>
+<style>
+  .cart-head { display: flex; align-items: baseline; gap: 14px; padding: 34px 0 26px; }
+  .cart-head .small { letter-spacing: .1em; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: clamp(26px, 4vw, 60px); align-items: start; padding-bottom: 70px; }
+
+  .lines { border-top: 1px solid var(--line); }
+  .line { display: grid; grid-template-columns: 104px minmax(0, 1fr) auto; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .line .ph { aspect-ratio: 4 / 5; display: block; }
+  .line .ph .sil { width: 70%; left: 15%; }
+  .line .nm { font-size: 14px; }
+  .line .mt { font-size: 12px; color: var(--muted); margin-top: 5px; display: flex; align-items: center; gap: 7px; }
+  .line .dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,.2); display: inline-block; }
+  .line .ea { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .ctrl { display: flex; align-items: center; gap: 18px; margin-top: 16px; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); }
+  .qty button { width: 34px; height: 34px; background: none; border: none; color: var(--ink); font-size: 15px; cursor: pointer; }
+  .qty button:disabled { opacity: .3; cursor: default; }
+  .qty span { min-width: 28px; text-align: center; font-size: 13px; }
+  .rm { background: none; border: none; color: var(--muted); font: inherit; font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .rm:hover { color: var(--ink); }
+  .line .tot { font-size: 14px; text-align: right; }
+  .warn { font-size: 11.5px; color: #a3412f; margin-top: 8px; }
+
+  .sum { background: var(--bg2); border: 1px solid var(--line); padding: 26px; position: sticky; top: 80px; }
+  .sum h2 { font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; margin-bottom: 18px; }
+  .row { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; }
+  .row .m { color: var(--muted); }
+  .row.total { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 16px; font-size: 15px; }
+  .sum .btn { margin-top: 20px; }
+  .sum .cont { display: block; text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 14px; text-decoration: underline; text-underline-offset: 3px; }
+  .sum ul { list-style: none; margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 8px; font-size: 11.5px; color: var(--muted); }
+  .sum li::before { content: "—"; margin-right: 8px; color: var(--amber); }
+
+  .empty { display: none; text-align: center; padding: 70px 0 110px; }
+  .empty.show { display: block; }
+  .empty p { color: var(--muted); margin: 12px 0 26px; font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .sum { position: static; }
+    .line { grid-template-columns: 84px minmax(0, 1fr); }
+    .line .tot { grid-column: 2; text-align: left; margin-top: -6px; }
+  }
+</style>
+</head>
+<body class="light">
+<div id="siteHeader"></div>
+
+<main>
+  <div class="wrap">
+    <div class="cart-head"><h1 class="t-l">Your cart</h1><span class="small" id="count"></span></div>
+
+    <div class="empty" id="empty">
+      <h2 class="t-m">Nothing here yet.</h2>
+      <p>Collection 01 is three pieces. Start with one.</p>
+      <a href="/shop.html" class="btn">Shop Collection 01</a>
+    </div>
+
+    <div class="layout" id="layout">
+      <div class="lines" id="lines"></div>
+      <aside class="sum">
+        <h2>Order summary</h2>
+        <div class="row"><span class="m">Subtotal</span><span id="sub">0 JD</span></div>
+        <div class="row"><span class="m">Shipping</span><span class="m">Calculated at checkout</span></div>
+        <div class="row total"><span>Total</span><span id="total">0 JD</span></div>
+        <button type="button" class="btn block" id="go">Proceed to checkout</button>
+        <a href="/shop.html" class="cont">Continue shopping</a>
+        <ul>
+          <li>Cash on delivery — pay when it arrives</li>
+          <li>We confirm your address on WhatsApp</li>
+          <li>Exchanges within 7 days</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<div id="siteFooter"></div>
+
+<script>
+(function () {
+  var S = window.DirbalkSite, CAT = window.DirbalkCatalog;
+  var stockLoaded = false;
+
+  function get() {
+    /* drop lines for products that no longer exist; old lines get their colour */
+    return S.cart.get().filter(function (l) { return S.find(l.id) && l.qty > 0; }).map(CAT.normLine);
+  }
+
+  function render() {
+    var cart = get();
+    var n = cart.reduce(function (s, l) { return s + l.qty; }, 0);
+    document.getElementById('count').textContent = n ? n + (n === 1 ? ' item' : ' items') : '';
+    document.getElementById('empty').classList.toggle('show', !cart.length);
+    document.getElementById('layout').style.display = cart.length ? '' : 'none';
+    var sub = 0, over = false;
+    document.getElementById('lines').innerHTML = cart.map(function (l, i) {
+      var p = S.find(l.id), href = '/product.html?id=' + p.id + '&c=' + l.color;
+      var max = CAT.stock(p, l.color, l.size);
+      var tooMany = stockLoaded && l.qty > max;
+      if (tooMany) over = true;
+      sub += p.price * l.qty;
+      return '<div class="line">' +
+        '<a class="ph" href="' + href + '">' + S.thumb(p, l.color) + '</a>' +
+        '<div>' +
+          '<a class="nm" href="' + href + '">' + S.esc(p.name) + '</a>' +
+          '<p class="mt"><span class="dot" style="background:' + CAT.swatch(p, l.color) + '"></span>' + S.esc(CAT.colorName(p, l.color)) + ' · Size ' + l.size + '</p>' +
+          '<p class="ea">' + p.price + ' JD each</p>' +
+          '<div class="ctrl">' +
+            '<div class="qty"><button type="button" data-a="dec" data-i="' + i + '" aria-label="One less">−</button><span>' + l.qty + '</span>' +
+            '<button type="button" data-a="inc" data-i="' + i + '" aria-label="One more"' + (stockLoaded && l.qty >= max ? ' disabled' : '') + '>+</button></div>' +
+            '<button type="button" class="rm" data-a="rm" data-i="' + i + '">Remove</button>' +
+          '</div>' +
+          (tooMany ? '<p class="warn">' + (max ? 'Only ' + max + ' left in this size — lower the quantity to continue.' : 'This size just sold out — remove it to continue.') + '</p>' : '') +
+        '</div>' +
+        '<div class="tot">' + (p.price * l.qty) + ' JD</div>' +
+      '</div>';
+    }).join('');
+    document.getElementById('sub').textContent = sub + ' JD';
+    document.getElementById('total').textContent = sub + ' JD';
+    var go = document.getElementById('go');
+    go.disabled = over;
+    S.updateCount();
+  }
+
+  document.getElementById('lines').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var cart = get(), i = +b.getAttribute('data-i'), l = cart[i]; if (!l) return;
+    var a = b.getAttribute('data-a');
+    if (a === 'inc') {
+      if (l.qty + 1 > CAT.stock(S.find(l.id), l.color, l.size)) { if (window.DirbalkToast) DirbalkToast.warning('Only a few left in that size.'); return; }
+      l.qty += 1;
+    }
+    if (a === 'dec') l.qty -= 1;
+    if (a === 'rm' || l.qty <= 0) cart.splice(i, 1);
+    S.cart.set(cart);
+    render();
+  });
+
+  /* buying needs an account — register popup if needed, then checkout */
+  document.getElementById('go').addEventListener('click', function () {
+    if (!get().length) return;
+    DirbalkAuth.require(function () { location.href = '/checkout.html'; });
+  });
+
+  window.addEventListener('storage', render);
+  render();
+  CAT.loadStock().then(function (ok) { if (ok) { stockLoaded = true; render(); } });
+  if (window.gtag) {
+    var c = get();
+    gtag('event', 'view_cart', { currency: 'JOD', value: c.reduce(function (s, l) { return s + S.find(l.id).price * l.qty; }, 0) });
+  }
+})();
+</script>
+</body>
+</html>

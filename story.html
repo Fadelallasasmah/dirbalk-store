@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal — The story of Collection 01 · DIRBALK</title>
+<meta name="description" content="Three places. One collection. The story behind DIRBALK Collection 01 — at the source, three sets, and a slower day.">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/favicon-180.png">
+<meta property="og:title" content="DIRBALK — The story">
+<meta property="og:image" content="https://dirbalk.com/og-image.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-FMPZV540CP');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cairo:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
+<script src="/assets/site.js"></script>
+<style>
+  /* ============ PHOTOS ============
+     Swap any photo by uploading a new one to /img/ with the same
+     file name — nothing here needs to change. */
+  .hero { position: relative; height: clamp(420px, 52vw, 680px); }
+  .hero > img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 25%; }
+  .hero .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,10,.9) 0%, rgba(10,10,10,.55) 35%, rgba(10,10,10,0) 65%); }
+  .hero .copy { position: absolute; left: 0; right: 0; bottom: clamp(36px, 7vw, 90px); }
+  .hero .ar { color: var(--amber); font-size: 16px; margin-top: 14px; text-align: left; }
+  .hero .lead { max-width: 380px; margin-top: 14px; }
+
+  .toc { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+  .toc a { padding: 22px var(--pad); border-right: 1px solid var(--line); display: flex; gap: 16px; align-items: baseline; transition: background .2s; }
+  .toc a:last-child { border-right: none; }
+  .toc a:hover { background: var(--bg2); }
+  .toc b { font-weight: 400; color: var(--amber); font-size: 12px; letter-spacing: .1em; }
+  .toc span { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+
+  .ch { padding: clamp(50px, 8vw, 110px) 0; border-bottom: 1px solid var(--line); scroll-margin-top: 60px; }
+  .ch-head { display: grid; grid-template-columns: 120px minmax(0, 1fr) minmax(0, 1fr); gap: 30px; align-items: start; margin-bottom: clamp(26px, 4vw, 46px); }
+  .ch-num { font-size: clamp(40px, 5vw, 64px); font-weight: 300; color: var(--amber); line-height: 1; }
+  .ch-head .lead { max-width: 440px; }
+  .ch-head .lead + .lead { margin-top: 12px; }
+
+  .g-source { display: grid; grid-template-columns: 1.3fr 1fr 1fr; grid-template-rows: repeat(2, clamp(160px, 19vw, 280px)); gap: 6px; }
+  .g-source .ph:first-child { grid-row: span 2; }
+  .g-sets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .g-sets figure .ph { aspect-ratio: 3 / 4; }
+  .g-sets figcaption { padding-top: 12px; display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .g-sets figcaption span { color: var(--muted); letter-spacing: .04em; text-transform: none; }
+  .g-looks { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+  .g-looks .ph { aspect-ratio: 3 / 4; }
+  .g-slow { display: grid; grid-template-columns: 1.6fr 1fr 1fr; grid-template-rows: repeat(2, clamp(160px, 19vw, 280px)); gap: 6px; }
+  .g-slow .ph:first-child { grid-row: span 2; }
+  .g-slow .ph:last-child { grid-column: span 2; }
+  .quote { text-align: center; padding: clamp(60px, 9vw, 120px) var(--pad); }
+  .quote .ar { font-size: clamp(26px, 4vw, 44px); color: var(--amber); text-align: center; }
+  .quote p.lead { margin: 16px auto 30px; max-width: 420px; }
+
+  @media (max-width: 860px) {
+    .toc { grid-template-columns: 1fr; }
+    .toc a { border-right: none; border-bottom: 1px solid var(--line); padding: 16px var(--pad); }
+    .toc a:last-child { border-bottom: none; }
+    .ch-head { grid-template-columns: 1fr; gap: 12px; }
+    .g-source, .g-slow { grid-template-columns: 1fr 1fr; grid-template-rows: clamp(240px, 70vw, 380px) clamp(150px, 42vw, 240px) clamp(150px, 42vw, 240px); }
+    .g-source .ph:first-child, .g-slow .ph:first-child { grid-column: span 2; grid-row: auto; }
+    .g-slow .ph:last-child { grid-column: auto; }
+    .g-sets { grid-template-columns: 1fr; gap: 26px; }
+    .g-looks { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div id="siteHeader"></div>
+
+<main>
+  <section class="hero">
+    <img src="/img/hero-2.jpg" alt="DIRBALK Collection 01" loading="eager">
+    <div class="shade"></div>
+    <div class="copy wrap">
+      <p class="eyebrow">Journal · The story</p>
+      <h1 class="t-xl">Three places.<br>One collection.</h1>
+      <p class="ar">دير بالك على حالك.</p>
+      <p class="lead">We say it to the people we love, just before they leave. Collection 01 is that sentence, made into something you can wear.</p>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Chapters">
+    <a href="#source"><b>01</b><span>At the source</span></a>
+    <a href="#sets"><b>02</b><span>Three sets</span></a>
+    <a href="#slow"><b>03</b><span>A slower day</span></a>
+  </nav>
+
+  <section class="ch" id="source">
+    <div class="wrap">
+      <div class="ch-head">
+        <span class="ch-num">01</span>
+        <h2 class="t-l">At the source.</h2>
+        <div>
+          <p class="lead">Before it's a jacket, it's a roll of 13oz raw denim and a lot of decisions nobody will see. Which thread. Which button. Where the stitch turns amber.</p>
+          <p class="lead">We started where it begins — inside the process — because that's where the care goes in.</p>
+        </div>
+      </div>
+      <div class="g-source">
+        <div class="ph zoom"><img src="/img/source-1.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/source-2.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/source-3.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/source-4.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-1.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="sets">
+    <div class="wrap">
+      <div class="ch-head">
+        <span class="ch-num">02</span>
+        <h2 class="t-l">Three sets.<br>Same feeling.</h2>
+        <div>
+          <p class="lead">Black, blue, indigo. Three people, three ways of wearing the same three pieces — a tee, wide-leg denim, an oversized jacket.</p>
+          <p class="lead">Different on everyone. That was the point.</p>
+        </div>
+      </div>
+      <div class="g-sets">
+        <figure><a href="/shop.html" class="ph zoom" style="display:block"><img src="/img/set-black.jpg" alt="Black set" loading="lazy"></a><figcaption>Black set<span>T-Shirt / Pants / Jacket</span></figcaption></figure>
+        <figure><a href="/shop.html" class="ph zoom" style="display:block"><img src="/img/set-blue.jpg" alt="Blue set" loading="lazy"></a><figcaption>Blue set<span>T-Shirt / Pants / Jacket</span></figcaption></figure>
+        <figure><a href="/shop.html" class="ph zoom" style="display:block"><img src="/img/set-indigo.jpg" alt="Indigo set" loading="lazy"></a><figcaption>Indigo set<span>T-Shirt / Pants / Jacket</span></figcaption></figure>
+      </div>
+      <div class="g-looks">
+        <div class="ph zoom"><img src="/img/look-1.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/look-2.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/look-3.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/look-4.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/look-5.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/look-6.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="slow">
+    <div class="wrap">
+      <div class="ch-head">
+        <span class="ch-num">03</span>
+        <h2 class="t-l">A slower day.</h2>
+        <div>
+          <p class="lead">Same people, different setting. A blanket, something to eat, nowhere to be. The kind of day you only notice once it's over.</p>
+          <p class="lead">Clothes made to move — and made to stay.</p>
+        </div>
+      </div>
+      <div class="g-slow">
+        <div class="ph zoom"><img src="/img/slow-1.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/slow-2.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/slow-3.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/slow-4.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote">
+    <p class="ar">دير بالك على حالك.</p>
+    <p class="lead">Take care of yourself. That's all it ever meant.</p>
+    <a href="/shop.html" class="btn ghost">Shop Collection 01 →</a>
+  </section>
+</main>
+
+<div id="siteFooter"></div>
+</body>
+</html>

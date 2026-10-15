@@ -1,435 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<script src="/assets/theme.js"></script>
-<script src="/assets/motion.js"></script>
-<script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About DIRBALK</title>
-<meta name="description" content="DIRBALK — Take care of yourself. From Amman.">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://dirbalk.com/about.html">
+<title>About — DIRBALK</title>
+<meta name="description" content="DIRBALK is a Jordanian brand built around real life. Nothing loud. Every piece is hiding something.">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/favicon-180.png">
 <meta property="og:title" content="About DIRBALK">
-<meta property="og:description" content="Take care of yourself. From Amman.">
 <meta property="og:image" content="https://dirbalk.com/og-image.png">
-<meta property="og:locale" content="en_JO">
-<link rel="canonical" href="https://dirbalk.com/about.html">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="About DIRBALK">
-<meta name="twitter:description" content="Take care of yourself. From Amman.">
-<meta name="twitter:image" content="https://dirbalk.com/og-image.png">
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-FMPZV540CP');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FMPZV540CP');
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cairo:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
+<script src="/assets/site.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .a-hero { text-align: center; padding: clamp(70px, 11vw, 150px) var(--pad) clamp(60px, 9vw, 120px); border-bottom: 1px solid var(--line); }
+  .a-hero .ar { font-size: clamp(38px, 7vw, 86px); color: var(--amber); text-align: center; line-height: 1.4; }
+  .a-hero p.lead { margin: 18px auto 0; max-width: 420px; font-size: 15px; }
+  .a-hero .eyebrow { margin-bottom: 24px; }
 
-  .brand-phrase { font-family: 'Cairo', Arial, sans-serif; font-weight: 700; }
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 90px); align-items: center; padding: clamp(50px, 8vw, 110px) 0; }
+  .intro .ph { aspect-ratio: 4 / 5; }
+  .intro h2 { margin-bottom: 20px; }
+  .intro .lead + .lead { margin-top: 14px; }
 
-  body {
-    background: #0a0a0a;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-  }
+  .approach { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
+  .approach div { border-top: 1px solid var(--line); padding-top: 22px; }
+  .approach b { display: block; font-size: 11px; letter-spacing: .2em; color: var(--amber); font-weight: 400; margin-bottom: 14px; }
+  .approach h3 { font-weight: 400; font-size: 20px; letter-spacing: .02em; margin-bottom: 10px; }
 
-  a { color: inherit; }
+  .details { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .details .ph { aspect-ratio: 1; }
+  .end { text-align: center; padding: clamp(60px, 8vw, 110px) var(--pad); }
+  .end .lead { max-width: 380px; margin: 12px auto 28px; }
 
-  /* ---------- header ---------- */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 25;
-    background: rgba(10,10,10,0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 0.5px solid rgba(255,255,255,0.1);
-  }
-
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 16px 20px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-  }
-
-  .header-logo { height: 22px; width: auto; display: block; }
-  .logo-link { grid-column: 2; justify-self: center; }
-
-  .hamburger-btn {
-    display: flex;
-    grid-column: 1; justify-self: start;
-    background: transparent; border: none;
-    color: rgba(255,255,255,0.85);
-    cursor: pointer; padding: 4px;
-    width: 24px; height: 24px;
-    flex-direction: column; justify-content: center; gap: 5px;
-  }
-  .hamburger-btn span { display: block; width: 100%; height: 1.4px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
-  .hamburger-btn.open span:nth-child(1) { transform: translateY(6.4px) rotate(45deg); }
-  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
-  .hamburger-btn.open span:nth-child(3) { transform: translateY(-6.4px) rotate(-45deg); }
-
-  .side-menu-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 96;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.7s ease;
-  }
-  .side-menu-overlay.open { opacity: 1; pointer-events: auto; }
-
-  #sideMenuPanel {
-    display: flex;
-    position: fixed;
-    top: 0; left: 0;
-    height: 100vh; width: 100%; max-width: 300px;
-    background: #0d0d0d;
-    border-right: 0.5px solid rgba(255,255,255,0.1);
-    z-index: 97;
-    transform: translateX(-100%);
-    transition: transform 0.7s cubic-bezier(.16,1,.3,1);
-    flex-direction: column;
-    padding: 20px 22px;
-    overflow-y: auto;
-  }
-  #sideMenuPanel.open { transform: translateX(0); }
-
-  .side-menu-close {
-    align-self: flex-start;
-    background: none; border: none; color: rgba(255,255,255,0.5);
-    font-size: 18px; cursor: pointer; margin-bottom: 30px; padding: 4px;
-  }
-
-  .side-menu-links { display: flex; flex-direction: column; gap: 4px; }
-  .side-menu-links a {
-    color: rgba(255,255,255,0.85); text-decoration: none;
-    font-size: 14px; padding: 12px 4px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.07);
-    opacity: 0;
-    transform: translateX(-14px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-  .side-menu-links a:hover { color: #C9A84C; }
-  .side-menu-links a.mlink-visible { opacity: 1; transform: translateX(0); }
-  @media (prefers-reduced-motion: reduce) {
-    .side-menu-links a { transition: none; opacity: 1; transform: none; }
-  }
-
-  /* ---------- image placeholders ---------- */
-  .img-slot {
-    background: #111111;
-    border: 0.5px solid rgba(255,255,255,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .img-slot svg { opacity: 0.22; }
-
-  .img-cover {
-    width: 100%;
-    display: block;
-    aspect-ratio: 21 / 9;
-    border-left: none;
-    border-right: none;
-  }
-
-  .img-inline {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    margin: 2.4rem 0 0;
-  }
-
-  @media (max-width: 520px) {
-    .img-cover { aspect-ratio: 16 / 9; }
-  }
-
-  .shrink-hero-wrap {
-    height: 160vh;
-    position: relative;
-  }
-  .shrink-hero-media {
-    position: sticky;
-    top: 0;
-    transform-origin: center top;
-    will-change: transform;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .shrink-hero-wrap { height: auto; }
-    .shrink-hero-media { position: static; }
-  }
-
-  /* ---------- statements ---------- */
-  .statements {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 12vh 24px 8vh;
-  }
-
-  .statement {
-    margin-bottom: 13vh;
-  }
-
-  .statement .big {
-    font-size: clamp(26px, 6vw, 44px);
-    font-weight: bold;
-    line-height: 1.7;
-    letter-spacing: 0px;
-  }
-
-
-  .statement .small {
-    margin-top: 26px;
-    font-size: 14px;
-    line-height: 2.2;
-    color: rgba(255,255,255,0.72);
-    max-width: 480px;
-  }
-
-  .statement .kicker {
-    font-size: 10px;
-    letter-spacing: 0px;
-    color: #C9A84C;
-    opacity: 0.7;
-    margin-bottom: 18px;
-  }
-
-  .divider {
-    width: 40px;
-    height: 1px;
-    background: #C9A84C;
-    margin: 0 0 13vh;
-  }
-  .divider[data-reveal].dm-visible { opacity: 0.4; }
-
-  /* ---------- closing ---------- */
-  .closing {
-    text-align: center;
-    padding: 0 24px 12vh;
-  }
-
-  .closing .brand-logo {
-    height: 26px;
-    width: auto;
-    margin-bottom: 3rem;
-    opacity: 0.9;
-  }
-
-  .closing-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    max-width: 420px;
-    margin: 0 auto 4rem;
-  }
-
-  .closing-btn {
-    flex: 1;
-    padding: 14px;
-    border: 0.5px solid rgba(255,255,255,0.2);
-    color: #ffffff;
-    font-size: 12px;
-    letter-spacing: 0px;
-    text-decoration: none;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  .closing-btn:hover { border-color: rgba(201,168,76,0.4); }
-  .closing-btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
-  .closing-btn.primary:hover { opacity: 0.9; }
-
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 22px;
-    margin-top: 3rem;
-  }
-  .footer-links a {
-    font-size: 11px;
-    letter-spacing: 0px;
-    color: rgba(255,255,255,0.35);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: #C9A84C; }
-
-  .copyright {
-    margin-top: 2.4rem;
-    color: rgba(255,255,255,0.3);
-    font-size: 10px;
-    letter-spacing: 0px;
-    text-align: center;
-  }
-
-  .contact-row { display: flex; justify-content: center; gap: 14px; }
-  .contact-btn {
-    width: 38px; height: 38px;
-    border: 0.5px solid rgba(255,255,255,0.18);
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .contact-btn:hover { border-color: rgba(201,168,76,0.5); color: #C9A84C; }
-  .contact-btn svg { width: 17px; height: 17px; }
-
-  @media (max-width: 520px) {
-    .statements { padding-top: 8vh; }
-    .statement { margin-bottom: 10vh; }
-    .divider { margin-bottom: 10vh; }
+  @media (max-width: 860px) {
+    .intro { grid-template-columns: 1fr; }
+    .approach { grid-template-columns: 1fr; gap: 0; }
+    .approach div { padding: 22px 0; }
+    .details { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
 <body>
+<div id="siteHeader"></div>
 
-<header>
-  <div class="header-inner">
-    <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <a href="/" class="logo-link"><img src="/logo.png" alt="DIRBALK" class="header-logo" /></a>
-  </div>
-</header>
+<main>
+  <section class="a-hero">
+    <p class="eyebrow">From Amman</p>
+    <p class="ar">دير بالك على حالك</p>
+    <p class="lead">Said to someone you love, just before they leave.</p>
+  </section>
 
-<div class="side-menu-overlay" id="sideMenuOverlay"></div>
-<nav id="sideMenuPanel" aria-label="Main menu">
-  <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu">✕</button>
-  <div class="side-menu-links">
-    <a href="/">Home</a>
-    <a href="/shop.html">Collection 01</a>
-    <a href="/about.html">About</a>
-    <a href="/me.html">My Account</a>
-  </div>
-</nav>
-
-<div class="shrink-hero-wrap" data-shrink-hero>
-  <div class="img-slot img-cover shrink-hero-media" data-reveal data-image-slot="about-cover">
-    <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="4" y="6" width="40" height="36" rx="2"/>
-      <circle cx="16" cy="18" r="4"/>
-      <path d="M4 32l10-10 8 8 6-6 16 16"/>
-    </svg>
-  </div>
-</div>
-
-<div class="statements">
-
-  <div class="statement" data-reveal data-reveal-group="story">
-    <p class="kicker">From Amman</p>
-    <p class="big brand-phrase">دير بالك على حالك</p>
-    <p class="small">
-      Said to someone you love, just before they leave.
-    </p>
+  <div class="wrap">
+    <section class="intro">
+      <div class="ph"><img src="/img/den-all.jpg" alt="DIRBALK denim" loading="lazy"></div>
+      <div>
+        <p class="eyebrow">About</p>
+        <h2 class="t-l">It started with a sentence.</h2>
+        <p class="lead">DIRBALK is a Jordanian brand built around real life — the people you leave the house for, and the ones who tell you to take care on your way out.</p>
+        <p class="lead">We make a few pieces, slowly: raw denim, heavy cotton, quiet details. Clothes that look like nothing much from across the street, and like a lot up close.</p>
+        <a href="/story.html" class="arrow" style="margin-top:26px">Read the story</a>
+      </div>
+    </section>
   </div>
 
-  <div class="divider" data-reveal data-reveal-group="story"></div>
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="eyebrow">Our approach</p><h2 class="t-l">Three rules we keep.</h2></div></div>
+      <div class="approach">
+        <div><b>01</b><h3>Nothing loud.</h3><p class="lead">No logo across the chest. No text shouting at strangers. Whoever's wearing it isn't an ad — not for us, not for anyone.</p></div>
+        <div><b>02</b><h3>Look closer.</h3><p class="lead">Every piece is hiding something. A phrase. A thread. A detail that isn't explained. We're not going to point.</p></div>
+        <div><b>03</b><h3>Made to stay.</h3><p class="lead">13oz raw denim that changes with you and 260gsm cotton that holds its shape. Pieces you keep, not pieces you replace.</p></div>
+      </div>
+    </div>
+  </section>
 
-  <div class="statement" data-reveal data-reveal-group="story">
-    <p class="big" data-motion="type">Nothing loud.</p>
-    <p class="small">
-      No logo across the chest. No text shouting at strangers. Whoever's wearing it isn't an ad — not for us, not for anyone.
-    </p>
-  </div>
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="eyebrow">The details</p><h2 class="t-l">Some of it, we'll keep.</h2></div><a href="/shop.html" class="arrow">Shop Collection 01</a></div>
+      <div class="details">
+        <div class="ph zoom"><img src="/img/detail-1.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-2.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-3.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-4.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-5.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-6.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
 
-  <div class="statement" data-reveal data-reveal-group="story">
-    <p class="big" data-motion="type">Look closer.</p>
-    <p class="small">
-      Every piece is hiding something. A phrase. A thread. A story. A number that isn't explained. More than one place. We're not going to point.
-    </p>
-  </div>
+  <section class="end sec">
+    <h2 class="t-m">Collection 01 is out now.</h2>
+    <p class="lead">Three pieces. Black, blue and indigo. Cash on delivery across Jordan.</p>
+    <a href="/shop.html" class="btn">Shop the collection</a>
+  </section>
+</main>
 
-  <div class="img-slot img-inline" data-reveal data-image-slot="about-detail">
-    <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="4" y="6" width="40" height="36" rx="2"/>
-      <circle cx="16" cy="18" r="4"/>
-      <path d="M4 32l10-10 8 8 6-6 16 16"/>
-    </svg>
-  </div>
-
-  <div class="statement" data-reveal data-reveal-group="story">
-    <p class="big" data-motion="type">It started with a sentence.</p>
-    <p class="small">
-      Some of it, we'll keep.
-    </p>
-  </div>
-
-</div>
-
-<div class="closing">
-  <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
-
-  <div class="closing-actions">
-    <a href="/shop.html" class="closing-btn primary">Collection 01</a>
-    <a href="/" class="closing-btn">Join the list</a>
-  </div>
-
-  <div class="contact-row">
-    <a href="https://wa.me/962785734499" target="_blank" rel="noreferrer" class="contact-btn" aria-label="WhatsApp">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.06 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
-    </a>
-    <a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer" class="contact-btn" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-    </a>
-  </div>
-
-  <p class="copyright">© 2026</p>
-</div>
-
-<script>
-(function () {
-  if (window.gtag) gtag('event', 'page_view_about');
-
-  /* ---------------- mobile hamburger + side menu ---------------- */
-  var hamburgerBtn = document.getElementById('hamburgerBtn');
-  var sideMenuPanel = document.getElementById('sideMenuPanel');
-  var sideMenuOverlay = document.getElementById('sideMenuOverlay');
-
-  var menuLinks = sideMenuPanel.querySelectorAll('.side-menu-links a');
-  var LINK_STEP = 0.18;
-  var LINK_START = 0.2;
-
-  function openSideMenu() {
-    sideMenuPanel.classList.add('open');
-    sideMenuOverlay.classList.add('open');
-    hamburgerBtn.classList.add('open');
-    hamburgerBtn.setAttribute('aria-expanded', 'true');
-    menuLinks.forEach(function (link, i) {
-      link.style.transitionDelay = (LINK_START + i * LINK_STEP) + 's';
-      link.classList.add('mlink-visible');
-    });
-  }
-  function closeSideMenu() {
-    sideMenuPanel.classList.remove('open');
-    sideMenuOverlay.classList.remove('open');
-    hamburgerBtn.classList.remove('open');
-    hamburgerBtn.setAttribute('aria-expanded', 'false');
-    var n = menuLinks.length;
-    menuLinks.forEach(function (link, i) {
-      link.style.transitionDelay = ((n - 1 - i) * LINK_STEP) + 's';
-      link.classList.remove('mlink-visible');
-    });
-  }
-  hamburgerBtn.addEventListener('click', function () {
-    if (sideMenuPanel.classList.contains('open')) closeSideMenu(); else openSideMenu();
-  });
-  document.getElementById('sideMenuClose').addEventListener('click', closeSideMenu);
-  sideMenuOverlay.addEventListener('click', closeSideMenu);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSideMenu(); });
-})();
-</script>
-
+<div id="siteFooter"></div>
 </body>
 </html>

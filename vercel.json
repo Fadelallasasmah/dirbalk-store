@@ -9,12 +9,26 @@
       "source": "/en/:path*",
       "destination": "/:path*",
       "permanent": true
-    }
-  ],
-  "rewrites": [
+    },
     {
-      "source": "/p/:slug",
-      "destination": "/p.html"
+      "source": "/shipping.html",
+      "destination": "/help.html#shipping",
+      "permanent": true
+    },
+    {
+      "source": "/shipping",
+      "destination": "/help.html#shipping",
+      "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/legal.html#privacy",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/legal.html#privacy",
+      "permanent": true
     }
   ],
   "headers": [
