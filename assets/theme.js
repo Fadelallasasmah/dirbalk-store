@@ -180,7 +180,7 @@
     var wrap = document.createElement('div');
     wrap.className = 'theme-toggle';
     wrap.innerHTML =
-      '<button type="button" class="theme-btn" aria-label="تبديل النهار والليل" style="background:none;border:none;padding:0;cursor:pointer;">' +
+      '<button type="button" class="theme-btn" aria-label="Switch day / night" style="background:none;border:none;padding:11px;margin:-11px;cursor:pointer;">' +
       '<span class="theme-icon">' +
         '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
           '<circle cx="12" cy="12" r="4.5" fill="#C9A84C"/>' +
@@ -196,7 +196,7 @@
           '<path d="M16.3 4.9a8.5 8.5 0 0 1 0 14.2 6.3 6.3 0 0 0 0-14.2z" fill="#0a0a0a" opacity="0.32"/>' +
         '</svg>' +
       '</span></button>' +
-      '<button type="button" class="theme-reset" aria-label="رجوع للوضع التلقائي" title="تلقائي">↺</button>';
+      '<button type="button" class="theme-reset" aria-label="Back to automatic theme" title="Automatic">↺</button>';
     document.body.appendChild(wrap);
 
     var resetBtn = wrap.querySelector('.theme-reset');

@@ -57,11 +57,11 @@
     el.outerHTML =
       '<header class="sh">' +
         '<div class="sh-in">' +
-          '<button type="button" class="sh-ic sh-menu" id="shMenu" aria-label="Menu">' + ICON.menu + '</button>' +
+          '<button type="button" class="sh-ic sh-menu" id="shMenu" aria-label="Menu" aria-expanded="false" aria-controls="sm">' + ICON.menu + '</button>' +
           '<a href="/home.html" class="sh-logo" aria-label="DIRBALK home"><img src="/logo.png" alt="DIRBALK"></a>' +
           '<nav class="sh-nav">' + navLinks.map(function (l) { return '<a href="' + l[0] + '"' + (here(l[0]) ? ' class="on"' : '') + '>' + l[1] + '</a>'; }).join('') + '</nav>' +
           '<div class="sh-right">' +
-            '<button type="button" class="sh-ic" id="shSearch" aria-label="Search">' + ICON.search + '</button>' +
+            '<button type="button" class="sh-ic" id="shSearch" aria-label="Search" aria-expanded="false" aria-controls="shSearchBar">' + ICON.search + '</button>' +
             '<a href="' + (loggedIn() ? '/me.html' : '/signin.html') + '" class="sh-ic acc" aria-label="Account">' + ICON.user + '</a>' +
             '<a href="/cart.html" class="sh-ic" aria-label="Cart">' + ICON.cart + '<span class="sh-count"></span></a>' +
           '</div>' +
@@ -79,8 +79,18 @@
       '</aside>';
 
     var sm = document.getElementById('sm'), ov = document.getElementById('smOv');
-    function openM() { sm.classList.add('open'); ov.classList.add('open'); }
-    function closeM() { sm.classList.remove('open'); ov.classList.remove('open'); }
+    var mb = document.getElementById('shMenu');
+    function openM() {
+      sm.classList.add('open'); ov.classList.add('open'); mb.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      setTimeout(function () { document.getElementById('smX').focus(); }, 30);
+    }
+    function closeM() {
+      if (!sm.classList.contains('open')) return;
+      sm.classList.remove('open'); ov.classList.remove('open'); mb.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      mb.focus();
+    }
     document.getElementById('shMenu').addEventListener('click', openM);
     document.getElementById('smX').addEventListener('click', closeM);
     ov.addEventListener('click', closeM);
@@ -88,6 +98,7 @@
     document.getElementById('shSearch').addEventListener('click', function () {
       var bar = document.getElementById('shSearchBar');
       bar.classList.toggle('open');
+      this.setAttribute('aria-expanded', bar.classList.contains('open') ? 'true' : 'false');
       if (bar.classList.contains('open')) bar.querySelector('input').focus();
     });
   }
