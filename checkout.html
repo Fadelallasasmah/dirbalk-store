@@ -22,6 +22,7 @@
   .ck-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 34px 0 26px; }
   .steps { display: flex; align-items: center; gap: 12px; }
   .step-dot { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+  .step-dot b { font-weight: 400; }
   .step-dot i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; border: 1px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; letter-spacing: 0; }
   .step-dot.active { color: var(--ink); }
   .step-dot.active i { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -49,12 +50,13 @@
   .field-error { border-color: #a3412f !important; }
   .form-error { display: none; font-size: 12.5px; color: #a3412f; margin: 0 0 14px; }
   .logged-in-note { display: none; font-size: 12.5px; color: var(--muted); background: var(--bg2); border: 1px solid var(--line); padding: 12px 14px; margin-bottom: 18px; line-height: 1.6; }
-  .save-info-row { display: flex; align-items: center; gap: 10px; font-size: 12.5px; margin-bottom: 22px; }
-  .save-info-row input { width: 16px; height: 16px; accent-color: #141414; }
+  .save-info-row { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 18px; min-height: 44px; }
+  .save-info-row input { width: 20px; height: 20px; accent-color: #141414; flex-shrink: 0; }
+  .save-info-row label { padding: 12px 0; cursor: pointer; }
   .primary-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 16px 22px; font: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid var(--btn-bg); background: var(--btn-bg); color: var(--btn-ink); cursor: pointer; text-decoration: none; }
   .primary-btn:hover { opacity: .88; }
   .primary-btn:disabled { opacity: .45; cursor: default; }
-  .secondary-link { display: block; margin: 16px auto 0; background: none; border: none; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .secondary-link { display: block; margin: 6px auto 0; padding: 14px 10px; background: none; border: none; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
   /* payment */
   .pay-opt { display: flex; gap: 14px; align-items: flex-start; border: 1px solid var(--ink); padding: 18px; margin-bottom: 10px; background: var(--bg2); }
@@ -86,7 +88,7 @@
   /* side summary */
   .ck-side { background: var(--bg2); border: 1px solid var(--line); padding: 24px; position: sticky; top: 80px; }
   .ck-side h2 { font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; margin-bottom: 8px; display: flex; justify-content: space-between; }
-  .ck-side h2 a { font-size: 11px; letter-spacing: .04em; text-transform: none; font-weight: 400; color: var(--muted); text-decoration: underline; }
+  .ck-side h2 a { padding: 12px 0 12px 12px; margin: -12px 0; font-size: 12px; letter-spacing: .04em; text-transform: none; font-weight: 400; color: var(--muted); text-decoration: underline; }
   .summary-item { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
   .summary-media { aspect-ratio: 4 / 5; }
   .summary-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -123,12 +125,18 @@
   .mini-lb.open { display: flex; }
   .mini-lb img { max-width: 92vw; max-height: 90vh; }
 
+  /* small phones: only the current step keeps its name so the row never overflows */
+  @media (max-width: 430px) {
+    .step-dot:not(.active) b { display: none; }
+    .step-sep { flex: 1; width: auto; }
+  }
   @media (max-width: 860px) {
     .ck { grid-template-columns: 1fr; }
     .ck-side { position: static; order: -1; padding: 18px; }
     .form-group { grid-template-columns: 1fr; }
-    .step-dot { font-size: 10px; letter-spacing: .08em; }
+    .step-dot { font-size: 10.5px; letter-spacing: .08em; }
     .step-sep { width: 14px; }
+    .steps { width: 100%; }
     .ck-head { padding: 24px 0 18px; }
   }
 </style>
@@ -141,11 +149,11 @@
   <div class="ck-head">
     <h1 class="t-l">Checkout</h1>
     <div class="steps" id="stepsIndicator">
-      <span class="step-dot" data-step="2"><i>1</i>Shipping</span>
+      <span class="step-dot" data-step="2"><i>1</i><b>Shipping</b></span>
       <span class="step-sep"></span>
-      <span class="step-dot" data-step="4"><i>2</i>Payment</span>
+      <span class="step-dot" data-step="4"><i>2</i><b>Payment</b></span>
       <span class="step-sep"></span>
-      <span class="step-dot" data-step="3"><i>3</i>Review</span>
+      <span class="step-dot" data-step="3"><i>3</i><b>Review</b></span>
     </div>
   </div>
 

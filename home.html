@@ -152,7 +152,11 @@
   @media (max-width: 860px) {
     .hdr nav, .hdr .right .lbl { display: none; }
     .menu-btn { display: inline-flex; }
-    .hero { height: 78vh; }
+    .hero { height: 78vh; height: min(76svh, 680px); }
+    /* portrait crops: keep the people in frame (the photos are landscape) */
+    .hero .slide:nth-child(1) img { object-position: 22% 50%; }
+    .hero .slide:nth-child(2) img { object-position: 45% 50%; }
+    .hero .slide:nth-child(3) img { object-position: 55% 40%; }
     .hero .shade { background: linear-gradient(0deg, rgba(10,10,10,.92) 0%, rgba(10,10,10,.35) 50%, rgba(10,10,10,0) 75%); }
     .hero .copy { top: auto; bottom: 64px; transform: none; right: var(--pad); }
     .cards { grid-template-columns: 1fr; gap: 26px; }
@@ -171,6 +175,30 @@
     footer .city { grid-column: 1 / -1; }
   }
   @media (prefers-reduced-motion: reduce) { .hero .slide { transition: none; } }
+  /* tablet: three product cards side by side instead of one huge card each */
+  @media (min-width: 561px) and (max-width: 860px) {
+    .cards { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  }
+
+  /* ---------- QA pass: bigger touch targets, same look ---------- */
+  .menu-btn { min-width: 44px; min-height: 44px; margin-left: -12px; padding: 0 12px; }
+  .hdr .logo { display: inline-flex; align-items: center; min-height: 44px; }
+  .hdr .right a { min-height: 44px; min-width: 44px; justify-content: center; }
+  .hdr .right { gap: 6px; }
+  .hero .dots button { min-height: 44px; padding: 0 8px; margin: 0 -8px; }
+  .card .swatch { position: relative; }
+  .card .swatch::before { content: ""; position: absolute; inset: -9px -6px; }
+  .arrow { padding: 14px 0; margin-top: 12px; margin-bottom: -14px; }
+  .coll-head .arrow { margin-top: -14px; }
+  footer .social a { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  footer .social { gap: 0; }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  @media (max-width: 860px) {
+    .card .code, .s2 .look figcaption, .eyebrow { font-size: 10.5px; }
+    .card .cname, .card .sizes, footer .city { font-size: 11px; }
+    footer nav { font-size: 11.5px; gap: 2px 24px; }
+    footer nav a { padding: 10px 0; }
+  }
 </style>
 </head>
 <body>

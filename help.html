@@ -38,7 +38,7 @@
   .facts span { font-size: 12px; color: var(--muted); line-height: 1.5; }
 
   .sg-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-  .sg-tabs button { background: none; border: 1px solid var(--line); color: var(--muted); font: inherit; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 10px 14px; cursor: pointer; }
+  .sg-tabs button { background: none; border: 1px solid var(--line); color: var(--muted); font: inherit; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 10px 16px; min-height: 44px; cursor: pointer; }
   .sg-tabs button.on { border-color: var(--ink); color: var(--ink); }
   .sg { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--bg2); border: 1px solid var(--line); }
   .sg th, .sg td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: center; }
@@ -65,7 +65,7 @@
     .layout { grid-template-columns: 1fr; padding-top: 0; }
     .side { position: sticky; top: 58px; z-index: 10; background: var(--bg); flex-direction: row; overflow-x: auto; gap: 18px; border-bottom: 1px solid var(--line); margin: 0 calc(var(--pad) * -1); padding: 0 var(--pad); scrollbar-width: none; }
     .side::-webkit-scrollbar { display: none; }
-    .side a { border: none; white-space: nowrap; font-size: 11px; padding: 14px 0; }
+    .side a { border: none; white-space: nowrap; font-size: 11.5px; padding: 15px 2px; }
     .side a.on::before { content: ""; }
     .side a.on { box-shadow: inset 0 -1px 0 var(--amber); }
     .facts, .contact { grid-template-columns: 1fr; }
