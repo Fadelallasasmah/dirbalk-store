@@ -74,7 +74,7 @@
     + 'opacity:0;pointer-events:none;transition:opacity 0.3s ease,color 0.2s ease;}'
     + '.theme-reset.show{opacity:1;pointer-events:auto;}'
     + '.theme-reset:hover{color:#C9A84C;}'
-    + '@media (max-width:860px){.theme-toggle{top:64px;left:12px;}}';
+    + '@media (max-width:860px){.theme-toggle{top:64px;left:12px;}}'
     /* ---------- back to top (global, premium UX) ---------- */
     + '.db-top-btn{position:fixed;bottom:24px;right:18px;width:38px;height:38px;'
     + 'background:rgba(20,20,20,0.85);backdrop-filter:blur(4px);'
