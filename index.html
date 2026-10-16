@@ -5,8 +5,7 @@
 /* Drop switch (Settings sheet / admin page).
    While a drop is open:
    - a visitor arriving from OUTSIDE the site (Instagram, a link, typing
-     dirbalk.com) is sent straight to the shop;
-   - a visitor who clicks Home from inside the site goes to the drop
+     dirbalk.com) — or clicking Home inside the site — goes to the drop
      homepage (/home.html).
    ?home=1 always stays here (and shows a "Shop Collection 01" entrance
    instead of the waitlist while the drop is open). The page is hidden for at most 900ms while we
@@ -23,7 +22,7 @@
     .then(function (res) {
       if (res && res.dropOpen) {
         if (/[?&]home=1/.test(location.search)) { d.classList.add('drop-open'); }
-        else { location.replace(internal ? '/home.html' : '/shop.html'); return; }
+        else { location.replace('/home.html'); return; }
       }
       show();
     })
