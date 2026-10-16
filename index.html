@@ -100,7 +100,7 @@ html.drop-open #form-section{display:none}
     width: 100%;
     /* never taller than the drawing itself (16:9), so on wide screens only
        a little of the bottom is trimmed and nothing is stretched */
-    height: min(56.25vw, 82vh); /* show most of the drawing even on wide, short laptop screens */
+    height: min(56.25vw, 100vh); /* the whole drawing (16:9), uncropped; only trimmed on ultra-wide screens */
     min-height: 300px;
     overflow: hidden;
     background: #0a0a0a;
@@ -112,7 +112,7 @@ html.drop-open #form-section{display:none}
     object-position: 50% 12%; /* sun/moon at the top and the person + house stay in frame; trims a little sky and the flowers */
   }
   .hero::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 24%;
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 16%;
     background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, rgba(10,10,10,.45) 45%, rgba(10,10,10,.88) 78%, var(--bg) 100%);
     pointer-events: none;
   }
@@ -121,7 +121,7 @@ html.drop-open #form-section{display:none}
 
   /* ---------- 2. name + the list ---------- */
   .wl { position: relative; z-index: 1; width: 100%; max-width: 600px; margin: 0 auto; padding: 0 22px; text-align: center; }
-  .identity { margin-top: clamp(-70px, -4.5vw, -36px); }
+  .identity { margin-top: clamp(-48px, -3vw, -28px); }
   .brand-logo { width: min(58vw, 236px); height: auto; margin: 0 auto; }
   .brand-arabic { color: var(--amber); font-size: 15px; margin-top: 8px; }
   .divider { width: 42px; height: 1px; background: var(--amber); opacity: .55; margin: 24px auto 22px; }
@@ -213,10 +213,11 @@ html.drop-open #form-section{display:none}
   /* ---------- phones ---------- */
   @media (max-width: 640px) {
     /* taller crop so the drawing still leads; centred on the person and the house */
-    .hero { height: clamp(300px, 54vh, 470px); height: clamp(300px, 54svh, 470px); }
-    .hero video, .hero .poster { object-position: 41% 40%; }
-    .identity { margin-top: -52px; }
-    .hero::after { height: 40%; }
+    /* phones: a 4:3 window on the drawing (about three quarters of it, sun to house to trees) */
+    .hero { height: 75vw; min-height: 0; }
+    .hero video, .hero .poster { object-position: 35% 40%; }
+    .identity { margin-top: -26px; }
+    .hero::after { height: 22%; }
     .reg { flex-direction: column; }
     .reg input { flex: none; width: 100%; }
     .submit-btn { width: 100%; }
