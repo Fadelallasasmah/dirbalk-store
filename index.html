@@ -100,7 +100,7 @@ html.drop-open #form-section{display:none}
     width: 100%;
     /* never taller than the drawing itself (16:9), so on wide screens only
        a little of the bottom is trimmed and nothing is stretched */
-    height: min(56.25vw, 64vh);
+    height: min(56.25vw, 82vh); /* show most of the drawing even on wide, short laptop screens */
     min-height: 300px;
     overflow: hidden;
     background: #0a0a0a;
@@ -109,19 +109,19 @@ html.drop-open #form-section{display:none}
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    object-position: 50% 0%; /* keep the sun / moon in frame; only the bottom (under the fade) is trimmed */
+    object-position: 50% 12%; /* sun/moon at the top and the person + house stay in frame; trims a little sky and the flowers */
   }
   .hero::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 52%;
-    background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, rgba(10,10,10,.6) 50%, rgba(10,10,10,.92) 80%, var(--bg) 100%);
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 24%;
+    background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, rgba(10,10,10,.45) 45%, rgba(10,10,10,.88) 78%, var(--bg) 100%);
     pointer-events: none;
   }
-  html[data-theme="night"] .hero::after { background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,.6) 50%, rgba(5,5,5,.92) 80%, #050505 100%); }
-  html[data-theme="day"] .hero::after { background: linear-gradient(to bottom, rgba(23,19,16,0) 0%, rgba(23,19,16,.6) 50%, rgba(23,19,16,.92) 80%, #171310 100%); }
+  html[data-theme="night"] .hero::after { background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,.45) 45%, rgba(5,5,5,.88) 78%, #050505 100%); }
+  html[data-theme="day"] .hero::after { background: linear-gradient(to bottom, rgba(23,19,16,0) 0%, rgba(23,19,16,.45) 45%, rgba(23,19,16,.88) 78%, #171310 100%); }
 
   /* ---------- 2. name + the list ---------- */
   .wl { position: relative; z-index: 1; width: 100%; max-width: 600px; margin: 0 auto; padding: 0 22px; text-align: center; }
-  .identity { margin-top: clamp(-96px, -7vw, -44px); }
+  .identity { margin-top: clamp(-70px, -4.5vw, -36px); }
   .brand-logo { width: min(58vw, 236px); height: auto; margin: 0 auto; }
   .brand-arabic { color: var(--amber); font-size: 15px; margin-top: 8px; }
   .divider { width: 42px; height: 1px; background: var(--amber); opacity: .55; margin: 24px auto 22px; }
@@ -216,6 +216,7 @@ html.drop-open #form-section{display:none}
     .hero { height: clamp(300px, 54vh, 470px); height: clamp(300px, 54svh, 470px); }
     .hero video, .hero .poster { object-position: 41% 40%; }
     .identity { margin-top: -52px; }
+    .hero::after { height: 40%; }
     .reg { flex-direction: column; }
     .reg input { flex: none; width: 100%; }
     .submit-btn { width: 100%; }
