@@ -4,6 +4,7 @@
 <script src="/assets/theme.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/qrcode.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم — DIRBALَK</title>
@@ -168,6 +169,39 @@
   .pc-reject-btn:hover { border-color: rgba(255,120,120,0.7); }
   .pc-approve-btn:disabled, .pc-reject-btn:disabled { opacity: 0.5; cursor: default; }
 
+
+  /* ---------- v37: QR package stickers ---------- */
+  .qr-btn {
+    background: none; border: 0.5px solid rgba(201,168,76,0.45); color: #C9A84C; font-family: inherit;
+    font-size: 12px; padding: 7px 12px; cursor: pointer; min-height: 34px; margin-inline-start: 8px; white-space: nowrap;
+  }
+  .qr-btn:hover { border-color: #C9A84C; }
+  .oc-status { display: flex; align-items: center; gap: 8px; }
+  .oc-status .status-select { flex: 1; }
+  .orders-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: -6px 0 16px; }
+  .orders-tools .qr-btn { margin: 0; min-height: 40px; font-size: 13px; }
+  .orders-tools small { color: rgba(255,255,255,0.4); font-size: 12px; }
+  td.status-cell { white-space: nowrap; }
+  #stickerSheet { display: none; }
+  @media print {
+    @page { size: A4; margin: 8mm; }
+    html, body { background: #fff !important; }
+    body > *:not(#stickerSheet) { display: none !important; }
+    #stickerSheet { display: flex !important; flex-wrap: wrap; gap: 0; direction: ltr; }
+  }
+  .sticker {
+    width: 70mm; height: 42mm; padding: 3.5mm; display: flex; align-items: center; gap: 3.5mm;
+    border: 0.3mm dashed #bbb; color: #000; background: #fff; font-family: Arial, sans-serif;
+    break-inside: avoid; page-break-inside: avoid; overflow: hidden;
+  }
+  .sticker .qr { width: 34mm; height: 34mm; flex-shrink: 0; }
+  .sticker .qr svg { width: 100%; height: 100%; display: block; }
+  .sticker .meta { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; height: 34mm; }
+  .sticker .meta img { width: 22mm; height: auto; display: block; }
+  .sticker .sid { font-size: 15pt; font-weight: bold; letter-spacing: 0.04em; }
+  .sticker .hint { font-size: 6.5pt; line-height: 1.35; color: #333; }
+  .sticker .hint span { display: block; direction: rtl; text-align: left; }
+
   .status-select {
     background: transparent;
     border: 0.5px solid rgba(255,255,255,0.18);
@@ -287,6 +321,10 @@
     <div class="country-list" id="countryList"></div>
 
     <h2>آخر الطلبات</h2>
+    <div class="orders-tools">
+      <button type="button" class="qr-btn" id="printNewStickers">اطبع ستيكرات الطلبات الجديدة</button>
+      <small>الطلبات اللي حالتها «قيد المراجعة» أو «قيد التجهيز». لطلب واحد: زر «ستيكر» جنب الطلب.</small>
+    </div>
     <div class="table-wrap">
       <table id="ordersTable">
         <thead>
@@ -653,7 +691,62 @@
     return select;
   }
 
+  /* ---------- v37: QR package stickers ----------
+     Each sticker carries a QR to /scan.html?o=<id>&t=<secret token>.
+     The staff phone (prep / courier) or the customer scans it to move the order on. */
+  let lastOrders = [];
+
+  function scanUrl(o) {
+    return 'https://dirbalk.com/scan.html?o=' + encodeURIComponent(o.orderId) + '&t=' + encodeURIComponent(o.scanToken);
+  }
+
+  function qrSvg(text) {
+    const qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    return qr.createSvgTag({ cellSize: 4, margin: 8, scalable: true });
+  }
+
+  function stickerHtml(o) {
+    return '<div class="sticker">' +
+      '<div class="qr">' + qrSvg(scanUrl(o)) + '</div>' +
+      '<div class="meta">' +
+        '<img src="/logo-black.png" alt="DIRBALK">' +
+        '<div class="sid">' + escapeHtml(o.orderId) + '</div>' +
+        '<div class="hint">Scan when it arrives.<span>وصلك؟ امسح الكود.</span></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function printStickers(list) {
+    list = (list || []).filter((o) => o && o.scanToken);
+    if (!list.length) {
+      if (window.DirbalkToast) DirbalkToast.error('ما في طلبات إلها ستيكر.');
+      return;
+    }
+    const sheet = document.getElementById('stickerSheet');
+    sheet.innerHTML = list.map(stickerHtml).join('');
+    const imgs = Array.prototype.slice.call(sheet.querySelectorAll('img'));
+    Promise.all(imgs.map((im) => im.complete ? 0 : new Promise((r) => { im.onload = im.onerror = r; })))
+      .then(() => window.print());
+  }
+
+  function buildStickerBtn(o) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'qr-btn';
+    b.textContent = 'ستيكر';
+    b.title = 'اطبع ستيكر QR لـ ' + o.orderId;
+    b.addEventListener('click', () => printStickers([o]));
+    return b;
+  }
+
+  document.getElementById('printNewStickers').addEventListener('click', () => {
+    printStickers(lastOrders.filter((o) => o.status === 'قيد المراجعة' || o.status === 'قيد التجهيز'));
+  });
+
   function renderOrders(orders) {
+    lastOrders = orders || [];
     const body = document.getElementById('ordersBody');
     const cards = document.getElementById('ordersCards');
     body.innerHTML = '';
@@ -680,8 +773,9 @@
         '<td class="wrap">' + escapeHtml(o.address) + safeLocationLink + '</td>' +
         '<td class="wrap">' + escapeHtml(o.items) + '</td>' +
         '<td>' + escapeHtml(o.total) + ' JD</td>' +
-        '<td></td>';
+        '<td class="status-cell"></td>';
       tr.lastElementChild.appendChild(buildStatusSelect(o.orderId, o.status));
+      if (o.scanToken) tr.lastElementChild.appendChild(buildStickerBtn(o));
       body.appendChild(tr);
 
       // mobile card — same data, stacked and labeled instead of squeezed into columns
@@ -698,6 +792,7 @@
       const ocStatus = document.createElement('div');
       ocStatus.className = 'oc-status';
       ocStatus.appendChild(buildStatusSelect(o.orderId, o.status));
+      if (o.scanToken) ocStatus.appendChild(buildStickerBtn(o));
       card.appendChild(ocStatus);
       cards.appendChild(card);
     });
@@ -896,5 +991,6 @@
 })();
 </script>
 
+<div id="stickerSheet" aria-hidden="true"></div>
 </body>
 </html>

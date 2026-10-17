@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>DIRBALK — الطلب</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a; --bg2: #121315; --line: rgba(255,255,255,0.1);
+    --ink: #f2efe8; --muted: rgba(242,239,232,0.62); --faint: rgba(242,239,232,0.38);
+    --amber: #C9A84C; --ok: #7fd88f; --err: #ff8c8c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    color: var(--ink); font-family: 'Cairo', 'Jost', Arial, sans-serif; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: max(22px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 18px; }
+  .top { display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
+  .top img { width: 96px; height: auto; display: block; }
+  .who { font-size: 12px; color: var(--muted); border: 1px solid var(--line); padding: 6px 12px; border-radius: 99px; background: none; font-family: inherit; cursor: pointer; min-height: 36px; }
+  .who b { color: var(--amber); font-weight: 600; }
+  .card { background: var(--bg2); border: 1px solid var(--line); padding: 22px 20px; }
+  .eyebrow { font-size: 12px; color: var(--faint); letter-spacing: .04em; }
+  .oid { font-family: 'Jost', sans-serif; font-size: 30px; letter-spacing: .06em; direction: ltr; text-align: right; margin-top: 4px; }
+  .items { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; white-space: pre-line; }
+
+  /* timeline */
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 22px; }
+  .steps li { font-size: 11px; color: var(--faint); text-align: center; line-height: 1.4; }
+  .steps li::before { content: ''; display: block; height: 3px; background: var(--line); margin-bottom: 8px; }
+  .steps li.done { color: var(--muted); }
+  .steps li.done::before { background: var(--amber); }
+  .steps li.now { color: var(--ink); font-weight: 600; }
+  .steps li.now::before { background: var(--ink); }
+
+  .contact { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; font-size: 14px; }
+  .contact .row { display: flex; justify-content: space-between; gap: 14px; }
+  .contact .k { color: var(--faint); flex-shrink: 0; }
+  .contact .v { text-align: left; word-break: break-word; }
+  .contact a { color: var(--amber); }
+  .cash { font-family: 'Jost', sans-serif; font-size: 22px; color: var(--amber); }
+
+  .btn {
+    width: 100%; min-height: 58px; border: 0; background: var(--ink); color: var(--bg);
+    font-family: inherit; font-size: 18px; font-weight: 700; cursor: pointer; letter-spacing: .01em;
+  }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); font-size: 15px; font-weight: 600; min-height: 50px; }
+  .btn:focus-visible, .who:focus-visible, .role:focus-visible, input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.8; text-align: center; }
+  .msg { font-size: 14px; text-align: center; min-height: 20px; }
+  .msg.err { color: var(--err); }
+  .msg.ok { color: var(--ok); }
+
+  .done-box { text-align: center; padding: 34px 20px; }
+  .tick { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--amber); margin: 0 auto 18px; display: grid; place-items: center; }
+  .tick svg { width: 30px; height: 30px; stroke: var(--amber); fill: none; stroke-width: 2.4; }
+  .done-box h1 { font-size: 22px; font-weight: 700; }
+  .done-box p { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+  .done-box .phrase { font-size: 26px; color: var(--amber); margin-top: 22px; }
+  .done-box a { color: var(--ink); }
+
+  /* setup */
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .role { min-height: 76px; background: none; border: 1px solid var(--line); color: var(--ink); font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; padding: 10px; }
+  .role small { display: block; font-size: 11px; color: var(--faint); font-weight: 400; margin-top: 2px; }
+  .role[aria-pressed="true"] { border-color: var(--amber); color: var(--amber); }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 18px 0 8px; }
+  input[type="password"], input[type="text"] {
+    width: 100%; min-height: 52px; background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+    font-size: 22px; letter-spacing: .3em; text-align: center; font-family: 'Jost', sans-serif; direction: ltr;
+  }
+  .stack { display: grid; gap: 10px; }
+  .hide { display: none !important; }
+  .skeleton { height: 140px; background: linear-gradient(90deg, #121315, #1a1b1e, #121315); background-size: 200% 100%; animation: sk 1.2s infinite; }
+  @keyframes sk { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+  .foot { text-align: center; font-size: 12px; color: var(--faint); margin-top: 8px; }
+  .foot a { color: var(--faint); }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="top">
+    <a href="/" aria-label="DIRBALK"><img src="/logo.png" alt="DIRBALK" width="96" height="34"></a>
+    <button type="button" class="who hide" id="whoBtn"></button>
+  </div>
+
+  <!-- loading -->
+  <div class="skeleton" id="loading" aria-hidden="true"></div>
+
+  <!-- order -->
+  <section id="orderView" class="hide" aria-live="polite">
+    <div class="card">
+      <p class="eyebrow">رقم الطلب</p>
+      <p class="oid" id="oId"></p>
+      <p class="items" id="oItems"></p>
+      <ol class="steps" id="oSteps">
+        <li>استلمنا الطلب</li><li>قيد التجهيز</li><li>بالطريق</li><li>وصل</li>
+      </ol>
+      <div class="contact hide" id="oContact"></div>
+    </div>
+    <div class="stack" style="margin-top:18px">
+      <p class="note" id="oNote"></p>
+      <button type="button" class="btn hide" id="actBtn"></button>
+      <button type="button" class="btn ghost hide" id="act2Btn"></button>
+      <p class="msg" id="actMsg" role="status"></p>
+    </div>
+  </section>
+
+  <!-- success -->
+  <section id="doneView" class="card done-box hide" aria-live="polite">
+    <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h1 id="doneTitle"></h1>
+    <p id="doneText"></p>
+    <p class="phrase hide" id="donePhrase">دير بالك على حالك</p>
+    <p id="doneLink" class="hide" style="margin-top:22px;font-size:14px"><a href="/me.html">طلباتي</a> · <a href="/shop.html">المتجر</a></p>
+  </section>
+
+  <!-- error / nothing to scan -->
+  <section id="emptyView" class="card hide">
+    <p class="note" id="emptyText">امسح الكود اللي على الطلب.</p>
+  </section>
+
+  <!-- staff setup -->
+  <section id="setupView" class="card hide">
+    <p class="eyebrow">تجهيز الجهاز</p>
+    <p class="note" style="text-align:right;margin-top:6px">مرة وحدة على كل تلفون. بعدها أي سكان من هاد الجهاز رح ينحسب على دورك.</p>
+    <div class="roles" role="group" aria-label="الدور">
+      <button type="button" class="role" data-role="prep" aria-pressed="false">تجهيز الطلبات<small>بنجهّز الطلب</small></button>
+      <button type="button" class="role" data-role="courier" aria-pressed="false">مندوب التوصيل<small>بنشحن ونسلّم</small></button>
+    </div>
+    <label for="pinInput">الكود السري</label>
+    <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" maxlength="12">
+    <div class="stack" style="margin-top:18px">
+      <button type="button" class="btn" id="setupBtn">حفظ</button>
+      <p class="msg" id="setupMsg" role="status"></p>
+    </div>
+    <div class="stack hide" id="setupCurrent" style="margin-top:6px">
+      <p class="note" id="setupCurrentText"></p>
+      <button type="button" class="btn ghost" id="forgetBtn">إلغاء تسجيل هاد الجهاز</button>
+    </div>
+  </section>
+
+  <p class="foot"><a href="/">dirbalk.com</a></p>
+</div>
+
+<script>
+(function () {
+  var STAFF_KEY = 'dirbalk_staff';
+  var ROLE_NAME = { prep: 'تجهيز الطلبات', courier: 'مندوب التوصيل' };
+  var RANK = { 'قيد المراجعة': 0, 'قيد التجهيز': 1, 'تم الشحن': 2, 'تم التسليم': 3 };
+  var $ = function (id) { return document.getElementById(id); };
+  var q = new URLSearchParams(location.search);
+  var orderId = (q.get('o') || '').trim();
+  var token = (q.get('t') || '').trim();
+
+  function getStaff() {
+    try {
+      var s = JSON.parse(localStorage.getItem(STAFF_KEY) || 'null');
+      if (s && ROLE_NAME[s.role] && s.pin) return s;
+    } catch (e) {}
+    return null;
+  }
+  function setStaff(s) { try { s ? localStorage.setItem(STAFF_KEY, JSON.stringify(s)) : localStorage.removeItem(STAFF_KEY); } catch (e) {} }
+  function show(id) {
+    ['loading', 'orderView', 'doneView', 'emptyView', 'setupView'].forEach(function (x) { $(x).classList.toggle('hide', x !== id); });
+  }
+  function api(body) {
+    return fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); });
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  var MSG_AR = {
+    'This code is not valid.': 'هاد الكود مش صالح.',
+    'This order was cancelled.': 'هاد الطلب ملغى.',
+    'Too early for this step.': 'لسا بكير على هاي الخطوة.',
+    'Wrong code.': 'الكود السري غلط.',
+    'This role is switched off.': 'هاد الدور مسكّر حاليًا.',
+    'Too many wrong codes. Try again in 15 minutes.': 'محاولات كثير غلط. جرّب بعد ربع ساعة.',
+    'Not allowed.': 'مش مسموح.'
+  };
+  function ar(m) { return MSG_AR[m] || 'صار خطأ، جرّب كمان مرة.'; }
+
+  var staff = getStaff();
+  function renderWho() {
+    var b = $('whoBtn');
+    if (staff) { b.innerHTML = 'الجهاز: <b>' + ROLE_NAME[staff.role] + '</b>'; b.classList.remove('hide'); }
+    else b.classList.add('hide');
+  }
+  $('whoBtn').addEventListener('click', function () { openSetup(); });
+
+  /* ---------- setup ---------- */
+  var pickedRole = '';
+  function openSetup() {
+    show('setupView');
+    pickedRole = staff ? staff.role : '';
+    syncRoles();
+    $('setupMsg').textContent = '';
+    $('pinInput').value = '';
+    $('setupCurrent').classList.toggle('hide', !staff);
+    if (staff) $('setupCurrentText').textContent = 'هاد الجهاز مسجّل كـ ' + ROLE_NAME[staff.role] + '.';
+  }
+  function syncRoles() {
+    document.querySelectorAll('.role').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.role === pickedRole)); });
+  }
+  document.querySelectorAll('.role').forEach(function (b) {
+    b.addEventListener('click', function () { pickedRole = b.dataset.role; syncRoles(); $('pinInput').focus(); });
+  });
+  $('setupBtn').addEventListener('click', function () {
+    var pin = $('pinInput').value.trim();
+    var m = $('setupMsg');
+    m.className = 'msg';
+    if (!pickedRole) { m.className = 'msg err'; m.textContent = 'اختار الدور أول.'; return; }
+    if (!pin) { m.className = 'msg err'; m.textContent = 'اكتب الكود السري.'; return; }
+    var btn = this; btn.disabled = true; m.textContent = '…';
+    api({ kind: 'staffCheck', role: pickedRole, pin: pin }).then(function (r) {
+      btn.disabled = false;
+      if (r.status !== 'success') { m.className = 'msg err'; m.textContent = ar(r.message); return; }
+      staff = { role: pickedRole, pin: pin };
+      setStaff(staff); renderWho();
+      m.className = 'msg ok'; m.textContent = 'تمام. هاد الجهاز صار ' + ROLE_NAME[pickedRole] + '.';
+      $('setupCurrent').classList.remove('hide');
+      $('setupCurrentText').textContent = 'هاد الجهاز مسجّل كـ ' + ROLE_NAME[pickedRole] + '.';
+      if (orderId && token) setTimeout(function () { history.replaceState(null, '', location.pathname + '?o=' + encodeURIComponent(orderId) + '&t=' + encodeURIComponent(token)); load(); }, 700);
+    }).catch(function () { btn.disabled = false; m.className = 'msg err'; m.textContent = 'ما في اتصال. جرّب كمان مرة.'; });
+  });
+  $('pinInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('setupBtn').click(); });
+  $('forgetBtn').addEventListener('click', function () {
+    staff = null; setStaff(null); renderWho();
+    if (orderId && token) load(); else openSetup();
+  });
+
+  /* ---------- order ---------- */
+  var current = null;
+
+  function renderOrder(o) {
+    current = o;
+    $('oId').textContent = o.orderId;
+    $('oItems').textContent = o.items || '';
+    var rank = RANK.hasOwnProperty(o.status) ? RANK[o.status] : -1;
+    Array.prototype.forEach.call($('oSteps').children, function (li, i) {
+      li.className = i < rank ? 'done' : i === rank ? 'now' : '';
+    });
+
+    var c = $('oContact');
+    if (staff && o.phone) {
+      var map = /^https?:\/\//i.test(o.locationLink || '') ? '<br><a href="' + esc(o.locationLink) + '" target="_blank" rel="noopener">افتح الخريطة</a>' : '';
+      c.innerHTML =
+        row('الاسم', esc(o.name)) +
+        row('التلفون', '<a href="tel:' + esc(o.phone) + '" dir="ltr">' + esc(o.phone) + '</a>') +
+        row('العنوان', esc(o.city) + ' — ' + esc(o.address) + map) +
+        (staff.role === 'courier' ? row('المبلغ (كاش)', '<span class="cash">' + esc(o.total) + ' JD</span>') : '');
+      c.classList.remove('hide');
+    } else c.classList.add('hide');
+
+    var act = $('actBtn'), act2 = $('act2Btn'), note = $('oNote');
+    act.classList.add('hide'); act2.classList.add('hide'); act.disabled = false;
+    $('actMsg').textContent = ''; $('actMsg').className = 'msg';
+    act.onclick = null;
+
+    if (o.status === 'ملغى') { note.textContent = 'هاد الطلب ملغى.'; return; }
+    var role = staff ? staff.role : 'customer';
+
+    if (role === 'prep') {
+      if (rank <= 0) { note.textContent = 'أول ما تبلّش تجهّز الطلب، اكبس:'; setAct('بلّشنا نجهّز الطلب', 'قيد التجهيز'); }
+      else note.textContent = 'الطلب ' + statusText(o.status) + '. ما في شي عليك هون.';
+    } else if (role === 'courier') {
+      if (rank <= 1) { note.textContent = 'استلمت الطلب من المحل؟'; setAct('استلمته — طالع للتوصيل', 'تم الشحن'); }
+      else if (rank === 2) {
+        note.textContent = 'سلّمت الطلب للزبون واستلمت المبلغ؟';
+        setAct('تم التسليم للزبون', 'تم التسليم', 'تأكيد: سلّمت ' + o.orderId + (o.total ? ' واستلمت ' + o.total + ' JD' : '') + '؟');
+      }
+      else note.textContent = 'الطلب وصل. يعطيك العافية.';
+    } else {
+      if (rank === 2) { note.textContent = 'وصلك الطلب؟ اكبس هون عشان نعرف.'; setAct('استلمت طلبي', 'تم التسليم'); }
+      else if (rank === 3) { showDone('وصل.', 'استلمت طلبك. هسا اطّلع منيح — في تفاصيل بالقطعة حدا فكّر فيها عشانك.', true); return; }
+      else note.textContent = rank === 1 ? 'طلبك قيد التجهيز. رح نخبرك أول ما يطلع.' : 'استلمنا طلبك. رح نتواصل معك قريب.';
+    }
+    show('orderView');
+  }
+  function row(k, v) { return '<div class="row"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
+  function statusText(s) { return { 'قيد التجهيز': 'قيد التجهيز', 'تم الشحن': 'بالطريق', 'تم التسليم': 'وصل', 'قيد المراجعة': 'لسا قيد المراجعة' }[s] || s; }
+
+  function setAct(label, target, confirmText) {
+    var act = $('actBtn');
+    act.textContent = label;
+    act.classList.remove('hide');
+    act.onclick = function () {
+      if (confirmText && !window.confirm(confirmText)) return;
+      act.disabled = true;
+      var m = $('actMsg'); m.className = 'msg'; m.textContent = '…';
+      var body = { kind: 'scan', orderId: orderId, token: token, role: staff ? staff.role : 'customer', target: target };
+      if (staff) body.pin = staff.pin;
+      api(body).then(function (r) {
+        if (r.status === 'success') {
+          var o = r.order || current;
+          if (target === 'قيد التجهيز') showDone('تمام.', o.orderId + ' صار قيد التجهيز.');
+          else if (target === 'تم الشحن') showDone('بالتوفيق.', o.orderId + ' طالع للتوصيل. الزبون وصله إيميل.');
+          else if (staff) showDone('يعطيك العافية.', o.orderId + ' تسلّم للزبون.');
+          else showDone('وصل.', 'شكرًا إنك خبّرتنا. هسا اطّلع منيح — في تفاصيل بالقطعة حدا فكّر فيها عشانك.', true);
+          return;
+        }
+        act.disabled = false;
+        if (r.pinError) { staff = null; setStaff(null); renderWho(); m.className = 'msg err'; m.textContent = ar(r.message) + ' سجّل الجهاز من جديد.'; return; }
+        m.className = 'msg err'; m.textContent = ar(r.message);
+        if (r.order) renderOrder(r.order);
+      }).catch(function () { act.disabled = false; m.className = 'msg err'; m.textContent = 'ما في اتصال. جرّب كمان مرة.'; });
+    };
+  }
+
+  function showDone(title, text, customer) {
+    $('doneTitle').textContent = title;
+    $('doneText').textContent = text;
+    $('donePhrase').classList.toggle('hide', !customer);
+    $('doneLink').classList.toggle('hide', !customer);
+    show('doneView');
+  }
+
+  function load() {
+    show('loading');
+    var body = { kind: 'scanInfo', orderId: orderId, token: token };
+    if (staff) { body.role = staff.role; body.pin = staff.pin; }
+    api(body).then(function (r) {
+      if (r.status === 'success' && r.order) return renderOrder(r.order);
+      if (r.pinError) { staff = null; setStaff(null); renderWho(); return load(); }
+      $('emptyText').textContent = ar(r.message);
+      show('emptyView');
+    }).catch(function () {
+      $('emptyText').textContent = 'ما في اتصال. جرّب كمان مرة.';
+      show('emptyView');
+    });
+  }
+
+  renderWho();
+  if (q.get('setup') === '1') openSetup();
+  else if (orderId && token) load();
+  else show('emptyView');
+})();
+</script>
+</body>
+</html>
