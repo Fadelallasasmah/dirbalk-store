@@ -156,6 +156,12 @@ html.drop-open #form-section{display:none}
   .reg input:focus-visible, .submit-btn:focus-visible, .wl a:focus-visible, .text-btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
   .field-msg, .form-error { display: none; color: rgba(255,150,150,.9); font-size: 13px; margin-top: 10px; }
   .note { font-size: 12px; color: var(--faint); margin-top: 12px; }
+  .signin-line { margin-top: 6px; }
+  .signin-line a { color: var(--muted); text-underline-offset: 3px; display: inline-block; padding: 10px 4px; }
+  .signin-line a:hover { color: var(--ink); }
+  .link-box { margin-top: 18px; }
+  .link-box .text-btn { color: var(--amber); font-size: 13px; }
+  .link-box .link-done { font-size: 13px; color: var(--muted); padding: 12px 0; }
 
   /* after registering */
   .success-msg { display: none; margin-top: 26px; }
@@ -283,11 +289,16 @@ html.drop-open #form-section{display:none}
       <p class="field-msg" id="email-msg" role="alert"></p>
       <p class="form-error" id="form-error" role="alert"></p>
       <p class="note" id="regNote">Registration doesn't guarantee access.</p>
+      <p class="note signin-line">Already on the list? <a href="/signin.html" id="signinLink">Sign in</a></p>
     </div>
 
     <div class="success-msg" id="success-msg" aria-live="polite">
       <svg class="success-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26"></circle><path d="M17 29 L24 36 L39 20"></path></svg>
       <p class="position-line" id="positionLine"><span id="positionLabel">You're on the list. Your number</span><span class="pos-num" id="positionNum"></span></p>
+      <div class="link-box" id="linkBox" hidden>
+        <button type="button" class="text-btn" id="sendLinkBtn">Email me a sign-in link</button>
+        <p class="link-done" id="linkDone" hidden></p>
+      </div>
       <p class="success-text" id="success-text">Good. We'll let you know first.<span class="brand-phrase" lang="ar">دير بالك على حالك.</span></p>
       <div class="success-actions">
         <button type="button" class="share-btn" id="share-whatsapp">
@@ -377,9 +388,16 @@ html.drop-open #form-section{display:none}
   });
   input.addEventListener('input', function () { input.classList.remove('field-error'); emailMsg.style.display = 'none'; });
 
-  function showSuccess() {
+  function showSuccess(already) {
     var pos = get(POSITION_KEY);
-    document.getElementById('positionLine').style.display = pos ? 'block' : 'none';
+    document.getElementById('positionLabel').textContent = already ? "You're already on the list." : "You're on the list. Your number";
+    if (already) { pos = ''; }
+    var lb = document.getElementById('linkBox');
+    lb.hidden = !already;
+    document.getElementById('linkDone').hidden = true;
+    document.getElementById('sendLinkBtn').hidden = false;
+    if (already) { document.getElementById('positionLine').style.display = 'block'; }
+    if (!already) document.getElementById('positionLine').style.display = pos ? 'block' : 'none';
     if (pos) document.getElementById('positionNum').textContent = pos;
     document.getElementById('logoutBtn').textContent = get(STORAGE_KEY) === '1' ? 'Log out' : 'Not you? Use a different email';
     document.getElementById('form-section').style.display = 'none';
@@ -399,6 +417,25 @@ html.drop-open #form-section{display:none}
     [WL_KEY, POSITION_KEY, STORAGE_KEY, 'dirbalk_name', 'dirbalk_gender', 'dirbalk_email', 'dirbalk_phone'].forEach(del);
     showForm();
     input.focus();
+  });
+
+  /* one-tap sign-in link to the email on this device (same /api/login as signin.html) */
+  document.getElementById('sendLinkBtn').addEventListener('click', function () {
+    var email = get(WL_KEY) || input.value.trim().toLowerCase();
+    var b = this, done = document.getElementById('linkDone');
+    if (!email) { location.href = '/signin.html'; return; }
+    b.disabled = true; b.textContent = 'Sending…';
+    fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'link', email: email }) })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        b.disabled = false; b.textContent = 'Email me a sign-in link';
+        if (r && r.status === 'success') {
+          b.hidden = true; done.hidden = false;
+          done.textContent = 'Sent to ' + email + '. Open it on this device to sign in.';
+          if (window.gtag) gtag('event', 'login_link_request', { source: 'waitlist' });
+        } else { done.hidden = false; done.textContent = (r && r.message) || 'Something went wrong, please try again.'; }
+      })
+      .catch(function () { b.disabled = false; b.textContent = 'Email me a sign-in link'; done.hidden = false; done.textContent = 'Something went wrong, please try again.'; });
   });
 
   function fail(msg) {
@@ -437,6 +474,11 @@ html.drop-open #form-section{display:none}
           set(WL_KEY, email);
           if (result.position) set(POSITION_KEY, String(result.position));
           showSuccess();
+        } else if (result && /already/i.test(result.message || '')) {
+          // already on the list: don't block them — show the list state + a one-tap sign-in link
+          set(WL_KEY, email);
+          showSuccess(true);
+          reset();
         } else {
           if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: (result && result.message) || 'unknown' });
           fail((result && result.message) || 'Something went wrong, please try again.');
