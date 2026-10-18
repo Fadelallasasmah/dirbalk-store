@@ -24,7 +24,9 @@
 
   /* gallery: thumbs + main */
   .gal { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-self: start; position: sticky; top: 76px; }
-  .thumbs { display: flex; flex-direction: column; gap: 8px; }
+  .thumbs { display: flex; flex-direction: column; gap: 8px; height: 0; min-height: 100%; overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain; } /* as tall as the main photo; scrolls when there are many */
+  .thumbs::-webkit-scrollbar { display: none; }
+  .thumbs button { flex: none; }
   .thumbs button { position: relative; aspect-ratio: 4 / 5; border: 1px solid transparent; background: var(--bg2); padding: 0; cursor: pointer; overflow: hidden; opacity: .55; transition: opacity .2s, border-color .2s; }
   .thumbs button.on, .thumbs button:hover { opacity: 1; }
   .thumbs button.on { border-color: var(--ink); }
@@ -313,7 +315,14 @@
   }
   function setIdx(i) {
     idx = i;
-    Array.prototype.forEach.call(document.querySelectorAll('#thumbs button'), function (b, j) { b.classList.toggle('on', j === i); });
+    var tb = document.getElementById('thumbs');
+    Array.prototype.forEach.call(tb.querySelectorAll('button'), function (b, j) {
+      b.classList.toggle('on', j === i);
+      if (j === i && tb.clientHeight) { // keep the active thumb in view without moving the page
+        if (b.offsetTop < tb.scrollTop) tb.scrollTop = b.offsetTop;
+        else if (b.offsetTop + b.offsetHeight > tb.scrollTop + tb.clientHeight) tb.scrollTop = b.offsetTop + b.offsetHeight - tb.clientHeight;
+      }
+    });
     Array.prototype.forEach.call(document.querySelectorAll('#dots span'), function (d, j) { d.classList.toggle('on', j === i); });
   }
   function go(i) {
