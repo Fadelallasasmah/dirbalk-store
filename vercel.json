@@ -1,6 +1,16 @@
 {
   "redirects": [
     {
+      "source": "/drop.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/drop",
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/en",
       "destination": "/",
       "permanent": true

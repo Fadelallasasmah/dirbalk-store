@@ -52,10 +52,7 @@
   .info h1 { margin: 10px 0 10px; }
   .info .price { font-size: 20px; color: var(--amber); }
   .tag { display: none; margin-left: 12px; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid rgba(255,150,150,.45); color: rgba(255,190,190,.9); padding: 4px 7px; vertical-align: middle; }
-  /* warm cream for reading text (was the grey/silver --muted) */
-  .info { --copy: rgba(242,239,232,0.88); }
-  body.light .info { --copy: rgba(20,20,20,0.82); }
-  .info .lead { margin: 16px 0 26px; max-width: 460px; color: var(--copy); font-weight: 400; }
+  .info .lead { margin: 16px 0 26px; max-width: 460px; font-size: 15px; } /* original colour, a touch bigger */
   .lbl-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 10px; }
   .lbl-row .v { color: var(--muted); letter-spacing: .04em; text-transform: none; font-size: 12px; margin-left: 8px; }
   .lbl-row button { background: none; border: none; color: var(--muted); font: inherit; font-size: 12px; padding: 14px 0; margin: -14px 0; letter-spacing: .04em; text-transform: none; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
@@ -75,7 +72,7 @@
   .buy { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 22px; }
   .buy .wish { border: 1px solid var(--line); width: 52px; justify-content: center; align-items: center; }
   .buy .wish:hover { border-color: var(--ink); }
-  .perks { margin-top: 20px; display: grid; gap: 8px; font-size: 12px; color: var(--copy); }
+  .perks { margin-top: 20px; display: grid; gap: 8px; font-size: 13px; color: var(--muted); }
   .perks span::before { content: "—"; color: var(--amber); margin-right: 10px; }
 
   /* accordions */
@@ -85,7 +82,7 @@
   .acc-h::after { content: "+"; font-size: 16px; letter-spacing: 0; transition: transform .25s; }
   .acc.open .acc-h::after { transform: rotate(45deg); }
   .acc-b { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
-  .acc-b > div { padding: 0 0 20px; font-size: 13.5px; line-height: 1.75; color: var(--copy); font-weight: 400; }
+  .acc-b > div { padding: 0 0 20px; font-size: 14.5px; line-height: 1.75; color: var(--muted); font-weight: 300; }
   .acc-b ul { list-style: none; display: grid; gap: 4px; margin-top: 8px; }
   .acc-b li::before { content: "·"; color: var(--amber); margin-right: 8px; }
   .acc-b p + p { margin-top: 8px; }

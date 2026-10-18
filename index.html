@@ -278,12 +278,11 @@ html.drop-open #form-section{display:none}
     <div id="form-section" class="fade d3">
       <form id="reg-form" class="reg" novalidate>
         <label for="email" class="sr-only">Email</label>
-        <input type="email" id="email" name="email" placeholder="Your email" autocomplete="email" inputmode="email" aria-describedby="email-msg regNote" required>
+        <input type="email" id="email" name="email" placeholder="Your email" autocomplete="email" inputmode="email" aria-describedby="email-msg" required>
         <button type="submit" class="submit-btn" id="submit-btn"><span class="lbl">Get on the list</span><span class="arw" aria-hidden="true">→</span></button>
       </form>
       <p class="field-msg" id="email-msg" role="alert"></p>
       <p class="form-error" id="form-error" role="alert"></p>
-      <p class="note" id="regNote">Registration doesn't guarantee access.</p>
     </div>
 
     <div class="success-msg" id="success-msg" aria-live="polite">
@@ -463,7 +462,7 @@ html.drop-open #form-section{display:none}
   var siteUrl = 'https://dirbalk.com';
   document.getElementById('share-whatsapp').addEventListener('click', function () {
     if (window.gtag) gtag('event', 'share_click', { method: 'whatsapp' });
-    window.open('https://wa.me/?text=' + encodeURIComponent('I just signed up for DIRBALK — when the collection drops you might be first to know. Sign up too: ' + siteUrl), '_blank');
+    window.open('https://wa.me/?text=' + encodeURIComponent('I just signed up for DIRBALK — Collection 01 drops soon. Sign up too: ' + siteUrl), '_blank');
   });
   var copyText = document.getElementById('copy-link-text');
   document.getElementById('copy-link').addEventListener('click', function () {

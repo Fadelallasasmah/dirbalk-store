@@ -1,7 +1,6 @@
 User-agent: *
 Allow: /
 Allow: /about.html
-Allow: /drop.html
 Allow: /shop.html
 Allow: /product.html
 Allow: /story.html
