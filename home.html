@@ -85,12 +85,15 @@
   .sm .phrase { margin-top: auto; font-family: 'Cairo', Arial, sans-serif; font-weight: 700; color: var(--amber); direction: rtl; }
 
   /* ---------- hero ---------- */
-  .hero { position: relative; height: clamp(320px, 30vw, 470px); border-top: 1px solid var(--line); }
+  /* the whole photo is always visible: the box takes the photo's own shape (1672×941) */
+  .hero { position: relative; border-top: 1px solid var(--line); }
+  #heroSlides { position: relative; width: 100%; aspect-ratio: 1672 / 941; }
   .hero .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
   .hero .slide.on { opacity: 1; }
-  .hero .slide img { object-position: 60% 20%; }
-  .hero .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,10,10,.92) 0%, rgba(10,10,10,.65) 28%, rgba(10,10,10,0) 55%); }
-  .hero .copy { position: absolute; left: var(--pad); top: 50%; transform: translateY(-58%); max-width: 520px; }
+  .hero .slide img { object-position: 50% 50%; }
+  .hero .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, rgba(10,10,10,.62) 0%, rgba(10,10,10,.3) 26%, rgba(10,10,10,0) 44%); }
+  .hero .copy { position: absolute; left: var(--pad); top: clamp(36px, 6.5vw, 110px); max-width: 520px; }
+  @media (min-width: 861px) { .hero .copy .t-xl { font-size: clamp(26px, 2.8vw, 40px); } } /* keep the headline clear of the faces */
   .hero .dots { position: absolute; right: var(--pad); bottom: 22px; display: flex; gap: 16px; font-size: 10.5px; color: rgba(242,239,232,.5); }
   .hero .dots button { background: none; border: none; color: inherit; font: inherit; cursor: pointer; display: flex; align-items: center; gap: 16px; }
   .hero .dots button.on { color: var(--ink); }
@@ -152,13 +155,9 @@
   @media (max-width: 860px) {
     .hdr nav, .hdr .right .lbl { display: none; }
     .menu-btn { display: inline-flex; }
-    .hero { height: 78vh; height: min(76svh, 680px); }
-    /* portrait crops: keep the people in frame (the photos are landscape) */
-    .hero .slide:nth-child(1) img { object-position: 22% 50%; }
-    .hero .slide:nth-child(2) img { object-position: 45% 50%; }
-    .hero .slide:nth-child(3) img { object-position: 55% 40%; }
-    .hero .shade { background: linear-gradient(0deg, rgba(10,10,10,.92) 0%, rgba(10,10,10,.35) 50%, rgba(10,10,10,0) 75%); }
-    .hero .copy { top: auto; bottom: 64px; transform: none; right: var(--pad); }
+    /* phone: the full photo on top, the words underneath it (nothing covers the photo) */
+    .hero .shade { display: none; }
+    .hero .copy { position: static; max-width: none; padding: 26px var(--pad) 34px; }
     .cards { grid-template-columns: 1fr; gap: 26px; }
     .session, .details { grid-template-columns: 1fr; }
     .session .txt, .details .txt { padding: 26px var(--pad) 16px; }
@@ -351,7 +350,9 @@
      needs to change). The current ones are temporary crops of the design. */
   var P = '/img/';
   var PHOTOS = {
-    hero:      [P + 'hero-1.jpg', P + 'hero-2.jpg', P + 'hero-3.jpg'],
+    // hero: one photo (add more paths here to turn it back into a slideshow)
+    hero:      [P + 'hero-picnic.jpg'],
+    heroSmall: { 'hero-picnic.jpg': P + 'hero-picnic-960.jpg' },   // lighter copy for phones
     // product cards (all three colours together)
     'DB-TEE-01': P + 'tee-all.jpg',
     'DB-DEN-01': P + 'den-all.jpg',
@@ -386,6 +387,13 @@
     var s = document.createElement('div');
     s.className = 'slide ph' + (i === 0 ? ' on' : '');
     addImg(s, src, i === 0);
+    var small = PHOTOS.heroSmall[src.split('/').pop()];
+    if (small) {
+      var im = s.querySelector('img');
+      im.srcset = small + ' 960w, ' + src + ' 1672w';
+      im.sizes = '100vw';
+      im.alt = 'Two friends on a picnic by the water, wearing DIRBALK denim and a white tee';
+    }
     slidesEl.appendChild(s);
     var b = document.createElement('button');
     b.type = 'button'; b.textContent = ('0' + (i + 1)).slice(-2);
@@ -398,7 +406,8 @@
     cur = (i + slidesEl.children.length) % slidesEl.children.length;
     slidesEl.children[cur].classList.add('on'); dotsEl.children[cur].classList.add('on');
   }
-  function restart() { clearInterval(timer); timer = setInterval(function () { go(cur + 1); }, 6000); }
+  function restart() { clearInterval(timer); if (PHOTOS.hero.length > 1) timer = setInterval(function () { go(cur + 1); }, 6000); }
+  if (PHOTOS.hero.length < 2) dotsEl.style.display = 'none';
   restart();
 
   /* ---------- product cards: real prices, sizes, colours, stock ---------- */
