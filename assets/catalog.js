@@ -28,7 +28,7 @@
   /* order = order of the circles under each product (left→right in reading order) */
   var VARIANTS = {
     'DB-JAC-01': { order: ['black', 'blue', 'indigo'], def: 'indigo', photos: { indigo: true } },
-    'DB-DEN-01': { order: ['black', 'blue', 'indigo'], def: 'indigo', photos: { indigo: true } },
+    'DB-DEN-01': { order: ['black', 'blue', 'indigo'], def: 'indigo', photos: { black: true, blue: true, indigo: true } }, // reference photos on every colour for now
     'DB-TEE-01': { order: ['black', 'white', 'grey'],  def: 'white',  photos: { white: true } }
   };
 

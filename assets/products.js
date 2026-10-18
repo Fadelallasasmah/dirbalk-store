@@ -28,8 +28,8 @@ window.DIRBALK_PRODUCTS = [
   },
   {
     id: 'DB-DEN-01',
-    img: '/img/den-back.jpg',
-    images: ['/img/den-back.jpg'],
+    img: '/img/den/front.jpg',
+    images: ['/img/den/front.jpg', '/img/den/back.jpg', '/img/den/side.jpg'],
     name: 'Wide-Leg Denim Pants',
     colorway: 'Raw Indigo 13oz',
     price: 50,
@@ -41,12 +41,25 @@ window.DIRBALK_PRODUCTS = [
     swatch: '#3a4a63',
     silhouette: 'pants',
     sizes: { S: 20, M: 60, L: 20 },
+    // reference shoot — same 17 frames for every colour until each colour is photographed
     media: [
-      { src: '/img/den-back.jpg', ratio: '45', caption: 'BACK' },
-      { ratio: '45', caption: 'FRONT' },
-      { ratio: '11', caption: 'DENIM MACRO' },
-      { ratio: '11', caption: 'AMBER STITCH' },
-      { ratio: '45', caption: 'HEM STACK' }
+      { src: '/img/den/front.jpg', ratio: '45', caption: 'FRONT' },
+      { src: '/img/den/side.jpg', ratio: '45', caption: 'SIDE' },
+      { src: '/img/den/back.jpg', ratio: '45', caption: 'BACK' },
+      { src: '/img/den/walk.jpg', ratio: '45', caption: 'ON THE MOVE' },
+      { src: '/img/den/flat-front.jpg', ratio: '45', caption: 'FLAT — FRONT' },
+      { src: '/img/den/flat-back.jpg', ratio: '45', caption: 'FLAT — BACK' },
+      { src: '/img/den/pocket.jpg', ratio: '45', caption: 'FRONT POCKET' },
+      { src: '/img/den/button.jpg', ratio: '45', caption: 'BUTTON' },
+      { src: '/img/den/zip.jpg', ratio: '45', caption: 'ZIPPER' },
+      { src: '/img/den/back-pocket.jpg', ratio: '45', caption: 'BACK POCKET' },
+      { src: '/img/den/patch.jpg', ratio: '45', caption: 'LEATHER PATCH' },
+      { src: '/img/den/inside.jpg', ratio: '45', caption: 'INSIDE' },
+      { src: '/img/den/fabric.jpg', ratio: '45', caption: '13OZ DENIM' },
+      { src: '/img/den/hem-twill.jpg', ratio: '45', caption: 'TWILL' },
+      { src: '/img/den/hem.jpg', ratio: '45', caption: 'HEM' },
+      { src: '/img/den/on-foot.jpg', ratio: '45', caption: 'ON FOOT' },
+      { src: '/img/den/folded.jpg', ratio: '45', caption: 'FOLDED' }
     ]
   },
   {
