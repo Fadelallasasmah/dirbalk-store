@@ -64,8 +64,8 @@ window.DIRBALK_PRODUCTS = [
   },
   {
     id: 'DB-JAC-01',
-    img: '/img/jac-front.jpg',
-    images: ['/img/jac-front.jpg', '/img/jac-back.jpg', '/img/jac-side.jpg'],
+    img: '/img/jac/front.jpg',
+    images: ['/img/jac/front.jpg', '/img/jac/back.jpg', '/img/jac/side.jpg'],
     name: 'Oversized Denim Jacket',
     colorway: 'Raw Indigo 13oz',
     price: 65,
@@ -77,13 +77,25 @@ window.DIRBALK_PRODUCTS = [
     swatch: '#2d3a52',
     silhouette: 'jacket',
     sizes: { S: 20, M: 60, L: 20 },
+    // reference shoot — same 17 frames for every colour until each colour is photographed
     media: [
-      { src: '/img/jac-front.jpg', ratio: '45', caption: 'FRONT' },
-      { src: '/img/jac-back.jpg', ratio: '45', caption: 'BACK' },
-      { src: '/img/jac-side.jpg', ratio: '45', caption: 'SIDE' },
-      { ratio: '11', caption: 'BUTTON MACRO' },
-      { ratio: '11', caption: 'CUFF DETAIL' },
-      { ratio: '45', caption: 'OPEN / INTERIOR' }
+      { src: '/img/jac/front.jpg', ratio: '45', caption: 'FRONT' },
+      { src: '/img/jac/side.jpg', ratio: '45', caption: 'SIDE' },
+      { src: '/img/jac/back.jpg', ratio: '45', caption: 'BACK' },
+      { src: '/img/jac/seated.jpg', ratio: '45', caption: 'SEATED' },
+      { src: '/img/jac/flat-front.jpg', ratio: '45', caption: 'FLAT — FRONT' },
+      { src: '/img/jac/flat-back.jpg', ratio: '45', caption: 'FLAT — BACK' },
+      { src: '/img/jac/collar.jpg', ratio: '45', caption: 'COLLAR' },
+      { src: '/img/jac/button.jpg', ratio: '45', caption: 'BUTTON' },
+      { src: '/img/jac/pocket.jpg', ratio: '45', caption: 'CHEST POCKET' },
+      { src: '/img/jac/cuff.jpg', ratio: '45', caption: 'CUFF' },
+      { src: '/img/jac/hem.jpg', ratio: '45', caption: 'HEM' },
+      { src: '/img/jac/inside.jpg', ratio: '45', caption: 'INSIDE' },
+      { src: '/img/jac/fabric.jpg', ratio: '45', caption: '13OZ DENIM' },
+      { src: '/img/jac/seam.jpg', ratio: '45', caption: 'SEAM' },
+      { src: '/img/jac/hand-pocket.jpg', ratio: '45', caption: 'HAND POCKET' },
+      { src: '/img/jac/patch.jpg', ratio: '45', caption: 'LEATHER PATCH' },
+      { src: '/img/jac/folded.jpg', ratio: '45', caption: 'FOLDED' }
     ]
   }
 ];
