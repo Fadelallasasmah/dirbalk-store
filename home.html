@@ -155,9 +155,13 @@
   @media (max-width: 860px) {
     .hdr nav, .hdr .right .lbl { display: none; }
     .menu-btn { display: inline-flex; }
-    /* phone: the full photo on top, the words underneath it (nothing covers the photo) */
-    .hero .shade { display: none; }
-    .hero .copy { position: static; max-width: none; padding: 26px var(--pad) 34px; }
+    /* phone: the full photo; the headline sits on its lower edge, the button underneath */
+    .hero .copy { display: contents; }
+    .hero .shade { inset: auto 0 auto 0; top: 0; height: calc(100vw * 941 / 1672); background: linear-gradient(0deg, rgba(10,10,10,.82) 0%, rgba(10,10,10,.45) 26%, rgba(10,10,10,0) 50%); }
+    .hero .copy .eyebrow, .hero .copy .t-xl { position: absolute; left: var(--pad); right: var(--pad); z-index: 2; text-shadow: 0 1px 12px rgba(0,0,0,.45); }
+    .hero .copy .t-xl { top: calc(100vw * 941 / 1672 - 14px); transform: translateY(-100%); font-size: clamp(17px, 5vw, 26px); margin: 0; }
+    .hero .copy .eyebrow { top: calc(100vw * 941 / 1672 - 14px - 2 * 1.2 * clamp(17px, 5vw, 26px) - 8px); transform: translateY(-100%); margin: 0; font-size: 10px; }
+    .hero .copy .btn { display: flex; justify-content: center; margin: 20px var(--pad) 30px; }
     .cards { grid-template-columns: 1fr; gap: 26px; }
     .session, .details { grid-template-columns: 1fr; }
     .session .txt, .details .txt { padding: 26px var(--pad) 16px; }
