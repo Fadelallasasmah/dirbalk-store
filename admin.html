@@ -63,7 +63,8 @@
     cursor: pointer;
     font-family: Arial, sans-serif;
   }
-  .gate-error { color: rgba(255,120,120,0.85); font-size: 11.5px; margin-top: 12px; display: none; }
+  .gate-error { color: rgba(255,120,120,0.85); font-size: 11.5px; margin-top: 12px; display: none; line-height: 1.7; }
+  .show-key { background: none; border: none; color: rgba(255,255,255,0.45); font-family: inherit; font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 10px 4px 0; display: block; margin: 0 auto; }
 
   .dash { display: none; max-width: 1000px; margin: 0 auto; padding: 30px 20px 80px; }
 
@@ -300,7 +301,8 @@
   <div class="gate-card">
     <img src="/logo.png" alt="DIRBALK" />
     <label for="adminKey">رمز الدخول</label>
-    <input type="password" id="adminKey" placeholder="••••••••" />
+    <input type="password" id="adminKey" placeholder="••••••••" autocomplete="off" spellcheck="false" />
+    <button type="button" class="show-key" id="showKey" aria-pressed="false">إظهار الرمز</button>
     <button type="button" class="gate-btn" id="gateBtn">دخول</button>
     <p class="gate-error" id="gateError">رمز الدخول غير صحيح.</p>
   </div>
@@ -432,7 +434,12 @@
         if (result.status !== 'success') {
           document.getElementById('gate').style.display = 'flex';
           document.getElementById('dash').style.display = 'none';
-          document.getElementById('gateError').style.display = 'block';
+          // tell a wrong key apart from a backend problem (both used to say "wrong key")
+          const ge = document.getElementById('gateError');
+          ge.textContent = result.message === 'Wrong access key.'
+            ? 'رمز الدخول غير صحيح (' + key.length + ' حرف).'
+            : 'الرمز ما انفحص — في مشكلة بالسيرفر: ' + (result.message || 'رد غير معروف') + ' — تأكد إنك عملت Deploy → New version للكود.';
+          ge.style.display = 'block';
           try { sessionStorage.removeItem(ADMIN_KEY_STORAGE); } catch (e) {}
           return;
         }
@@ -449,6 +456,14 @@
         document.getElementById('loadingNote').textContent = 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.';
       });
   }
+
+  document.getElementById('showKey').addEventListener('click', function () {
+    const inp = document.getElementById('adminKey');
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    this.textContent = show ? 'إخفاء الرمز' : 'إظهار الرمز';
+    this.setAttribute('aria-pressed', String(show));
+  });
 
   var PRODUCT_NAMES_COMMENTS = {
     'DB-TEE-01': 'تيشيرت أوفرسايز',
