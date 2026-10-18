@@ -438,6 +438,7 @@
         }
 
         document.getElementById('dashContent').style.display = 'block';
+        try { localStorage.setItem('dirbalk_preview', '1'); } catch (e) {} // this device can see the inside of the site (assets/gate.js)
         renderStats(result.stats);
         renderCountries(result.stats.countryCounts);
         renderOrders(result.orders);

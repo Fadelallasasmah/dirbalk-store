@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>DIRBALK — Team preview</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0a0a0a; --bg2: #121315; --line: rgba(255,255,255,0.1); --ink: #f2efe8; --muted: rgba(242,239,232,0.62); --faint: rgba(242,239,232,0.38); --amber: #C9A84C; --err: #ff8c8c; --ok: #7fd88f; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body { color: var(--ink); font-family: 'Cairo', 'Jost', Arial, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+  .box { width: 100%; max-width: 380px; text-align: center; }
+  .box img { width: 120px; height: auto; margin: 0 auto 26px; display: block; }
+  h1 { font-size: 18px; font-weight: 600; }
+  p { color: var(--muted); font-size: 14px; line-height: 1.8; margin-top: 8px; }
+  input { width: 100%; min-height: 54px; margin-top: 22px; background: var(--bg2); border: 1px solid var(--line); color: var(--ink); font-size: 22px; letter-spacing: .3em; text-align: center; font-family: 'Jost', sans-serif; direction: ltr; }
+  button { width: 100%; min-height: 54px; margin-top: 12px; border: 0; background: var(--ink); color: var(--bg); font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+  button.ghost { background: none; color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+  button:disabled { opacity: .5; }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .msg { min-height: 22px; font-size: 14px; margin-top: 12px; }
+  .msg.err { color: var(--err); } .msg.ok { color: var(--ok); }
+  .links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+  .links a { display: flex; align-items: center; justify-content: center; min-height: 46px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 14px; }
+  .links a:hover { border-color: var(--amber); color: var(--amber); }
+  .hide { display: none !important; }
+</style>
+</head>
+<body>
+<main class="box">
+  <img src="/logo.png" alt="DIRBALK" width="120" height="43">
+
+  <section id="lockView">
+    <h1>دخول الفريق</h1>
+    <p>الموقع من جوا لسا قيد التجهيز. اكتب كود المعاينة، وهاد الجهاز رح يقدر يشوف كل الصفحات.</p>
+    <input type="password" id="pin" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="كود المعاينة">
+    <button type="button" id="goBtn">دخول</button>
+    <p class="msg" id="msg" role="status"></p>
+  </section>
+
+  <section id="inView" class="hide">
+    <h1>هاد الجهاز بيشوف الموقع من جوا</h1>
+    <p>الناس برا بيشوفوا صفحة الانتظار بس، لحد ما تفتح الدروب من صفحة الأدمن.</p>
+    <nav class="links" aria-label="صفحات">
+      <a href="/home.html">الرئيسية</a><a href="/shop.html">المتجر</a>
+      <a href="/product.html?id=DB-JAC-01">الجاكيت</a><a href="/product.html?id=DB-DEN-01">البنطلون</a>
+      <a href="/cart.html">السلة</a><a href="/me.html">حسابي</a>
+      <a href="/story.html">القصة</a><a href="/">صفحة الانتظار</a>
+    </nav>
+    <button type="button" class="ghost" id="exitBtn" style="margin-top:22px">خروج من المعاينة</button>
+  </section>
+</main>
+<script>
+(function () {
+  var KEY = 'dirbalk_preview';
+  var $ = function (id) { return document.getElementById(id); };
+  function inside() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function render() { $('lockView').classList.toggle('hide', inside()); $('inView').classList.toggle('hide', !inside()); }
+  render();
+
+  $('goBtn').addEventListener('click', function () {
+    var pin = $('pin').value.trim(), m = $('msg'), b = this;
+    m.className = 'msg';
+    if (!pin) { m.className = 'msg err'; m.textContent = 'اكتب الكود.'; return; }
+    b.disabled = true; m.textContent = '…';
+    fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'staffCheck', role: 'preview', pin: pin }) })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        b.disabled = false;
+        if (r && r.status === 'success') {
+          try { localStorage.setItem(KEY, '1'); } catch (e) {}
+          render();
+        } else {
+          m.className = 'msg err';
+          m.textContent = r && /Too many/.test(r.message || '') ? 'محاولات كثير غلط. جرّب بعد ربع ساعة.' : 'الكود غلط.';
+        }
+      })
+      .catch(function () { b.disabled = false; m.className = 'msg err'; m.textContent = 'ما في اتصال. جرّب كمان مرة.'; });
+  });
+  $('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('goBtn').click(); });
+  $('exitBtn').addEventListener('click', function () {
+    try { localStorage.removeItem(KEY); sessionStorage.removeItem('dirbalk_status'); } catch (e) {}
+    render();
+  });
+})();
+</script>
+</body>
+</html>

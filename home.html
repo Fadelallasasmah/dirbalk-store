@@ -1,18 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<script>
-/* Drop homepage. Only lives while a drop is open (Settings sheet / admin
-   page); otherwise it sends people back to the waitlist homepage.
-   ?preview=1 lets you see it any time. */
-(function () {
-  if (/[?&]preview=1/.test(location.search)) return;
-  fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'status' }) })
-    .then(function (r) { return r.json(); })
-    .then(function (res) { if (!(res && res.dropOpen)) location.replace('/?home=1'); })
-    .catch(function () {});
-})();
-</script>
+<script src="/assets/gate.js"></script>
 <script src="/assets/motion.js"></script>
 <script src="/assets/products.js"></script>
 <script src="/assets/catalog.js"></script>

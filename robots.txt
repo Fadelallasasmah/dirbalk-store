@@ -16,6 +16,7 @@ Disallow: /forgot-password.html
 Disallow: /reset-password.html
 Disallow: /enter.html
 Disallow: /scan.html
+Disallow: /preview.html
 Disallow: /unbox.html
 Disallow: /p/
 Disallow: /api/
