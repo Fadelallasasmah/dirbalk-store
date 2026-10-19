@@ -245,6 +245,7 @@
           codeEmail = email;
           try { localStorage.setItem('dirbalk_return_to', location.pathname + location.search); } catch (e3) {}
           show('code');
+          if (res.limited) msg(ov.querySelector('.dag-code'), res.message, false); // v40: too many codes — use the last one
         } else if (res && res.status === 'success' && res.session) {
           finishLogin(res); // older backend without codes
         } else {
@@ -282,6 +283,7 @@
         if (res && res.status === 'error') return msg(form, res.message || T.errGeneric);
         codeEmail = email;
         show('code');
+        if (res && res.status === 'limited') msg(ov.querySelector('.dag-code'), res.message, false);
       })
       .catch(function () {
         btn.disabled = false; btn.textContent = T.loginBtn;
@@ -323,15 +325,17 @@
   function onResend() {
     var form = ov.querySelector('.dag-code');
     fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'link', email: codeEmail }) })
-      .then(function () { msg(form, T.codeResent, true); }, function () { msg(form, T.errGeneric); });
+      .then(function (r) { return r.json(); })
+      .then(function (res) { msg(form, res && res.status === 'limited' ? res.message : T.codeResent, !(res && res.status === 'limited')); }, function () { msg(form, T.errGeneric); });
   }
 
   /* open straight on the code step (e.g. after signin.html sent a code) */
-  function openCode(email, onReady) {
+  function openCode(email, onReady, note) {
     codeEmail = (email || '').toLowerCase();
     pending = onReady || null;
     build();
     show('code');
+    if (note) msg(ov.querySelector('.dag-code'), note, false);
     ov.classList.add('open');
     document.documentElement.style.overflow = 'hidden';
   }
