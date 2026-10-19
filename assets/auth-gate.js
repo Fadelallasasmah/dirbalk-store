@@ -16,7 +16,12 @@
    login link (once, within 1 hour), gives this browser a random session key
    (localStorage 'dirbalk_session'). Every account request sends it; the
    backend works out the email from it. Log out = the server forgets the key.
-   DirbalkAuth.session() → the key · DirbalkAuth.expired() → sign-in again. */
+   DirbalkAuth.session() → the key · DirbalkAuth.expired() → sign-in again.
+
+   v39: nobody is signed in without proving the email. Registering a new
+   email, or asking to sign in, emails a 6-digit code (+ a one-tap link).
+   The popup asks for the code right away — the bag and the page stay as
+   they are. DirbalkAuth.openCode(email) opens that step directly. */
 (function () {
   var EN = (document.documentElement.lang || '').toLowerCase().indexOf('en') === 0;
   var T = EN ? {
@@ -33,7 +38,12 @@
     sent: 'If this email is registered, a login link is on its way. Check your inbox (and spam).',
     errName: 'Please enter your full name.', errEmail: 'Please enter a valid email.',
     errPhone: 'Phone number isn\'t valid.', errGeneric: 'Something went wrong, please try again.',
-    close: 'Close'
+    close: 'Close',
+    codeTitle: 'Check your email',
+    codeSub: 'We sent a 6-digit code to',
+    codeLabel: 'Code', codeBtn: 'Sign in', codeBusy: 'Checking…',
+    codeResend: 'Send a new code', codeResent: 'A new code is on its way.',
+    codeOther: 'Use a different email', errCode: 'Enter the 6 digits from the email.'
   } : {
     regTitle: 'خطوة وحدة قبل ما تشتري',
     regSub: 'اسمك، إيميلك، ورقمك — بس هيك.',
@@ -48,7 +58,12 @@
     sent: 'إذا الإيميل مسجّل عندنا، رابط الدخول بالطريق. شيّك الإيميل (والسبام).',
     errName: 'الرجاء إدخال الاسم الكامل.', errEmail: 'الرجاء إدخال إيميل صحيح.',
     errPhone: 'رقم الهاتف غير صحيح.', errGeneric: 'حدث خطأ مؤقت، يرجى المحاولة لاحقًا.',
-    close: 'إغلاق'
+    close: 'إغلاق',
+    codeTitle: 'شيّك إيميلك',
+    codeSub: 'بعتنالك كود من 6 أرقام على',
+    codeLabel: 'الكود', codeBtn: 'دخول', codeBusy: 'لحظة…',
+    codeResend: 'ابعتلي كود جديد', codeResent: 'كود جديد بالطريق.',
+    codeOther: 'إيميل ثاني', errCode: 'اكتب الـ 6 أرقام اللي بالإيميل.'
   };
 
   var KEYS = ['dirbalk_logged_in', 'dirbalk_name', 'dirbalk_email', 'dirbalk_phone', 'dirbalk_gender', 'dirbalk_session'];
@@ -85,6 +100,8 @@
   }
 
   var css =
+    '.dag .dag-codein{font-size:24px;letter-spacing:.45em;text-align:center;font-family:Arial,sans-serif;}' +
+    '.dag .dag-to{color:#fff;font-weight:normal;}' +
     '.dag-ov{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);' +
     'z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;}' +
     '.dag-ov.open{display:flex;}' +
@@ -138,6 +155,14 @@
           '<p class="dag-msg"></p>' +
           '<p class="dag-switch">' + T.noAcc + '<a data-go="reg">' + T.noAccLink + '</a></p>' +
         '</form>' +
+        /* code view (v39) */
+        '<form class="dag-code" novalidate style="display:none">' +
+          '<h3>' + T.codeTitle + '</h3><p class="dag-sub">' + T.codeSub + ' <b class="dag-to" dir="ltr"></b></p>' +
+          '<label for="dagCode">' + T.codeLabel + '</label><input id="dagCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr" class="dag-codein" />' +
+          '<button type="submit" class="dag-btn">' + T.codeBtn + '</button>' +
+          '<p class="dag-msg" role="status"></p>' +
+          '<p class="dag-switch"><a data-act="resend">' + T.codeResend + '</a> · <a data-go="login">' + T.codeOther + '</a></p>' +
+        '</form>' +
       '</div>';
     document.body.appendChild(ov);
 
@@ -150,13 +175,22 @@
 
     ov.querySelector('.dag-reg').addEventListener('submit', onRegister);
     ov.querySelector('.dag-login').addEventListener('submit', onLoginLink);
+    ov.querySelector('.dag-code').addEventListener('submit', onCode);
+    ov.querySelector('[data-act="resend"]').addEventListener('click', onResend);
+    ov.querySelector('#dagCode').addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+      if (this.value.length === 6) ov.querySelector('.dag-code .dag-btn').click();
+    });
   }
 
+  var codeEmail = '';
   function show(view) {
-    ov.querySelector('.dag-reg').style.display = view === 'login' ? 'none' : '';
+    ov.querySelector('.dag-reg').style.display = (view === 'login' || view === 'code') ? 'none' : '';
     ov.querySelector('.dag-login').style.display = view === 'login' ? '' : 'none';
+    ov.querySelector('.dag-code').style.display = view === 'code' ? '' : 'none';
     Array.prototype.forEach.call(ov.querySelectorAll('.dag-msg'), function (m) { m.className = 'dag-msg'; m.textContent = ''; });
-    var first = ov.querySelector(view === 'login' ? '#dagLEmail' : '#dagName');
+    if (view === 'code') { ov.querySelector('.dag-to').textContent = codeEmail; ov.querySelector('#dagCode').value = ''; }
+    var first = ov.querySelector(view === 'login' ? '#dagLEmail' : view === 'code' ? '#dagCode' : '#dagName');
     setTimeout(function () { try { first.focus(); } catch (e) {} }, 50);
   }
 
@@ -205,17 +239,14 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         btn.disabled = false; btn.textContent = T.regBtn;
-        if (res && res.status === 'success') {
-          setSession({ name: res.name || name, email: res.email || email, phone: res.phone || phone, gender: res.gender || '', session: res.session || '' });
+        if (res && (res.status === 'verify' || res.status === 'exists')) {
+          /* v39: new or existing email → we emailed a code; prove it's yours */
           if (window.gtag) gtag('event', 'sign_up', { method: 'checkout_gate' });
-          var cb = pending;
-          pending = null;
-          close();
-          try { window.dispatchEvent(new CustomEvent('dirbalk:login')); } catch (e2) {}
-          if (cb) cb();
-        } else if (res && res.status === 'exists') {
-          /* email already registered → backend emailed a login link */
-          msg(form, res.message || T.sent, true);
+          codeEmail = email;
+          try { localStorage.setItem('dirbalk_return_to', location.pathname + location.search); } catch (e3) {}
+          show('code');
+        } else if (res && res.status === 'success' && res.session) {
+          finishLogin(res); // older backend without codes
         } else {
           msg(form, (res && res.message) || T.errGeneric);
         }
@@ -248,12 +279,61 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         btn.disabled = false; btn.textContent = T.loginBtn;
-        msg(form, (res && res.message) || T.sent, !(res && res.status === 'error'));
+        if (res && res.status === 'error') return msg(form, res.message || T.errGeneric);
+        codeEmail = email;
+        show('code');
       })
       .catch(function () {
         btn.disabled = false; btn.textContent = T.loginBtn;
         msg(form, T.errGeneric);
       });
+  }
+
+  function finishLogin(res) {
+    setSession({ name: res.name || '', email: res.email || codeEmail, phone: res.phone || '', gender: res.gender || '', session: res.session || '' });
+    try { localStorage.removeItem('dirbalk_return_to'); } catch (e) {}
+    if (window.gtag) gtag('event', 'login', { method: 'email_code' });
+    var cb = pending;
+    pending = null;
+    close();
+    try { window.dispatchEvent(new CustomEvent('dirbalk:login')); } catch (e2) {}
+    if (cb) cb();
+  }
+
+  function onCode(e) {
+    e.preventDefault();
+    var form = e.currentTarget, input = form.querySelector('#dagCode');
+    var code = input.value.replace(/\D/g, '');
+    if (code.length !== 6) { input.classList.add('err'); return msg(form, T.errCode); }
+    input.classList.remove('err');
+    var btn = form.querySelector('.dag-btn');
+    if (btn.disabled) return;
+    btn.disabled = true; btn.textContent = T.codeBusy;
+    fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'code', email: codeEmail, code: code }) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        btn.disabled = false; btn.textContent = T.codeBtn;
+        if (res && res.status === 'success' && res.session) return finishLogin(res);
+        input.classList.add('err'); input.select();
+        msg(form, (res && res.message) || T.errGeneric);
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = T.codeBtn; msg(form, T.errGeneric); });
+  }
+
+  function onResend() {
+    var form = ov.querySelector('.dag-code');
+    fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'link', email: codeEmail }) })
+      .then(function () { msg(form, T.codeResent, true); }, function () { msg(form, T.errGeneric); });
+  }
+
+  /* open straight on the code step (e.g. after signin.html sent a code) */
+  function openCode(email, onReady) {
+    codeEmail = (email || '').toLowerCase();
+    pending = onReady || null;
+    build();
+    show('code');
+    ov.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
   }
 
   function requireAuth(onReady) {
@@ -279,5 +359,5 @@
     open('login');
   }
 
-  window.DirbalkAuth = { isLoggedIn: isLoggedIn, require: requireAuth, open: open, logout: logout, expired: expired, session: session, normPhone: normPhone };
+  window.DirbalkAuth = { isLoggedIn: isLoggedIn, require: requireAuth, open: open, openCode: openCode, logout: logout, expired: expired, session: session, normPhone: normPhone };
 })();
