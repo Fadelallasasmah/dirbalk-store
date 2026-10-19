@@ -419,9 +419,10 @@ html.drop-open #form-section{display:none}
   /* ---------- sign in (v41): a 6-digit code to the email, nothing else gets you in ---------- */
   var signinBtn = document.getElementById('signinBtn');
   function afterSignIn() {
-    var team = false; try { team = localStorage.getItem('dirbalk_preview') === '1'; } catch (e) {}
-    if (team || document.documentElement.classList.contains('drop-open')) { location.href = '/home.html'; return; }
-    showSuccess(); // drop still closed → signed in, nothing to buy yet
+    // signing in never takes anyone inside while the drop is closed — not even the team
+    // (the team opens the inside on purpose via /preview.html or /admin.html)
+    if (document.documentElement.classList.contains('drop-open')) { location.href = '/home.html'; return; }
+    showSuccess();
   }
   signinBtn.addEventListener('click', function () {
     var email = input.value.trim().toLowerCase();
