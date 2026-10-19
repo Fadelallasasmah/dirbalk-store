@@ -140,6 +140,7 @@
     .steps { width: 100%; }
     .ck-head { padding: 24px 0 18px; }
   }
+  #ckEmail[readonly] { opacity: .65; cursor: not-allowed; }
 </style>
 </head>
 <body class="light">
@@ -513,7 +514,7 @@
       const email = localStorage.getItem('dirbalk_email') || '';
       const phone = localStorage.getItem('dirbalk_phone') || '';
       if (name && !document.getElementById('fullName').value) document.getElementById('fullName').value = name;
-      if (email && !document.getElementById('ckEmail').value) document.getElementById('ckEmail').value = email;
+      if (email) { const ce = document.getElementById('ckEmail'); ce.value = email; ce.readOnly = true; }
       if (phone && !document.getElementById('ckPhone').value) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
       if (name) {
         const note = document.getElementById('loggedInNote');
@@ -530,7 +531,7 @@
       const phone = localStorage.getItem('dirbalk_phone') || '';
 
       if (name) document.getElementById('fullName').value = name;
-      if (email) document.getElementById('ckEmail').value = email;
+      if (email) { const ce = document.getElementById('ckEmail'); ce.value = email; ce.readOnly = true; ce.title = 'Your order confirmation goes to your account email.'; }
       if (phone) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
 
       if (name) {
@@ -650,6 +651,7 @@
       items: cartItemsSummary(),
       lines: cart.map((l) => ({ id: l.id, color: l.color, size: l.size, qty: l.qty })),
       total: total,
+      session: DirbalkAuth.session(), // v38: the order is placed by the signed-in session
     };
 
     try {
@@ -659,6 +661,17 @@
         body: JSON.stringify(orderPayload),
       });
       const result = await res.json();
+
+      if (result && result.auth === false) {
+        // signed out on the server (logged out elsewhere / account deleted) → sign in again, cart stays
+        isSubmittingOrder = false;
+        confirmOrderBtn.disabled = false;
+        confirmOrderBtn.textContent = 'Confirm Order';
+        document.getElementById('submitOrderError').textContent = 'Please sign in again to place your order — your bag is saved.';
+        document.getElementById('submitOrderError').style.display = 'block';
+        DirbalkAuth.expired();
+        return;
+      }
 
       if (result.status === 'success') {
         if (window.gtag) {

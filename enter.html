@@ -127,6 +127,7 @@
   var email = (params.get('e') || '').toLowerCase();
 
   if (!token || !email) { show('stateError'); return; }
+  try { history.replaceState(null, '', '/enter.html'); } catch (e) {} // the link is single-use — don't keep it in history
 
   fetch('/api/magic', {
     method: 'POST',
@@ -135,13 +136,14 @@
   })
     .then(function (r) { return r.json(); })
     .then(function (result) {
-      if (result.status !== 'success') {
+      if (result.status !== 'success' || !result.session) {
         if (result.message) document.getElementById('errMsg').textContent = result.message;
         show('stateError');
         return;
       }
 
       try {
+        localStorage.setItem('dirbalk_session', result.session);
         localStorage.setItem('dirbalk_logged_in', '1');
         localStorage.setItem('dirbalk_name', result.name || '');
         localStorage.setItem('dirbalk_gender', result.gender || '');

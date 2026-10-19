@@ -265,8 +265,9 @@
   };
 
   var loggedIn = false, email = '', name = '', gender = '';
+  var session = DirbalkAuth.session();
   try {
-    loggedIn = localStorage.getItem('dirbalk_logged_in') === '1';
+    loggedIn = DirbalkAuth.isLoggedIn(); // v38: needs a server session, not just a flag
     email = (localStorage.getItem('dirbalk_email') || '').toLowerCase();
     name = localStorage.getItem('dirbalk_name') || '';
     gender = localStorage.getItem('dirbalk_gender') || '';
@@ -289,7 +290,7 @@
     var btn = this;
     btn.disabled = true;
     btn.textContent = 'Enabling...';
-    DirbalkPush.enable('/api/account', { kind: 'registerPushToken', email: email }, function (result) {
+    DirbalkPush.enable('/api/account', { kind: 'registerPushToken', session: session }, function (result) {
       btn.disabled = false;
       btn.textContent = 'Enable Notifications';
       if (result.ok) {
@@ -301,11 +302,9 @@
   });
 
   document.getElementById('logoutBtn').addEventListener('click', function () {
-    try {
-      ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position']
-        .forEach(function (k) { localStorage.removeItem(k); });
-    } catch (e) { /* ignore */ }
-    window.location.href = '/home.html';
+    var b = this; b.disabled = true;
+    try { ['dirbalk_pending_verification','dirbalk_position'].forEach(function (k) { localStorage.removeItem(k); }); } catch (e) { /* ignore */ }
+    DirbalkAuth.logout().then(function () { window.location.href = '/home.html'; }); // v38: ends the session on the server too
   });
   document.getElementById('logoutSide').addEventListener('click', function (e) { e.preventDefault(); document.getElementById('logoutBtn').click(); });
 
@@ -387,7 +386,7 @@
       fetch('/api/account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind: 'updatePhone', email: email, phone: international })
+        body: JSON.stringify({ kind: 'updatePhone', session: session, phone: international })
       })
         .then(function (r) { return r.json(); })
         .then(function (result) {
@@ -519,14 +518,14 @@
     fetch('/api/account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'delete', email: email, password: pw })
+      body: JSON.stringify({ kind: 'delete', session: session, password: pw })
     })
       .then(function (r) { return r.json(); })
       .then(function (result) {
         if (result.status === 'success') {
           if (window.DirbalkToast) DirbalkToast.success('Your account has been deleted. دير بالك على حالك.');
           try {
-            ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position','dirbalk_has_password']
+            ['dirbalk_logged_in','dirbalk_gender','dirbalk_name','dirbalk_pending_verification','dirbalk_email','dirbalk_phone','dirbalk_position','dirbalk_has_password','dirbalk_session']
               .forEach(function (k) { localStorage.removeItem(k); });
           } catch (e) { /* ignore */ }
           setTimeout(function () { window.location.href = '/home.html'; }, 1200);
@@ -549,10 +548,11 @@
   fetch('/api/me', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email })
+    body: JSON.stringify({ session: session })
   })
     .then(function (r) { return r.json(); })
     .then(function (result) {
+      if (result && result.auth === false) { DirbalkAuth.logout(); location.reload(); return; } // session ended elsewhere
       renderPieces(result.pieces || [], result.myComments || []);
       renderOrders(result.orders || []);
     })
@@ -620,7 +620,7 @@
             fetch('/api/account', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ kind: 'deleteComment', email: email, commentId: existing.id })
+              body: JSON.stringify({ kind: 'deleteComment', session: session, commentId: existing.id })
             })
               .then(function (r) { return r.json(); })
               .then(function (result) {
@@ -665,7 +665,7 @@
           fetch('/api/account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kind: 'submitComment', email: email, product: pc.product, text: text })
+            body: JSON.stringify({ kind: 'submitComment', session: session, product: pc.product, text: text })
           })
             .then(function (r) { return r.json(); })
             .then(function (result) {
