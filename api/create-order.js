@@ -30,6 +30,7 @@ export default async function handler(req, res) {
   } else {
     payload = {
       action: 'order',
+      session: (req.body?.session || '').toString().slice(0, 128), // v38: the order belongs to the signed-in session
       name: (req.body?.name || '').toString(),
       email: (req.body?.email || '').toString(),
       phone: (req.body?.phone || '').toString(),

@@ -1,4 +1,5 @@
-// DIRBALK — account actions proxy (change password / delete account / submit comment / delete comment)
+// DIRBALK — account actions proxy (logout / delete account / comments / push / phone / password)
+// v38: every action carries the browser's session key; the backend takes the email from it.
 // Merged into one function to stay within Vercel Hobby's serverless function limit.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -10,7 +11,9 @@ export default async function handler(req, res) {
   const kind = (req.body && req.body.kind) || '';
   let payload;
 
-  if (kind === 'delete') {
+  if (kind === 'logout') {
+    payload = { action: 'logout' };
+  } else if (kind === 'delete') {
     payload = {
       action: 'deleteAccount',
       email: (req.body && req.body.email) || '',
@@ -49,6 +52,8 @@ export default async function handler(req, res) {
       newPassword: (req.body && req.body.newPassword) || ''
     };
   }
+
+  payload.session = ((req.body && req.body.session) || '').toString().slice(0, 128);
 
   try {
     const upstream = await fetch(SCRIPT_URL, {

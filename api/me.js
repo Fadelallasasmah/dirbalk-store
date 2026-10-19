@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const upstream = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'me', email: (req.body && req.body.email) || '' })
+      body: JSON.stringify({ action: 'me', session: ((req.body && req.body.session) || '').toString().slice(0, 128) })
     });
     const data = await upstream.json();
     return res.status(200).json(data);
