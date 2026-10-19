@@ -45,7 +45,7 @@
 
   <section id="inView" class="hide">
     <h1>هاد الجهاز بيشوف الموقع من جوا</h1>
-    <p>الناس برا بيشوفوا صفحة الانتظار بس، لحد ما تفتح الدروب من صفحة الأدمن.</p>
+    <p>لمدة 12 ساعة أو لحد ما تكبس «خروج». الناس برا بيشوفوا صفحة الانتظار بس، لحد ما تفتح الدروب من صفحة الأدمن.</p>
     <nav class="links" aria-label="صفحات">
       <a href="/home.html">الرئيسية</a><a href="/shop.html">المتجر</a>
       <a href="/product.html?id=DB-JAC-01">الجاكيت</a><a href="/product.html?id=DB-DEN-01">البنطلون</a>
@@ -59,7 +59,7 @@
 (function () {
   var KEY = 'dirbalk_preview';
   var $ = function (id) { return document.getElementById(id); };
-  function inside() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function inside() { try { var t = parseInt(localStorage.getItem(KEY) || '', 10); return t > 1e12 && Date.now() - t < 12 * 3600 * 1000; } catch (e) { return false; } } // 12 hours
   function render() { $('lockView').classList.toggle('hide', inside()); $('inView').classList.toggle('hide', !inside()); }
   render();
 
@@ -73,7 +73,7 @@
       .then(function (r) {
         b.disabled = false;
         if (r && r.status === 'success') {
-          try { localStorage.setItem(KEY, '1'); } catch (e) {}
+          try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
           render();
         } else {
           m.className = 'msg err';

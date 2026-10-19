@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<script src="/assets/gate.js"></script>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
 <meta charset="UTF-8">
@@ -166,7 +165,11 @@
         if (/^\/[^\/]/.test(rt)) back = rt;
         localStorage.removeItem('dirbalk_return_to');
       } catch (e) { /* ignore */ }
-      setTimeout(function () { window.location.href = back; }, 1800);
+      // v41: while the drop is closed, signing in only ever lands on the waiting page
+      fetch('/api/passport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"kind":"status"}' })
+        .then(function (r) { return r.json(); })
+        .then(function (st) { return !!(st && st.dropOpen); }, function () { return false; })
+        .then(function (open) { setTimeout(function () { window.location.href = open ? back : '/'; }, 1800); });
     })
     .catch(function () { show('stateError'); });
 })();
