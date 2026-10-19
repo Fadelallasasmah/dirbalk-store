@@ -16,7 +16,7 @@
     tt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.2 1.8 3.7 4 3.9v3.2c-1.5.1-2.8-.3-4-1.1v6.1c0 3.4-2.6 5.9-5.9 5.9S4.8 18.5 4.8 15.2c0-3.6 3.1-6.2 6.6-5.8v3.3c-1.6-.4-3.3.8-3.3 2.5 0 1.5 1.1 2.6 2.6 2.6 1.6 0 2.7-1.2 2.7-2.9V3h3.2z"/></svg>'
   };
 
-  function loggedIn() { try { return localStorage.getItem('dirbalk_logged_in') === '1'; } catch (e) { return false; } }
+  function loggedIn() { try { return localStorage.getItem('dirbalk_logged_in') === '1' && !!localStorage.getItem('dirbalk_session'); } catch (e) { return false; } } // v38: a login needs a server session
 
   /* ---------- cart helpers (one place for every page) ---------- */
   var CART_KEY = 'dirbalk_cart';

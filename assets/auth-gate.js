@@ -10,7 +10,13 @@
 
    Registration = name + email + phone only (no password). A returning
    customer on a new device enters their email and gets a one-tap login
-   link (enter.html). Fires window event 'dirbalk:login' after login. */
+   link (enter.html). Fires window event 'dirbalk:login' after login.
+
+   v38: a login is a server session. Registering a new email, or opening a
+   login link (once, within 1 hour), gives this browser a random session key
+   (localStorage 'dirbalk_session'). Every account request sends it; the
+   backend works out the email from it. Log out = the server forgets the key.
+   DirbalkAuth.session() → the key · DirbalkAuth.expired() → sign-in again. */
 (function () {
   var EN = (document.documentElement.lang || '').toLowerCase().indexOf('en') === 0;
   var T = EN ? {
@@ -45,10 +51,16 @@
     close: 'إغلاق'
   };
 
-  var KEYS = ['dirbalk_logged_in', 'dirbalk_name', 'dirbalk_email', 'dirbalk_phone', 'dirbalk_gender'];
+  var KEYS = ['dirbalk_logged_in', 'dirbalk_name', 'dirbalk_email', 'dirbalk_phone', 'dirbalk_gender', 'dirbalk_session'];
+
+  function clearLocal() { try { KEYS.forEach(function (k) { localStorage.removeItem(k); }); } catch (e) {} }
+  function session() { try { return localStorage.getItem('dirbalk_session') || ''; } catch (e) { return ''; } }
+
+  /* an old "logged in" flag without a server session isn't a login any more */
+  try { if (localStorage.getItem('dirbalk_logged_in') === '1' && !session()) clearLocal(); } catch (e) {}
 
   function isLoggedIn() {
-    try { return localStorage.getItem('dirbalk_logged_in') === '1'; } catch (e) { return false; }
+    try { return localStorage.getItem('dirbalk_logged_in') === '1' && !!session(); } catch (e) { return false; }
   }
 
   function setSession(acc) {
@@ -58,6 +70,7 @@
       localStorage.setItem('dirbalk_email', acc.email || '');
       localStorage.setItem('dirbalk_phone', acc.phone || '');
       localStorage.setItem('dirbalk_gender', acc.gender || '');
+      if (acc.session) localStorage.setItem('dirbalk_session', acc.session);
       localStorage.removeItem('dirbalk_pending_verification');
     } catch (e) { /* ignore */ }
   }
@@ -193,7 +206,7 @@
       .then(function (res) {
         btn.disabled = false; btn.textContent = T.regBtn;
         if (res && res.status === 'success') {
-          setSession({ name: res.name || name, email: res.email || email, phone: res.phone || phone, gender: res.gender || '' });
+          setSession({ name: res.name || name, email: res.email || email, phone: res.phone || phone, gender: res.gender || '', session: res.session || '' });
           if (window.gtag) gtag('event', 'sign_up', { method: 'checkout_gate' });
           var cb = pending;
           pending = null;
@@ -249,9 +262,22 @@
     open('reg');
   }
 
+  /* ends the session on the server too; resolves when done (or after 3s) */
   function logout() {
-    try { KEYS.forEach(function (k) { localStorage.removeItem(k); }); } catch (e) {}
+    var key = session();
+    clearLocal();
+    if (!key) return Promise.resolve();
+    var req = fetch('/api/account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'logout', session: key }), keepalive: true })
+      .then(function () {}, function () {});
+    return Promise.race([req, new Promise(function (r) { setTimeout(r, 3000); })]);
   }
 
-  window.DirbalkAuth = { isLoggedIn: isLoggedIn, require: requireAuth, open: open, logout: logout, normPhone: normPhone };
+  /* the server said the session is gone → clean up and offer a login link */
+  function expired() {
+    clearLocal();
+    try { window.dispatchEvent(new CustomEvent('dirbalk:logout')); } catch (e) {}
+    open('login');
+  }
+
+  window.DirbalkAuth = { isLoggedIn: isLoggedIn, require: requireAuth, open: open, logout: logout, expired: expired, session: session, normPhone: normPhone };
 })();
