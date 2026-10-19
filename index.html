@@ -39,6 +39,7 @@ html.drop-open #form-section{display:none}
 #dropEntrance .drop-btn:hover{opacity:.9}
 #dropEntrance .drop-sub{font-size:11px;color:rgba(255,255,255,0.4)}
 #dropEntrance .drop-sub a{color:#C9A84C;text-decoration:none}
+  .form-error.soft { color: var(--muted); }
 </style>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
@@ -404,6 +405,7 @@ html.drop-open #form-section{display:none}
   });
 
   function fail(msg) {
+    formError.classList.remove('soft');
     formError.textContent = msg;
     formError.style.display = 'block';
     if (window.DirbalkToast) DirbalkToast.error(msg);
@@ -440,9 +442,11 @@ html.drop-open #form-section{display:none}
           if (result.position) set(POSITION_KEY, String(result.position));
           showSuccess();
         } else if (result && /already/i.test(result.message || '')) {
-          // already on the list: don't block them — show the list state + a one-tap sign-in link
-          set(WL_KEY, email);
-          showSuccess(true);
+          // already on the list: just say so. This page is a list, not a sign-in —
+          // nothing is unlocked and nothing about that email is shown.
+          formError.textContent = 'This email is already on the list. We\'ll let you know when Collection 01 drops.';
+          formError.style.display = 'block';
+          formError.classList.add('soft');
           reset();
         } else {
           if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: (result && result.message) || 'unknown' });
