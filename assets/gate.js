@@ -3,16 +3,20 @@
    cart, checkout, account, story, about, help, sign-in…) is for the team only.
    Everyone else is sent to the public waiting page at "/".
 
-   Team access: open /preview.html once on your device and enter the
-   'Preview PIN' (Settings sheet) — or sign in to /admin.html.
-   That device then sees everything until "Exit preview".
+   Team access: open /preview.html and enter the 'Preview PIN' (Settings
+   sheet). That device sees the inside for 12 hours or until "Exit preview".
+   Signing in to an account or to /admin.html does NOT open the inside.
 
    When the drop is open (admin → drop switch) every page is public again.
    Note: this is a front-end gate. It keeps the public out of the
    unfinished site; it is not a lock for secret data. */
 (function () {
   var d = document.documentElement;
-  try { if (localStorage.getItem('dirbalk_preview') === '1') return; } catch (e) {}
+  try {
+    var pv = parseInt(localStorage.getItem('dirbalk_preview') || '', 10); // time it was unlocked
+    if (pv > 1e12 && Date.now() - pv < 12 * 3600 * 1000) return;
+    localStorage.removeItem('dirbalk_preview'); // old '1' flags / expired → locked again
+  } catch (e) {}
   d.style.visibility = 'hidden';
   function decide(open) {
     if (open) d.style.visibility = '';
