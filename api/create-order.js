@@ -6,6 +6,8 @@
 //     the abandoned-cart reminder system (action: "logAbandonedCart")
 // v17 fix: forwards `lines` so the backend can assign specific pieces.
 // v25: added the logAbandonedCart branch.
+// v41: forwards waConsent + clientKey. WhatsApp itself is sent by Apps Script
+//      (token in Script Properties) — nothing WhatsApp-related lives here.
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
 
@@ -39,7 +41,9 @@ export default async function handler(req, res) {
       locationLink: (req.body?.locationLink || '').toString(),
       items: (req.body?.items || '').toString(),
       lines: Array.isArray(req.body?.lines) ? req.body.lines : [],
-      total: parseFloat(req.body?.total) || 0,
+      total: parseFloat(req.body?.total) || 0, // ignored by the backend since v41 — it prices the order itself
+      waConsent: req.body?.waConsent === true, // v41: WhatsApp opt-in from checkout
+      clientKey: (req.body?.clientKey || '').toString().slice(0, 64), // v41: idempotency key
     };
   }
 

@@ -13,6 +13,7 @@
 //     email (action: "launchAnnouncement")
 //   - kind: "setDrop": open/close the drop — while open, the homepage
 //     sends visitors straight to the shop (action: "setDrop")
+//   - kind: "resendWhatsApp": re-send a failed WhatsApp order confirmation (v41)
 // The Apps Script itself checks the secret key before doing anything either way.
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfWm7URWsqiFrplKN16VXhOspTs2ZaqZaDf1Ol4ZXJ1R8uwtt27G6BgmMV7TwVXhDr/exec';
@@ -57,6 +58,12 @@ export default async function handler(req, res) {
       action: 'setDrop',
       key: (req.body?.key || '').toString(),
       open: req.body?.open === true,
+    };
+  } else if (kind === 'resendWhatsApp') {
+    payload = {
+      action: 'resendWhatsApp',
+      key: (req.body?.key || '').toString(),
+      orderId: (req.body?.orderId || '').toString(),
     };
   } else if (kind === 'registerPushToken') {
     payload = {
