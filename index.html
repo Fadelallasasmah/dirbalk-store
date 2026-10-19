@@ -40,9 +40,13 @@ html.drop-open #form-section{display:none}
 #dropEntrance .drop-sub{font-size:11px;color:rgba(255,255,255,0.4)}
 #dropEntrance .drop-sub a{color:#C9A84C;text-decoration:none}
   .form-error.soft { color: var(--muted); }
+  .signin-line { margin-top: 10px; }
+  .signin-line .signin-btn { margin: 0; padding: 10px 4px; font-size: 12px; color: var(--muted); }
+  .signin-line .signin-btn.hot { color: var(--amber); font-size: 13px; }
 </style>
 <script src="/assets/theme.js"></script>
 <script src="/assets/toast.js"></script>
+<script src="/assets/auth-gate.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIRBALK</title>
@@ -283,6 +287,7 @@ html.drop-open #form-section{display:none}
       </form>
       <p class="field-msg" id="email-msg" role="alert"></p>
       <p class="form-error" id="form-error" role="alert"></p>
+      <p class="note signin-line">Already on the list? <button type="button" class="text-btn signin-btn" id="signinBtn">Sign in</button></p>
     </div>
 
     <div class="success-msg" id="success-msg" aria-live="polite">
@@ -384,7 +389,12 @@ html.drop-open #form-section{display:none}
     if (already) { document.getElementById('positionLine').style.display = 'block'; }
     if (!already) document.getElementById('positionLine').style.display = pos ? 'block' : 'none';
     if (pos) document.getElementById('positionNum').textContent = pos;
-    document.getElementById('logoutBtn').textContent = get(STORAGE_KEY) === '1' ? 'Log out' : 'Not you? Use a different email';
+    var signed = window.DirbalkAuth && DirbalkAuth.isLoggedIn();
+    if (signed) {
+      document.getElementById('positionLine').style.display = 'none';
+      document.getElementById('success-text').firstChild.textContent = 'You\'re signed in. We\'ll let you know the moment Collection 01 drops.';
+    }
+    document.getElementById('logoutBtn').textContent = signed ? 'Log out' : 'Not you? Use a different email';
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
   }
@@ -395,13 +405,43 @@ html.drop-open #form-section{display:none}
   }
 
   /* already on the list (or signed in) on this device */
-  if (get(WL_KEY) || get(STORAGE_KEY) === '1') showSuccess();
+  if (get(WL_KEY) || (window.DirbalkAuth && DirbalkAuth.isLoggedIn())) showSuccess();
 
   document.getElementById('logoutBtn').addEventListener('click', function () {
     if (window.gtag) gtag('event', 'logout_click', { form_name: 'dirbalk_waitlist' });
-    [WL_KEY, POSITION_KEY, STORAGE_KEY, 'dirbalk_name', 'dirbalk_gender', 'dirbalk_email', 'dirbalk_phone'].forEach(del);
+    [WL_KEY, POSITION_KEY].forEach(del);
+    if (window.DirbalkAuth) DirbalkAuth.logout(); // ends the session on the server too
+    document.getElementById('success-text').firstChild.textContent = 'Good. We\'ll let you know first.';
     showForm();
     input.focus();
+  });
+
+  /* ---------- sign in (v41): a 6-digit code to the email, nothing else gets you in ---------- */
+  var signinBtn = document.getElementById('signinBtn');
+  function afterSignIn() {
+    var team = false; try { team = localStorage.getItem('dirbalk_preview') === '1'; } catch (e) {}
+    if (team || document.documentElement.classList.contains('drop-open')) { location.href = '/home.html'; return; }
+    showSuccess(); // drop still closed → signed in, nothing to buy yet
+  }
+  signinBtn.addEventListener('click', function () {
+    var email = input.value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.classList.add('field-error');
+      emailMsg.textContent = 'Type your email above, then tap Sign in.';
+      emailMsg.style.display = 'block';
+      input.focus();
+      return;
+    }
+    signinBtn.disabled = true;
+    fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'link', email: email }) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        signinBtn.disabled = false;
+        if (res && res.status === 'error') { fail(res.message || 'Something went wrong, please try again.'); return; }
+        formError.style.display = 'none';
+        DirbalkAuth.openCode(email, afterSignIn, res && res.status === 'limited' ? res.message : '');
+      })
+      .catch(function () { signinBtn.disabled = false; fail('Something went wrong, please try again.'); });
   });
 
   function fail(msg) {
@@ -444,9 +484,11 @@ html.drop-open #form-section{display:none}
         } else if (result && /already/i.test(result.message || '')) {
           // already on the list: just say so. This page is a list, not a sign-in —
           // nothing is unlocked and nothing about that email is shown.
-          formError.textContent = 'This email is already on the list. We\'ll let you know when Collection 01 drops.';
+          formError.textContent = 'This email is already on the list. If it\'s yours, sign in with a code we email you.';
           formError.style.display = 'block';
           formError.classList.add('soft');
+          signinBtn.textContent = 'Sign in with a code →';
+          signinBtn.classList.add('hot');
           reset();
         } else {
           if (window.gtag) gtag('event', 'form_submit_error', { form_name: 'dirbalk_waitlist', reason: (result && result.message) || 'unknown' });
