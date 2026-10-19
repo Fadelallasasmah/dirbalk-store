@@ -326,7 +326,7 @@
 
   <h1 data-reveal data-reveal-delay="0.2" data-motion="type">Welcome Back</h1>
 
-  <p class="signin-note" style="font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.9;margin:-6px 0 22px;text-align:center;">No password — enter your email and we'll send you a one-tap login link.</p>
+  <p class="signin-note" style="font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.9;margin:-6px 0 22px;text-align:center;">No password — enter your email and we'll send you a 6-digit code.</p>
 
   <form id="signin-form" novalidate>
     <div class="form-group">
@@ -341,7 +341,7 @@
     <p class="form-ok" id="form-ok" style="display:none;color:#C9A84C;font-size:12.5px;line-height:1.9;text-align:center;margin-top:12px;"></p>
 
     <button type="submit" class="submit-btn" id="submit-btn">
-      Send me a login link
+      Send me a code
     </button>
   </form>
 
@@ -359,7 +359,7 @@
   const btn = document.getElementById('submit-btn');
   const formError = document.getElementById('form-error');
   const formOk = document.getElementById('form-ok');
-  const BTN_TEXT = 'Send me a login link';
+  const BTN_TEXT = 'Send me a code';
 
   /* already logged in → nothing to do here */
   try {
@@ -418,8 +418,14 @@
         formError.textContent = result.message || 'Something went wrong, please try again.';
         formError.style.display = 'block';
       } else {
-        formOk.textContent = result.message || 'If this email is registered, a login link is on its way. Check your inbox (and spam).';
+        formOk.textContent = 'If this email has an account, a 6-digit code is on its way. Check your inbox (and spam).';
         formOk.style.display = 'block';
+        // v39: enter the code right here
+        DirbalkAuth.openCode(email, function () {
+          var back = '/shop.html';
+          try { var rt = localStorage.getItem('dirbalk_return_to') || ''; if (/^\/[^\/]/.test(rt) && rt.indexOf('/signin') !== 0) back = rt; } catch (e) {}
+          window.location.href = back;
+        });
       }
     } catch (err) {
       formError.textContent = 'Something went wrong, please try again.';
