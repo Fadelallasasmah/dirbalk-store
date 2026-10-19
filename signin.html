@@ -418,14 +418,15 @@
         formError.textContent = result.message || 'Something went wrong, please try again.';
         formError.style.display = 'block';
       } else {
-        formOk.textContent = 'If this email has an account, a 6-digit code is on its way. Check your inbox (and spam).';
+        formOk.textContent = result.status === 'limited' ? result.message : 'If this email has an account, a 6-digit code is on its way. Check your inbox (and spam).';
         formOk.style.display = 'block';
         // v39: enter the code right here
+        var limitedMsg = result.status === 'limited' ? result.message : '';
         DirbalkAuth.openCode(email, function () {
           var back = '/shop.html';
           try { var rt = localStorage.getItem('dirbalk_return_to') || ''; if (/^\/[^\/]/.test(rt) && rt.indexOf('/signin') !== 0) back = rt; } catch (e) {}
           window.location.href = back;
-        });
+        }, limitedMsg);
       }
     } catch (err) {
       formError.textContent = 'Something went wrong, please try again.';
