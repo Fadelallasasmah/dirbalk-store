@@ -214,6 +214,10 @@
         <input type="checkbox" id="saveInfoCheck" />
         <label for="saveInfoCheck">Save my info for next time</label>
       </div>
+      <div class="save-info-row">
+        <input type="checkbox" id="waConsentCheck" />
+        <label for="waConsentCheck">Send my order confirmation and updates on WhatsApp to this number</label>
+      </div>
 
       <p class="form-error" id="shippingError"></p>
       <button type="submit" class="primary-btn">Continue to payment</button>
@@ -632,6 +636,17 @@
   const confirmOrderBtn = document.getElementById('confirmOrderBtn');
   let isSubmittingOrder = false;
 
+  /* v41: one key per bag — a double tap or a retry after a timeout returns the same order */
+  function checkoutKey() {
+    const sig = JSON.stringify(cart.map((l) => [l.id, l.color, l.size, l.qty]));
+    let saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem('dirbalk_checkout_key') || 'null'); } catch (e) {}
+    if (saved && saved.sig === sig && saved.key) return saved.key;
+    const key = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+    try { sessionStorage.setItem('dirbalk_checkout_key', JSON.stringify({ sig: sig, key: key })); } catch (e) {}
+    return key;
+  }
+
   async function submitOrder() {
     if (isSubmittingOrder) return;
     isSubmittingOrder = true;
@@ -650,8 +665,10 @@
       locationLink: shippingData.locationLink,
       items: cartItemsSummary(),
       lines: cart.map((l) => ({ id: l.id, color: l.color, size: l.size, qty: l.qty })),
-      total: total,
+      total: total, // shown to the customer only — the server prices the order itself (v41)
       session: DirbalkAuth.session(), // v38: the order is placed by the signed-in session
+      waConsent: document.getElementById('waConsentCheck').checked, // v41: WhatsApp opt-in
+      clientKey: checkoutKey(), // v41: the same checkout sent twice = one order
     };
 
     try {
@@ -699,6 +716,7 @@
         }
         cart = [];
         saveCart(cart);
+        try { sessionStorage.removeItem('dirbalk_checkout_key'); } catch (e) {}
         if (window.DirbalkSite) window.DirbalkSite.updateCount();
         goToStep(5);
       } else {

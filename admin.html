@@ -171,6 +171,9 @@
   .pc-approve-btn:disabled, .pc-reject-btn:disabled { opacity: 0.5; cursor: default; }
 
 
+  .wa-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.5); margin-inline-start: 8px; white-space: nowrap; }
+  .wa-badge[data-state="sent"] { color: #7fd88f; }
+  .wa-badge[data-state="failed"] { color: rgba(255,140,140,0.9); }
   /* ---------- v37: QR package stickers ---------- */
   .qr-btn {
     background: none; border: 0.5px solid rgba(201,168,76,0.45); color: #C9A84C; font-family: inherit;
@@ -761,6 +764,40 @@
     printStickers(lastOrders.filter((o) => o.status === 'قيد المراجعة' || o.status === 'قيد التجهيز'));
   });
 
+  /* ---------- v41: WhatsApp confirmation state per order ---------- */
+  var WA_LABELS = {
+    sent: 'واتساب ✓', pending: 'واتساب: بالانتظار', sending: 'واتساب: بينبعت',
+    failed: 'واتساب: فشل', disabled: 'واتساب: مش مفعّل',
+    'skipped-no-consent': 'واتساب: ما وافق', 'skipped-bad-phone': 'واتساب: رقم غلط'
+  };
+  function buildWaBadge(o) {
+    const wrap = document.createElement('span');
+    wrap.className = 'wa-badge';
+    const st = o.waStatus || '';
+    if (!st) return wrap;
+    wrap.textContent = WA_LABELS[st] || ('واتساب: ' + st);
+    wrap.dataset.state = st;
+    if (o.waError) wrap.title = o.waError;
+    if (st === 'failed' || st === 'disabled' || st === 'sending') {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'qr-btn'; b.textContent = 'أعد الإرسال';
+      b.addEventListener('click', () => {
+        let key = ''; try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+        b.disabled = true;
+        fetch('/api/admin-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'resendWhatsApp', key, orderId: o.orderId }) })
+          .then((r) => r.json())
+          .then((r) => {
+            b.disabled = false;
+            if (r.status === 'success') { wrap.firstChild.textContent = WA_LABELS.sent; wrap.dataset.state = 'sent'; b.remove(); if (window.DirbalkToast) DirbalkToast.success('انبعتت رسالة الواتساب.'); }
+            else if (window.DirbalkToast) DirbalkToast.error(r.message || 'ما انبعتت.');
+          })
+          .catch(() => { b.disabled = false; if (window.DirbalkToast) DirbalkToast.error('حدث خطأ مؤقت.'); });
+      });
+      wrap.appendChild(b);
+    }
+    return wrap;
+  }
+
   function renderOrders(orders) {
     lastOrders = orders || [];
     const body = document.getElementById('ordersBody');
@@ -792,6 +829,7 @@
         '<td class="status-cell"></td>';
       tr.lastElementChild.appendChild(buildStatusSelect(o.orderId, o.status));
       if (o.scanToken) tr.lastElementChild.appendChild(buildStickerBtn(o));
+      tr.lastElementChild.appendChild(buildWaBadge(o));
       body.appendChild(tr);
 
       // mobile card — same data, stacked and labeled instead of squeezed into columns
@@ -809,6 +847,7 @@
       ocStatus.className = 'oc-status';
       ocStatus.appendChild(buildStatusSelect(o.orderId, o.status));
       if (o.scanToken) ocStatus.appendChild(buildStickerBtn(o));
+      ocStatus.appendChild(buildWaBadge(o));
       card.appendChild(ocStatus);
       cards.appendChild(card);
     });

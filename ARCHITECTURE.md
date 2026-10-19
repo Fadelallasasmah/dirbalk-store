@@ -738,3 +738,59 @@ sequenceDiagram
 | ADR-043 | 2026-10-14 | **Colours per product.** `assets/catalog.js` layers colour variants on `products.js`: jacket + pants black / blue / indigo, tee black / white / grey, each with its own images + S/M/L stock; a colour without photos falls back to a tinted silhouette. Three circles under each product card, on the quick view and on the PDP (`?c=` in the URL). Cart lines are `{id, color, size, qty}`; old lines default to the product's photographed colour | Same single-source-of-truth principle as ADR-028 — colours defined once, read by shop, PDP and checkout |
 | ADR-044 | 2026-10-14 | **No piece numbers / passports for Collection 01** (supersedes ADR-008 for C01). Stock is a count per Product + Color + Size in a `Stock` sheet (auto-created: 80 per colour, S16/M48/L16), taken under the order lock — an order that would oversell is refused. Order lines (with colour) saved in a new `Lines` column; cancelling an order returns its stock. Public stock via `api/passport.js` `kind:'stock'`, capped at 6 per size so exact counts never leave the backend. Account page lists purchased items from orders; comments check purchases against Orders. Apps Script v33 | Owner decision. Serials could not express colour without re-issuing every code, and a simple count is enough for a 240-set run; passports can return for a later collection |
 | ADR-045 | 2026-10-14 | **English-only site.** The English pages (former `/en/*`) are now the site at the root; the Arabic pages, `assets/lang-switch.js` and `assets/products.en.js` are removed (`products.js` now holds the English catalog). `/en` and `/en/*` permanently redirect to the root (`vercel.json`) so old links keep working. `enter.html` translated. Apps Script v34: every customer-facing email, push and error message in English; stored order-status values unchanged. The brand phrase دير بالك على حالك stays in Arabic as identity. `admin.html` (internal) unchanged | Owner decision — one language to maintain instead of two drifting copies |
+| ADR-046 | 2026-10-15 | **Drop switch.** `Settings` sheet row `Drop open` (TRUE/FALSE), read publicly via `api/passport.js` `kind:'status'` → `siteStatus`, flipped from admin.html via `api/admin-data.js` `kind:'setDrop'` (admin key). While open, a visitor arriving at index.html from outside the site goes straight to /shop.html; a visitor clicking Home from inside the site (same-origin referrer) or using `?home=1` stays, and the homepage swaps the waitlist form for a "Shop Collection 01" entrance (page hidden ≤900ms during the check so nothing flashes). Apps Script v35 | Owner wants the homepage to become the shop on drop day without a code deploy — the switch is a sheet cell / one admin click |
+| ADR-047 | 2026-10-15 | **Drop homepage `/home.html`** (owner-supplied editorial layout: hero slideshow → Collection 01 cards with live prices/colours/stock → Session 01 "At the source" → Session 02 "Three sets" → Session 03 "A slower day" → "Look closer" details → footer; temporary photos in `/img/home/` cropped from the owner's mockup, replaced by uploading same-named files). While a drop is open, internal "Home" clicks on `/` go to `/home.html`; outside visitors still land on the shop; `/home.html` sends people back to the waitlist when the drop is closed (`?preview=1` bypasses). Photo slots are filled from one `PHOTOS` map at the top of the page script — empty slots render a labelled placeholder naming the shot from the shoot list. Cart icon → `/shop.html?cart=1`, which opens the cart drawer | Owner-supplied design; keeps the waitlist page intact for between drops |
+
+## ADR-048 — One site design: shared header/footer, new pages (Oct 2026)
+**Decision:** Every page except `home.html` uses `assets/site.css` + `assets/site.js` (one header, one footer, cart count, search, mobile menu, product card, wishlist). Dark pages: shop, product, story, about. Light pages (`<body class="light">`): cart, checkout, account, help, legal.
+**New pages:** `cart.html` (the cart drawer is gone; `shop.html?cart=1` redirects to it), `story.html` (Journal), `help.html` (shipping, returns, size guide, FAQ, contact), `legal.html` (terms + privacy). `shipping.html` and `privacy.html` are replaced and 301-redirect via `vercel.json`.
+**Checkout:** Shipping → Payment (cash on delivery) → Review, order summary on the side. Order logic, stock checks and API calls are unchanged.
+**Account:** sidebar with Orders (+ pieces/reviews), Addresses, Wishlist, Account details, Log out. Passwords are no longer offered (sign-in is by email link). The wishlist is stored on the device (`dirbalk_wishlist`).
+**home.html** keeps its own design; only its links now point to cart/journal/help.
+
+## ADR-049 — Waiting page refined: email-only list (Oct 2026)
+**Decision:** `index.html` (the waiting page) has four parts only: the crayon drawing (unchanged, day/night video + still), name + email-only list form, one workroom glimpse (`img/detail-1.jpg`), and the close (sentence, Instagram, © / Privacy / Sign in). Removed: intro splash, "Nothing loud." / "Look closer." story blocks, name + gender fields, the floating user badge.
+**Backend:** Apps Script v36 makes name and gender optional for `action: 'waitlist'` — deploy v36 BEFORE this page goes live, or sign-ups fail ("Please enter your full name."). `/api/waitlist` request shape is unchanged (`{email, name:'', gender:''}`).
+**Device memory:** joining stores `dirbalk_waitlist` (email) + `dirbalk_position`; it no longer sets `dirbalk_logged_in` (a list sign-up isn't an account).
+**Perf:** day video re-encoded as `hero-day-720.mp4` (1.5 MB vs 12.9 MB, same drawing); the still drawing shows first and stays for reduced motion / Data Saver.
+**Fix:** `theme.js` had a stray `;` that silently dropped the back-to-top and page-fade styles.
+
+## ADR-050 — QR on every order (v37)
+- Every order row gets a secret `Scan Token` (UUID, Orders col M) + `Prepared At` / `Shipped At` / `Delivered At`. Old orders get a token the first time the admin dashboard loads.
+- Admin prints a 70×42mm sticker per order (QR → `/scan.html?o=<id>&t=<token>`, generated client-side by vendored `assets/qrcode.js`, MIT). Stuck on the outside of the package; the inner card stays text-only.
+- `scan.html` (noindex): a staff phone is set up once at `/scan.html?setup=1` with a role (prep / courier) + PIN from the Settings sheet (`Prep PIN`, `Courier PIN`; empty = role off). PIN kept in that phone's localStorage.
+  - prep: قيد المراجعة → قيد التجهيز · courier: → تم الشحن, then → تم التسليم (sees phone, address, cash amount) · customer (no PIN): تم الشحن → تم التسليم via «استلمت طلبي».
+  - Never backwards, cancelled orders refused, contact details only returned with a valid PIN, 8 wrong PINs lock a role for 15 min.
+- Status side effects (stock, emails, push) moved into one `applyOrderStatus` shared by admin and scan.
+- Proxy: `/api/passport` kinds `scanInfo`, `scan`, `staffCheck` (no-store) — no new Vercel function.
+
+## ADR-051 — Public outside, team-only inside (until the drop opens)
+- Public while the drop is closed: `/` (waiting page), legal, 404, scan (order QR), preview, admin (own key).
+- Every other page loads `assets/gate.js` first: drop closed + device not unlocked → `location.replace('/')`. Fails closed on network error. Status cached 60s in sessionStorage.
+- Team unlock: `/preview.html` + 'Preview PIN' (Settings sheet, checked by `staffCheck` role `preview`, same lockout as other PINs), or a successful admin login. Flag `localStorage.dirbalk_preview = '1'`; "Exit preview" clears it.
+- Old `home.html?preview=1` bypass removed. Waiting page no longer shows Sign in links (nothing to sign in to while closed).
+- Front-end gate only: hides the unfinished site from the public; it is not access control for data (APIs keep their own checks).
+
+## ADR-052 — Real sign-in sessions (backend v38)
+- Problem: "signed in" was only a localStorage flag + email, and account APIs trusted any email sent to them; login links stayed valid for 24h and could be reopened.
+- Login links: single use, 1 hour (`login|uuid|ts`); admin drop invites stay `magic|…`, single use, 24h. enter.html strips the token from the address bar.
+- Opening a link, or registering a brand-new email, returns a random session key. Browser: `localStorage.dirbalk_session`. Backend: 'Sessions' sheet stores SHA-256 only; 90-day life; cache 6h.
+- doPost resolves `data.session` → email for me / order / updatePhone / deleteAccount / changePassword / submitComment / deleteComment / customer registerPushToken. No/invalid session → `{status:'error', auth:false}`. The typed email is ignored.
+- Logout (`/api/account {kind:'logout'}`) revokes the key server-side; deleting an account revokes every session.
+- Old browsers with `dirbalk_logged_in` but no session are treated as signed out (auth-gate.js / site.js).
+
+## ADR-053 — Every sign-in proves the email (backend v39)
+- Registering a new email creates the account *unverified* and emails a 6-digit code + one-tap link; no session until one of them is used. Existing emails (register popup or "Sign in") get the same email — always to the owner's inbox.
+- Code: `login|uuid|ts|code` on the account row; one use, 1 hour, 5 wrong tries → ask for a new one. Link (`enter.html`) and code end the same way: account verified + session.
+- Popup (auth-gate.js) gains a code step that keeps the bag and the page; auto-submits at 6 digits. signin.html opens the same step. `DirbalkAuth.openCode(email, cb)`.
+- Re-registering an *unverified* email overwrites its name/phone (squatters can't lock an email); verified details never change this way.
+
+## ADR-054 — Server-priced orders + WhatsApp order confirmation (backend v41)
+- Audit: before v41 the order's `total` and `items` text came from the browser and were stored as sent. Lines were checked against the Stock sheet (unknown product/colour/size → 0 stock → refused) under the script lock.
+- Now `priceOrderLines()` rebuilds lines, item text and total from `PRODUCT_CATALOG` (keep in sync with assets/products.js); unknown product/size, qty ≤0 or >10 refused; browser total only logged on mismatch.
+- Idempotency: checkout sends `clientKey` (one per bag, sessionStorage). Same key → the first order is returned (`duplicate:true`), no new row/email/WhatsApp. Checked again under the lock.
+- WhatsApp: sent from Apps Script (not Vercel) because that's where the row is written and locked. Official Cloud API `POST graph.facebook.com/{ver}/{phone-number-id}/messages`, approved template, 4 body params. Credentials in Script Properties only (WA_ACCESS_TOKEN, WA_PHONE_NUMBER_ID, WA_TEMPLATE_NAME, WA_TEMPLATE_LANG, WA_API_VERSION, WA_ENABLED).
+- Only with checkout opt-in (`waConsent`, unchecked by default) and a valid phone (`normalizePhoneE164`, Jordan-first). Never for waitlist/newsletter.
+- Orders columns Q–V: WA Consent | WA Status | WA Message ID | WA Updated | WA Error | Client Key. Status: pending → sending → sent|failed; or skipped-no-consent, skipped-bad-phone, disabled. A row is claimed (pending→sending) under the lock, so it can't be sent twice. Sent after the row + email; failures never affect the order.
+- Admin: badge per order; failed/disabled → "أعد الإرسال" (`resendWhatsApp`, admin key).
+- Not yet: delivery/read receipts (needs a Meta webhook on Vercel with signature check — Apps Script can't read request headers).
