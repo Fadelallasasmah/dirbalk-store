@@ -305,7 +305,7 @@ $("send").addEventListener("click", async () => {
   } catch (e) {
     b.disabled = false; b.textContent = "Try again";
     n.style.color = "var(--stamp)";
-    n.textContent = "Couldn't send it. Copy your answer and reply to the email instead.";
+    n.textContent = "Couldn't send it. Copy your answer and reply to the email instead. (" + (location.protocol === "file:" ? "opened as a file, not from a website" : e.message) + ")";
     $("copy").hidden = false;
   }
 });
