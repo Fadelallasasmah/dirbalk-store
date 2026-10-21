@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Hangout Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one official "form" sheet centred on a blueprint-blue desk; each step swaps the sheet's content. Single deliberate light look. */
+:root{
+  --desk:#dfe8f1; --paper:#fbfcfe; --ink:#1b2a4a; --muted:#5d6b86;
+  --line:#c9d5e4; --stamp:#d2372c; --go:#1f7a5a; --go-soft:#d9efe6;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{
+  background:var(--desk);color:var(--ink);font-family:var(--display);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:28px 28px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:32px;display:grid;place-items:center;box-sizing:border-box;
+}
+*{box-sizing:border-box}
+.sheet{
+  position:relative;width:100%;max-width:440px;background:var(--paper);
+  border:1.5px solid var(--ink);border-radius:6px;padding:28px 24px 24px;
+  box-shadow:6px 6px 0 var(--ink);overflow:hidden;
+}
+.meta{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px dashed var(--line);padding-bottom:12px;margin-bottom:22px}
+h1{font-size:clamp(34px,9vw,44px);line-height:1;font-weight:800;margin:0 0 10px;text-wrap:balance;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--stamp)}
+.sub{font-family:var(--mono);font-size:13px;color:var(--muted);margin:0 0 6px;min-height:1.4em}
+.step[hidden]{display:none}
+.arena{position:relative;height:190px;margin-top:18px}
+.btn{font-family:var(--display);font-weight:800;border:1.5px solid var(--ink);border-radius:6px;cursor:pointer;transition:transform .15s ease,background .15s;touch-action:manipulation}
+.btn:focus-visible{outline:3px solid var(--stamp);outline-offset:3px}
+.yes{position:absolute;left:0;top:20px;background:var(--go);color:var(--paper);font-size:24px;padding:16px 0;width:62%;box-shadow:3px 3px 0 var(--ink);transform-origin:left center}
+.yes:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.no{position:absolute;background:var(--paper);color:var(--ink);font-size:15px;padding:10px 14px;white-space:nowrap;transition:left .22s cubic-bezier(.3,1.5,.5,1),top .22s cubic-bezier(.3,1.5,.5,1),transform .2s}
+.tries{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.stamp{
+  display:inline-block;font-family:var(--mono);font-weight:500;color:var(--stamp);border:3px solid var(--stamp);
+  border-radius:6px;padding:8px 14px;font-size:20px;letter-spacing:.12em;text-transform:uppercase;
+  transform:rotate(-8deg);margin:6px 0 18px;
+}
+.stamp.hit{animation:thud .45s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes thud{from{transform:rotate(-8deg) scale(2.4);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+p{line-height:1.5;margin:0 0 14px;font-size:16px}
+.primary{width:100%;background:var(--ink);color:var(--paper);font-size:18px;padding:14px;box-shadow:3px 3px 0 var(--stamp)}
+.primary:disabled{opacity:.4;cursor:not-allowed}
+.ghost{background:transparent;color:var(--ink);font-size:14px;padding:10px 14px;border-style:dashed}
+label.field{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input[type=time],input[type=text]{width:100%;font-family:var(--mono);font-size:18px;padding:10px 12px;border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink)}
+.group{margin-bottom:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--display);font-weight:500;font-size:15px;padding:8px 12px;border:1.5px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--go-soft);border-color:var(--go);color:var(--go);font-weight:800}
+.chip:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.terms{display:grid;gap:10px}
+.terms label{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.35;cursor:pointer}
+.terms input{width:18px;height:18px;margin-top:1px;accent-color:var(--go);flex:none}
+.doc{font-family:var(--mono);font-size:14px;line-height:1.7;border:1.5px dashed var(--line);border-radius:6px;padding:16px;margin-bottom:16px;white-space:pre-wrap;word-break:break-word}
+.sig{display:flex;justify-content:space-between;gap:16px;margin:4px 0 20px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.sig div{flex:1;border-top:1.5px solid var(--ink);padding-top:6px}
+.sig b{display:block;font-family:var(--display);font-size:22px;text-transform:none;letter-spacing:0;color:var(--ink);margin-bottom:4px;font-weight:800}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > *{flex:1 1 160px;text-align:center;text-decoration:none}
+.wa{background:var(--go);color:var(--paper);font-size:16px;padding:12px;box-shadow:3px 3px 0 var(--ink);display:inline-block}
+.note{font-family:var(--mono);font-size:12px;color:var(--go);min-height:1.4em;margin:10px 0 0}
+canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="sheet">
+  <div class="meta"><span>Form 2-B</span><span>Request to hang out</span></div>
+
+  <!-- STEP 1 -->
+  <section class="step" id="s1">
+    <h1>Wanna hang out <em>again</em> today?</h1>
+    <p class="sub" id="taunt">Yesterday was fun. Round two?</p>
+    <div class="arena" id="arena">
+      <button class="btn yes" id="yes">Yes</button>
+      <button class="btn no" id="no">No</button>
+    </div>
+    <div class="tries">Attempts to say no: <span id="count">0</span></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" id="s2" hidden>
+    <div class="stamp" id="stamp">Approved</div>
+    <h1>Great. Request <em>approved</em>.</h1>
+    <button class="btn primary" id="toDetails">Fill in the details</button>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" id="s3" hidden>
+    <h1>The fine print</h1>
+    <p class="sub">Section 3: logistics.</p>
+    <div class="group" style="margin-top:16px">
+      <label class="field" for="name">Your name</label>
+      <input type="text" id="name" placeholder="Write your name" autocomplete="given-name" maxlength="40">
+    </div>
+    <div class="group">
+      <label class="field" for="time">Pick a time (today, Wed 21 Oct)</label>
+      <input type="time" id="time">
+      <p class="note" id="timeNote">Choose any time you like.</p>
+    </div>
+    <div class="group">
+      <span class="field" style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">The plan (so many options)</span>
+      <div class="chips" id="chips">
+        <button class="chip" aria-pressed="false">Matcha</button>
+        <button class="chip" aria-pressed="false">Dessert</button>
+        <button class="chip" aria-pressed="false">Matcha</button>
+        <button class="chip" aria-pressed="false">Dessert</button>
+        <button class="chip" aria-pressed="false">Matcha</button>
+        <button class="chip" aria-pressed="false">Dessert</button>
+        <button class="chip" aria-pressed="false">Matcha</button>
+        <button class="chip" aria-pressed="false">Dessert</button>
+        <button class="chip" aria-pressed="false">Matcha</button>
+        <button class="chip" aria-pressed="false">Dessert</button>
+      </div>
+    </div>
+    <div class="group">
+      <span class="field" style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Terms &amp; conditions</span>
+      <div class="terms">
+        <label><input type="checkbox" id="t1" checked> Bad jokes are allowed and must be laughed at.</label>
+        <label><input type="checkbox" id="t2" checked> We listen, and we don't judge.</label>
+        <label><input type="checkbox" id="t3" checked> Hanging out today is nice, and that's enough.</label>
+      </div>
+    </div>
+    <button class="btn primary" id="sign" disabled>Pick a plan first</button>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step" id="s4" hidden>
+    <div class="stamp hit">Signed &amp; filed</div>
+    <h1>Hangout Agreement <em>No. 002</em></h1>
+    <div class="doc" id="doc"></div>
+    <div class="sig">
+      <div><b id="herSig">You</b>Party A</div>
+      <div><b id="fromSig"></b>Party B</div>
+    </div>
+    <div class="row">
+      <button class="btn wa" id="copy">Copy my answer</button>
+    </div>
+    <p class="note" id="note"></p>
+    <button class="btn ghost" id="restart" style="margin-top:8px;width:100%">Start over</button>
+  </section>
+</div>
+<canvas id="fx"></canvas>
+
+<script>
+const FROM = "Fadel";
+const $ = id => document.getElementById(id);
+document.getElementById("fromSig").textContent = FROM;
+
+const show = n => { ["s1","s2","s3","s4"].forEach((s,i)=> $(s).hidden = (i+1)!==n); };
+
+/* ---------- Step 1: the dodging No ---------- */
+const arena = $("arena"), no = $("no"), yes = $("yes");
+const labels = ["Sure?","Think again","Nope, wrong button","Too slow","Try harder","You can't catch me","Still no?","Be serious","I'm getting tired","Okay fine…"];
+const taunts = ["Nice try. It dodged you.","No is not available right now.","Your finger is very slow.","The No button has left the chat.","Yes is right there, just saying.","Statistically, you're going to press Yes.","This is getting embarrassing.","No is wilting…","Last chance to be reasonable.","Fine. You win. Sort of."];
+let tries = 0;
+
+function placeNoStart(){
+  const a = arena.getBoundingClientRect();
+  no.style.left = (a.width - no.offsetWidth) + "px";
+  no.style.top = (20 + (yes.offsetHeight - no.offsetHeight)/2) + "px";
+}
+function dodge(e){
+  if (tries >= 10) return;              // gives up: No becomes a Yes
+  if (e) e.preventDefault();
+  tries++;
+  $("count").textContent = tries;
+  no.textContent = labels[tries-1];
+  $("taunt").textContent = taunts[tries-1];
+  const a = arena.getBoundingClientRect(), y = yes.getBoundingClientRect();
+  const w = no.offsetWidth, h = no.offsetHeight;
+  let x, t, guard = 0;
+  do {
+    x = Math.random() * (a.width - w);
+    t = Math.random() * (a.height - h);
+    guard++;
+  } while (guard < 40 && x < (y.right - a.left) + 6 && t < (y.bottom - a.top) + 6 && t + h > (y.top - a.top) - 6);
+  no.style.left = x + "px"; no.style.top = t + "px";
+  yes.style.transform = `scale(${1 + tries*0.04})`;
+  if (tries === 10){
+    no.textContent = "Fine… Yes";
+    no.style.background = "var(--go-soft)";
+    no.style.borderColor = "var(--go)";
+    no.style.color = "var(--go)";
+  }
+}
+no.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") dodge(); });
+no.addEventListener("pointerdown", dodge);
+no.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") dodge(e); });
+no.addEventListener("click", e => { if (tries >= 10) approve(); else e.preventDefault(); });
+yes.addEventListener("click", approve);
+window.addEventListener("resize", () => { if (tries === 0) placeNoStart(); });
+requestAnimationFrame(placeNoStart);
+document.fonts && document.fonts.ready.then(() => { if (tries === 0) placeNoStart(); });
+
+/* ---------- Step 2 ---------- */
+function approve(){
+  show(2);
+  const s = $("stamp"); s.classList.remove("hit"); void s.offsetWidth; s.classList.add("hit");
+  burst();
+}
+$("toDetails").addEventListener("click", () => show(3));
+
+/* ---------- Step 3 ---------- */
+const chips = [...document.querySelectorAll(".chip")];
+const sign = $("sign");
+function refreshSign(){
+  const any = chips.some(c => c.getAttribute("aria-pressed") === "true");
+  sign.disabled = !any;
+  sign.textContent = any ? "Sign the agreement" : "Pick a plan first";
+}
+chips.forEach(c => c.addEventListener("click", () => {
+  c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") === "true" ? "false" : "true");
+  refreshSign();
+}));
+
+$("time").addEventListener("change", () => {
+  const v = $("time").value, n = $("timeNote");
+  if (!v) return;
+  if (v === "14:00"){ n.style.color = "var(--go)"; n.textContent = "Perfect. 2:00 PM it is. Great minds."; }
+  else { n.style.color = "var(--stamp)"; n.textContent = fmtTime(v) + "? Noted… and ignored. It's 2:00 PM, like we said."; }
+});
+
+function fmtTime(v){
+  if (!v) return "whenever";
+  let [h,m] = v.split(":").map(Number);
+  const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+  return `${h}:${String(m).padStart(2,"0")} ${ap}`;
+}
+function joinList(a){ return a.length < 2 ? a.join("") : a.slice(0,-1).join(", ") + " and " + a.at(-1); }
+
+let message = "";
+sign.addEventListener("click", () => {
+  const plan = [...new Set(chips.filter(c => c.getAttribute("aria-pressed") === "true").map(c => c.textContent.toLowerCase()))];
+  const terms = [["t1","Bad jokes get laughs"],["t2","We listen, no judging"],["t3","Today is nice, and that's enough"]]
+    .filter(([id]) => $(id).checked).map(([,t]) => "  ✓ " + t);
+  const picked = $("time").value;
+  const name = $("name").value.trim() || "You";
+  $("herSig").textContent = name;
+  const ignored = picked && picked !== "14:00" ? `\n        (You picked ${fmtTime(picked)}. Ignored.)` : "";
+  const doc =
+`WHO     ${name} & ${FROM}
+WHEN    Wednesday, 21 Oct
+TIME    2:00 PM${ignored}
+PLAN    ${joinList(plan)}
+STATUS  Confirmed
+
+TERMS
+${terms.length ? terms.join("\n") : "  None. Living dangerously."}`;
+  $("doc").textContent = doc;
+  message = `Hangout request: APPROVED ✅\n\n` + doc;
+  $("note").textContent = "";
+  show(4);
+  burst();
+});
+
+/* ---------- Step 4 ---------- */
+$("copy").addEventListener("click", () => {
+  const ok = () => $("note").textContent = "Copied. Reply to " + FROM + "'s email and paste it.";
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(message).then(ok).catch(fallback);
+  } else fallback();
+  function fallback(){
+    const r = document.createRange(); r.selectNodeContents($("doc"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    $("note").textContent = "Text selected. Copy it and reply to " + FROM + "'s email.";
+  }
+});
+$("restart").addEventListener("click", () => {
+  tries = 0; $("count").textContent = 0;
+  no.textContent = "No"; no.removeAttribute("style"); yes.style.transform = "";
+  $("taunt").textContent = "Yesterday was fun. Round two?";
+  chips.forEach(c => c.setAttribute("aria-pressed","false")); refreshSign();
+  $("time").value = ""; $("timeNote").textContent = "Choose any time you like."; $("timeNote").style.color = "";
+  show(1); requestAnimationFrame(placeNoStart);
+});
+
+/* ---------- confetti (paper scraps) ---------- */
+const cv = $("fx"), ctx = cv.getContext("2d");
+let parts = [], running = false;
+function burst(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio;
+  const cols = ["#d2372c","#1f7a5a","#1b2a4a","#f2b84b","#7fb3e0"];
+  for (let i = 0; i < 120; i++){
+    parts.push({x:innerWidth/2, y:innerHeight/2.4, vx:(Math.random()-.5)*14, vy:Math.random()*-14-4,
+      r:Math.random()*Math.PI, vr:(Math.random()-.5)*.3, w:6+Math.random()*6, h:3+Math.random()*4,
+      c:cols[i%cols.length], life:0});
+  }
+  if (!running){ running = true; requestAnimationFrame(tick); }
+}
+function tick(){
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  parts.forEach(p => { p.vy += .45; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life++;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+  parts = parts.filter(p => p.y < innerHeight + 20 && p.life < 300);
+  if (parts.length) requestAnimationFrame(tick); else { running = false; ctx.clearRect(0,0,innerWidth,innerHeight); }
+}
+</script>
+
+</body>
+</html>
