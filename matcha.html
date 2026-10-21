@@ -116,7 +116,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
       <p class="note" id="timeNote">Choose any time you like.</p>
     </div>
     <div class="group">
-      <span class="field" style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">The plan (so many options)</span>
+      <span class="field" style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">The plan (so many options · pick at least one of each)</span>
       <div class="chips" id="chips">
         <button class="chip" aria-pressed="false">Matcha</button>
         <button class="chip" aria-pressed="false">Dessert</button>
@@ -138,7 +138,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
         <label><input type="checkbox" id="t3" checked> The 500-calorie limit may be exceeded slightly (in the presence of good company).</label>
       </div>
     </div>
-    <button class="btn primary" id="sign" disabled>Pick a plan first</button>
+    <button class="btn primary" id="sign" disabled>Pick a Matcha and a Dessert</button>
   </section>
 
   <!-- STEP 4 -->
@@ -151,7 +151,8 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
       <div><b id="fromSig"></b>Party B</div>
     </div>
     <div class="row">
-      <button class="btn wa" id="copy">Copy my answer</button>
+      <button class="btn wa" id="send">Send to Fadel</button>
+      <button class="btn ghost" id="copy" hidden>Copy my answer</button>
     </div>
     <p class="note" id="note"></p>
     <button class="btn ghost" id="restart" style="margin-top:8px;width:100%">Start over</button>
@@ -231,9 +232,13 @@ $("toDetails").addEventListener("click", () => show(3));
 const chips = [...document.querySelectorAll(".chip")];
 const sign = $("sign");
 function refreshSign(){
-  const any = chips.some(c => c.getAttribute("aria-pressed") === "true");
-  sign.disabled = !any;
-  sign.textContent = any ? "Sign the agreement" : "Pick a plan first";
+  const on = chips.filter(c => c.getAttribute("aria-pressed") === "true").map(c => c.textContent);
+  const hasM = on.includes("Matcha"), hasD = on.includes("Dessert");
+  sign.disabled = !(hasM && hasD);
+  sign.textContent = hasM && hasD ? "Sign the agreement"
+    : hasM ? "Matcha without dessert? Pick a Dessert"
+    : hasD ? "Dessert without matcha? Pick a Matcha"
+    : "Pick a Matcha and a Dessert";
 }
 chips.forEach(c => c.addEventListener("click", () => {
   c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") === "true" ? "false" : "true");
@@ -255,14 +260,15 @@ function fmtTime(v){
 }
 function joinList(a){ return a.length < 2 ? a.join("") : a.slice(0,-1).join(", ") + " and " + a.at(-1); }
 
-let message = "";
+let message = "", lastName = "Nour";
+const EMAIL = "hamzafadel828@gmail.com";
 sign.addEventListener("click", () => {
   const plan = [...new Set(chips.filter(c => c.getAttribute("aria-pressed") === "true").map(c => c.textContent.toLowerCase()))];
   const terms = [["t1","Bad jokes get laughs"],["t2","We listen, no judging"],["t3","500-calorie limit may be exceeded slightly"]]
     .filter(([id]) => $(id).checked).map(([,t]) => "  ✓ " + t);
   const picked = $("time").value;
   const name = $("name").value.trim() || "Nour";
-  $("herSig").textContent = name;
+  $("herSig").textContent = name; lastName = name;
   const ignored = picked && picked !== "14:00" ? `\n        (You picked ${fmtTime(picked)}. Ignored.)` : "";
   const doc =
 `WHO     ${name} & ${FROM}
@@ -275,12 +281,35 @@ TERMS
 ${terms.length ? terms.join("\n") : "  None. Living dangerously."}`;
   $("doc").textContent = doc;
   message = `Matcha request: APPROVED ✅\n\n` + doc;
-  $("note").textContent = "";
+  $("note").textContent = ""; $("note").style.color = "";
+  $("send").disabled = false; $("send").textContent = "Send to " + FROM; $("copy").hidden = true;
   show(4);
   burst();
 });
 
 /* ---------- Step 4 ---------- */
+$("send").addEventListener("click", async () => {
+  const b = $("send"), n = $("note");
+  b.disabled = true; b.textContent = "Sending…"; n.style.color = ""; n.textContent = "";
+  try {
+    const r = await fetch("https://formsubmit.co/ajax/" + EMAIL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ _subject: "Matcha Agreement signed by " + lastName, _template: "box", name: lastName, agreement: message })
+    });
+    const d = await r.json();
+    if (!r.ok || String(d.success) !== "true") throw new Error(d.message || "failed");
+    b.textContent = "Sent ✓";
+    n.textContent = FROM + " got it. See you at 2:00 PM.";
+    burst();
+  } catch (e) {
+    b.disabled = false; b.textContent = "Try again";
+    n.style.color = "var(--stamp)";
+    n.textContent = "Couldn't send it. Copy your answer and reply to the email instead.";
+    $("copy").hidden = false;
+  }
+});
+
 $("copy").addEventListener("click", () => {
   const ok = () => $("note").textContent = "Copied. Reply to " + FROM + "'s email and paste it.";
   if (navigator.clipboard && navigator.clipboard.writeText){
