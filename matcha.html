@@ -43,6 +43,7 @@ h1 em{font-style:normal;color:var(--stamp)}
 .yes{position:absolute;left:0;top:20px;background:var(--go);color:var(--paper);font-size:24px;padding:16px 0;width:62%;box-shadow:3px 3px 0 var(--ink);transform-origin:left center}
 .yes:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
 .no{position:absolute;background:var(--paper);color:var(--ink);font-size:15px;padding:10px 14px;white-space:nowrap;transition:left .22s cubic-bezier(.3,1.5,.5,1),top .22s cubic-bezier(.3,1.5,.5,1),transform .2s}
+.no.free{position:fixed;z-index:20}
 .tries{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums}
 .stamp{
   display:inline-block;font-family:var(--mono);font-weight:500;color:var(--stamp);border:3px solid var(--stamp);
@@ -85,7 +86,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
 
   <!-- STEP 1 -->
   <section class="step" id="s1">
-    <h1>Wanna hang out <em>again</em> today?</h1>
+    <h1>Nour, wanna drink <em>MATCHA</em> today?</h1>
     <p class="sub" id="taunt">Yesterday was fun. Round two?</p>
     <div class="arena" id="arena">
       <button class="btn yes" id="yes">Yes</button>
@@ -107,7 +108,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
     <p class="sub">Section 3: logistics.</p>
     <div class="group" style="margin-top:16px">
       <label class="field" for="name">Your name</label>
-      <input type="text" id="name" placeholder="Write your name" autocomplete="given-name" maxlength="40">
+      <input type="text" id="name" value="Nour" placeholder="Write your name" autocomplete="given-name" maxlength="40">
     </div>
     <div class="group">
       <label class="field" for="time">Pick a time (today, Wed 21 Oct)</label>
@@ -146,7 +147,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
     <h1>Hangout Agreement <em>No. 002</em></h1>
     <div class="doc" id="doc"></div>
     <div class="sig">
-      <div><b id="herSig">You</b>Party A</div>
+      <div><b id="herSig">Nour</b>Party A</div>
       <div><b id="fromSig"></b>Party B</div>
     </div>
     <div class="row">
@@ -183,14 +184,23 @@ function dodge(e){
   $("count").textContent = tries;
   no.textContent = labels[tries-1];
   $("taunt").textContent = taunts[tries-1];
-  const a = arena.getBoundingClientRect(), y = yes.getBoundingClientRect();
-  const w = no.offsetWidth, h = no.offsetHeight;
+  // jump anywhere on the screen, far from where it was
+  const cur = no.getBoundingClientRect();
+  if (!no.classList.contains("free")){
+    no.classList.add("free");
+    no.style.left = cur.left + "px"; no.style.top = cur.top + "px";
+    void no.offsetWidth;
+  }
+  const vw = innerWidth, vh = innerHeight, m = 16;
+  const w = no.offsetWidth, h = no.offsetHeight, y = yes.getBoundingClientRect();
+  const minJump = Math.min(vw, vh) * 0.5;
   let x, t, guard = 0;
   do {
-    x = Math.random() * (a.width - w);
-    t = Math.random() * (a.height - h);
+    x = m + Math.random() * Math.max(0, vw - w - 2*m);
+    t = m + Math.random() * Math.max(0, vh - h - 2*m);
     guard++;
-  } while (guard < 40 && x < (y.right - a.left) + 6 && t < (y.bottom - a.top) + 6 && t + h > (y.top - a.top) - 6);
+  } while (guard < 80 && (Math.hypot(x - cur.left, t - cur.top) < minJump ||
+           (x < y.right + 8 && x + w > y.left - 8 && t < y.bottom + 8 && t + h > y.top - 8)));
   no.style.left = x + "px"; no.style.top = t + "px";
   yes.style.transform = `scale(${1 + tries*0.04})`;
   if (tries === 10){
@@ -251,7 +261,7 @@ sign.addEventListener("click", () => {
   const terms = [["t1","Bad jokes get laughs"],["t2","We listen, no judging"],["t3","Today is nice, and that's enough"]]
     .filter(([id]) => $(id).checked).map(([,t]) => "  ✓ " + t);
   const picked = $("time").value;
-  const name = $("name").value.trim() || "You";
+  const name = $("name").value.trim() || "Nour";
   $("herSig").textContent = name;
   const ignored = picked && picked !== "14:00" ? `\n        (You picked ${fmtTime(picked)}. Ignored.)` : "";
   const doc =
@@ -284,7 +294,7 @@ $("copy").addEventListener("click", () => {
 });
 $("restart").addEventListener("click", () => {
   tries = 0; $("count").textContent = 0;
-  no.textContent = "No"; no.removeAttribute("style"); yes.style.transform = "";
+  no.textContent = "No"; no.removeAttribute("style"); no.classList.remove("free"); yes.style.transform = "";
   $("taunt").textContent = "Yesterday was fun. Round two?";
   chips.forEach(c => c.setAttribute("aria-pressed","false")); refreshSign();
   $("time").value = ""; $("timeNote").textContent = "Choose any time you like."; $("timeNote").style.color = "";
