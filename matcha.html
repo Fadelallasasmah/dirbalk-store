@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
-<title>Hangout Request</title>
+<title>Matcha Request</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Mono:wght@400;500&display=swap">
 <style>
@@ -82,12 +82,12 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
 
 
 <div class="sheet">
-  <div class="meta"><span>Form 2-B</span><span>Request to hang out</span></div>
+  <div class="meta"><span>Form 1-A</span><span>Request to drink matcha</span></div>
 
   <!-- STEP 1 -->
   <section class="step" id="s1">
     <h1>Nour, wanna drink <em>MATCHA</em> today?</h1>
-    <p class="sub" id="taunt">Yesterday was fun. Round two?</p>
+    <p class="sub" id="taunt"></p>
     <div class="arena" id="arena">
       <button class="btn yes" id="yes">Yes</button>
       <button class="btn no" id="no">No</button>
@@ -135,7 +135,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
       <div class="terms">
         <label><input type="checkbox" id="t1" checked> Bad jokes are allowed and must be laughed at.</label>
         <label><input type="checkbox" id="t2" checked> We listen, and we don't judge.</label>
-        <label><input type="checkbox" id="t3" checked> Hanging out today is nice, and that's enough.</label>
+        <label><input type="checkbox" id="t3" checked> The 500-calorie limit may be exceeded slightly (in the presence of good company).</label>
       </div>
     </div>
     <button class="btn primary" id="sign" disabled>Pick a plan first</button>
@@ -144,7 +144,7 @@ canvas{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
   <!-- STEP 4 -->
   <section class="step" id="s4" hidden>
     <div class="stamp hit">Signed &amp; filed</div>
-    <h1>Hangout Agreement <em>No. 002</em></h1>
+    <h1>Matcha Agreement <em>No. 002</em></h1>
     <div class="doc" id="doc"></div>
     <div class="sig">
       <div><b id="herSig">Nour</b>Party A</div>
@@ -258,7 +258,7 @@ function joinList(a){ return a.length < 2 ? a.join("") : a.slice(0,-1).join(", "
 let message = "";
 sign.addEventListener("click", () => {
   const plan = [...new Set(chips.filter(c => c.getAttribute("aria-pressed") === "true").map(c => c.textContent.toLowerCase()))];
-  const terms = [["t1","Bad jokes get laughs"],["t2","We listen, no judging"],["t3","Today is nice, and that's enough"]]
+  const terms = [["t1","Bad jokes get laughs"],["t2","We listen, no judging"],["t3","500-calorie limit may be exceeded slightly"]]
     .filter(([id]) => $(id).checked).map(([,t]) => "  ✓ " + t);
   const picked = $("time").value;
   const name = $("name").value.trim() || "Nour";
@@ -274,7 +274,7 @@ STATUS  Confirmed
 TERMS
 ${terms.length ? terms.join("\n") : "  None. Living dangerously."}`;
   $("doc").textContent = doc;
-  message = `Hangout request: APPROVED ✅\n\n` + doc;
+  message = `Matcha request: APPROVED ✅\n\n` + doc;
   $("note").textContent = "";
   show(4);
   burst();
@@ -295,7 +295,7 @@ $("copy").addEventListener("click", () => {
 $("restart").addEventListener("click", () => {
   tries = 0; $("count").textContent = 0;
   no.textContent = "No"; no.removeAttribute("style"); no.classList.remove("free"); yes.style.transform = "";
-  $("taunt").textContent = "Yesterday was fun. Round two?";
+  $("taunt").textContent = "";
   chips.forEach(c => c.setAttribute("aria-pressed","false")); refreshSign();
   $("time").value = ""; $("timeNote").textContent = "Choose any time you like."; $("timeNote").style.color = "";
   show(1); requestAnimationFrame(placeNoStart);
