@@ -59,6 +59,12 @@ export default async function handler(req, res) {
       key: (req.body?.key || '').toString(),
       open: req.body?.open === true,
     };
+  } else if (kind === 'waTest') {
+    payload = {
+      action: 'waTest',
+      key: (req.body?.key || '').toString(),
+      phone: (req.body?.phone || '').toString().slice(0, 24),
+    };
   } else if (kind === 'resendWhatsApp') {
     payload = {
       action: 'resendWhatsApp',
