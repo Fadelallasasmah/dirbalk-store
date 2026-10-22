@@ -47,6 +47,9 @@
   .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
   .form-group .field.wide { grid-column: 1 / -1; }
   .field input { font-size: 16px; }
+  .phone-row { display: flex; gap: 8px; }
+  .phone-row select { flex: 0 0 auto; width: 112px; font-size: 16px; direction: ltr; }
+  .phone-row input { flex: 1; min-width: 0; direction: ltr; }
   .field-msg { display: none; font-size: 11.5px; color: #a3412f; }
   .field-error { border-color: #a3412f !important; }
   .form-error { display: none; font-size: 12.5px; color: #a3412f; margin: 0 0 14px; }
@@ -190,7 +193,10 @@
         </div>
         <div class="field">
           <label for="ckPhone">Phone number</label>
-          <input type="tel" id="ckPhone" placeholder="07XXXXXXXX" inputmode="numeric" autocomplete="tel" />
+          <div class="phone-row">
+            <select id="ckCc" aria-label="Country code"></select>
+            <input type="tel" id="ckPhone" placeholder="7XXXXXXXX" inputmode="tel" autocomplete="tel-national" />
+          </div>
           <p class="field-msg" id="ckPhone-msg"></p>
         </div>
         <div class="field">
@@ -511,6 +517,37 @@
   document.getElementById('toReviewBtn').addEventListener('click', () => { renderReview(); goToStep(3); });
   document.getElementById('backToStep2').addEventListener('click', () => goToStep(2));
 
+  /* phone: country code + local number (v42) */
+  const COUNTRY_CODES = [
+    ['+962', '🇯🇴 +962'], ['+966', '🇸🇦 +966'], ['+971', '🇦🇪 +971'], ['+965', '🇰🇼 +965'],
+    ['+974', '🇶🇦 +974'], ['+973', '🇧🇭 +973'], ['+968', '🇴🇲 +968'], ['+20', '🇪🇬 +20'],
+    ['+970', '🇵🇸 +970'], ['+961', '🇱🇧 +961'], ['+964', '🇮🇶 +964'], ['+963', '🇸🇾 +963'],
+    ['+44', '🇬🇧 +44'], ['+1', '🇺🇸 +1'], ['+49', '🇩🇪 +49'], ['+90', '🇹🇷 +90']
+  ];
+  const ccSel = document.getElementById('ckCc');
+  ccSel.innerHTML = COUNTRY_CODES.map((c) => '<option value="' + c[0] + '">' + c[1] + '</option>').join('');
+  ccSel.value = '+962';
+  function setPhone(full) {
+    let p = (full || '').replace(/[\s\-().]/g, '');
+    if (/^00\d/.test(p)) p = '+' + p.slice(2);
+    if (p.charAt(0) === '+') {
+      const hit = COUNTRY_CODES.map((c) => c[0]).sort((a, b) => b.length - a.length).find((cc) => p.indexOf(cc) === 0);
+      if (hit) { ccSel.value = hit; document.getElementById('ckPhone').value = p.slice(hit.length).replace(/^0/, ''); return; }
+    }
+    ccSel.value = '+962';
+    document.getElementById('ckPhone').value = p.replace(/^0/, '');
+  }
+  /* → '+9627XXXXXXXX' or '' if it doesn't look right */
+  function fullPhone() {
+    let local = document.getElementById('ckPhone').value.replace(/[\s\-().]/g, '');
+    if (/^00\d/.test(local)) local = '+' + local.slice(2);
+    if (local.charAt(0) === '+') return /^\+[1-9]\d{7,14}$/.test(local) ? local : ''; // typed the whole number
+    local = local.replace(/^0+/, '');
+    const cc = ccSel.value;
+    if (cc === '+962') return /^7[789]\d{7}$/.test(local) ? cc + local : '';
+    return /^\d{6,12}$/.test(local) ? cc + local : '';
+  }
+
   function prefillFromAccount() {
     try {
       if (localStorage.getItem('dirbalk_logged_in') !== '1') return;
@@ -519,7 +556,7 @@
       const phone = localStorage.getItem('dirbalk_phone') || '';
       if (name && !document.getElementById('fullName').value) document.getElementById('fullName').value = name;
       if (email) { const ce = document.getElementById('ckEmail'); ce.value = email; ce.readOnly = true; }
-      if (phone && !document.getElementById('ckPhone').value) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
+      if (phone && !document.getElementById('ckPhone').value) setPhone(phone);
       if (name) {
         const note = document.getElementById('loggedInNote');
         note.innerHTML = 'Signed in as <strong>' + escapeHtml(name) + '</strong> — we filled in your info, just double check it and fill the rest.';
@@ -536,7 +573,7 @@
 
       if (name) document.getElementById('fullName').value = name;
       if (email) { const ce = document.getElementById('ckEmail'); ce.value = email; ce.readOnly = true; ce.title = 'Your order confirmation goes to your account email.'; }
-      if (phone) document.getElementById('ckPhone').value = phone.replace(/^\+962/, '0');
+      if (phone) setPhone(phone);
 
       if (name) {
         const note = document.getElementById('loggedInNote');
@@ -549,7 +586,7 @@
     if (saved) {
       if (saved.fullName) document.getElementById('fullName').value = saved.fullName;
       if (saved.email) document.getElementById('ckEmail').value = saved.email;
-      if (saved.phone) document.getElementById('ckPhone').value = saved.phone;
+      if (saved.phone) setPhone(saved.phone);
       if (saved.city) document.getElementById('city').value = saved.city;
       if (saved.address) document.getElementById('address').value = saved.address;
       if (saved.locationLink) document.getElementById('locationLink').value = saved.locationLink;
@@ -584,7 +621,7 @@
     const data = {
       fullName: document.getElementById('fullName').value.trim(),
       email: document.getElementById('ckEmail').value.trim().toLowerCase(),
-      phone: document.getElementById('ckPhone').value.trim(),
+      phone: fullPhone(), // international, e.g. +962791234567
       city: document.getElementById('city').value.trim(),
       address: document.getElementById('address').value.trim(),
       locationLink: document.getElementById('locationLink').value.trim(),
@@ -593,7 +630,7 @@
     let valid = true;
     if (!data.fullName) { showFieldError('fullName', 'Please enter your full name.'); valid = false; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showFieldError('ckEmail', 'Please enter a valid email.'); valid = false; }
-    if (!/^0?7[0-9]{8}$/.test(data.phone.replace(/\s/g, ''))) { showFieldError('ckPhone', 'Please enter a valid phone number.'); valid = false; }
+    if (!data.phone) { showFieldError('ckPhone', ccSel.value === '+962' ? 'Enter your mobile number, e.g. 7XXXXXXXX.' : 'Please enter a valid phone number.'); valid = false; }
     if (!data.city) { showFieldError('city', 'Please enter your city.'); valid = false; }
     if (!data.address) { showFieldError('address', 'Please enter your address.'); valid = false; }
     if (data.locationLink && !/^https?:\/\/.+/i.test(data.locationLink)) {
