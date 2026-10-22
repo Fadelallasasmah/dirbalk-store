@@ -330,6 +330,11 @@
       <button type="button" class="qr-btn" id="printNewStickers">اطبع ستيكرات الطلبات الجديدة</button>
       <small>الطلبات اللي حالتها «قيد المراجعة» أو «قيد التجهيز». لطلب واحد: زر «ستيكر» جنب الطلب.</small>
     </div>
+    <div class="orders-tools">
+      <input type="tel" id="waTestPhone" placeholder="07XXXXXXXX" dir="ltr" style="background:none;border:0.5px solid rgba(255,255,255,0.2);color:#fff;padding:9px 12px;font-size:14px;min-height:40px;width:170px;">
+      <button type="button" class="qr-btn" id="waTestBtn">جرّب رسالة واتساب</button>
+      <small id="waTestMsg">بتبعت قالب الواتساب لهالرقم، بدون طلب.</small>
+    </div>
     <div class="table-wrap">
       <table id="ordersTable">
         <thead>
@@ -796,6 +801,16 @@
     }
     return wrap;
   }
+
+  document.getElementById('waTestBtn').addEventListener('click', function () {
+    const b = this, m = document.getElementById('waTestMsg');
+    let key = ''; try { key = sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) {}
+    b.disabled = true; m.textContent = '…';
+    fetch('/api/admin-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'waTest', key, phone: document.getElementById('waTestPhone').value }) })
+      .then((r) => r.json())
+      .then((r) => { b.disabled = false; m.textContent = r.status === 'success' ? '✓ ' + r.message : '✗ ' + (r.message || 'ما انبعتت.'); })
+      .catch(() => { b.disabled = false; m.textContent = '✗ حدث خطأ مؤقت.'; });
+  });
 
   function renderOrders(orders) {
     lastOrders = orders || [];
