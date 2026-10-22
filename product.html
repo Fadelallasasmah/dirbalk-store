@@ -87,6 +87,11 @@
   .acc-b li::before { content: "·"; color: var(--amber); margin-right: 8px; }
   .acc-b p + p { margin-top: 8px; }
   .acc-b .hint { color: var(--amber); }
+  .acc-b .care-intro { color: var(--ink); margin-bottom: 4px; }
+  .acc-b .care-fabric { margin-top: 14px; font-size: 12.5px; letter-spacing: .02em; }
+  .acc-b .care-close { color: var(--amber); margin-top: 12px; }
+  .acc-b .care-close span { font-family: 'Cairo', sans-serif; }
+  .acc-b .care-meta { font-size: 12px; color: var(--faint); margin-top: 6px; }
   .sg { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
   .sg th, .sg td { padding: 9px 6px; border-bottom: 1px solid var(--line); text-align: center; }
   .sg th { font-weight: 500; color: var(--ink); letter-spacing: .1em; }
@@ -215,7 +220,7 @@
         <figure class="ph zoom"><img src="/img/detail-1.jpg" alt="" loading="lazy"><figcaption>Amber stitch</figcaption></figure>
         <figure class="ph zoom"><img src="/img/detail-2.jpg" alt="" loading="lazy"><figcaption>Matte hardware</figcaption></figure>
         <figure class="ph zoom"><img src="/img/detail-3.jpg" alt="" loading="lazy"><figcaption>13oz raw denim</figcaption></figure>
-        <figure class="ph zoom"><img src="/img/detail-4.jpg" alt="" loading="lazy"><figcaption>On the inside</figcaption></figure>
+        <figure class="ph zoom"><img src="/img/detail-4.jpg" alt="" loading="lazy"><figcaption>The finish</figcaption></figure>
       </div>
     </div>
   </section>
@@ -282,9 +287,15 @@
   document.getElementById('mbPrice').textContent = p.price + ' JD';
 
   /* accordions content */
-  document.getElementById('accDetails').innerHTML = '<p>' + S.esc(p.story) + '</p><p>' + p.details + '</p>' +
+  document.getElementById('accDetails').innerHTML = '<p>' + S.esc(p.story) + '</p>' + (p.details ? '<p>' + S.esc(p.details) + '</p>' : '') +
     '<ul>' + p.fit.map(function (t) { return '<li>' + S.esc(t) + '</li>'; }).join('') + '</ul>';
-  document.getElementById('accCare').innerHTML = '<ul>' + p.care.map(function (t) { return '<li>' + S.esc(t) + '</li>'; }).join('') + '</ul><p style="margin-top:10px">Made in Egypt · Collection 01 · Winter 2026</p>';
+  /* care written to the person who owns it, not a label */
+  document.getElementById('accCare').innerHTML =
+    (p.careIntro ? '<p class="care-intro">' + S.esc(p.careIntro) + '</p>' : '') +
+    '<ul>' + p.care.map(function (t) { return '<li>' + S.esc(t) + '</li>'; }).join('') + '</ul>' +
+    (p.fabric ? '<p class="care-fabric">' + S.esc(p.fabric) + '</p>' : '') +
+    '<p class="care-close">Take care of it. <span lang="ar" dir="rtl">دير بالك عليها.</span></p>' +
+    '<p class="care-meta">Made in Egypt · Collection 01 · Winter 2026</p>';
   var sg = SIZE_GUIDE[p.id];
   var sgHtml = sg ? '<table class="sg"><thead><tr><th>cm</th><th>S</th><th>M</th><th>L</th></tr></thead><tbody>' +
     sg.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') +
