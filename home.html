@@ -208,6 +208,8 @@
     <a href="/home.html" class="logo" aria-label="DIRBALK"><img src="/logo.png" alt="DIRBALK"></a>
     <div class="right">
       <a href="/shop.html?search=1" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="lbl">Search</span></a>
+      <a href="/wishlist.html" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="lbl">Wishlist (<span id="wishCount">0</span>)</span></a>
+      <a href="/me.html" id="hdrAccount" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span class="lbl">Account</span></a>
       <a href="/cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg><span class="lbl">Cart (<span id="cartCount">0</span>)</span></a>
     </div>
   </div>
@@ -222,6 +224,7 @@
     <a href="/about.html">About</a>
     <a href="/story.html" class="sm-link">Journal</a>
     <a href="/help.html">Help</a>
+    <a href="/wishlist.html">Wishlist</a>
     <a href="/me.html" id="smAccount">My Account</a>
   </nav>
   <p class="phrase">دير بالك على حالك.</p>
@@ -444,6 +447,9 @@
   try {
     var n = JSON.parse(localStorage.getItem('dirbalk_cart') || '[]').reduce(function (s, l) { return s + (l.qty || 0); }, 0);
     document.getElementById('cartCount').textContent = n;
+    document.getElementById('wishCount').textContent = JSON.parse(localStorage.getItem('dirbalk_wishlist') || '[]').length;
+    var signed = localStorage.getItem('dirbalk_logged_in') === '1' && !!localStorage.getItem('dirbalk_session');
+    if (!signed) document.getElementById('hdrAccount').href = '/signin.html';
   } catch (e) {}
 
   /* ---------- mobile menu ---------- */
