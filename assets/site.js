@@ -10,6 +10,7 @@
   var ICON = {
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7h18M3 12h18M3 17h18"/></svg>',
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
     user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
     cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 3h3l1 3"/></svg>',
     ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>',
@@ -34,14 +35,16 @@
       var w = wish.get(), i = w.indexOf(id);
       if (i === -1) w.push(id); else w.splice(i, 1);
       try { localStorage.setItem(WISH_KEY, JSON.stringify(w)); } catch (e) {}
+      updateCount();
       return i === -1;
     }
   };
 
   function updateCount() {
-    var n = cart.count();
+    var n = cart.count(), w = wish.get().length;
     Array.prototype.forEach.call(document.querySelectorAll('.sh-count'), function (b) {
-      b.textContent = n; b.style.display = n > 0 ? 'flex' : 'none';
+      var v = b.classList.contains('wish-count') ? w : n;
+      b.textContent = v; b.style.display = v > 0 ? 'flex' : 'none';
     });
   }
 
@@ -62,6 +65,7 @@
           '<nav class="sh-nav">' + navLinks.map(function (l) { return '<a href="' + l[0] + '"' + (here(l[0]) ? ' class="on"' : '') + '>' + l[1] + '</a>'; }).join('') + '</nav>' +
           '<div class="sh-right">' +
             '<button type="button" class="sh-ic" id="shSearch" aria-label="Search" aria-expanded="false" aria-controls="shSearchBar">' + ICON.search + '</button>' +
+            '<a href="/wishlist.html" class="sh-ic" aria-label="Wishlist">' + ICON.heart + '<span class="sh-count wish-count"></span></a>' +
             '<a href="' + (loggedIn() ? '/me.html' : '/signin.html') + '" class="sh-ic acc" aria-label="Account">' + ICON.user + '</a>' +
             '<a href="/cart.html" class="sh-ic" aria-label="Cart">' + ICON.cart + '<span class="sh-count"></span></a>' +
           '</div>' +
@@ -73,7 +77,7 @@
         '<button type="button" class="x" id="smX" aria-label="Close">✕</button>' +
         '<nav>' +
           '<a href="/home.html">Home</a><a href="/shop.html">Shop</a><a href="/story.html">Journal</a><a href="/about.html">About</a>' +
-          '<a href="/help.html">Help</a><a href="' + (loggedIn() ? '/me.html">My Account' : '/signin.html">Sign in') + '</a><a href="/cart.html">Cart</a>' +
+          '<a href="/help.html">Help</a><a href="/wishlist.html">Wishlist</a><a href="' + (loggedIn() ? '/me.html">My Account' : '/signin.html">Sign in') + '</a><a href="/cart.html">Cart</a>' +
         '</nav>' +
         '<p class="ar">دير بالك على حالك.</p>' +
       '</aside>';
@@ -183,7 +187,7 @@
         var id = h.closest('.pcard').getAttribute('data-id');
         var on = wish.toggle(id);
         h.classList.toggle('on', on);
-        if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist' : 'Removed from your wishlist');
+        if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist — tap ♡ at the top to see it' : 'Removed from your wishlist');
       }
     });
   }
