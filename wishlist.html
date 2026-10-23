@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<script src="/assets/gate.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist — DIRBALK</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/favicon-180.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FMPZV540CP"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-FMPZV540CP');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cairo:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/toast.js"></script>
+<script src="/assets/products.js"></script>
+<script src="/assets/catalog.js"></script>
+<script src="/assets/auth-gate.js"></script>
+<script src="/assets/site.js"></script>
+<style>
+  main.wrap { width: 100%; }
+  .w-head { padding: 40px 0 30px; border-bottom: 1px solid var(--line); }
+  .w-head .lead { margin-top: 10px; }
+  .w-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 18px; padding: 30px 0 90px; }
+  .w-empty { padding: 60px 0 100px; text-align: center; }
+  .w-empty .lead { margin: 10px auto 26px; max-width: 360px; }
+  @media (max-width: 860px) { .w-grid { grid-template-columns: 1fr 1fr; gap: 26px 12px; } }
+</style>
+</head>
+<body>
+<div id="siteHeader"></div>
+<main class="wrap">
+  <section class="w-head">
+    <p class="eyebrow">Saved on this device</p>
+    <h1 class="t-l">Wishlist</h1>
+    <p class="lead" id="wCount"></p>
+  </section>
+  <div id="wArea"></div>
+</main>
+<div id="siteFooter"></div>
+<script>
+(function () {
+  var S = window.DirbalkSite;
+  function render() {
+    var items = S.wish.get().map(S.find).filter(Boolean);
+    var area = document.getElementById('wArea');
+    document.getElementById('wCount').textContent = items.length ? items.length + (items.length === 1 ? ' piece' : ' pieces') + ' you kept an eye on.' : '';
+    if (!items.length) {
+      area.innerHTML = '<div class="w-empty"><p class="t-m">Nothing saved yet.</p><p class="lead">Tap the ♡ on any piece to keep it here.</p><a href="/shop.html" class="btn">Shop Collection 01</a></div>';
+      return;
+    }
+    area.innerHTML = '<div class="w-grid">' + items.map(function (p) { return S.card(p); }).join('') + '</div>';
+  }
+  render();
+  S.bindCards(document.getElementById('wArea'));
+  document.getElementById('wArea').addEventListener('click', function (e) { if (e.target.closest('.wish')) setTimeout(render, 60); });
+})();
+</script>
+</body>
+</html>

@@ -420,7 +420,7 @@
   wishBtn.addEventListener('click', function () {
     var on = S.wish.toggle(p.id);
     wishBtn.classList.toggle('on', on);
-    if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist' : 'Removed from your wishlist');
+    if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist — tap ♡ at the top to see it' : 'Removed from your wishlist');
   });
 
   /* ---------- add to cart (buying needs an account) ---------- */
