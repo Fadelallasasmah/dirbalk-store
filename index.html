@@ -193,9 +193,18 @@ html.drop-open #form-section{display:none}
   .glimpse .frame { position: relative; }
   .glimpse img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; opacity: 0; transition: opacity 1.2s ease; }
   .glimpse img.on { opacity: 1; }
-  .gl-dots { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
-  .gl-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--line); transition: background .4s; }
-  .gl-dots span.on { background: var(--amber); }
+  .gl-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(242,239,232,.28); background: rgba(10,10,10,.45); color: #f2efe8; display: none; align-items: center; justify-content: center; cursor: pointer; padding: 0; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .25s, border-color .25s, color .25s; }
+  .gl-arrow svg { width: 18px; height: 18px; }
+  .gl-arrow.prev { left: 12px; } .gl-arrow.next { right: 12px; }
+  .glimpse.multi .gl-arrow { display: flex; }
+  .gl-arrow:hover { background: rgba(10,10,10,.7); border-color: var(--amber); color: var(--amber); }
+  .gl-arrow:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  @media (max-width: 660px) { .gl-arrow { width: 36px; height: 36px; } .gl-arrow.prev { left: 8px; } .gl-arrow.next { right: 8px; } }
+  .gl-dots { display: flex; gap: 2px; justify-content: center; margin-top: 8px; }
+  .gl-dots button { width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .gl-dots button::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: background .4s; }
+  .gl-dots button.on::before { background: var(--amber); }
+  .gl-dots button:hover::before { background: rgba(242,239,232,.6); }
   @media (prefers-reduced-motion: reduce) { .glimpse img { transition: none; } }
   .glimpse figcaption { font-size: 12px; color: var(--amber); margin-top: 12px; letter-spacing: .02em; }
 
@@ -320,28 +329,59 @@ html.drop-open #form-section{display:none}
       <img data-src="/img/workroom-2.jpg" data-srcset="/img/workroom-2-1024.jpg 1024w, /img/workroom-2.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Amber thread running into raw indigo denim." decoding="async" width="2048" height="1368">
       <img data-src="/img/workroom-3.jpg" data-srcset="/img/workroom-3-1024.jpg 1024w, /img/workroom-3.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Over the shoulder: a seam being finished by hand and machine." decoding="async" width="2048" height="1368">
       <img data-src="/img/workroom-4.jpg" data-srcset="/img/workroom-4-1024.jpg 1024w, /img/workroom-4.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Three cones of amber thread, waiting." decoding="async" width="2048" height="1368">
+      <button type="button" class="gl-arrow prev" id="glPrev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" class="gl-arrow next" id="glNext" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-    <div class="gl-dots" id="glDots" aria-hidden="true"></div>
+    <div class="gl-dots" id="glDots"></div>
     <figcaption>— from the workroom</figcaption>
   </figure>
   <script>
-  /* Workroom slideshow: crossfades every 4.5s; images that fail to load are dropped. */
+  /* Workroom slideshow: moves by itself every 4.5s; arrows, dots, swipe and the
+     keyboard flip it by hand (the timer restarts after each manual move).
+     Images that fail to load are dropped. */
   (function () {
     var frame = document.getElementById('glFrame'), dots = document.getElementById('glDots');
     if (!frame) return;
-    var imgs = [].slice.call(frame.querySelectorAll('img')), live = [imgs[0]], i = 0, timer;
-    function drawDots() { dots.innerHTML = live.length > 1 ? live.map(function (_, k) { return '<span' + (k === i ? ' class="on"' : '') + '></span>'; }).join('') : ''; }
+    var fig = frame.parentNode, imgs = [].slice.call(frame.querySelectorAll('img')), ready = [imgs[0]], cur = imgs[0], timer;
+    var auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function live() { return imgs.filter(function (im) { return ready.indexOf(im) > -1; }); } // keeps page order
+    function draw() {
+      var L = live(), k = L.indexOf(cur);
+      fig.classList.toggle('multi', L.length > 1);
+      dots.innerHTML = L.length > 1 ? L.map(function (_, n) { return '<button type="button" aria-label="Photo ' + (n + 1) + '"' + (n === k ? ' class="on" aria-current="true"' : '') + '></button>'; }).join('') : '';
+    }
+    function show(n) {
+      var L = live(); if (L.length < 2) return;
+      n = (n + L.length) % L.length;
+      cur.classList.remove('on'); cur = L[n]; cur.classList.add('on'); draw();
+    }
+    function step(d) { show(live().indexOf(cur) + d); }
+    function restart() { clearInterval(timer); timer = null; if (auto && live().length > 1) timer = setInterval(function () { if (!document.hidden) step(1); }, 4500); }
+    function manual(d) { step(d); restart(); }
     imgs.slice(1).forEach(function (im) {
-      im.onload = function () { live.push(im); drawDots(); start(); };
-      im.onerror = function () { im.remove(); };
+      im.onload = function () { ready.push(im); draw(); if (!timer) restart(); };
+      im.onerror = function () { im.remove(); imgs.splice(imgs.indexOf(im), 1); };
       if (im.getAttribute('data-srcset')) { im.sizes = im.getAttribute('sizes'); im.srcset = im.getAttribute('data-srcset'); }
       im.src = im.getAttribute('data-src');
     });
-    function step() {
-      if (document.hidden || live.length < 2) return;
-      live[i].classList.remove('on'); i = (i + 1) % live.length; live[i].classList.add('on'); drawDots();
-    }
-    function start() { if (!timer && live.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(step, 4500); }
+    document.getElementById('glPrev').addEventListener('click', function () { manual(-1); });
+    document.getElementById('glNext').addEventListener('click', function () { manual(1); });
+    dots.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      show([].indexOf.call(dots.children, b)); restart();
+    });
+    fig.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { manual(-1); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { manual(1); e.preventDefault(); }
+    });
+    // swipe on phones
+    var x0 = null, y0 = null;
+    frame.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    frame.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) manual(dx < 0 ? 1 : -1);
+    }, { passive: true });
   })();
   </script>
 
