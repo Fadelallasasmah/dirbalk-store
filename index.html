@@ -189,8 +189,14 @@ html.drop-open #form-section{display:none}
 
   /* ---------- 3. one glimpse ---------- */
   .glimpse { max-width: 620px; margin: clamp(48px, 7vw, 64px) auto 0; }
-  .glimpse .frame { aspect-ratio: 1821 / 864; overflow: hidden; border: 1px solid var(--line); background: #111; }
-  .glimpse img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+  .glimpse .frame { aspect-ratio: 3 / 2; overflow: hidden; border: 1px solid var(--line); background: #111; }
+  .glimpse .frame { position: relative; }
+  .glimpse img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; opacity: 0; transition: opacity 1.2s ease; }
+  .glimpse img.on { opacity: 1; }
+  .gl-dots { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
+  .gl-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--line); transition: background .4s; }
+  .gl-dots span.on { background: var(--amber); }
+  @media (prefers-reduced-motion: reduce) { .glimpse img { transition: none; } }
   .glimpse figcaption { font-size: 12px; color: var(--amber); margin-top: 12px; letter-spacing: .02em; }
 
   /* ---------- 4. the close ---------- */
@@ -309,9 +315,35 @@ html.drop-open #form-section{display:none}
   </section>
 
   <figure class="glimpse fade d3">
-    <div class="frame"><img src="/img/workroom-cutting.jpg" alt="In the workroom: a hand in a steel-mesh glove holds the pattern while the cutter follows the line." loading="lazy" decoding="async" width="1240" height="588"></div>
+    <div class="frame" id="glFrame">
+      <img class="on" src="/img/workroom-1.jpg" srcset="/img/workroom-1-1024.jpg 1024w, /img/workroom-1.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="At the machine: gloved hands guide raw denim under the presser foot." decoding="async" width="2048" height="1368">
+      <img data-src="/img/workroom-2.jpg" data-srcset="/img/workroom-2-1024.jpg 1024w, /img/workroom-2.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Amber thread running into raw indigo denim." decoding="async" width="2048" height="1368">
+      <img data-src="/img/workroom-3.jpg" data-srcset="/img/workroom-3-1024.jpg 1024w, /img/workroom-3.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Over the shoulder: a seam being finished by hand and machine." decoding="async" width="2048" height="1368">
+      <img data-src="/img/workroom-4.jpg" data-srcset="/img/workroom-4-1024.jpg 1024w, /img/workroom-4.jpg 2048w" sizes="(max-width: 660px) 100vw, 620px" alt="Three cones of amber thread, waiting." decoding="async" width="2048" height="1368">
+    </div>
+    <div class="gl-dots" id="glDots" aria-hidden="true"></div>
     <figcaption>— from the workroom</figcaption>
   </figure>
+  <script>
+  /* Workroom slideshow: crossfades every 4.5s; images that fail to load are dropped. */
+  (function () {
+    var frame = document.getElementById('glFrame'), dots = document.getElementById('glDots');
+    if (!frame) return;
+    var imgs = [].slice.call(frame.querySelectorAll('img')), live = [imgs[0]], i = 0, timer;
+    function drawDots() { dots.innerHTML = live.length > 1 ? live.map(function (_, k) { return '<span' + (k === i ? ' class="on"' : '') + '></span>'; }).join('') : ''; }
+    imgs.slice(1).forEach(function (im) {
+      im.onload = function () { live.push(im); drawDots(); start(); };
+      im.onerror = function () { im.remove(); };
+      if (im.getAttribute('data-srcset')) { im.sizes = im.getAttribute('sizes'); im.srcset = im.getAttribute('data-srcset'); }
+      im.src = im.getAttribute('data-src');
+    });
+    function step() {
+      if (document.hidden || live.length < 2) return;
+      live[i].classList.remove('on'); i = (i + 1) % live.length; live[i].classList.add('on'); drawDots();
+    }
+    function start() { if (!timer && live.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(step, 4500); }
+  })();
+  </script>
 
   <footer class="closing">
     <p class="line">It started with a sentence.</p>

@@ -103,7 +103,7 @@
 
   /* details row */
   .det { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .det .ph { aspect-ratio: 1; }
+  .det .ph { aspect-ratio: 3 / 2; }
   .det figcaption { position: absolute; left: 10px; bottom: 9px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #f2efe8; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
   .also { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 
@@ -217,10 +217,10 @@
     <div class="wrap">
       <div class="sec-head"><div><p class="eyebrow">Look closer</p><h2 class="t-l">The details.</h2></div></div>
       <div class="det">
-        <figure class="ph zoom"><img src="/img/detail-1.jpg" alt="" loading="lazy"><figcaption>Amber stitch</figcaption></figure>
-        <figure class="ph zoom"><img src="/img/detail-2.jpg" alt="" loading="lazy"><figcaption>Matte hardware</figcaption></figure>
-        <figure class="ph zoom"><img src="/img/detail-3.jpg" alt="" loading="lazy"><figcaption>13oz raw denim</figcaption></figure>
-        <figure class="ph zoom"><img src="/img/detail-4.jpg" alt="" loading="lazy"><figcaption>The finish</figcaption></figure>
+        <figure class="ph zoom"><img src="/img/detail-1.jpg" srcset="/img/detail-1-1024.jpg 1024w, /img/detail-1.jpg 2048w" sizes="(max-width: 860px) 50vw, 25vw" alt="Amber thread running into raw indigo denim" loading="lazy"><figcaption>Amber stitch</figcaption></figure>
+        <figure class="ph zoom"><img src="/img/detail-2.jpg" srcset="/img/detail-2-1024.jpg 1024w, /img/detail-2.jpg 2048w" sizes="(max-width: 860px) 50vw, 25vw" alt="A metal zip being set into the fly" loading="lazy"><figcaption>Metal zip</figcaption></figure>
+        <figure class="ph zoom"><img src="/img/detail-3.jpg" srcset="/img/detail-3-1024.jpg 1024w, /img/detail-3.jpg 2048w" sizes="(max-width: 860px) 50vw, 25vw" alt="Two pieces of raw denim joined with amber thread" loading="lazy"><figcaption>13oz raw denim</figcaption></figure>
+        <figure class="ph zoom"><img src="/img/detail-4.jpg" srcset="/img/detail-4-1024.jpg 1024w, /img/detail-4.jpg 2048w" sizes="(max-width: 860px) 50vw, 25vw" alt="A belt loop bar-tacked in amber" loading="lazy"><figcaption>The finish</figcaption></figure>
       </div>
     </div>
   </section>

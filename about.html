@@ -37,8 +37,8 @@
   .approach b { display: block; font-size: 11px; letter-spacing: .2em; color: var(--amber); font-weight: 400; margin-bottom: 14px; }
   .approach h3 { font-weight: 400; font-size: 20px; letter-spacing: .02em; margin-bottom: 10px; }
 
-  .details { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-  .details .ph { aspect-ratio: 1; }
+  .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .details .ph { aspect-ratio: 3 / 2; }
   .end { text-align: center; padding: clamp(60px, 8vw, 110px) var(--pad); }
   .end .lead { max-width: 380px; margin: 12px auto 28px; }
 
@@ -47,7 +47,7 @@
     .intro .ph { aspect-ratio: 4 / 3; max-height: 70vh; }
     .approach { grid-template-columns: 1fr; gap: 0; }
     .approach div { padding: 22px 0; }
-    .details { grid-template-columns: repeat(3, 1fr); }
+    .details { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -89,12 +89,12 @@
     <div class="wrap">
       <div class="sec-head"><div><p class="eyebrow">The details</p><h2 class="t-l">Some of it, we'll keep.</h2></div><a href="/shop.html" class="arrow">Shop Collection 01</a></div>
       <div class="details">
-        <div class="ph zoom"><img src="/img/detail-1.jpg" alt="" loading="lazy"></div>
-        <div class="ph zoom"><img src="/img/detail-2.jpg" alt="" loading="lazy"></div>
-        <div class="ph zoom"><img src="/img/detail-3.jpg" alt="" loading="lazy"></div>
-        <div class="ph zoom"><img src="/img/detail-4.jpg" alt="" loading="lazy"></div>
-        <div class="ph zoom"><img src="/img/detail-5.jpg" alt="" loading="lazy"></div>
-        <div class="ph zoom"><img src="/img/detail-6.jpg" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-1.jpg" srcset="/img/detail-1-1024.jpg 1024w, /img/detail-1.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-2.jpg" srcset="/img/detail-2-1024.jpg 1024w, /img/detail-2.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-3.jpg" srcset="/img/detail-3-1024.jpg 1024w, /img/detail-3.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-4.jpg" srcset="/img/detail-4-1024.jpg 1024w, /img/detail-4.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-5.jpg" srcset="/img/detail-5-1024.jpg 1024w, /img/detail-5.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
+        <div class="ph zoom"><img src="/img/detail-6.jpg" srcset="/img/detail-6-1024.jpg 1024w, /img/detail-6.jpg 2048w" sizes="(max-width: 860px) 50vw, 33vw" alt="" loading="lazy"></div>
       </div>
     </div>
   </section>
