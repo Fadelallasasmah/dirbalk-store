@@ -198,8 +198,29 @@
     silhouette: silhouette, thumb: thumb, find: find, esc: esc, card: card, bindCards: bindCards, heart: HEART,
     type: function (p) { return TYPE[p.id] || ''; } };
 
+  /* ---------- the stitch: a thin amber seam across the top that sews itself as you scroll ---------- */
+  function stitch() {
+    var st = document.createElement('style');
+    st.textContent = '#dbStitch{position:fixed;top:0;left:0;height:2px;width:100%;z-index:300;pointer-events:none;transform-origin:0 50%;transform:scaleX(0);'
+      + 'background:repeating-linear-gradient(90deg,var(--amber,#C9A84C) 0 7px,transparent 7px 11px);opacity:.9;transition:opacity .3s}'
+      + '#dbStitch.off{opacity:0}';
+    document.head.appendChild(st);
+    var bar = document.createElement('div'); bar.id = 'dbStitch'; bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+    var ticking = false;
+    function draw() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - innerHeight;
+      bar.classList.toggle('off', max < 400);            // short pages: no seam
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    }
+    addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, { passive: true });
+    addEventListener('resize', draw);
+    draw();
+  }
+
   function init() {
-    header(); footer(); updateCount();
+    header(); footer(); updateCount(); stitch();
     if (window.DirbalkSound) DirbalkSound.refresh();
     /* ?search=1 (from the homepage) opens the search bar */
     if (/[?&]search=1/.test(location.search)) {

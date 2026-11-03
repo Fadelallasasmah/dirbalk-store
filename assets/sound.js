@@ -9,6 +9,7 @@
      save    saved to wishlist                              (one light note)
      remove  removed from cart                              (one falling note)
      done    order placed / joined the list                 (three warm notes)
+   add / save / remove / done also give a tiny vibration on Android phones.
 
    Rules this file keeps:
    - Sounds only answer a tap. Nothing plays on page load, scroll or hover.
@@ -73,12 +74,19 @@
     done:   function () { note(523.25, 0, 0.5, 0.55); note(659.25, 0.11, 0.55, 0.5); note(783.99, 0.22, 0.9, 0.5); } // C–E–G
   };
 
+  /* a small buzz on Android with the important sounds (iPhone browsers don't allow vibration) */
+  var BUZZ = { add: 14, save: 8, remove: 10, done: [16, 70, 26] };
+  function buzz(name) {
+    try { if (BUZZ[name] && navigator.vibrate) navigator.vibrate(BUZZ[name]); } catch (e) {}
+  }
+
   var last = {};
   function play(name) {
     if (!enabled() || !SOUNDS[name]) return;
     var now = Date.now();
     if (last[name] && now - last[name] < 60) return;   // no machine-gun on double taps
     last[name] = now;
+    buzz(name);
     try { if (audio()) SOUNDS[name](); } catch (e) { /* sound must never break the page */ }
   }
 
