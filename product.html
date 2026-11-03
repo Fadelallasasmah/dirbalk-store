@@ -74,6 +74,13 @@
   .buy { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 22px; }
   .buy .wish { border: 1px solid var(--line); width: 52px; justify-content: center; align-items: center; }
   .buy .wish:hover { border-color: var(--ink); }
+  /* "بدي ياها" — send a hint on WhatsApp */
+  .hint { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 10px; padding: 14px 16px; min-height: 48px;
+          background: none; border: 1px dashed var(--line); color: inherit; font: inherit; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: border-color .2s, color .2s; }
+  .hint:hover { border-color: var(--amber); color: var(--amber); }
+  .hint svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .hint .ar { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--amber); }
+  .hint-sub { font-size: 11px; color: var(--muted); text-align: center; margin-top: 6px; }
   .perks { margin-top: 20px; display: grid; gap: 8px; font-size: 13px; color: var(--muted); }
   .perks span::before { content: "—"; color: var(--amber); margin-right: 10px; }
 
@@ -193,6 +200,11 @@
           <button type="button" class="btn block" id="addBtn">Add to cart</button>
           <button type="button" class="wish" id="wishBtn" aria-label="Save to wishlist"></button>
         </div>
+        <button type="button" class="hint" id="hintBtn" aria-label="Drop a hint on WhatsApp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 8.5c0 3.5 2.5 6.5 6.5 6.5l1-1.6-2-1-1 .9c-1.2-.5-2.3-1.6-2.8-2.8l.9-1-1-2z" stroke-width="1.2"/></svg>
+          <span>Drop a hint</span><span class="ar" lang="ar" dir="rtl">بدي ياها</span>
+        </button>
+        <p class="hint-sub">Send it to someone who might get it for you.</p>
         <a href="/cart.html" class="arrow" id="viewCart" style="display:none;margin-top:14px">In your cart — view cart</a>
         <div class="perks">
           <span>Cash on delivery — pay when it arrives</span>
@@ -426,6 +438,19 @@
     if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist — tap ♡ at the top to see it' : 'Removed from your wishlist');
   });
 
+  /* ---------- "بدي ياها" — drop a hint on WhatsApp ---------- */
+  document.getElementById('hintBtn').addEventListener('click', function () {
+    var link = location.origin + '/product.html?id=' + p.id + '&c=' + color + (size ? '&s=' + encodeURIComponent(size) : '') +
+      '&utm_source=whatsapp&utm_medium=hint&utm_campaign=bdi_yaha';
+    var text = 'بدي ياها 👀\n\n' +
+      'DIRBALK — ' + p.name + '\n' +
+      'اللون: ' + CAT.colorName(p, color) + (size ? ' · المقاس: ' + size : '') + '\n' +
+      p.price + ' JD\n\n' + link;
+    if (window.DirbalkSound) DirbalkSound.play('save');
+    if (window.gtag) gtag('event', 'share', { method: 'whatsapp_hint', content_type: 'product', item_id: p.id });
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
+
   /* ---------- add to cart (buying needs an account) ---------- */
   function say(t) { var m = document.getElementById('msg'); m.textContent = t; m.style.display = 'block'; if (window.DirbalkToast) DirbalkToast.warning(t); }
   function addNow() {
@@ -500,9 +525,16 @@
   }
 
   setColor(params.get('c') || CAT.defaultKey(p));
+  /* a hint link can carry the size they want (?s=M) */
+  function wantedSize() {
+    var s = params.get('s'), b = s && document.querySelector('.size[data-s="' + s.replace(/"/g, '') + '"]');
+    if (b && !b.disabled) pickSize(s);
+  }
+  wantedSize();
   CAT.loadStock().then(function (ok) {
     if (!ok) return;
     setColor(color);
+    if (!size) wantedSize();
     var also = document.getElementById('also');
     also.innerHTML = others.map(function (o) { var c = also.querySelector('[data-id="' + o.id + '"]'); return S.card(o, c && c.getAttribute('data-color')); }).join('');
   });
