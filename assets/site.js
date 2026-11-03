@@ -115,7 +115,7 @@
         '<div class="sf-brand"><img src="/logo.png" alt="DIRBALK"><span class="ar">دير بالك على حالك.</span></div>' +
         '<nav><a href="/shop.html">Shop</a><a href="/story.html">Journal</a><a href="/about.html">About</a><a href="/help.html#shipping">Shipping</a><a href="/help.html#returns">Returns</a><a href="/help.html#faq">FAQ</a><a href="/help.html#contact">Contact</a><a href="/legal.html">Terms &amp; Privacy</a></nav>' +
         '<div class="sf-social"><a href="https://instagram.com/dirbalk__" target="_blank" rel="noreferrer" aria-label="Instagram">' + ICON.ig + '</a><a href="https://www.tiktok.com/@dirbalk__" target="_blank" rel="noreferrer" aria-label="TikTok">' + ICON.tt + '</a></div>' +
-        '<span class="sf-city">Amman, Jordan · © 2026</span>' +
+        '<span class="sf-city">Amman, Jordan · © 2026<button type="button" class="sound-toggle" data-sound-toggle aria-pressed="true">Sound on</button></span>' +
       '</footer>';
   }
 
@@ -180,6 +180,7 @@
       if (sw) {
         var c = sw.closest('.pcard'), p = find(c.getAttribute('data-id'));
         if (p) c.outerHTML = card(p, sw.getAttribute('data-color'));
+        if (window.DirbalkSound) DirbalkSound.play('tick'); 
         return;
       }
       var h = e.target.closest('.pcard .wish');
@@ -187,6 +188,7 @@
         var id = h.closest('.pcard').getAttribute('data-id');
         var on = wish.toggle(id);
         h.classList.toggle('on', on);
+        if (window.DirbalkSound) DirbalkSound.play(on ? 'save' : 'tick'); 
         if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist — tap ♡ at the top to see it' : 'Removed from your wishlist');
       }
     });
@@ -198,6 +200,7 @@
 
   function init() {
     header(); footer(); updateCount();
+    if (window.DirbalkSound) DirbalkSound.refresh();
     /* ?search=1 (from the homepage) opens the search bar */
     if (/[?&]search=1/.test(location.search)) {
       var bar = document.getElementById('shSearchBar');
