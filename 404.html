@@ -69,6 +69,7 @@
   .btn:hover { border-color: rgba(201,168,76,0.4); }
   .btn.primary { background: #C9A84C; color: #0a0a0a; border-color: #C9A84C; font-weight: bold; }
   .btn.primary:hover { opacity: 0.9; }
+  .msg .ar { display: inline-block; margin-top: 6px; color: #C9A84C; font-size: 17px; }
 </style>
 </head>
 <body>
@@ -76,8 +77,8 @@
     <img src="/logo.png" alt="DIRBALK" class="brand-logo" />
     <p class="code">4<span>0</span>4</p>
     <p class="msg" id="msg404">
-      Wrong turn. It happens.<br>
-      Dirbalk where you go
+      Looks like you got lost.<br>
+      <span class="ar" lang="ar" dir="rtl">شكلك ضعت. دير بالك.</span>
     </p>
     <div class="actions">
       <a href="/" class="btn primary">Home</a>
@@ -90,7 +91,7 @@
   var h = new Date().getHours();
   var isNight = h < 6 || h >= 18;
   if (isNight) {
-    document.getElementById('msg404').innerHTML = "Wrong turn. It happens.<br>Even at night, Dirbalk where you go";
+    document.getElementById('msg404').innerHTML = 'Lost at night? It happens.<br><span class="ar" lang="ar" dir="rtl">شكلك ضعت. دير بالك على حالك.</span>';
   }
 })();
 </script>

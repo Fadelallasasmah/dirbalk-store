@@ -50,7 +50,7 @@
     var area = document.getElementById('wArea');
     document.getElementById('wCount').textContent = items.length ? items.length + (items.length === 1 ? ' piece' : ' pieces') + ' you kept an eye on.' : '';
     if (!items.length) {
-      area.innerHTML = '<div class="w-empty"><p class="t-m">Nothing saved yet.</p><p class="lead">Tap the ♡ on any piece to keep it here.</p><a href="/shop.html" class="btn">Shop Collection 01</a></div>';
+      area.innerHTML = '<div class="w-empty"><p class="t-m">Nothing saved yet.</p><p class="ar" lang="ar" dir="rtl" style="color:var(--amber);font-size:16px;margin-top:10px">لسا ما حفظت إشي… خذ وقتك.</p><p class="lead">Tap the ♡ on any piece to keep it here.</p><a href="/shop.html" class="btn">Shop Collection 01</a></div>';
       return;
     }
     area.innerHTML = '<div class="w-grid">' + items.map(function (p) { return S.card(p); }).join('') + '</div>';
