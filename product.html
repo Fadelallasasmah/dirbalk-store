@@ -17,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cairo:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/toast.js"></script>
+<script src="/assets/sound.js"></script>
 <script src="/assets/products.js"></script>
 <script src="/assets/catalog.js"></script>
 <script src="/assets/auth-gate.js"></script>
@@ -397,7 +398,7 @@
     document.getElementById('low').classList.toggle('show', left > 0 && left <= 5);
   }
   document.getElementById('sizes').addEventListener('click', function (e) {
-    var b = e.target.closest('.size'); if (b && !b.disabled) pickSize(b.getAttribute('data-s'));
+    var b = e.target.closest('.size'); if (b && !b.disabled) { pickSize(b.getAttribute('data-s')); if (window.DirbalkSound) DirbalkSound.play('tick'); }
   });
 
   function setColor(key) {
@@ -411,7 +412,7 @@
     try { var u = new URL(location.href); u.searchParams.set('c', color); history.replaceState(null, '', u.pathname + u.search); } catch (e) {}
   }
   document.getElementById('pSwatches').addEventListener('click', function (e) {
-    var b = e.target.closest('.swatch'); if (b) setColor(b.getAttribute('data-color'));
+    var b = e.target.closest('.swatch'); if (b) { setColor(b.getAttribute('data-color')); if (window.DirbalkSound) DirbalkSound.play('tick'); }
   });
 
   /* ---------- wishlist ---------- */
@@ -421,6 +422,7 @@
   wishBtn.addEventListener('click', function () {
     var on = S.wish.toggle(p.id);
     wishBtn.classList.toggle('on', on);
+    if (window.DirbalkSound) DirbalkSound.play(on ? 'save' : 'tick');
     if (window.DirbalkToast) DirbalkToast.info(on ? 'Saved to your wishlist — tap ♡ at the top to see it' : 'Removed from your wishlist');
   });
 
@@ -433,6 +435,7 @@
     if (line) line.qty += 1; else cart.push({ id: p.id, color: color, size: size, qty: 1 });
     S.cart.set(cart);
     document.getElementById('viewCart').style.display = 'inline-flex';
+    if (window.DirbalkSound) DirbalkSound.play('add'); 
     if (window.DirbalkToast) DirbalkToast.success('Added to your cart — ' + p.name + ' · ' + CAT.colorName(p, color) + ' (' + size + ')');
     if (window.gtag) gtag('event', 'add_to_cart', { currency: 'JOD', value: p.price, items: [{ item_id: p.id, item_name: p.name, price: p.price, item_variant: color + '/' + size, quantity: 1 }] });
   }
