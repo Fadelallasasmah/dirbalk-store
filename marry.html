@@ -227,6 +227,9 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
 .qheart.w{animation:wordIn 1s cubic-bezier(.2,.8,.2,1) var(--d) forwards, beatq 1.4s calc(var(--d) + 1s) ease-in-out infinite}
 @keyframes beatq{0%,100%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
 .stuck{font-size:clamp(22px,6vw,28px)}
+#scene1{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.envelope:hover .seal{transform:scale(1.1)}
+.envelope:focus-visible{outline:3px solid var(--brown);outline-offset:6px;border-radius:14px}
 </style>
 </head>
 <body>
@@ -373,6 +376,14 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     setTimeout(swap, 480);
   }
 
+  // tapping anywhere on the first screen (envelope included) opens it, same as the button
+  $("scene1").addEventListener("click", e => {
+    if (e.target.closest("#openBtn") || $("openBtn").disabled) return;
+    $("openBtn").click();
+  });
+  $("envelope").setAttribute("role","button"); $("envelope").tabIndex = 0;
+  $("envelope").setAttribute("aria-label","Open the envelope");
+  $("envelope").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !$("openBtn").disabled){ e.preventDefault(); $("openBtn").click(); } });
   $("openBtn").addEventListener("click", () => {
     $("openBtn").disabled = true;
     $("envelope").classList.add("open");
