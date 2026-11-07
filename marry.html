@@ -223,6 +223,29 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
 .sign{font-family:var(--hand);font-size:36px;color:var(--brown);margin:4px 0 0}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}
 
+
+/* ---------- letter (build-up) ---------- */
+.letter{
+  position:relative;width:100%;background:var(--cream);border-radius:18px;padding:34px 28px 28px;text-align:left;
+  box-shadow:0 24px 50px -24px rgba(58,26,34,.45),0 2px 0 var(--line);
+  background-image:repeating-linear-gradient(transparent 0 37px,var(--line) 37px 38px);background-position:0 60px;
+}
+.letter::before{content:"";position:absolute;top:-12px;left:50%;width:90px;height:24px;margin-left:-45px;background:rgba(217,179,166,.75);border-radius:3px;transform:rotate(-3deg)}
+.letter .dear{font-family:var(--hand);font-size:38px;color:var(--rose-deep);margin:0 0 6px;line-height:1}
+.letter p{font-family:var(--hand);font-size:25px;line-height:38px;margin:0;color:var(--brown)}
+.letter .doodle{position:absolute;right:18px;bottom:16px;width:44px;color:var(--rose);opacity:.8}
+.ghost{visibility:hidden}
+.letter .caret{display:inline-block;width:2px;height:.9em;background:var(--rose-deep);vertical-align:-.1em;margin-left:1px;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* ---------- staged question build-up ---------- */
+.qname{font-family:var(--hand);font-size:clamp(40px,11vw,54px);line-height:1;color:var(--rose-deep);margin:0}
+.qwill{font-family:var(--serif);font-style:italic;font-size:clamp(26px,7vw,34px);margin:2px 0 8px;color:var(--brown)}
+.qwill.w{animation:wordIn 1s cubic-bezier(.2,.8,.2,1) var(--d) forwards, nudge .5s calc(var(--d) + 1.4s) ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}30%{transform:rotate(-3deg) scale(1.06)}70%{transform:rotate(3deg) scale(1.06)}}
+.qwill .dots i{font-style:normal;display:inline-block;animation:dotUp 1s ease-in-out infinite}
+.qwill .dots i:nth-child(2){animation-delay:.15s}.qwill .dots i:nth-child(3){animation-delay:.3s}
+@keyframes dotUp{0%,100%{transform:none}40%{transform:translateY(-6px)}}
+.qtext .tail{display:block;font-style:italic;color:var(--rose);font-size:.62em;margin-top:8px}
 /* ---------- music ---------- */
 .music{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;
   width:46px;height:46px;border-radius:50%;border:0;background:var(--cream);color:var(--rose-deep);cursor:pointer;
@@ -244,6 +267,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
 @keyframes pulse{50%{box-shadow:0 0 0 8px rgba(156,79,94,.18)}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}
+  .answer{opacity:1!important;pointer-events:auto!important}
   .w,.ring,.terms li,.parties,.up{opacity:1!important;filter:none!important;transform:none!important}.stamp{opacity:.88}}
 </style>
 </head>
@@ -300,8 +324,20 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     <button class="btn" id="openBtn">Okay, what's this?</button>
   </section>
 
-  <!-- 01 Tuna -->
+
+  <!-- The build-up letter -->
   <section class="scene" id="scene2" hidden>
+    <article class="letter">
+      <p class="dear" data-type>Sooo...</p>
+      <p data-type>After all the talking, planning, and getting our families together...</p>
+      <p data-type>There's just one thing left.</p>
+      <svg class="doodle" viewBox="0 0 24 22" aria-hidden="true"><use href="#heart"/></svg>
+    </article>
+    <div class="answer after-letter" id="after2"><button class="btn" id="letterBtn">Continue</button></div>
+  </section>
+
+  <!-- 01 Tuna -->
+  <section class="scene" id="scene3" hidden>
     <svg class="ill" viewBox="0 0 140 110" aria-hidden="true">
       <g class="up" fill="#9C4F5E"><use href="#heart" x="104" y="14" width="12" height="11"/></g>
       <g class="up d2" fill="#B76E7D"><use href="#heart" x="22" y="22" width="9" height="8"/></g>
@@ -317,14 +353,15 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
         <g class="lid"><ellipse cx="72" cy="34" rx="36" ry="9" fill="#F1E8E1" stroke="#3A1A22" stroke-width="2"/><circle cx="56" cy="34" r="5" fill="none" stroke="#3A1A22" stroke-width="2"/></g>
       </g>
     </svg>
-    <p class="qnum">first question</p>
-    <h2 class="qtext">Will you eat <em>tuna</em> with me?</h2>
-    <p class="soft">Even when I steal the last bite?</p>
-    <div class="answer"><button class="btn" data-next="3">OF COURSE! ♡</button></div>
+    <p class="qname w" style="--d:.5s">Nour,</p>
+    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:2.5s">eat <em>tuna</em> with me <span class="tail">for the rest of my life?</span></h2>
+    <p class="soft w" style="--d:3.5s">Even when I steal the last bite?</p>
+    <div class="answer"><button class="btn" data-next="4">OF COURSE! ♡</button></div>
   </section>
 
   <!-- 02 Kimbap -->
-  <section class="scene" id="scene3" hidden>
+  <section class="scene" id="scene4" hidden>
     <svg class="ill" viewBox="0 0 150 110" aria-hidden="true">
       <g stroke="#8A5A44" stroke-width="4" stroke-linecap="round"><path d="M100 8 L138 44"/><path d="M110 4 L144 34"/></g>
       <g class="b1"><circle cx="38" cy="70" r="24" fill="#2C3326"/><circle cx="38" cy="70" r="19" fill="#FFFDF8"/>
@@ -335,14 +372,15 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
         <rect x="109" y="67" width="6" height="6" rx="1" fill="#6FA35B"/><rect x="116" y="67" width="6" height="6" rx="1" fill="#E79AAE"/><rect x="109" y="74" width="6" height="6" rx="1" fill="#F2C94C"/><rect x="116" y="74" width="6" height="6" rx="1" fill="#E8875B"/></g>
       <g fill="#E7D9CC"><circle cx="28" cy="60" r="1.2"/><circle cx="48" cy="82" r="1.2"/><circle cx="90" cy="50" r="1.2"/><circle cx="66" cy="68" r="1.2"/><circle cx="104" cy="84" r="1.2"/><circle cx="128" cy="64" r="1.2"/></g>
     </svg>
-    <p class="qnum">second question</p>
-    <h2 class="qtext">Will you go on <em>kimbap</em> dates with me?</h2>
-    <p class="soft">Korean food dates are officially part of the plan.</p>
-    <div class="answer"><button class="btn" data-next="4">OBVIOUSLY! ♡</button></div>
+    <p class="qname w" style="--d:.5s">Nour,</p>
+    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:2.5s">go on <em>kimbap</em> dates with me <span class="tail">every week, forever?</span></h2>
+    <p class="soft w" style="--d:3.5s">Korean food dates are officially part of the plan.</p>
+    <div class="answer"><button class="btn" data-next="5">OBVIOUSLY! ♡</button></div>
   </section>
 
   <!-- 03 Coffee & matcha -->
-  <section class="scene" id="scene4" hidden>
+  <section class="scene" id="scene5" hidden>
     <svg class="ill" viewBox="0 0 150 115" aria-hidden="true">
       <g fill="none" stroke="#B9A196" stroke-width="2.5" stroke-linecap="round">
         <path class="steam" d="M32 40 q-6 -8 0 -16 t0 -16"/><path class="steam" d="M44 40 q-6 -8 0 -16 t0 -16" style="animation-delay:-.5s"/>
@@ -363,14 +401,15 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
         <path d="M94 74 H122" stroke="#FBF5EF" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
       </g>
     </svg>
-    <p class="qnum">third question</p>
-    <h2 class="qtext">Will you make me the best <em>matcha</em> ever?</h2>
-    <p class="soft">Coffee dates are included. Obviously.</p>
-    <div class="answer"><button class="btn" data-next="5">ONLY IF YOU MAKE COFFEE TOO!</button></div>
+    <p class="qname w" style="--d:.5s">Nour,</p>
+    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:2.5s">make me the best <em>matcha</em> ever <span class="tail">every single morning?</span></h2>
+    <p class="soft w" style="--d:3.5s">Coffee dates are included. Obviously.</p>
+    <div class="answer"><button class="btn" data-next="6">ONLY IF YOU MAKE COFFEE TOO!</button></div>
   </section>
 
   <!-- 04 Gossip -->
-  <section class="scene" id="scene5" hidden>
+  <section class="scene" id="scene6" hidden>
     <svg class="ill" viewBox="0 0 150 110" aria-hidden="true">
       <g class="b1">
         <path d="M10 22 h76 a12 12 0 0 1 12 12 v26 a12 12 0 0 1 -12 12 h-46 l-16 14 l2 -14 h-16 a12 12 0 0 1 -12 -12 v-26 a12 12 0 0 1 12 -12z" fill="#9C4F5E" stroke="#3A1A22" stroke-width="2"/>
@@ -382,14 +421,15 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
       </g>
       <g class="up" fill="#B76E7D"><use href="#heart" x="120" y="30" width="11" height="10"/></g>
     </svg>
-    <p class="qnum">fourth question</p>
-    <h2 class="qtext">Will you tell me <em>ALL</em> the gossip?</h2>
-    <p class="soft">No classified information between us.</p>
-    <div class="answer"><button class="btn" data-next="6">YOU KNOW EVERYTHING!</button></div>
+    <p class="qname w" style="--d:.5s">Nour,</p>
+    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:2.5s">tell me <em>ALL</em> the gossip <span class="tail">for the rest of our lives?</span></h2>
+    <p class="soft w" style="--d:3.5s">No classified information between us.</p>
+    <div class="answer"><button class="btn" data-next="7">YOU KNOW EVERYTHING!</button></div>
   </section>
 
   <!-- 05 The real question -->
-  <section class="scene slow" id="scene6" hidden>
+  <section class="scene slow" id="scene7" hidden>
     <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
       <circle cx="50" cy="64" r="25" fill="none" stroke="#9C4F5E" stroke-width="7"/>
       <circle cx="50" cy="64" r="25" fill="none" stroke="#FBF5EF" stroke-width="2" stroke-dasharray="8 70" stroke-linecap="round" transform="rotate(200 50 64)"/>
@@ -402,7 +442,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
   </section>
 
   <!-- The agreement -->
-  <section class="scene" id="scene7" hidden>
+  <section class="scene" id="scene8" hidden>
     <article class="deal">
       <header class="deal-head">
         <p class="deal-no">No. 001 · 8·11</p>
@@ -473,13 +513,13 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
   let current = 1, busy = false;
   function setProgress(n){
     const p = $("progress");
-    if (n >= 2 && n <= 6){ $("pNum").textContent = "0" + (n - 1); p.setAttribute("aria-hidden","false"); }
+    if (n >= 3 && n <= 7){ $("pNum").textContent = "0" + (n - 2); p.setAttribute("aria-hidden","false"); }
     else p.setAttribute("aria-hidden","true");
   }
   async function go(n){
-    const from = $("scene"+current), to = $("scene"+n), slow = n === 6;
+    const from = $("scene"+current), to = $("scene"+n), slow = n === 7;
     if (slow) document.body.classList.add("hush");          // hearts & sparkles soften for the real question
-    if (n === 7) document.body.classList.remove("hush");
+    if (n === 8) document.body.classList.remove("hush");
     if (!reduced){ from.classList.add(slow ? "slow-out" : "out"); await wait(slow ? 950 : 480); }
     from.hidden = true; from.classList.remove("out","slow-out");
     to.hidden = false; current = n; setProgress(n);
@@ -487,11 +527,12 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     onEnter(n);
   }
   async function onEnter(n){
-    if (n >= 2 && n <= 5){                                  // answer appears after a beat, so a double tap can't skip a question
-      await wait(1000); $("scene"+n).querySelector(".answer").classList.add("show"); busy = false;
-    } else if (n === 6){
-      await wait(5200); $("answer5").classList.add("show"); busy = false;
+    if (n === 2){ startLetter(); }
+    else if (n >= 3 && n <= 6){                             // answer appears only after the build-up, so a double tap can't skip a question
+      await wait(4300); $("scene"+n).querySelector(".answer").classList.add("show"); busy = false;
     } else if (n === 7){
+      await wait(5200); $("answer5").classList.add("show"); busy = false;
+    } else if (n === 8){
       await wait(3300); $("stamp").classList.add("hit");
       await wait(260); celebrate();
       await wait(500); $("official").classList.add("show");
@@ -513,6 +554,38 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
   $("envelope").setAttribute("aria-label","Open the envelope");
   $("envelope").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openEnvelope(); } });
 
+
+  /* letter: each line types itself letter by letter, layout reserved so nothing jumps */
+  let lettered = false;
+  function startLetter(){
+    if (lettered) return; lettered = true;
+    const lines = [...document.querySelectorAll("[data-type]")], after = $("after2");
+    const done = () => { after.classList.add("show"); busy = false; };
+    if (reduced) return done();
+    const caret = document.createElement("span"); caret.className = "caret";
+    const prepared = lines.map(p => {
+      const text = p.textContent; p.textContent = "";
+      const shown = document.createElement("span"), ghost = document.createElement("span");
+      ghost.className = "ghost"; ghost.textContent = text; p.append(shown, ghost);
+      return {text, shown, ghost};
+    });
+    let li = 0, ci = 0;
+    (function step(){
+      const L = prepared[li];
+      if (ci === 0 && li === 0 && !L.started){ L.started = true; return setTimeout(step, 700); }
+      ci++; L.shown.textContent = L.text.slice(0, ci); L.ghost.textContent = L.text.slice(ci);
+      L.shown.after(caret);
+      if (ci < L.text.length){
+        const ch = L.text[ci-1];
+        setTimeout(step, ch === "." ? 230 : ch === "," ? 180 : 42 + Math.random()*38);
+      } else if (++li < prepared.length){ ci = 0; setTimeout(step, 650); }
+      else setTimeout(() => { caret.remove(); done(); }, 600);
+    })();
+  }
+  $("letterBtn").addEventListener("click", () => {
+    if (busy) return; busy = true; $("letterBtn").disabled = true; go(3);
+  });
+
   // questions 01–04
   document.querySelectorAll("[data-next]").forEach(b => b.addEventListener("click", () => {
     if (busy) return; busy = true;
@@ -528,7 +601,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     const b = $("yesBtn"); b.disabled = true; b.classList.add("picked","done"); b.textContent = "تم ✓ ♡";
     const r = b.getBoundingClientRect();
     if (!reduced){ burst(r.left + r.width/2, r.top + r.height/2, 70); setTimeout(() => burst(r.left + r.width/2, r.top - 40, 40), 300); }
-    setTimeout(() => go(7), reduced ? 0 : 1300);
+    setTimeout(() => go(8), reduced ? 0 : 1300);
   });
 
   /* ---------- music: "Married Life", starts on first tap, never restarts ---------- */
@@ -623,7 +696,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     setTimeout(() => burst(innerWidth*.8, innerHeight*.5, 45), 650);
     setTimeout(rain, 900);
   }
-  $("scene7").addEventListener("click", e => { if (!reduced) burst(e.clientX, e.clientY, 22); });
+  $("scene8").addEventListener("click", e => { if (!reduced) burst(e.clientX, e.clientY, 22); });
 })();
 </script>
 
