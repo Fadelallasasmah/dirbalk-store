@@ -7,7 +7,7 @@
 <style>[hidden]{display:none!important}img{max-width:100%}</style>
 <title>For Nour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&family=Tajawal:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&family=Tajawal:wght@700;800&family=Jua&display=swap">
 <style>
 /* Layout: one centred "scene" at a time on a blush sky of floating hearts and sparkles; hand-drawn flowers in the corners;
    an envelope intro, five questions (01/05 … 05/05), then the agreement card. Single deliberate light look. */
@@ -246,6 +246,11 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
 .qwill .dots i:nth-child(2){animation-delay:.15s}.qwill .dots i:nth-child(3){animation-delay:.3s}
 @keyframes dotUp{0%,100%{transform:none}40%{transform:translateY(-6px)}}
 .qtext .tail{display:block;font-style:italic;color:var(--rose);font-size:.62em;margin-top:8px}
+.ko{font-family:"Jua","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;font-weight:400;line-height:1.15;display:inline-block}
+.ko em{font-style:normal;color:var(--rose-deep)}
+.ko-q{font-size:clamp(36px,10.5vw,52px)}
+.ko-q .tail{font-family:var(--serif);font-size:.42em}
+.ko-s{font-family:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--rose-deep);font-size:1.08em}
 /* ---------- music ---------- */
 .music{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;
   width:46px;height:46px;border-radius:50%;border:0;background:var(--cream);color:var(--rose-deep);cursor:pointer;
@@ -337,7 +342,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
   </section>
 
   <!-- 01 Tuna -->
-  <section class="scene" id="scene3" hidden>
+  <section class="scene" id="scene3" data-wait="4300" hidden>
     <svg class="ill" viewBox="0 0 140 110" aria-hidden="true">
       <g class="up" fill="#9C4F5E"><use href="#heart" x="104" y="14" width="12" height="11"/></g>
       <g class="up d2" fill="#B76E7D"><use href="#heart" x="22" y="22" width="9" height="8"/></g>
@@ -360,22 +365,31 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     <div class="answer"><button class="btn" data-next="4">OF COURSE! ♡</button></div>
   </section>
 
-  <!-- 02 Kimbap -->
+  <!-- 02 Kimbap & ramyeon -->
   <section class="scene" id="scene4" hidden>
-    <svg class="ill" viewBox="0 0 150 110" aria-hidden="true">
-      <g stroke="#8A5A44" stroke-width="4" stroke-linecap="round"><path d="M100 8 L138 44"/><path d="M110 4 L144 34"/></g>
-      <g class="b1"><circle cx="38" cy="70" r="24" fill="#2C3326"/><circle cx="38" cy="70" r="19" fill="#FFFDF8"/>
-        <rect x="31" y="63" width="6" height="6" rx="1" fill="#F2C94C"/><rect x="38" y="63" width="6" height="6" rx="1" fill="#E8875B"/><rect x="31" y="70" width="6" height="6" rx="1" fill="#6FA35B"/><rect x="38" y="70" width="6" height="6" rx="1" fill="#E79AAE"/></g>
-      <g class="b2"><circle cx="78" cy="60" r="24" fill="#2C3326"/><circle cx="78" cy="60" r="19" fill="#FFFDF8"/>
-        <rect x="71" y="53" width="6" height="6" rx="1" fill="#E8875B"/><rect x="78" y="53" width="6" height="6" rx="1" fill="#F2C94C"/><rect x="71" y="60" width="6" height="6" rx="1" fill="#E79AAE"/><rect x="78" y="60" width="6" height="6" rx="1" fill="#6FA35B"/></g>
-      <g class="b3"><circle cx="116" cy="74" r="24" fill="#2C3326"/><circle cx="116" cy="74" r="19" fill="#FFFDF8"/>
-        <rect x="109" y="67" width="6" height="6" rx="1" fill="#6FA35B"/><rect x="116" y="67" width="6" height="6" rx="1" fill="#E79AAE"/><rect x="109" y="74" width="6" height="6" rx="1" fill="#F2C94C"/><rect x="116" y="74" width="6" height="6" rx="1" fill="#E8875B"/></g>
-      <g fill="#E7D9CC"><circle cx="28" cy="60" r="1.2"/><circle cx="48" cy="82" r="1.2"/><circle cx="90" cy="50" r="1.2"/><circle cx="66" cy="68" r="1.2"/><circle cx="104" cy="84" r="1.2"/><circle cx="128" cy="64" r="1.2"/></g>
+    <svg class="ill" viewBox="0 0 150 116" aria-hidden="true">
+      <g class="b1"><circle cx="30" cy="62" r="20" fill="#2C3326"/><circle cx="30" cy="62" r="16" fill="#FFFDF8"/>
+        <rect x="24" y="56" width="5.5" height="5.5" rx="1" fill="#F2C94C"/><rect x="30.5" y="56" width="5.5" height="5.5" rx="1" fill="#E8875B"/><rect x="24" y="62.5" width="5.5" height="5.5" rx="1" fill="#6FA35B"/><rect x="30.5" y="62.5" width="5.5" height="5.5" rx="1" fill="#E79AAE"/></g>
+      <g class="b3"><circle cx="54" cy="80" r="17" fill="#2C3326"/><circle cx="54" cy="80" r="13.5" fill="#FFFDF8"/>
+        <rect x="49" y="75" width="4.5" height="4.5" rx="1" fill="#E8875B"/><rect x="54.5" y="75" width="4.5" height="4.5" rx="1" fill="#F2C94C"/><rect x="49" y="80.5" width="4.5" height="4.5" rx="1" fill="#E79AAE"/><rect x="54.5" y="80.5" width="4.5" height="4.5" rx="1" fill="#6FA35B"/></g>
+      <g fill="none" stroke="#B9A196" stroke-width="2.5" stroke-linecap="round">
+        <path class="steam" d="M100 40 q-6 -8 0 -16 t0 -14"/><path class="steam" d="M114 40 q-6 -8 0 -16 t0 -14" style="animation-delay:-.6s"/>
+      </g>
+      <g class="b2">
+        <g stroke="#8A5A44" stroke-width="3.5" stroke-linecap="round"><path d="M128 10 L104 50"/><path d="M140 14 L112 52"/></g>
+        <path d="M106 48 q-3 10 1 18 M111 50 q-3 9 0 16" stroke="#F2C94C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M76 58 H144 q-2 30 -34 34 q-32 -4 -34 -34Z" fill="#9C4F5E" stroke="#3A1A22" stroke-width="2"/>
+        <ellipse cx="110" cy="58" rx="34" ry="8" fill="#E8875B" stroke="#3A1A22" stroke-width="2"/>
+        <path d="M84 58 q4 -4 8 0 t8 0 t8 0 t8 0 t8 0 t8 0" stroke="#F2C94C" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <g transform="translate(96 56)"><ellipse rx="7" ry="4.5" fill="#FFFDF8"/><circle r="2.8" fill="#F2B53C"/></g>
+        <g fill="#6FA35B"><circle cx="118" cy="55" r="1.6"/><circle cx="123" cy="59" r="1.6"/><circle cx="114" cy="60" r="1.6"/></g>
+        <path d="M88 76 H132" stroke="#FBF5EF" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+      </g>
+      <g font-family="Jua, sans-serif" font-size="13" fill="#6B2232" text-anchor="middle"><text x="40" y="112">김밥</text><text x="110" y="112">라면</text></g>
     </svg>
-    <p class="qname w" style="--d:.5s">Nour,</p>
-    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
-    <h2 class="qtext w" style="--d:2.5s">go on <em>kimbap</em> dates with me <span class="tail">every week, forever?</span></h2>
-    <p class="soft w" style="--d:3.5s">Korean food dates are officially part of the plan.</p>
+    <p class="qwill w" style="--d:.5s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w ko-q" style="--d:1.5s"><span class="ko" lang="ko">나랑 평생 같이<br><em>라면</em> 먹을래?</span> <span class="tail">eat ramyeon with me, for the rest of our lives?</span></h2>
+    <p class="soft w" style="--d:2.6s"><span class="ko-s" lang="ko">김밥</span> &amp; <span class="ko-s" lang="ko">라면</span> dates are officially part of the plan.</p>
     <div class="answer"><button class="btn" data-next="5">OBVIOUSLY! ♡</button></div>
   </section>
 
@@ -401,10 +415,9 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
         <path d="M94 74 H122" stroke="#FBF5EF" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
       </g>
     </svg>
-    <p class="qname w" style="--d:.5s">Nour,</p>
-    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
-    <h2 class="qtext w" style="--d:2.5s">make me the best <em>matcha</em> ever <span class="tail">every single morning?</span></h2>
-    <p class="soft w" style="--d:3.5s">Coffee dates are included. Obviously.</p>
+    <p class="qwill w" style="--d:.5s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:1.5s">make me the best <em>matcha</em> ever <span class="tail">every single morning?</span></h2>
+    <p class="soft w" style="--d:2.5s">Coffee dates are included. Obviously.</p>
     <div class="answer"><button class="btn" data-next="6">ONLY IF YOU MAKE COFFEE TOO!</button></div>
   </section>
 
@@ -421,10 +434,9 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
       </g>
       <g class="up" fill="#B76E7D"><use href="#heart" x="120" y="30" width="11" height="10"/></g>
     </svg>
-    <p class="qname w" style="--d:.5s">Nour,</p>
-    <p class="qwill w" style="--d:1.4s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
-    <h2 class="qtext w" style="--d:2.5s">tell me <em>ALL</em> the gossip <span class="tail">for the rest of our lives?</span></h2>
-    <p class="soft w" style="--d:3.5s">No classified information between us.</p>
+    <p class="qwill w" style="--d:.5s">will you<span class="dots"><i>.</i><i>.</i><i>.</i></span>?</p>
+    <h2 class="qtext w" style="--d:1.5s">tell me <em>ALL</em> the gossip <span class="tail">for the rest of our lives?</span></h2>
+    <p class="soft w" style="--d:2.5s">No classified information between us.</p>
     <div class="answer"><button class="btn" data-next="7">YOU KNOW EVERYTHING!</button></div>
   </section>
 
@@ -451,7 +463,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
       </header>
       <ol class="terms">
         <li style="animation-delay:.5s"><b>01</b><span>Tuna dates are mandatory.</span></li>
-        <li style="animation-delay:.7s"><b>02</b><span>Kimbap nights are officially approved.</span></li>
+        <li style="animation-delay:.7s"><b>02</b><span>Kimbap &amp; ramyeon nights are officially approved.</span></li>
         <li style="animation-delay:.9s"><b>03</b><span>Matcha and coffee supplies must never run out.</span></li>
         <li style="animation-delay:1.1s"><b>04</b><span>Morning coffee is a serious matter.</span></li>
         <li style="animation-delay:1.3s"><b>05</b><span>All gossip must be shared. No secrets!</span></li>
@@ -529,7 +541,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
   async function onEnter(n){
     if (n === 2){ startLetter(); }
     else if (n >= 3 && n <= 6){                             // answer appears only after the build-up, so a double tap can't skip a question
-      await wait(4300); $("scene"+n).querySelector(".answer").classList.add("show"); busy = false;
+      await wait(+($("scene"+n).dataset.wait || 3500)); $("scene"+n).querySelector(".answer").classList.add("show"); busy = false;
     } else if (n === 7){
       await wait(5200); $("answer5").classList.add("show"); busy = false;
     } else if (n === 8){
