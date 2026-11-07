@@ -252,6 +252,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
 .ko-q{font-size:clamp(36px,10.5vw,52px)}
 .ko-q .tail{font-family:var(--serif);font-size:.42em}
 .ko-s{font-family:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--rose-deep);font-size:1.08em}
+.btn.dl{display:inline-block;margin-top:22px;text-decoration:none;font-size:15px;padding:13px 24px}
 /* ---------- music ---------- */
 .music{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;
   width:46px;height:46px;border-radius:50%;border:0;background:var(--cream);color:var(--rose-deep);cursor:pointer;
@@ -475,14 +476,15 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
         <div><small>PARTY A</small><span>Nour</span></div>
         <div><small>PARTY B</small><span>Fadel</span></div>
         <div><small>STATUS</small><span class="ok">APPROVED ✓</span></div>
-        <div><small>EFFECTIVE</small><span class="eff">NOW</span></div>
+        <div><small>EFFECTIVE</small><span class="eff">Tomorrow ♡</span></div>
       </div>
       <div class="stamp" id="stamp" aria-label="يتم موافقة"><div><b lang="ar">يتم<br>موافقة</b><small>♡ 8·11 ♡</small></div></div>
     </article>
     <div class="official" id="official">
       <h2 class="yay">IT'S OFFICIAL! ♡</h2>
-      <p class="future">사랑해, 미래의 내 아내.</p>
+      <p class="future">See you tomorrow, future Mrs.</p>
       <p class="sign">Fadel &amp; Nour</p>
+      <a class="btn dl" href="nour-fadel-agreement.pdf" download="Nour-Fadel-Agreement.pdf">Download our agreement (PDF) ♡</a>
     </div>
   </section>
 </main>
@@ -701,7 +703,7 @@ h1,h2{font-family:var(--serif);font-weight:600;color:var(--brown);margin:0;text-
     setTimeout(() => burst(innerWidth*.8, innerHeight*.5, 45), 650);
     setTimeout(rain, 900);
   }
-  $("scene8").addEventListener("click", e => { if (!reduced) burst(e.clientX, e.clientY, 22); });
+  $("scene8").addEventListener("click", e => { if (e.target.closest("a")) return; if (!reduced) burst(e.clientX, e.clientY, 22); });
 })();
 </script>
 
