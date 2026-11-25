@@ -179,9 +179,20 @@ button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 <div id="fade"></div>
 <audio id="song" src="our-song.mp3" preload="auto" loop playsinline></audio>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+window.addEventListener("error", e => {
+  const sub = document.querySelector("#loader .sub"); if (!sub) return;
+  sub.style.fontStyle = "normal"; sub.style.fontSize = "13px"; sub.style.maxWidth = "320px";
+  sub.textContent = "Something went wrong: " + (e.message || "unknown error") + (window.THREE ? "" : " (3D library didn't load)");
+});
+</script>
+<script src="three.min.js"></script>
+<script>if (!window.THREE) document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');</script>
+<script>if (!window.THREE) document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>');</script>
 <script>
 (() => {
+if (!window.THREE) throw new Error("3D library didn't load");
+let R;
 const $ = id => document.getElementById(id);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -190,7 +201,8 @@ const V = (x,y,z) => new THREE.Vector3(x,y,z);
 
 /* ---------- renderer & camera ---------- */
 const canvas = $("c");
-const R = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:"high-performance"});
+try { R = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:"high-performance"}); }
+catch (e) { throw new Error("This browser can't show 3D right now. In Chrome, turn on Settings → System → Use graphics acceleration, then reload."); }
 const TOUCH = matchMedia("(pointer: coarse)").matches;
 const DPR = Math.min(devicePixelRatio || 1, TOUCH ? 1.5 : 2);
 R.setPixelRatio(DPR);
